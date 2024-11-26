@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReportController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('base.dashboard');
 });
+Route::get('/report', [ReportController::class, 'showReport'])->name('showReport');
+Route::get('/login', function () {
+    return view('auth.login');
+});
+

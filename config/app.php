@@ -170,6 +170,9 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\KoolReportServiceProvider::class,
 
+        MongoDB\Laravel\MongoDBServiceProvider::class,
+
+
 
         
     ])->toArray(),

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\AuthController;
+
 
 
 /*
@@ -15,8 +17,13 @@ use App\Http\Controllers\ReportController;
 |
 */
 
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('submit.login');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
 Route::get('/', function () {
-    return view('base.dashboard');
+    return view('welcome');
 });
 Route::get('/report', [ReportController::class, 'showReport'])->name('showReport');
 Route::get('/login', function () {

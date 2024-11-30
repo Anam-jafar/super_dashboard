@@ -34,7 +34,7 @@
                     </div>
 
                     <!-- Login Form -->
-                    <form method="POST" action="" class="space-y-5">
+                    <form method="POST" action="{{ route('submit.login') }}" class="space-y-5">
                         @csrf
                         <div>
                             <input 
@@ -60,7 +60,7 @@
                         </div>
 
                         <div>
-                            <a href="" class="text-sm text-blue-600 hover:text-blue-800">
+                            <a href="#" class="text-sm text-blue-600 hover:text-blue-800">
                                 Forgot password?
                             </a>
                         </div>
@@ -68,7 +68,7 @@
 
                         <div class="flex justify-end pt-4">
                             <button type="submit" class="min-w-[80px] px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                Next
+                                Login
                             </button>
                         </div>
                     </form>

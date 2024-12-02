@@ -16,6 +16,11 @@ use App\Http\Controllers\AuthController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+use App\Http\Controllers\DashboardController;
+
+Route::get('/dashboard/create', [DashboardController::class, 'create'])->name('dashboard.create');
+Route::post('/dashboard/store', [DashboardController::class, 'store'])->name('dashboard.store');
+
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('submit.login');

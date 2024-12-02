@@ -1,6 +1,6 @@
 <?php
 use \koolreport\widgets\google\PieChart;
-use \koolreport\widgets\google\BarChart; // Assuming you might have BarChart or other chart types
+use \koolreport\widgets\google\BarChart;
 ?>
 
 <div class="max-w-full mx-auto p-4 sm:p-6 space-y-8">
@@ -10,22 +10,25 @@ use \koolreport\widgets\google\BarChart; // Assuming you might have BarChart or 
     // Fetch the data from the data store
     $userData = $this->dataStore('user_data')->data();
     
-    // Extract 'elements' data from the first entry
+    // Extract 'elements' data from the first entry (assuming there's only one dashboard for simplicity)
     $elements = !empty($userData) ? $userData[0]['elements'] : [];
 
     // Loop through elements to display charts dynamically
     foreach ($elements as $element) {
-        // Check if chart type is provided and the required data is available
+        // Check if chart type and prms data are provided
         if (!empty($element['chart_type']) && !empty($element['prms'])) {
-            // Extract chart data
+            // Extract prms and chart type
             $prms = $element['prms'];
             $chartType = $element['chart_type'];
             $width = isset($element['width']) && $element['width'] === 'full' ? '100%' : '50%';
 
             // Prepare chart data dynamically by mapping prms into category-value pairs
             $chartData = [['Category', 'Value']];
-            foreach ($prms as $category => $value) {
-                $chartData[] = [$category, $value];
+            foreach ($prms as $param) {
+                // Ensure we handle each key-value pair correctly
+                if (isset($param['key']) && isset($param['value'])) {
+                    $chartData[] = [$param['key'], (int)$param['value']];  // Cast value to integer
+                }
             }
 
             // Get the element name to use as the title

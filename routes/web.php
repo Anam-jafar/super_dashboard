@@ -27,9 +27,9 @@ Route::post('/login', [AuthController::class, 'login'])->name('submit.login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('index');
+
 Route::get('/report', [ReportController::class, 'showReport'])->name('showReport');
 Route::get('/login', function () {
     return view('auth.login');

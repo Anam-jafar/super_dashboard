@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use MongoDB\Client as MongoClient;
+use App\Reports\DashboardReport;
+
 
 class DashboardController extends Controller
 {
@@ -50,4 +52,66 @@ class DashboardController extends Controller
         // Redirect or return response
         return redirect()->route('dashboard.create')->with('success', 'Dashboard created successfully!');
     }
+
+    public function dashboard(Request $request)
+    {        
+        $report = new DashboardReport();
+
+        $report->run();
+
+        return view('welcome', compact('report'));
+    }
+
+    public function index(Request $request)
+    {
+        // Connect to MongoDB
+        $client = new MongoClient('mongodb+srv://development:XT7GquBxdsk5wMru@ebossdevelopment.ekek02t.mongodb.net/?retryWrites=true&w=majority');
+        $collection = $client->super_dashboard->dashboard;
+    
+        // Fetch all documents from the dashboard collection
+        $dashboardData = $collection->find(); // Retrieves all documents
+    
+        // Initialize arrays to store cards, pie charts, and tables data
+        $data = [];
+        $pieCharts = [];
+        $tables = [];
+    
+        // Loop through each document to extract cards, pie charts, and tables
+        foreach ($dashboardData as $document) {
+            // Extract cards
+            if (isset($document['cards'])) {
+                foreach ($document['cards'] as $card) {
+                    $data[$card['name']] = [
+                        $card['title'],
+                        $card['value']
+                    ];
+                }
+            }
+    
+            // Extract pie charts
+            if (isset($document['pie_charts'])) {
+                foreach ($document['pie_charts'] as $chart) {
+                    $pieCharts[$chart['name']] = $chart['data'];
+                }
+            }
+    
+            // Extract tables
+            if (isset($document['tables'])) {
+                foreach ($document['tables'] as $table) {
+                    // Add table name and relevant data
+                    $tables[$table['name']] = [
+                        'categories' => $table['categories'],
+                        'districts' => $table['districts'],
+                        'totals' => $table['totals']
+                    ];
+                }
+            }
+        }
+    
+        // Return the view with cards, pie charts, and tables data
+        return view('base.index', compact('data', 'pieCharts', 'tables'));
+    }
+    
+    
+    
 }

@@ -106,10 +106,32 @@ class DashboardController extends Controller
                     ];
                 }
             }
+             // Extract other objects (e.g., total_mosque, total_kariah, etc.)
+            $fieldsToExtract = [
+                'total_mosque',
+                'total_kariah',
+                'total_staff',
+                'total_male',
+                'total_female',
+                'members_active_percentage',
+                'members_age_category',
+                'members_category',
+                'members_nationality_percentage',
+                'total_members_each_district',
+                'percentage_of_mosque_type',
+            ];
+
+            foreach ($fieldsToExtract as $field) {
+                if (isset($document[$field])) {
+                    $objects[$field] = $document[$field];
+                }
+            }
+        
+        
         }
     
         // Return the view with cards, pie charts, and tables data
-        return view('base.index', compact('data', 'pieCharts', 'tables'));
+        return view('base.index', compact('data', 'pieCharts', 'tables', 'objects'));
     }
     
     

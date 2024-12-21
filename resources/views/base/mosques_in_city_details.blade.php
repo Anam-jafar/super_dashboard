@@ -13,7 +13,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="text-sm font-medium opacity-90 uppercase tracking-wide mb-2">
-                                JUMLAH MASJID DALAM SELANGOR <!-- Access Title -->
+                                JUMLAH MASJID DALAM {{$city}} <!-- Access Title -->
                             </h2>
                             <p class="text-4xl font-bold">{{ $totalMosques }}</p> <!-- Access Value -->
                         </div>
@@ -28,7 +28,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="text-sm font-medium opacity-90 uppercase tracking-wide mb-2">
-                                JUMLAH KARIAH MASJID DALAM SELANGOR <!-- Access Title -->
+                                JUMLAH KARIAH MASJID DALAM  {{$city}}  <!-- Access Title -->
                             </h2>
                             <p class="text-4xl font-bold">{{ $totalKariah }}</p> <!-- Access Value -->
                         </div>
@@ -43,7 +43,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <h2 class="text-sm font-medium opacity-90 uppercase tracking-wide mb-2">
-                                JUMLAH STAFF MASJID DALAM SELANGOR <!-- Access Title -->
+                                JUMLAH STAFF MASJID DALAM  {{$city}}  <!-- Access Title -->
                             </h2>
                             <p class="text-4xl font-bold">{{ $totalStaff }}</p> <!-- Access Value -->
                         </div>
@@ -59,7 +59,7 @@
             <div class="w-full lg:w-1/2 mt-4 lg:mt-0">
                 <div class="bg-white shadow-lg rounded-lg p-6 h-full">
                     <div class="flex justify-between items-start mb-6">
-                        <h2 class="text-lg font-semibold text-gray-800">PERATUSAN JENIS MASJID SELURUH SELANGOR</h2>
+                        <h2 class="text-lg font-semibold text-gray-800">PERATUSAN STATUS MASJID SELURUH  {{$city}}  </h2>
                         <button class="text-gray-500 hover:text-gray-700">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
@@ -73,92 +73,7 @@
             </div>
         </div>
 
-        <div class="w-full mt-8">
-            <div class="bg-white shadow-lg rounded-lg p-4 sm:p-6 overflow-x-auto">
-                <h3 class="text-xl font-semibold text-gray-700 mb-4">Statistik Masjid Mengikut Daerah</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead>
-                            <tr class="bg-gray-200">
-                                <th width='3%' rowspan='2' class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">#</th>
-                                <th width='17%' rowspan='2' class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Daerah</th>
-                                <th colspan='8' class="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Kategori Masjid</th>
-                                <th rowspan='2' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Aktif</th>
-                                <th rowspan='2' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Tidak Aktif</th>
-                                <th rowspan='2' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Jumlah Masjid</th>
-                            </tr>
-                            <tr class="bg-gray-200">
-                                <th width='6%' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Masjid Utama</th>
-                                <th width='6%' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Surau</th>
-                                <th width='6%' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Masjid Daerah</th>
-                                <th width='6%' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Masjid Kariah</th>
-                                <th width='6%' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Surau Jumaat</th>
-                                <th width='6%' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Masjid Jamek</th>
-                                <th width='6%' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Masjid Pengurusan</th>
-                                <th width='6%' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Masjid</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($districtTable as $index => $district)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{{ $index + 1 }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">{{ $district->city }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">{{ $district->MASJID_UTAMA }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">{{ $district->SURAU }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">{{ $district->MASJID_DAERAH }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">{{ $district->MASJID_KARIAH }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">{{ $district->MASJID_JUMAAT ?? 0 }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">{{ $district->MASJID_JAMEK ?? 0 }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">{{ $district->MASJID_PENGURUSAN ?? 0 }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">{{ $district->MASJID }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">{{ $district->Total_Active }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">{{ $district->Total_Inactive }}</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">{{ $district->MASJID_UTAMA + $district->SURAU + $district->MASJID_DAERAH +  $district->MASJID_KARIAH +   $district->MASJID_PENGURUSAN + $district->MASJID }}</td>
-                                </tr>
-                            @endforeach
-                            <tr class="bg-yellow-500 text-white font-semibold">
-                                <td class="px-4 py-2 whitespace-nowrap text-sm" colspan="2">Jumlah</td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                    {{ $districtTable->sum('MASJID_UTAMA') }}
-                                </td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                    {{ $districtTable->sum('SURAU') }}
-                                </td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                    {{ $districtTable->sum('MASJID_DAERAH') }}
-                                </td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                    {{ $districtTable->sum('MASJID_KARIAH') }}
-                                </td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                    {{ $districtTable->sum('MASJID_JUMAAT') ?? 0 }}
-                                </td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                    {{ $districtTable->sum('MASJID_JAMEK') ?? 0 }}
-                                </td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                    {{ $districtTable->sum('MASJID_PENGURUSAN') ?? 0 }}
-                                </td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                    {{ $districtTable->sum('MASJID') }}
-                                </td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                    {{ $districtTable->sum('Total_Active') }}
-                                </td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                    {{ $districtTable->sum('Total_Inactive') }}
-                                </td>
-                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                    {{ $districtTable->sum('MASJID') + $districtTable->sum('MASJID_KARIAH') + $districtTable->sum('MASJID_PENGURUSAN') + $districtTable->sum('SURAU') }}
-                                </td>
-                            </tr>
-                        </tbody>
 
-                    </table>
-
-                </div>
-            </div>
-        </div>
         <!-- New Three Column Section -->
         <div class="w-full mt-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -169,21 +84,35 @@
                         <table class="min-w-full">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Daerah</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
                                     <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200">
-                                @foreach ($totalKariahPerDistrict as $district)
+                                @php
+                                    $total = 0; // Initialize total variable
+                                @endphp
+
+                                @foreach ($kariahPerMosqueType as $category => $jumlah)
+                                    @php
+                                        $total += $jumlah; // Add each category's amount to total
+                                    @endphp
                                     <tr class="hover:bg-gray-50">
-                                        <td class="px-4 py-2 text-sm text-gray-900">{{ $district->city }}</td>
-                                        <td class="px-4 py-2 text-sm text-gray-500 text-right">{{ number_format($district->total_kariah) }}</td>
+                                        <td class="px-4 py-2 text-sm text-gray-900">{{ $category }}</td>
+                                        <td class="px-4 py-2 text-sm text-gray-500 text-right">{{ number_format($jumlah) }}</td>
                                     </tr>
                                 @endforeach
+
+                                <!-- Total Row with bold text and darker background -->
+                                <tr class="bg-gray-700 text-white font-semibold">
+                                    <td class="px-4 py-2 text-sm">Jumlah</td>
+                                    <td class="px-4 py-2 text-sm text-right">{{ number_format($total) }}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
+
 
 
                 <!-- Gender Distribution Cards -->
@@ -191,7 +120,7 @@
                     {{-- Male Card --}}
                     <div class="bg-sky-500 rounded-lg p-6 text-white flex-grow">
                         <div class="flex items-center justify-between mb-4">
-                            <h4 class="text-lg font-semibold">Ahli Kariah (Lelaki)</h4>
+                            <h4 class="text-lg font-semibold">Ahli Kariah  {{$city}} (Lelaki)</h4>
                             <svg class="w-8 h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
@@ -203,7 +132,7 @@
                     {{-- Female Card --}}
                     <div class="bg-pink-500 rounded-lg p-6 text-white flex-grow">
                         <div class="flex items-center justify-between mb-4">
-                            <h4 class="text-lg font-semibold">Ahli Kariah (Wanita)</h4>
+                            <h4 class="text-lg font-semibold">Ahli Kariah  {{$city}}  (Wanita)</h4>
                             <svg class="w-8 h-8 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
@@ -217,7 +146,7 @@
                 <!-- Age Distribution Chart -->
                 <div class="bg-white shadow-lg rounded-lg p-6">
                     <div class="flex justify-between items-start mb-6">
-                        <h4 class="text-lg font-semibold text-gray-800">Peringkat Umur Ahli Kariah</h4>
+                        <h4 class="text-lg font-semibold text-gray-800">Peringkat Umur Ahli Kariah  {{$city}} </h4>
                         <button class="text-gray-500 hover:text-gray-700">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
@@ -237,7 +166,7 @@
                 {{-- Nationality Distribution Pie Chart --}}
                 <div class="bg-white shadow-lg rounded-lg p-6">
                     <div class="flex justify-between items-start mb-6">
-                        <h4 class="text-lg font-semibold text-gray-800">Peratusan Bangsa Ahli Kariah</h4>
+                        <h4 class="text-lg font-semibold text-gray-800">Peratusan Bangsa Ahli Kariah  {{$city}} </h4>
                         <button class="text-gray-500 hover:text-gray-700">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
@@ -252,7 +181,7 @@
                 <!-- Member Category Column Chart -->
                 <div class="bg-white shadow-lg rounded-lg p-6">
                     <div class="flex justify-between items-start mb-6">
-                        <h4 class="text-lg font-semibold text-gray-800">Kategori Ahli Kariah</h4>
+                        <h4 class="text-lg font-semibold text-gray-800">Kategori Ahli Kariah  {{$city}} </h4>
                         <button class="text-gray-500 hover:text-gray-700">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
@@ -265,8 +194,6 @@
                 </div>
             </div>
         </div>
-
-
     <!-- End -->
     </div>
 </div>
@@ -305,7 +232,7 @@
 
 
         // Mosque Data Pie Chart
-        const mosqueData = @json($mosqueData);
+        const mosqueData = @json($mosqueActiveInactive);
         const mosqueLabels = Object.keys(mosqueData);
         const mosqueValues = Object.values(mosqueData);
 
@@ -318,8 +245,7 @@
                     datasets: [{
                         data: mosqueValues,
                         backgroundColor: [
-                            '#DC2626', '#7C3AED', '#059669', '#D97706',
-                            '#2563EB', '#9333EA', '#F59E0B', '#3B82F6'
+                            '#DC2626', '#7C3AED'
                         ].slice(0, mosqueLabels.length),
                         borderWidth: 0
                     }]

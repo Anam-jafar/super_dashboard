@@ -38,11 +38,10 @@
                         @csrf
                         <div>
                             <input 
-                                type="email" 
-                                name="email" 
-                                id="email"
-                                autocomplete="email" 
-                                placeholder="Email or phone"
+                                type="text" 
+                                name="ic" 
+                                id="ic"
+                                placeholder="Username or IC"
                                 required
                                 class="w-full px-3 py-3.5 text-base text-gray-900 border border-gray-300 rounded-md hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             >
@@ -51,7 +50,7 @@
                         <div>
                             <input 
                                 type="password" 
-                                name="password" 
+                                name="pass" 
                                 id="password"
                                 placeholder="Enter your password"
                                 required
@@ -72,6 +71,7 @@
                             </button>
                         </div>
                     </form>
+
                 </div>
             </div>
 

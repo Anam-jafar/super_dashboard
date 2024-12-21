@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+
 
 class AuthController extends Controller
 {
@@ -29,15 +30,19 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
+            'ic' => 'required|string',
+            'pass' => 'required|string',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = DB::table('usr')
+            ->where('ic', $request->ic)
+            ->where('pass', md5($request->pass))
+            ->first();
 
-        if ($user && password_verify($request->password, $user->password)) {
-            Auth::login($user);
-            return view('welcome');
+        if ($user) {
+            Auth::guard()->loginUsingId($user->id);
+
+            return redirect()->route('index');
         }
 
         return back()->with('error', 'Invalid credentials.');
@@ -51,7 +56,6 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('login')->with('warning', 'Logged out successfully.');
+        return redirect()->route('login');
     }
-
 }

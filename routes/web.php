@@ -23,11 +23,11 @@ Route::post('/login', [AuthController::class, 'login'])->name('submit.login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
-Route::get('/', [DashboardController::class, 'index'])->name('index');
-Route::get('/test', [DashboardController::class, 'indexs'])->name('indexs');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('index');
+    Route::get('/district/', [DashboardController::class, 'mosquesInCityDetails'])->name('mosquesInCityDetails');
+});
 
 
-// Route::get('/login', function () {
-//     return view('auth.login');
-// });
+
 

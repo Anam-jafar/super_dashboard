@@ -381,6 +381,9 @@ class DashboardController extends Controller
         ));
     }
     
+    public function showEntityList(Request $request){
+        return view('base.mosques');
+    }
     
     
 }

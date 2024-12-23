@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Awfatect Dashboard</title>
+    <title>Awfatech Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="min-h-screen bg-gray-100" x-data="{ sidebarOpen: true, profileOpen: false }">
+<body class="min-h-screen bg-gray-100" x-data="{ sidebarOpen: false, profileOpen: false }">
     <!-- Navbar -->
     <nav class="fixed top-0 left-0 right-0 bg-white border-b z-20 h-16 flex items-center justify-between px-4">
         <div class="flex items-center space-x-2">
@@ -29,7 +29,7 @@
                 <span class="sr-only">Toggle sidebar</span>
             </button>
 
-            <h1 class="text-xl font-semibold text-gray-800">Awfatect</h1>
+            <h1 class="text-xl font-semibold text-gray-800">Awfatech</h1>
         </div>
 
         <!-- Profile Menu -->
@@ -51,7 +51,6 @@
             </div>
         </div>
     </nav>
-
     <!-- Mobile: Sidebar Dropdown -->
     <div x-show="sidebarOpen" @click.away="sidebarOpen = false" class="fixed inset-0 z-30 sm:hidden" x-cloak>
         <div class="fixed inset-0 bg-gray-800 bg-opacity-50" aria-hidden="true"></div>
@@ -65,34 +64,50 @@
                 </button>
                 <ul class="mt-6 space-y-4">
                     <li>
-                        <a href="{{route('index')}}" class="flex items-center text-gray-700 hover:text-gray-900">
+                        <a href="{{route('index')}}" class="flex items-center text-gray-700 hover:text-gray-900 {{ request()->routeIs('index') ? 'bg-gray-200 text-gray-900' : '' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
                             Dashboard
                         </a>
                     </li>
-                    <!-- Add more menu items as needed -->
+                    <li>
+                        <a href="{{ route('showEntityList') }}" class="flex items-center text-gray-700 hover:text-gray-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3v18m4.5-18v18M3 9.75h18m-18 4.5h18" />
+                            </svg>
+                            Masjid
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
     </div>
 
     <!-- Desktop: Sidebar -->
-    <nav class="fixed top-16 left-0 bottom-0 bg-white border-r z-10 transition-all duration-300 ease-in-out hidden sm:block"
+    <nav class="fixed top-16 left-0 bottom-0 bg-white border-r z-10 transition-all duration-300 ease-in-out" 
         :class="sidebarOpen ? 'w-64' : 'w-20'">
         <ul class="flex-1 px-2 py-4 space-y-2 overflow-y-auto">
             <li>
-                <a href="{{route('index')}}" class="flex items-center p-2 rounded-md hover:bg-gray-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
+                <a href="{{route('index')}}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('index') ? 'bg-gray-200 text-gray-900' : '' }}">
+                    <img src="{{ asset('assets/temp/dashboard-svgrepo-com (3).svg') }}" alt="Mosque Icon" class="h-6 w-6 mr-3">
                     <span x-show="sidebarOpen">Dashboard</span>
                 </a>
             </li>
-            <!-- Add more menu items as needed -->
+            <li>
+                <a href="{{ route('showEntityList') }}" 
+                class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showEntityList') ? 'bg-gray-200 text-gray-900' : '' }}">
+                    <img src="{{ asset('assets/temp/mosque-svgrepo-com (1).svg') }}" alt="Mosque Icon" class="h-6 w-6 mr-3">
+                    <span x-show="sidebarOpen">Masjid</span>
+                </a>
+            </li>
+
+
+
+
         </ul>
     </nav>
+
 
     <!-- Main Content -->
     <main class="pt-16 px-4 transition-all duration-300 sm:ml-20" :class="{'sm:ml-64': sidebarOpen}">

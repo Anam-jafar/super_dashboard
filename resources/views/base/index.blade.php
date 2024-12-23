@@ -82,7 +82,7 @@
                             <tr class="bg-gray-200">
                                 <th width='3%' rowspan='2' class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">#</th>
                                 <th width='17%' rowspan='2' class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Daerah</th>
-                                <th colspan='8' class="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider">Kategori Masjid</th>
+                                <th colspan='8' class="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider border-b-2 border-gray-400">Kategori Masjid</th>
                                 <th rowspan='2' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Aktif</th>
                                 <th rowspan='2' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Tidak Aktif</th>
                                 <th rowspan='2' class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">Jumlah Masjid</th>

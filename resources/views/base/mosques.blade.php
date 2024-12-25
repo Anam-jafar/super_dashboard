@@ -124,6 +124,9 @@
                     <li class="mr-1">
                         <a class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold" onclick="changeTab(event, 'alamat')" href="#">Alamat</a>
                     </li>
+                    <li class="mr-1">
+                        <a class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold" onclick="changeTab(event, 'additionalInfo')" href="#">Maklumat Tambahan</a>
+                    </li>
                 </ul>
             </div>
 
@@ -192,6 +195,22 @@
                         <input type="text" id="modalCountry" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     </div>
                 </div>
+<!-- Maklumat Tambahan Tab -->
+<div id="additionalInfo" class="tab-content hidden">
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalCustomerLink">CUSTOMER LINK:</label>
+        <input type="text" id="modalCustomerLink" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalAppCode">DIRECTORY / APPCODE:</label>
+        <input type="text" id="modalAppCode" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+    <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalCenterId">CENTER ID:</label>
+        <input type="text" id="modalCenterId" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    </div>
+</div>
+
             </div>
         </div>
     </div>
@@ -228,6 +247,11 @@ function openModal(mosqueId) {
             document.getElementById('modalCity').value = mosque.city || '';
             document.getElementById('modalState').value = mosque.state || '';
             document.getElementById('modalCountry').value = mosque.country || '';
+
+            document.getElementById('modalCustomerLink').value = mosque.rem1 || '';
+            document.getElementById('modalAppCode').value = mosque.rem2 || '';
+            document.getElementById('modalCenterId').value = mosque.rem3 || '';
+
 
             // Show the modal
             document.getElementById('mosqueModal').classList.remove('hidden');
@@ -291,7 +315,10 @@ function updateMosque() {
         pcode: document.getElementById('modalPcode').value,
         city: document.getElementById('modalCity').value,
         state: document.getElementById('modalState').value,
-        country: document.getElementById('modalCountry').value
+        country: document.getElementById('modalCountry').value,
+        rem1: document.getElementById('modalCustomerLink').value,
+        rem2: document.getElementById('modalAppCode').value,
+        rem3: document.getElementById('modalCenterId').value
     };
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

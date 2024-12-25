@@ -381,9 +381,106 @@ class DashboardController extends Controller
         ));
     }
     
-    public function showEntityList(Request $request){
-        return view('base.mosques');
+    public function showEntityList(Request $request)
+    {
+        $query = DB::table('client');
+    
+        // Fetch distinct cities for the dropdown
+        $cities = DB::table('client')->distinct()->pluck('city');
+    
+        // Apply search filter
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+    
+        // Apply status filter
+        if ($request->filled('status')) {
+            $query->where('sta', $request->input('status'));
+        }
+    
+        // Apply city filter
+        if ($request->filled('city')) {
+            $query->where('city', $request->input('city'));
+        }
+    
+        $clients = $query->paginate(25);
+    
+        return view('base.mosques', compact('clients', 'cities'));
+    }
+
+    public function showBranchList(Request $request)
+    {
+        $query = DB::table('sch')->select('name', 'sname', 'tel', 'mel', 'url');
+    
+        // Apply search filter
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+    
+        $branches = $query->paginate(25);
+    
+        return view('base.branches', compact('branches'));
     }
     
+    public function showAdminList(Request $request)
+    {
+        $query = DB::table('usr')->select('name', 'ic', 'hp', 'mel', 'jobdiv', 'status', );
+    
+        // Apply search filter
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+    
+        $admins = $query->paginate(25);
+    
+        return view('base.admins', compact('admins'));
+    }
+
+    // Controller Method for fetching mosque details
+public function getMosqueDetails($id)
+{
+    $mosque = DB::table('client')->where('id', $id)->first();
+
+    if ($mosque) {
+        return response()->json($mosque);
+    } else {
+        return response()->json(['error' => 'Mosque not found'], 404);
+    }
+}
+    public function update(Request $request, $id)
+    {
+        $mosque = DB::table('client')->where('id', $id)->first();
+
+        if (!$mosque) {
+            return response()->json(['error' => 'Mosque not found'], 404);
+        }
+
+        $updatedData = $request->all();
+        
+        // Basic validation (you can expand this as needed)
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'con1' => 'nullable|string|max:255',
+            'cate' => 'nullable|string|max:255',
+            'cate1' => 'nullable|string|max:255',
+            'sta' => 'nullable|string|max:255',
+            'mel' => 'nullable|email|max:255',
+            'hp' => 'nullable|string|max:255',
+            'addr' => 'nullable|string|max:255',
+            'addr1' => 'nullable|string|max:255',
+            'addr2' => 'nullable|string|max:255',
+            'pcode' => 'nullable|string|max:20',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+        ]);
+
+        DB::table('client')->where('id', $id)->update($validated);
+
+        $updatedMosque = DB::table('client')->where('id', $id)->first();
+
+        return response()->json($updatedMosque);
+    }
+
     
 }

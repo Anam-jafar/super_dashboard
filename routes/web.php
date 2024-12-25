@@ -26,7 +26,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
     Route::get('/district/', [DashboardController::class, 'mosquesInCityDetails'])->name('mosquesInCityDetails');
-    ROute::get('/mosques/', [DashboardController::class, 'showEntityList'])->name('showEntityList');
+    Route::get('/mosques/', [DashboardController::class, 'showEntityList'])->name('showEntityList');
+    Route::get('/branches/', [DashboardController::class, 'showBranchList'])->name('showBranchList');
+    Route::get('/admins/', [DashboardController::class, 'showAdminList'])->name('showAdminList');
+    Route::get('/api/mosques/{id}', [DashboardController::class, 'getMosqueDetails']);
+    Route::put('/update/mosques/{id}', [DashboardController::class, 'update']);
+
+
+
+
+
 });
 
 

@@ -42,6 +42,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/update/branches/{id}', [DashboardController::class, 'updateBranch']);
 
 
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::put('/profile/update', [AuthController::class, 'updateProfile'])->name('updateProfile');
+    Route::put('/profile/password', [AuthController::class, 'updatePassword'])->name('updatePassword');
+    
+
+
 
 
 

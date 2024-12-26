@@ -30,26 +30,40 @@
                 <span class="sr-only">Toggle sidebar</span>
             </button>
 
-            <h1 class="text-xl font-semibold text-gray-800">Awfatech</h1>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-transparent">
+                mias@Awfatech<sup class="text-xs bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-transparent">TM</sup>
+            </h1>
+
+
         </div>
 
         <!-- Profile Menu -->
         <div class="relative">
-            <button @click="profileOpen = !profileOpen" class="flex items-center space-x-2" aria-haspopup="true" :aria-expanded="profileOpen.toString()">
-                <img src="https://via.placeholder.com/40" alt="Profile" class="w-8 h-8 rounded-full">
-                <span class="text-gray-700 hidden sm:inline">John Doe</span>
+            <!-- Profile Menu Button -->
+            <button @click="profileOpen = !profileOpen" class="flex items-center space-x-2" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">
+                <img src="{{ asset('assets/temp/sd_default_profile.svg') }}" alt="Profile" class="w-8 h-8 rounded-full">
+                <span class="text-gray-700 hidden sm:inline">
+                    {{ Auth::check() ? Auth::user()->name : 'Guest' }}
+                </span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
             </button>
-            <div x-show="profileOpen" @click.away="profileOpen = false" class="absolute right-0 mt-2 bg-white shadow-md rounded-md w-48 py-1" x-cloak>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
+
+            <!-- Profile Menu Dropdown -->
+            <div x-show="profileOpen" @click.away="profileOpen = false" class="absolute right-0 mt-2 bg-white shadow-md rounded-md w-48 py-1" x-cloak id="profileMenu">
+                <!-- Profile Button -->
+                <button @click="window.location.href='{{ route('profile') }}'" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">
+                    Profile
+                </button>
+                <!-- <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a> -->
+                <!-- Logout Form -->
                 <form action="{{ route('logout') }}" method="POST" class="inline">
                     @csrf
                     <button type="submit" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">Logout</button>
                 </form>
             </div>
+
         </div>
     </nav>
     <!-- Mobile: Sidebar Dropdown -->

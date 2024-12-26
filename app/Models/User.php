@@ -10,8 +10,10 @@ class User extends Model implements AuthenticatableContract
 {
     use Authenticatable; // Use the Authenticatable trait
     protected $table = 'usr';
+    public $timestamps = false; // This disables the automatic timestamp handling
 
 
-    protected $fillable = ['ic', 'pass'];
+
+    protected $fillable = ['ic', 'pass', 'name', 'mel'];
     protected $hidden = ['pass'];
 }

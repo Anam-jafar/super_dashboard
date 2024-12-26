@@ -424,7 +424,7 @@ class DashboardController extends Controller
     
     public function showAdminList(Request $request)
     {
-        $query = DB::table('usr')->select('name', 'ic', 'hp', 'mel', 'jobdiv', 'status', );
+        $query = DB::table('usr');
     
         // Apply search filter
         if ($request->filled('search')) {
@@ -481,6 +481,53 @@ public function getMosqueDetails($id)
 
         return response()->json($updatedMosque);
     }
+
+    public function getDetails($id)
+{
+    $admin = DB::table('usr')->where('id', $id)->first();
+
+    if ($admin) {
+        return response()->json($admin);
+    } else {
+        return response()->json(['error' => 'Admin not found'], 404);
+    }
+}
+
+
+public function updateAdmin(Request $request, $id)
+{
+    // Check if the admin exists
+    $admin = DB::table('usr')->where('id', $id)->first();
+
+    if (!$admin) {
+        return response()->json(['error' => 'Admin not found'], 404);
+    }
+
+    // Basic validation (expand as needed)
+    // $validated = $request->validate([
+    //     'name' => 'required|string|max:255',
+    //     'ic' => 'nullable|string|max:20',
+    //     'hp' => 'nullable|string|max:20',
+    //     'mel' => 'nullable|email|max:255',
+    //     'jobdiv' => 'nullable|string|max:255',
+    //     'status' => 'nullable|string|max:50',
+    //     'syslevel' => 'nullable|string|max:50',
+    //     'sysaccess' => 'nullable|string|max:255',
+    //     'jobstart' => 'nullable|date',
+    // ]);
+
+    // Update the admin record
+    $updatedData = $request->all();
+
+    DB::table('usr')->where('id', $id)->update($updatedData);
+
+    // Retrieve the updated admin
+    $updatedAdmin = DB::table('usr')->where('id', $id)->first();
+
+    return response()->json($updatedAdmin);
+}
+
+
 
     
 }

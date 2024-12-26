@@ -7,214 +7,234 @@ use MongoDB\Client as MongoClient;
 use App\Reports\DashboardReport;
 use Illuminate\Support\Facades\DB;
 
-
-
 class DashboardController extends Controller
 {
-    
-    private function _getTotalMosques($city = NULL){
-        if($city != NULL){
-            $totalMosques = DB::table('client')
-            ->where('app', 'CLIENT')
-            ->where('isdel', 0)
-            ->where('city',$city)
-            ->count();
-        }else{
-            $totalMosques = DB::table('client')
-            ->where('app', 'CLIENT')
-            ->where('isdel', 0)
-            ->count();
-        }
+    private const CLIENT_BASE_QUERY = [
+        'app' => 'CLIENT',
+        'isdel' => 0
+    ];
 
-        return $totalMosques;
+    // Generic database query method to reduce redundancy
+    private function executeQuery($table, $constraints = [], $aggregation = null, $groupBy = null)
+    {
+        $query = DB::table($table);
+        
+        foreach ($constraints as $field => $value) {
+            $query->where($field, $value);
+        }
+        
+        if ($aggregation) {
+            $query->select(DB::raw($aggregation));
+        }
+        
+        if ($groupBy) {
+            $query->groupBy($groupBy);
+        }
+        
+        return $query;
     }
 
-    private function _getTotalKariah($city = NULL){
-        if($city != NULL){
-            $totalKariah = DB::table('report_kariah AS k')
+    private function getBaseClientQuery($city = null)
+    {
+        $constraints = self::CLIENT_BASE_QUERY;
+        if ($city) {
+            $constraints['city'] = $city;
+        }
+        return $constraints;
+    }
+
+    private function _getTotalMosques($city = null)
+    {
+        return $this->executeQuery('client', $this->getBaseClientQuery($city))->count();
+    }
+
+    private function _getTotalKariah($city = null)
+    {
+        if ($city) {
+            return DB::table('report_kariah AS k')
                 ->rightJoin(DB::raw('(SELECT uid, city FROM report_masjid) AS m'), 'k.uid', '=', 'm.uid')
                 ->where('m.city', $city)
                 ->sum('k.kariah_bil');
-            return $totalKariah;
-        } else {
-            $totalKariah = DB::table('report_kariah')
-                ->sum('kariah_bil');
-            return $totalKariah;
         }
-    }
-    
-
-
-    private function _getTotalStaff($city = NULL){
-        if($city != NULL){
-            $totalStaff = DB::table('report_masjid')
-            ->where('city', $city)
-            ->sum('staff_bil');
-        }else{
-            $totalStaff = DB::table('report_masjid')
-            ->sum('staff_bil');
-        }
-        return $totalStaff;
+        return DB::table('report_kariah')->sum('kariah_bil');
     }
 
-    private function _getKariahMaleFemale($city = NULL)
+    private function _getTotalStaff($city = null)
     {
-        if ($city != NULL) {
-            $result = DB::table('report_kariah AS k')
+        $constraints = $city ? ['city' => $city] : [];
+        return $this->executeQuery('report_masjid', $constraints)->sum('staff_bil');
+    }
+
+    private function getDemographicData($table, $columns, $city = null)
+    {
+        $baseQuery = $city 
+            ? DB::table($table . ' AS k')
                 ->rightJoin(DB::raw('(SELECT uid, city FROM report_masjid) AS m'), 'k.uid', '=', 'm.uid')
-                ->select(DB::raw('SUM(k.kariah_male) AS total_male, SUM(k.kariah_female) AS total_female'))
                 ->where('m.city', $city)
-                ->first();
-        } else {
-            $result = DB::table('report_kariah')
-                ->select(DB::raw('SUM(kariah_male) AS total_male, SUM(kariah_female) AS total_female'))
-                ->first();
-        }
-    
+            : DB::table($table);
+
+        return $baseQuery->select(DB::raw($columns))->first();
+    }
+
+    private function _getKariahMaleFemale($city = null)
+    {
+        $columns = 'SUM(kariah_male) AS total_male, SUM(kariah_female) AS total_female';
+        $result = $this->getDemographicData('report_kariah', $columns, $city);
+        
         return [
             'total_male' => $result->total_male ?? 0,
             'total_female' => $result->total_female ?? 0,
         ];
     }
-    
 
     private function _getTotalKariahPerDistrict()
     {
-        $result = DB::table('report_kariah AS k')
+        return DB::table('report_kariah AS k')
             ->rightJoin(DB::raw('(SELECT uid, city FROM report_masjid) AS m'), 'k.uid', '=', 'm.uid')
             ->select('m.city', DB::raw('SUM(k.kariah_bil) AS total_kariah'))
             ->groupBy('m.city')
             ->get();
-
-        return $result;
     }
 
-    private function _getKariahPerType($city = NULL)
+    private function _getTotalMosquePerCategory()
     {
-        if ($city) {
-            $result = DB::table('report_kariah AS k')
-                ->rightJoin(DB::raw('(SELECT uid, city FROM report_masjid) AS m'), 'k.uid', '=', 'm.uid')
-                ->select(DB::raw('
-                    SUM(k.kariah_cat_1) AS warga_emas,
-                    SUM(k.kariah_cat_2) AS ibu_tunggal,
-                    SUM(k.kariah_cat_3) AS oku,
-                    SUM(k.kariah_cat_4) AS fakir_miskin,
-                    SUM(k.kariah_cat_5) AS penerima_zakat,
-                    SUM(k.kariah_cat_6) AS pprt,
-                    SUM(k.kariah_cat_7) AS penerima_jkm,
-                    SUM(k.kariah_cat_8) AS pelajar,
-                    SUM(k.kariah_cat_9) AS pengangur,
-                    SUM(k.kariah_cat_10) AS bantuan_masjid
-                '))
-                ->where('m.city', $city)
-                ->first();
-        } else {
-            $result = DB::table('report_kariah')
-                ->select(DB::raw('
-                    SUM(kariah_cat_1) AS warga_emas,
-                    SUM(kariah_cat_2) AS ibu_tunggal,
-                    SUM(kariah_cat_3) AS oku,
-                    SUM(kariah_cat_4) AS fakir_miskin,
-                    SUM(kariah_cat_5) AS penerima_zakat,
-                    SUM(kariah_cat_6) AS pprt,
-                    SUM(kariah_cat_7) AS penerima_jkm,
-                    SUM(kariah_cat_8) AS pelajar,
-                    SUM(kariah_cat_9) AS pengangur,
-                    SUM(kariah_cat_10) AS bantuan_masjid
-                '))
-                ->first();
-        }
-    
-        return $result;
-    }
-    
-    private function _getKariahPerAgeRange($city = NULL)
-    {
-        if ($city) {
-            $result = DB::table('report_kariah AS k')
-                ->rightJoin(DB::raw('(SELECT uid, city FROM report_masjid) AS m'), 'k.uid', '=', 'm.uid')
-                ->select(DB::raw('
-                    SUM(kariah_age_1) AS range1_15,
-                    SUM(kariah_age_2) AS range15_30,
-                    SUM(kariah_age_3) AS range31_45,
-                    SUM(kariah_age_4) AS range46_60,
-                    SUM(kariah_age_5) AS range61_75,
-                    SUM(kariah_age_6) AS range75_plus'
-                ))
-                ->where('m.city', $city)
-                ->first();
-        } else {
-            $result = DB::table('report_kariah')
-                ->select(DB::raw('
-                    SUM(kariah_age_1) AS range1_15,
-                    SUM(kariah_age_2) AS range15_30,
-                    SUM(kariah_age_3) AS range31_45,
-                    SUM(kariah_age_4) AS range46_60,
-                    SUM(kariah_age_5) AS range61_75,
-                    SUM(kariah_age_6) AS range75_plus'
-                ))
-                ->first();
-        }
-    
-        return $result;
+        return DB::table('client as a')
+            ->rightJoin('type as b', 'a.cate', '=', 'b.prm')
+            ->where('b.grp', '=', 'type_CLIENT')
+            ->select('b.prm', DB::raw('count(a.id) as total'))
+            ->groupBy('b.prm')
+            ->get();
     }
 
+    private function _getKariahPerType($city = null)
+    {
+        $columns = '
+            SUM(kariah_cat_1) AS warga_emas,
+            SUM(kariah_cat_2) AS ibu_tunggal,
+            SUM(kariah_cat_3) AS oku,
+            SUM(kariah_cat_4) AS fakir_miskin,
+            SUM(kariah_cat_5) AS penerima_zakat,
+            SUM(kariah_cat_6) AS pprt,
+            SUM(kariah_cat_7) AS penerima_jkm,
+            SUM(kariah_cat_8) AS pelajar,
+            SUM(kariah_cat_9) AS pengangur,
+            SUM(kariah_cat_10) AS bantuan_masjid
+        ';
+        return $this->getDemographicData('report_kariah', $columns, $city);
+    }
+
+    private function _getKariahPerAgeRange($city = null)
+    {
+        $columns = '
+            SUM(kariah_age_1) AS range1_15,
+            SUM(kariah_age_2) AS range15_30,
+            SUM(kariah_age_3) AS range31_45,
+            SUM(kariah_age_4) AS range46_60,
+            SUM(kariah_age_5) AS range61_75,
+            SUM(kariah_age_6) AS range75_plus
+        ';
+        return $this->getDemographicData('report_kariah', $columns, $city);
+    }
+
+    private function _getKariahNationality($city = null)
+    {
+        $columns = '
+            SUM(kariah_race_my) AS Malay,
+            SUM(kariah_race_ind) AS Indo,
+            SUM(kariah_race_ch) AS Chinese,
+            SUM(kariah_race_oth) AS others
+        ';
+        $result = $this->getDemographicData('report_kariah', $columns, $city);
         
-    private function _getKariahNationality($city = NULL)
-    {
-        if ($city) {
-            $result = DB::table('report_kariah AS k')
-                ->rightJoin(DB::raw('(SELECT uid, city FROM report_masjid) AS m'), 'k.uid', '=', 'm.uid')
-                    ->select(DB::raw('
-                    SUM(kariah_race_my) AS Malay,
-                    SUM(kariah_race_ind) AS Indo,
-                    SUM(kariah_race_ch) AS Chinese,
-                    SUM(kariah_race_oth) AS others'
-                ))
-                ->where('m.city', $city)
-                ->first();
-        } else {
-            $result = DB::table('report_kariah')
-                ->select(DB::raw('
-                    SUM(kariah_race_my) AS Malay,
-                    SUM(kariah_race_ind) AS Indo,
-                    SUM(kariah_race_ch) AS Chinese,
-                    SUM(kariah_race_oth) AS others'
-                ))
-                ->first();
-        }
-    
-        return $result;
+        return [
+            'Malay' => $result->Malay ?? 0,
+            'Indo' => $result->Indo ?? 0,
+            'Chinese' => $result->Chinese ?? 0,
+            'Others' => $result->others ?? 0
+        ];
     }
-    
 
     private function _getDistrictTable()
     {
+        $categories = ['MASJID UTAMA', 'SURAU', 'MASJID DAERAH', 'MASJID KARIAH', 
+                      'SURAU JUMAAT', 'MASJID JAMEK', 'MASJID PENGURUSAN', 'MASJID'];
+        
+        $selects = ['c.city'];
+        
+        foreach ($categories as $category) {
+            $selects[] = DB::raw("(SELECT COUNT(*) FROM client WHERE cate = '$category' AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS " . str_replace(' ', '_', $category));
+        }
+        
+        $selects = array_merge($selects, [
+            DB::raw("(SELECT COUNT(*) FROM client WHERE sta = 1 AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS Total_Active"),
+            DB::raw("(SELECT COUNT(*) FROM client WHERE sta = 0 AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS Total_Inactive"),
+            DB::raw("(SELECT COUNT(*) FROM client WHERE cate IN (SELECT prm FROM `type` WHERE grp='type_CLIENT') AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS Total")
+        ]);
+
+        return DB::table('client AS c')
+            ->select($selects)
+            ->where(self::CLIENT_BASE_QUERY)
+            ->groupBy('c.city')
+            ->get();
+    }
+
+    // Generic listing method to handle mosque, branch, and admin listings
+    private function getListingData($table, Request $request, $additionalFilters = [])
+    {
+        $query = DB::table($table);
+        
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
+        }
+        
+        foreach ($additionalFilters as $filter => $field) {
+            if ($request->filled($filter)) {
+                $query->where($field, $request->input($filter));
+            }
+        }
+        
+        return $query->paginate($request->get('recordsPerPage', 25));
+    }
+
+    public function mosquesInCityDetails(Request $request)
+    {
+        $city = $request['city'];
+        
+        $data = [
+            'totalMosques' => $this->_getTotalMosques($city),
+            'totalKariah' => $this->_getTotalKariah($city),
+            'totalStaff' => $this->_getTotalStaff($city),
+            'totalKariah_MaleFemale' => $this->_getKariahMaleFemale($city),
+            'totalKariahPerDistrict' => $this->_getTotalKariahPerDistrict(),
+            'kariahPerType' => $this->_getKariahPerType($city),
+            'kariahPerAgeRange' => $this->_getKariahPerAgeRange($city),
+            'kariahNationality' => $this->_getKariahNationality(),
+            'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn($item) => [$item->prm => $item->total]),
+            'mosqueActiveInactive' => $this->_getMosqueActiveInactive($city),
+            'city' => $city,
+            'kariahPerMosqueType' => $this->_getKariahPerMosquesType($city)
+        ];
+
+        return view('base.mosques_in_city_details', $data);
+    }
+
+    private function _getMosqueActiveInactive($city)
+    {
         $result = DB::table('client AS c')
             ->select(
-                'c.city',
-                DB::raw("(SELECT COUNT(*) FROM client WHERE cate = 'MASJID UTAMA' AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS MASJID_UTAMA"),
-                DB::raw("(SELECT COUNT(*) FROM client WHERE cate = 'SURAU' AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS SURAU"),
-                DB::raw("(SELECT COUNT(*) FROM client WHERE cate = 'MASJID DAERAH' AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS MASJID_DAERAH"),
-                DB::raw("(SELECT COUNT(*) FROM client WHERE cate = 'MASJID KARIAH' AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS MASJID_KARIAH"),
-                DB::raw("(SELECT COUNT(*) FROM client WHERE cate = 'SURAU JUMAAT' AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS SURAU_JUMAAT"),
-                DB::raw("(SELECT COUNT(*) FROM client WHERE cate = 'MASJID JAMEK' AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS MASJID_JAMEK"),
-                DB::raw("(SELECT COUNT(*) FROM client WHERE cate = 'MASJID PENGURUSAN' AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS MASJID_PENGURUSAN"),
-                DB::raw("(SELECT COUNT(*) FROM client WHERE cate = 'MASJID' AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS MASJID"),
-
-                DB::raw("(SELECT COUNT(*) FROM client WHERE sta = 1 AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS Total_Active"),
-                DB::raw("(SELECT COUNT(*) FROM client WHERE sta = 0 AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS Total_Inactive"),
-
-                DB::raw("(SELECT COUNT(*) FROM client WHERE cate IN (SELECT prm FROM `type` WHERE grp='type_CLIENT') AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS Total")
+                DB::raw("SUM(CASE WHEN c.sta = 1 THEN 1 ELSE 0 END) AS Total_Active"),
+                DB::raw("SUM(CASE WHEN c.sta = 0 THEN 1 ELSE 0 END) AS Total_Inactive")
             )
             ->where('c.app', 'CLIENT')
             ->where('c.isdel', 0)
-            ->groupBy('c.city')
-            ->get();
+            ->where('c.city', $city)
+            ->first();
 
-        return $result;
+        return [
+            'Active' => $result->Total_Active ?? 0,
+            'Inactive' => $result->Total_Inactive ?? 0,
+        ];
     }
-
     private function _getKariahPerMosquesType($city)
     {
         $result = DB::table('client AS c')
@@ -233,364 +253,88 @@ class DashboardController extends Controller
             ->where('c.city', $city)
             ->groupBy('c.city')
             ->first();
-            
-        // Convert result into an array of categories
-        $categories = [
-            'Masjid Utama' => $result->MASJID_UTAMA,
-            'Surau' => $result->SURAU,
-            'Masjid Daerah' => $result->MASJID_DAERAH,
-            'Masjid Kariah' => $result->MASJID_KARIAH,
-            'Surau Jumaat' => $result->SURAU_JUMAAT,
-            'Masjid Jamek' => $result->MASJID_JAMEK,
-            'Masjid Pengurusan' => $result->MASJID_PENGURUSAN,
-            'Masjid' => $result->MASJID,
+                
+        return [
+            'Masjid Utama' => $result->MASJID_UTAMA ?? 0,
+            'Surau' => $result->SURAU ?? 0,
+            'Masjid Daerah' => $result->MASJID_DAERAH ?? 0,
+            'Masjid Kariah' => $result->MASJID_KARIAH ?? 0,
+            'Surau Jumaat' => $result->SURAU_JUMAAT ?? 0,
+            'Masjid Jamek' => $result->MASJID_JAMEK ?? 0,
+            'Masjid Pengurusan' => $result->MASJID_PENGURUSAN ?? 0,
+            'Masjid' => $result->MASJID ?? 0,
         ];
-
-        
-        return $categories;
-    }
-    
-    
-
-    private function _getMosqueActiveInactive($city)
-    {
-        $result = DB::table('client AS c')
-            ->select(
-                DB::raw("SUM(CASE WHEN c.sta = 1 THEN 1 ELSE 0 END) AS Total_Active"),
-                DB::raw("SUM(CASE WHEN c.sta = 0 THEN 1 ELSE 0 END) AS Total_Inactive")
-            )
-            ->where('c.app', 'CLIENT')
-            ->where('c.isdel', 0)
-            ->where('c.city', $city)
-            ->first();
-    
-        return $result;
-    }
-    
-
-    private function _getTotalMosquePerCategory()
-    {
-        // Execute the SQL query and return the result
-        return DB::table('client as a')
-            ->rightJoin('type as b', 'a.cate', '=', 'b.prm')
-            ->where('b.grp', '=', 'type_CLIENT')
-            ->select('b.prm', DB::raw('count(a.id) as total'))
-            ->groupBy('b.prm')
-            ->get();
     }
 
-
-
-
-
-
-
+    // Controller methods for web routes
     public function index()
     {
-        // Fetch data using the private functions
-        $totalMosques = $this->_getTotalMosques();
-        $totalKariah = $this->_getTotalKariah();
-        $totalStaff = $this->_getTotalStaff();
-        $totalKariah_MaleFemale = $this->_getKariahMaleFemale();
-        $totalKariahPerDistrict = $this->_getTotalKariahPerDistrict();
-        $kariahPerType = $this->_getKariahPerType();
-        $kariahPerAgeRange = $this->_getKariahPerAgeRange();
-        $kariahNationality = $this->_getKariahNationality();
-        $districtTable = $this->_getDistrictTable();
-        $mosqueData = $this->_getTotalMosquePerCategory();
-        $mosqueData = $mosqueData->mapWithKeys(function ($item) {
-            return [$item->prm => $item->total];
-        });
-        $kariahNationality = (array) $kariahNationality;
-
-        // Ensure all keys exist and fallback to 0 if missing
-        $kariahNationality = [
-            'Malay' => $kariahNationality['Malay'] ?? 0,
-            'Indo' => $kariahNationality['Indo'] ?? 0,
-            'Chinese' => $kariahNationality['Chinese'] ?? 0,
-            'Others' => $kariahNationality['others'] ?? 0
+        $data = [
+            'totalMosques' => $this->_getTotalMosques(),
+            'totalKariah' => $this->_getTotalKariah(),
+            'totalStaff' => $this->_getTotalStaff(),
+            'totalKariah_MaleFemale' => $this->_getKariahMaleFemale(),
+            'totalKariahPerDistrict' => $this->_getTotalKariahPerDistrict(),
+            'kariahPerType' => $this->_getKariahPerType(),
+            'kariahPerAgeRange' => $this->_getKariahPerAgeRange(),
+            'kariahNationality' => $this->_getKariahNationality(),
+            'districtTable' => $this->_getDistrictTable(),
+            'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn($item) => [$item->prm => $item->total])
         ];
 
-    
-        // Pass all the data to the view
-        return view('base.index', compact(
-            'totalMosques', 
-            'totalKariah', 
-            'totalStaff', 
-            'totalKariah_MaleFemale',
-            'totalKariahPerDistrict',
-            'kariahPerType',
-            'kariahPerAgeRange',
-            'kariahNationality',
-            'districtTable',
-            'mosqueData'
-        ));
+        return view('base.index', $data);
     }
 
-    public function mosquesInCityDetails(Request $request)
-    {
-        $city = $request['city'];
-        // Fetch data using the private functions
-        $totalMosques = $this->_getTotalMosques($city);
-        $totalKariah = $this->_getTotalKariah($city);
-        $totalStaff = $this->_getTotalStaff($city);
-        $totalKariah_MaleFemale = $this->_getKariahMaleFemale($city);
-        $totalKariahPerDistrict = $this->_getTotalKariahPerDistrict();
-        $kariahPerType = $this->_getKariahPerType($city);
-        $kariahPerAgeRange = $this->_getKariahPerAgeRange($city);
-        $kariahNationality = $this->_getKariahNationality();
-        $districtTable = $this->_getDistrictTable();
-        $mosqueData = $this->_getTotalMosquePerCategory();
-        $kariahPerMosqueType = $this->_getKariahPerMosquesType($city);
-
-        $mosqueData = $mosqueData->mapWithKeys(function ($item) {
-            return [$item->prm => $item->total];
-        });
-        $kariahNationality = (array) $kariahNationality;
-        // Ensure all keys exist and fallback to 0 if missing
-        $kariahNationality = [
-            'Malay' => $kariahNationality['Malay'] ?? 0,
-            'Indo' => $kariahNationality['Indo'] ?? 0,
-            'Chinese' => $kariahNationality['Chinese'] ?? 0,
-            'Others' => $kariahNationality['others'] ?? 0
-        ];
-
-        $mosqueActiveInactive = $this->_getMosqueActiveInactive($city);
-        $mosqueActiveInactive = (array) $mosqueActiveInactive;
-        $mosqueActiveInactive = [
-            'Active' => $mosqueActiveInactive['Total_Active'] ?? 0,
-            'Inactive' => $mosqueActiveInactive['Total_Inactive'] ?? 0,
-        ];
-
-
-    
-        // Pass all the data to the view
-        return view('base.mosques_in_city_details', compact(
-            'totalMosques', 
-            'totalKariah', 
-            'totalStaff', 
-            'totalKariah_MaleFemale',
-            'totalKariahPerDistrict',
-            'kariahPerType',
-            'kariahPerAgeRange',
-            'kariahNationality',
-            'mosqueData',
-            'mosqueActiveInactive',
-            'city',
-            'kariahPerMosqueType'
-        ));
-    }
-    
     public function showEntityList(Request $request)
     {
-        $query = DB::table('client');
-    
-        // Fetch distinct cities for the dropdown
         $cities = DB::table('client')->distinct()->pluck('city');
-    
-        // Apply search filter
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->input('search') . '%');
-        }
-    
-        // Apply status filter
-        if ($request->filled('status')) {
-            $query->where('sta', $request->input('status'));
-        }
-
-        // Apply sch filter
-        if ($request->filled('sch')) {
-            $query->where('sid', $request->input('sch'));
-        }
         $schs = DB::select('SELECT sname, sid FROM sch');
-
-    
-        // Apply city filter
-        if ($request->filled('city')) {
-            $query->where('city', $request->input('city'));
-        }
-        $recordsPerPage = request()->get('recordsPerPage', 25); // Default to 25
-    
-        $clients = $query->paginate($recordsPerPage);
+        $clients = $this->getListingData('client', $request, [
+            'status' => 'sta',
+            'sch' => 'sid',
+            'city' => 'city'
+        ]);
 
         return view('base.mosques', compact('clients', 'cities', 'schs'));
     }
 
     public function showBranchList(Request $request)
     {
-        $query = DB::table('sch');
-    
-        // Apply search filter
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->input('search') . '%');
-        }
-    
-        $recordsPerPage = request()->get('recordsPerPage', 25); // Default to 25
-    
-        $branches = $query->paginate($recordsPerPage);
-    
+        $branches = $this->getListingData('sch', $request);
         return view('base.branches', compact('branches'));
     }
-    
+
     public function showAdminList(Request $request)
     {
-        $query = DB::table('usr');
-    
-        // Apply search filter
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->input('search') . '%');
-        }
-
-        // Apply sch filter
-        if ($request->filled('sch')) {
-            $query->where('sch_id', $request->input('sch'));
-        }
         $schs = DB::select('SELECT sname, sid FROM sch');
-    
-        $recordsPerPage = request()->get('recordsPerPage', 25); // Default to 25
-    
-        $admins = $query->paginate($recordsPerPage);
-    
+        $admins = $this->getListingData('usr', $request, ['sch' => 'sch_id']);
         return view('base.admins', compact('admins', 'schs'));
     }
 
-    // Controller Method for fetching mosque details
-public function getMosqueDetails($id)
-{
-    $mosque = DB::table('client')->where('id', $id)->first();
-
-    if ($mosque) {
-        return response()->json($mosque);
-    } else {
-        return response()->json(['error' => 'Mosque not found'], 404);
-    }
-}
-    public function update(Request $request, $id)
+    // Generic CRUD operations
+    private function handleEntityOperation($table, $id, $request = null)
     {
-        $mosque = DB::table('client')->where('id', $id)->first();
-
-        if (!$mosque) {
-            return response()->json(['error' => 'Mosque not found'], 404);
+        if (!$request) {
+            $entity = DB::table($table)->where('id', $id)->first();
+            return $entity 
+                ? response()->json($entity)
+                : response()->json(['error' => ucfirst($table) . ' not found'], 404);
         }
 
-        $updatedData = $request->all();
-        
-        // Basic validation (you can expand this as needed)
-        // $validated = $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'con1' => 'nullable|string|max:255',
-        //     'cate' => 'nullable|string|max:255',
-        //     'cate1' => 'nullable|string|max:255',
-        //     'sta' => 'nullable|string|max:255',
-        //     'mel' => 'nullable|email|max:255',
-        //     'hp' => 'nullable|string|max:255',
-        //     'addr' => 'nullable|string|max:255',
-        //     'addr1' => 'nullable|string|max:255',
-        //     'addr2' => 'nullable|string|max:255',
-        //     'pcode' => 'nullable|string|max:20',
-        //     'city' => 'nullable|string|max:255',
-        //     'state' => 'nullable|string|max:255',
-        //     'country' => 'nullable|string|max:255',
-        // ]);
+        $entity = DB::table($table)->where('id', $id)->first();
+        if (!$entity) {
+            return response()->json(['error' => ucfirst($table) . ' not found'], 404);
+        }
 
-        DB::table('client')->where('id', $id)->update($updatedData);
-
-        $updatedMosque = DB::table('client')->where('id', $id)->first();
-
-        return response()->json($updatedMosque);
+        DB::table($table)->where('id', $id)->update($request->all());
+        return response()->json(DB::table($table)->where('id', $id)->first());
     }
 
-    public function getDetails($id)
-{
-    $admin = DB::table('usr')->where('id', $id)->first();
-
-    if ($admin) {
-        return response()->json($admin);
-    } else {
-        return response()->json(['error' => 'Admin not found'], 404);
-    }
-}
-
-
-public function updateAdmin(Request $request, $id)
-{
-    // Check if the admin exists
-    $admin = DB::table('usr')->where('id', $id)->first();
-
-    if (!$admin) {
-        return response()->json(['error' => 'Admin not found'], 404);
-    }
-
-    // Basic validation (expand as needed)
-    // $validated = $request->validate([
-    //     'name' => 'required|string|max:255',
-    //     'ic' => 'nullable|string|max:20',
-    //     'hp' => 'nullable|string|max:20',
-    //     'mel' => 'nullable|email|max:255',
-    //     'jobdiv' => 'nullable|string|max:255',
-    //     'status' => 'nullable|string|max:50',
-    //     'syslevel' => 'nullable|string|max:50',
-    //     'sysaccess' => 'nullable|string|max:255',
-    //     'jobstart' => 'nullable|date',
-    // ]);
-
-    // Update the admin record
-    $updatedData = $request->all();
-
-    DB::table('usr')->where('id', $id)->update($updatedData);
-
-    // Retrieve the updated admin
-    $updatedAdmin = DB::table('usr')->where('id', $id)->first();
-
-    return response()->json($updatedAdmin);
-}
-
-public function getBranchDetails($id)
-{
-    $branch = DB::table('sch')->where('id', $id)->first();
-
-    if ($branch) {
-        return response()->json($branch);
-    } else {
-        return response()->json(['error' => 'Branch not found'], 404);
-    }
-}
-
-public function updateBranch(Request $request, $id)
-{
-    $branch = DB::table('sch')->where('id', $id)->first();
-
-    if (!$branch) {
-        return response()->json(['error' => 'Branch not found'], 404);
-    }
-
-    // $updatedData = $request->validate([
-    //     'name' => 'required|string|max:255',
-    //     'sname' => 'required|string|max:50',
-    //     'schcat' => 'required|string|max:50',
-    //     'tel' => 'nullable|string|max:20',
-    //     'mel' => 'required|email|max:255',
-    //     'url' => 'nullable|url|max:255',
-    //     'addr' => 'nullable|string|max:255',
-    //     'addr2' => 'nullable|string|max:255',
-    //     'addr3' => 'nullable|string|max:255',
-    //     'daerah' => 'nullable|string|max:100',
-    //     'poskod' => 'nullable|string|max:20',
-    //     'state' => 'nullable|string|max:100',
-    //     'country' => 'nullable|string|max:100',
-    // ]);
-
-    $updatedData = $request->all();
-
-
-    DB::table('sch')->where('id', $id)->update($updatedData);
-
-    $updatedBranch = DB::table('sch')->where('id', $id)->first();
-
-    return response()->json($updatedBranch);
-}
-
-
-
-    
+    // CRUD route handlers
+    public function getMosqueDetails($id) { return $this->handleEntityOperation('client', $id); }
+    public function update(Request $request, $id) { return $this->handleEntityOperation('client', $id, $request); }
+    public function getDetails($id) { return $this->handleEntityOperation('usr', $id); }
+    public function updateAdmin(Request $request, $id) { return $this->handleEntityOperation('usr', $id, $request); }
+    public function getBranchDetails($id) { return $this->handleEntityOperation('sch', $id); }
+    public function updateBranch(Request $request, $id) { return $this->handleEntityOperation('sch', $id, $request); }
 }

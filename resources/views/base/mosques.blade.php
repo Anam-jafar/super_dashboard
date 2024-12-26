@@ -9,6 +9,20 @@
         <!-- Filter and Search Card -->
         <div class="w-full mb-4 bg-white shadow-md rounded-lg p-4">
             <form method="GET" action="{{ route('showEntityList') }}" class="flex flex-wrap items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <!-- Filter by School -->
+                <div class="flex-1">
+                    <label for="sch" class="block text-sm font-medium text-gray-700">Filter by Sch</label>
+                    <select id="sch" name="sch" class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:ring-blue-500 focus:border-blue-500">
+                        <!-- Default "All" option -->
+                        <option value="" {{ request('sch') == '' ? 'selected' : '' }}>All</option>
+                        <!-- School options -->
+                        @foreach ($schs as $sch)
+                            <option value="{{ $sch->sid }}" {{ request('sch') == $sch->sid ? 'selected' : '' }}>
+                                {{ $sch->sname }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
                 <!-- Name Search -->
                 <div class="flex-1">
                     <label for="search" class="block text-sm font-medium text-gray-700">Search by Name</label>

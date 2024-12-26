@@ -397,6 +397,13 @@ class DashboardController extends Controller
         if ($request->filled('status')) {
             $query->where('sta', $request->input('status'));
         }
+
+        // Apply sch filter
+        if ($request->filled('sch')) {
+            $query->where('sid', $request->input('sch'));
+        }
+        $schs = DB::select('SELECT sname, sid FROM sch');
+
     
         // Apply city filter
         if ($request->filled('city')) {
@@ -404,8 +411,8 @@ class DashboardController extends Controller
         }
     
         $clients = $query->paginate(25);
-    
-        return view('base.mosques', compact('clients', 'cities'));
+
+        return view('base.mosques', compact('clients', 'cities', 'schs'));
     }
 
     public function showBranchList(Request $request)
@@ -430,10 +437,16 @@ class DashboardController extends Controller
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
+
+        // Apply sch filter
+        if ($request->filled('sch')) {
+            $query->where('sch_id', $request->input('sch'));
+        }
+        $schs = DB::select('SELECT sname, sid FROM sch');
     
         $admins = $query->paginate(25);
     
-        return view('base.admins', compact('admins'));
+        return view('base.admins', compact('admins', 'schs'));
     }
 
     // Controller Method for fetching mosque details

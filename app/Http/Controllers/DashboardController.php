@@ -410,7 +410,7 @@ class DashboardController extends Controller
 
     public function showBranchList(Request $request)
     {
-        $query = DB::table('sch')->select('name', 'sname', 'tel', 'mel', 'url');
+        $query = DB::table('sch');
     
         // Apply search filter
         if ($request->filled('search')) {
@@ -525,6 +525,51 @@ public function updateAdmin(Request $request, $id)
     $updatedAdmin = DB::table('usr')->where('id', $id)->first();
 
     return response()->json($updatedAdmin);
+}
+
+public function getBranchDetails($id)
+{
+    $branch = DB::table('sch')->where('id', $id)->first();
+
+    if ($branch) {
+        return response()->json($branch);
+    } else {
+        return response()->json(['error' => 'Branch not found'], 404);
+    }
+}
+
+public function updateBranch(Request $request, $id)
+{
+    $branch = DB::table('sch')->where('id', $id)->first();
+
+    if (!$branch) {
+        return response()->json(['error' => 'Branch not found'], 404);
+    }
+
+    // $updatedData = $request->validate([
+    //     'name' => 'required|string|max:255',
+    //     'sname' => 'required|string|max:50',
+    //     'schcat' => 'required|string|max:50',
+    //     'tel' => 'nullable|string|max:20',
+    //     'mel' => 'required|email|max:255',
+    //     'url' => 'nullable|url|max:255',
+    //     'addr' => 'nullable|string|max:255',
+    //     'addr2' => 'nullable|string|max:255',
+    //     'addr3' => 'nullable|string|max:255',
+    //     'daerah' => 'nullable|string|max:100',
+    //     'poskod' => 'nullable|string|max:20',
+    //     'state' => 'nullable|string|max:100',
+    //     'country' => 'nullable|string|max:100',
+    // ]);
+
+    $updatedData = $request->all();
+
+
+    DB::table('sch')->where('id', $id)->update($updatedData);
+
+    $updatedBranch = DB::table('sch')->where('id', $id)->first();
+
+    return response()->json($updatedBranch);
 }
 
 

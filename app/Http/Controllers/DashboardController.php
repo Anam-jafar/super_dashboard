@@ -425,7 +425,9 @@ class DashboardController extends Controller
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
     
-        $branches = $query->paginate(25);
+        $recordsPerPage = request()->get('recordsPerPage', 25); // Default to 25
+    
+        $branches = $query->paginate($recordsPerPage);
     
         return view('base.branches', compact('branches'));
     }
@@ -445,7 +447,9 @@ class DashboardController extends Controller
         }
         $schs = DB::select('SELECT sname, sid FROM sch');
     
-        $admins = $query->paginate(25);
+        $recordsPerPage = request()->get('recordsPerPage', 25); // Default to 25
+    
+        $admins = $query->paginate($recordsPerPage);
     
         return view('base.admins', compact('admins', 'schs'));
     }

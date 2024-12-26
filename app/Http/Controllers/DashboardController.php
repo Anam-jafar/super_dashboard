@@ -409,8 +409,9 @@ class DashboardController extends Controller
         if ($request->filled('city')) {
             $query->where('city', $request->input('city'));
         }
+        $recordsPerPage = request()->get('recordsPerPage', 25); // Default to 25
     
-        $clients = $query->paginate(25);
+        $clients = $query->paginate($recordsPerPage);
 
         return view('base.mosques', compact('clients', 'cities', 'schs'));
     }
@@ -471,24 +472,24 @@ public function getMosqueDetails($id)
         $updatedData = $request->all();
         
         // Basic validation (you can expand this as needed)
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'con1' => 'nullable|string|max:255',
-            'cate' => 'nullable|string|max:255',
-            'cate1' => 'nullable|string|max:255',
-            'sta' => 'nullable|string|max:255',
-            'mel' => 'nullable|email|max:255',
-            'hp' => 'nullable|string|max:255',
-            'addr' => 'nullable|string|max:255',
-            'addr1' => 'nullable|string|max:255',
-            'addr2' => 'nullable|string|max:255',
-            'pcode' => 'nullable|string|max:20',
-            'city' => 'nullable|string|max:255',
-            'state' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:255',
-        ]);
+        // $validated = $request->validate([
+        //     'name' => 'required|string|max:255',
+        //     'con1' => 'nullable|string|max:255',
+        //     'cate' => 'nullable|string|max:255',
+        //     'cate1' => 'nullable|string|max:255',
+        //     'sta' => 'nullable|string|max:255',
+        //     'mel' => 'nullable|email|max:255',
+        //     'hp' => 'nullable|string|max:255',
+        //     'addr' => 'nullable|string|max:255',
+        //     'addr1' => 'nullable|string|max:255',
+        //     'addr2' => 'nullable|string|max:255',
+        //     'pcode' => 'nullable|string|max:20',
+        //     'city' => 'nullable|string|max:255',
+        //     'state' => 'nullable|string|max:255',
+        //     'country' => 'nullable|string|max:255',
+        // ]);
 
-        DB::table('client')->where('id', $id)->update($validated);
+        DB::table('client')->where('id', $id)->update($updatedData);
 
         $updatedMosque = DB::table('client')->where('id', $id)->first();
 

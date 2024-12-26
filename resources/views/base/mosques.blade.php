@@ -101,10 +101,62 @@
                 </tbody>
             </table>
 
-            <!-- Pagination links -->
-            <div class="mt-4">
-                {{ $clients->links() }}
-            </div>
+
+
+<!-- Pagination Section -->
+<div class="mt-4 flex justify-between items-center">
+    <!-- Showing Records Info (Left Side) -->
+    <div class="text-sm font-medium text-gray-700">
+        Showing 
+        {{ $clients->firstItem() }} - {{ $clients->lastItem() }} 
+        from total {{ $clients->total() }}
+    </div>
+
+    <!-- Pagination Links and Records Per Page (Right Side) -->
+    <div class="flex items-center space-x-4">
+        <!-- Pagination Links (Prev and Next Buttons) -->
+        <div class="flex items-center space-x-2">
+            <!-- Prev Button -->
+            @if ($clients->currentPage() > 1)
+                <a href="{{ $clients->previousPageUrl() }}" 
+                   class="p-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    Prev
+                </a>
+            @else
+                <span class="p-2 border border-gray-300 rounded-md bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed">
+                    Prev
+                </span>
+            @endif
+
+            <!-- Next Button -->
+            @if ($clients->hasMorePages())
+                <a href="{{ $clients->nextPageUrl() }}" 
+                   class="p-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                    Next
+                </a>
+            @else
+                <span class="p-2 border border-gray-300 rounded-md bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed">
+                    Next
+                </span>
+            @endif
+        </div>
+
+        <!-- Records Per Page Dropdown -->
+        <div class="flex items-center space-x-2">
+            <select id="recordsPerPage" name="recordsPerPage" 
+                    onchange="updatePagination(this.value)" 
+                    class="p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                <option value="25" {{ request('recordsPerPage') == 25 ? 'selected' : '' }}>25/Ms</option>
+                <option value="50" {{ request('recordsPerPage') == 50 ? 'selected' : '' }}>50/Ms</option>
+                <option value="100" {{ request('recordsPerPage') == 100 ? 'selected' : '' }}>100/Ms</option>
+                <option value="200" {{ request('recordsPerPage') == 200 ? 'selected' : '' }}>200/Ms</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+
+
         </div>
     </div>
 </div>
@@ -231,6 +283,13 @@
 </div>
 
 <script>
+
+function updatePagination(recordsPerPage) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('recordsPerPage', recordsPerPage);
+        url.searchParams.set('page', 1); // Reset to the first page when the number of records changes
+        window.location.href = url.toString();
+    }
 let currentMosqueData = null;
 
 function openModal(mosqueId) {

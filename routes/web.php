@@ -38,8 +38,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/getAdminDetails/{id}', [DashboardController::class, 'getDetails']);
     Route::post('/updateAdmin/{id}', [DashboardController::class, 'updateAdmin']);
 
-Route::get('/api/branches/{id}', [DashboardController::class, 'getBranchDetails']);
-Route::post('/update/branches/{id}', [DashboardController::class, 'updateBranch']);
+    Route::get('/api/branches/{id}', [DashboardController::class, 'getBranchDetails']);
+    Route::post('/update/branches/{id}', [DashboardController::class, 'updateBranch']);
 
 
 

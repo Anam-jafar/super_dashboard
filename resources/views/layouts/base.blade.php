@@ -91,14 +91,14 @@
         <ul class="flex-1 px-2 py-4 space-y-2 overflow-y-auto">
             <li>
                 <a href="{{route('index')}}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('index') ? 'bg-gray-200 text-gray-900' : '' }}">
-                    <img src="{{ asset('assets/temp/dashboard-svgrepo-com (3).svg') }}" alt="Mosque Icon" class="h-6 w-6  ml-3 mr-3">
+                    <img src="{{ asset('assets/temp/sd_dashboard.svg') }}" alt="Mosque Icon" class="h-6 w-6  ml-3 mr-3">
                     <span x-show="sidebarOpen">Dashboard</span>
                 </a>
             </li>
             <li>
                 <a href="{{ route('showEntityList') }}" 
                 class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showEntityList') ? 'bg-gray-200 text-gray-900' : '' }}">
-                    <img src="{{ asset('assets/temp/mosque-svgrepo-com (1).svg') }}" alt="Mosque Icon" class="h-6 w-6 ml-3 mr-3">
+                    <img src="{{ asset('assets/temp/sd_mosque03.svg') }}" alt="Mosque Icon" class="h-6 w-6 ml-3 mr-3">
                     <span x-show="sidebarOpen">Masjid</span>
                 </a>
             </li>
@@ -106,7 +106,7 @@
             <li>
                 <a href="{{ route('showAdminList') }}" 
                 class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showAdminList') ? 'bg-gray-200 text-gray-900' : '' }}">
-                    <img src="{{ asset('assets/temp/user-svgrepo-com (1).svg') }}" alt="Mosque Icon" class="h-6 w-6 ml-3 mr-3">
+                    <img src="{{ asset('assets/temp/sd_account.svg') }}" alt="Mosque Icon" class="h-6 w-6 ml-3 mr-3">
                     <span x-show="sidebarOpen">Admin</span>    
                 </a>
 
@@ -115,7 +115,7 @@
             <li>
                 <a href="{{ route('showBranchList') }}" 
                 class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showBranchList') ? 'bg-gray-200 text-gray-900' : '' }}">
-                    <img src="{{ asset('assets/temp/branch-svgrepo-com.svg') }}" alt="Mosque Icon" class="h-6 w-6 ml-3 mr-3">
+                    <img src="{{ asset('assets/temp/sd_branch.svg') }}" alt="Mosque Icon" class="h-6 w-6 ml-3 mr-3">
                     <span x-show="sidebarOpen">Branch</span>    
                 </a>
 

@@ -306,9 +306,19 @@ class DashboardController extends Controller
 
     public function showAdminList(Request $request)
     {
+        $formFields = [
+            ['id' => 'name', 'label' => 'Nama'],
+            ['id' => 'syslevel', 'label' => 'Level Sistem'],
+            ['id' => 'ic', 'label' => 'Nombor KP'],
+            ['id' => 'sysaccess', 'label' => 'Capaian Sistem'],
+            ['id' => 'hp', 'label' => 'Tel. Bimbit'],
+            ['id' => 'jobstart', 'label' => 'Tarikh Mula'],
+            ['id' => 'mel', 'label' => 'Emel'],
+            ['id' => 'status', 'label' => 'Status']
+        ];
         $schs = DB::select('SELECT sname, sid FROM sch');
         $admins = $this->getListingData('usr', $request, ['sch' => 'sch_id']);
-        return view('base.admins', compact('admins', 'schs'));
+        return view('base.admins', compact('admins', 'schs', 'formFields'));
     }
 
     // Generic CRUD operations
@@ -337,4 +347,73 @@ class DashboardController extends Controller
     public function updateAdmin(Request $request, $id) { return $this->handleEntityOperation('usr', $id, $request); }
     public function getBranchDetails($id) { return $this->handleEntityOperation('sch', $id); }
     public function updateBranch(Request $request, $id) { return $this->handleEntityOperation('sch', $id, $request); }
+
+
+public function store(Request $request)
+{
+    // Optional validation (uncomment if needed)
+    // $validator = Validator::make($request->all(), [
+    //     'name' => 'required|string|max:255',
+    //     'con1' => 'nullable|string|max:255',
+    //     'cate' => 'nullable|string|max:255',
+    //     'cate1' => 'nullable|string|max:255',
+    //     'sta' => 'nullable|integer',
+    //     'mel' => 'nullable|email|max:255',
+    //     'hp' => 'nullable|string|max:255',
+    //     'addr' => 'nullable|string|max:255',
+    //     'addr1' => 'nullable|string|max:255',
+    //     'addr2' => 'nullable|string|max:255',
+    //     'pcode' => 'nullable|string|max:20',
+    //     'city' => 'nullable|string|max:255',
+    //     'state' => 'nullable|string|max:255',
+    //     'country' => 'nullable|string|max:255',
+    //     'rem1' => 'nullable|string|max:255',
+    //     'rem2' => 'nullable|string|max:255',
+    //     'rem3' => 'nullable|string|max:255',
+    // ]);
+
+    // if ($validator->fails()) {
+    //     return response()->json(['errors' => $validator->errors()], 422);
+    // }
+
+    try {
+        $insertId = DB::table('client')->insertGetId([
+            'name' => $request->input('name'),
+            'con1' => $request->input('con1'),
+            'cate' => $request->input('cate'),
+            'cate1' => $request->input('cate1'),
+            'sta' => (int) $request->input('sta'), // Explicitly cast to int
+            'mel' => $request->input('mel'),
+            'hp' => $request->input('hp'),
+            'addr' => $request->input('addr'),
+            'addr1' => $request->input('addr1'),
+            'addr2' => $request->input('addr2'),
+            'pcode' => $request->input('pcode'),
+            'city' => $request->input('city'),
+            'state' => $request->input('state'),
+            'country' => $request->input('country'),
+            'rem1' => $request->input('rem1'),
+            'rem2' => $request->input('rem2'),
+            'rem3' => $request->input('rem3'),
+            'uid' => 'c002020',
+            'firebase_id' => '',
+            'imgProfile' => '',
+            'isustaz' => '',
+            'iskariah' => '',
+            'sid' => 0,
+        ]);
+
+        // Fetch the inserted row to return as a response
+        $mosque = DB::table('client')->where('id', $insertId)->first();
+
+        return response()->json($mosque, 201);
+
+    } catch (\Exception $e) {
+        // Log the error for debugging and return a 500 response
+        \Log::error('Error inserting into client table: ' . $e->getMessage());
+
+        return response()->json(['error' => 'Failed to insert client data.'], 500);
+    }
+}
+
 }

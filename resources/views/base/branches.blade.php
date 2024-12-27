@@ -30,6 +30,7 @@
             <table class="min-w-full border-collapse border border-gray-300">
                 <thead>
                     <tr>
+                        <th class="border border-gray-300 px-4 py-2 text-left">#</th>
                         <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
                         <th class="border border-gray-300 px-4 py-2 text-left">Short Name</th>
                         <th class="border border-gray-300 px-4 py-2 text-left">Telephone</th>
@@ -38,8 +39,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($branches as $branch)
+                    @forelse($branches  as $key => $branch)
                         <tr class="cursor-pointer hover:bg-gray-100" onclick="openModal('{{ $branch->id }}')">
+                        <td class="border border-gray-300 px-4 py-2">{{ ($branches->currentPage() - 1) * $branches->perPage() + $key + 1 }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $branch->name }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $branch->sname }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $branch->tel }}</td>

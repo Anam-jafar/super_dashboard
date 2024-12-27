@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admins/', [DashboardController::class, 'showAdminList'])->name('showAdminList');
     Route::get('/api/mosques/{id}', [DashboardController::class, 'getMosqueDetails']);
     Route::put('/update/mosques/{id}', [DashboardController::class, 'update']);
+    Route::post('/add/mosques/', [DashboardController::class, 'store']);
 
     // Route::get('/getAdminDetails/{id}', [DashboardController::class, 'getAdminDetails']);
 

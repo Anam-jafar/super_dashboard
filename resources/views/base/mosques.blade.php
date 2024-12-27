@@ -63,12 +63,15 @@
                 </div>
             </form>
         </div>
+        <button onclick="openModal()">Add New</button>
+
 
         <!-- Table to display data -->
         <div class="w-full overflow-x-auto bg-white shadow-md rounded-lg p-4">
             <table class="min-w-full border-collapse border border-gray-300">
                 <thead>
                     <tr>
+                        <th class="border border-gray-300 px-4 py-2 text-left">#</th>
                         <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
                         <th class="border border-gray-300 px-4 py-2 text-left">Registration</th>
                         <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
@@ -81,8 +84,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($clients as $mosque)
+                    @forelse($clients as $key => $mosque)
                         <tr class="cursor-pointer hover:bg-gray-100" onclick="openModal('{{ $mosque->id }}')">
+                           <td class="border border-gray-300 px-4 py-2">{{ ($clients->currentPage() - 1) * $clients->perPage() + $key + 1 }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $mosque->name }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $mosque->regdt }}</td>
                             <td class="border border-gray-300 px-4 py-2">{{ $mosque->sta }}</td>
@@ -173,7 +177,7 @@
                         Refresh
                     </button>
                     <button onclick="updateMosque()" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 mr-2">
-                        Update
+                        Save
                     </button>
                     <button onclick="closeModal()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
                         Close
@@ -283,7 +287,6 @@
 </div>
 
 <script>
-
 function updatePagination(recordsPerPage) {
         const url = new URL(window.location.href);
         url.searchParams.set('recordsPerPage', recordsPerPage);
@@ -292,8 +295,16 @@ function updatePagination(recordsPerPage) {
     }
 let currentMosqueData = null;
 
-function openModal(mosqueId) {
-    // Fetch mosque data using AJAX
+function openModal(mosqueId = null) {
+    if (mosqueId === null) {
+        // Creating a new mosque
+        currentMosqueData = null;
+        clearModalFields();
+        document.getElementById('mosqueModal').classList.remove('hidden');
+        return;
+    }
+
+    // Fetching existing mosque data
     fetch(`/api/mosques/${mosqueId}`)
         .then(response => {
             if (!response.ok) {
@@ -303,36 +314,42 @@ function openModal(mosqueId) {
         })
         .then(mosque => {
             currentMosqueData = mosque;
-
-            // Set the data in the modal
-            document.getElementById('modalName').value = mosque.name || '';
-            document.getElementById('modalContact').value = mosque.con1 || '';
-            document.getElementById('modalCategory').value = mosque.cate || '';
-            document.getElementById('modalGroup').value = mosque.cate1 || '';
-            document.getElementById('modalStatus').value = mosque.sta || '';
-            document.getElementById('modalEmail').value = mosque.mel || '';
-            document.getElementById('modalPhone').value = mosque.hp || '';
-
-            document.getElementById('modalAddress1').value = mosque.addr || '';
-            document.getElementById('modalAddress2').value = mosque.addr1 || '';
-            document.getElementById('modalAddress3').value = mosque.addr2 || '';
-            document.getElementById('modalPcode').value = mosque.pcode || '';
-            document.getElementById('modalCity').value = mosque.city || '';
-            document.getElementById('modalState').value = mosque.state || '';
-            document.getElementById('modalCountry').value = mosque.country || '';
-
-            document.getElementById('modalCustomerLink').value = mosque.rem1 || '';
-            document.getElementById('modalAppCode').value = mosque.rem2 || '';
-            document.getElementById('modalCenterId').value = mosque.rem3 || '';
-
-
-            // Show the modal
+            populateModalFields(mosque);
             document.getElementById('mosqueModal').classList.remove('hidden');
         })
         .catch(error => {
             console.error('Error fetching mosque data:', error);
             alert('Failed to fetch mosque details. Please try again.');
         });
+}
+
+function clearModalFields() {
+    const fields = ['Name', 'Contact', 'Category', 'Group', 'Status', 'Email', 'Phone', 
+                    'Address1', 'Address2', 'Address3', 'Pcode', 'City', 'State', 'Country',
+                    'CustomerLink', 'AppCode', 'CenterId'];
+    fields.forEach(field => {
+        document.getElementById(`modal${field}`).value = '';
+    });
+}
+
+function populateModalFields(mosque) {
+    document.getElementById('modalName').value = mosque.name || '';
+    document.getElementById('modalContact').value = mosque.con1 || '';
+    document.getElementById('modalCategory').value = mosque.cate || '';
+    document.getElementById('modalGroup').value = mosque.cate1 || '';
+    document.getElementById('modalStatus').value = mosque.sta || '';
+    document.getElementById('modalEmail').value = mosque.mel || '';
+    document.getElementById('modalPhone').value = mosque.hp || '';
+    document.getElementById('modalAddress1').value = mosque.addr || '';
+    document.getElementById('modalAddress2').value = mosque.addr1 || '';
+    document.getElementById('modalAddress3').value = mosque.addr2 || '';
+    document.getElementById('modalPcode').value = mosque.pcode || '';
+    document.getElementById('modalCity').value = mosque.city || '';
+    document.getElementById('modalState').value = mosque.state || '';
+    document.getElementById('modalCountry').value = mosque.country || '';
+    document.getElementById('modalCustomerLink').value = mosque.rem1 || '';
+    document.getElementById('modalAppCode').value = mosque.rem2 || '';
+    document.getElementById('modalCenterId').value = mosque.rem3 || '';
 }
 
 function closeModal() {
@@ -369,11 +386,6 @@ function refreshModal() {
 }
 
 function updateMosque() {
-    if (!currentMosqueData || !currentMosqueData.id) {
-        alert('No mosque data to update.');
-        return;
-    }
-
     const updatedData = {
         name: document.getElementById('modalName').value,
         con1: document.getElementById('modalContact').value,
@@ -395,9 +407,11 @@ function updateMosque() {
     };
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const url = currentMosqueData ? `/update/mosques/${currentMosqueData.id}` : '/add/mosques/';
+    const method = currentMosqueData ? 'PUT' : 'POST';
 
-    fetch(`/update/mosques/${currentMosqueData.id}`, {
-        method: 'PUT',
+    fetch(url, {
+        method: method,
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': csrfToken
@@ -413,13 +427,15 @@ function updateMosque() {
         return response.json();
     })
     .then(data => {
-        alert('Mosque data updated successfully!');
+        alert(currentMosqueData ? 'Mosque data updated successfully!' : 'New mosque created successfully!');
         currentMosqueData = data;
-        refreshModal();
+        closeModal();
+        // Refresh the mosque list
+        location.reload();
     })
     .catch(error => {
-        console.error('Error updating mosque data:', error);
-        alert(`Failed to update mosque details. Error: ${error.message}`);
+        console.error('Error updating/creating mosque data:', error);
+        alert(`Failed to update/create mosque details. Error: ${error.message}`);
     });
 }
 
@@ -432,6 +448,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.flex.border-b a').click();
 });
 </script>
+
 
 @endsection
 

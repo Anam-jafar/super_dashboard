@@ -45,34 +45,37 @@
 
         <!-- Table to display data -->
         <div class="w-full overflow-x-auto bg-white shadow-md rounded-lg p-4">
-            <table class="min-w-full border-collapse border border-gray-300">
-                <thead>
-                    <tr>
-                        <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">IC</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">HP</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">Email</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">JobDiv</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($admins as $admin)
-                        <tr class="cursor-pointer hover:bg-gray-100" data-id="{{ $admin->id }}" onclick="openModal('{{ $admin->id }}')">
-                            <td class="border border-gray-300 px-4 py-2">{{ $admin->name }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $admin->ic }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $admin->hp }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $admin->mel }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $admin->jobdiv }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $admin->status }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="border border-gray-300 px-4 py-2 text-center">No records found.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+        <table class="min-w-full border-collapse border border-gray-300">
+    <thead>
+        <tr>
+            <th class="border border-gray-300 px-4 py-2 text-left">#</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">IC</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">HP</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Email</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">JobDiv</th>
+            <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @forelse($admins as $key => $admin)
+            <tr class="cursor-pointer hover:bg-gray-100" data-id="{{ $admin->id }}" onclick="openModal('{{ $admin->id }}')">
+                <td class="border border-gray-300 px-4 py-2">{{ ($admins->currentPage() - 1) * $admins->perPage() + $key + 1 }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ $admin->name }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ $admin->ic }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ $admin->hp }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ $admin->mel }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ $admin->jobdiv }}</td>
+                <td class="border border-gray-300 px-4 py-2">{{ $admin->status }}</td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="7" class="border border-gray-300 px-4 py-2 text-center">No records found.</td>
+            </tr>
+        @endforelse
+    </tbody>
+</table>
+
 
 
 

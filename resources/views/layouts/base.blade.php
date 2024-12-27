@@ -128,6 +128,12 @@
                 <span x-show="sidebarOpen">Branch</span>
             </a>
         </li>
+        <li>
+            <a href="{{ route('compensation.list') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showBranchList') ? 'bg-gray-200 text-gray-900' : '' }}">
+                <img src="{{ asset('assets/temp/compensation.svg') }}" alt="Branch Icon" class="h-6 w-6 ml-3 mr-3">
+                <span x-show="sidebarOpen">Kaffarah</span>
+            </a>
+        </li>
     </ul>
 </nav>
 

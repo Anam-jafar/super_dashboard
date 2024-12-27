@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MetrixController;
 
 
 
@@ -46,6 +47,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
     Route::put('/profile/update', [AuthController::class, 'updateProfile'])->name('updateProfile');
     Route::put('/profile/password', [AuthController::class, 'updatePassword'])->name('updatePassword');
+
+    Route::get('/compensation', [MetrixController::class, 'compensationList'])->name('compensation.list');
     
 
 

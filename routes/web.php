@@ -49,6 +49,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/password', [AuthController::class, 'updatePassword'])->name('updatePassword');
 
     Route::get('/compensation', [MetrixController::class, 'compensationList'])->name('compensation.list');
+    Route::get('/compensation/create', [MetrixController::class, 'create'])->name('compensation.create');
+    Route::post('/compensation/store', [MetrixController::class, 'store'])->name('compensation.store');
+    Route::post('/compensation/mark-as-active/{id}', [MetrixController::class, 'markAsActive'])->name('compensation.markAsActive');
+
+
     
 
 

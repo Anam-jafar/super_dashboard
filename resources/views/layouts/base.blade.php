@@ -31,7 +31,7 @@
             </button>
 
             <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-transparent">
-                mias@Awfatech<sup class="text-xs bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-transparent">TM</sup>
+                mais@Awfatech<sup class="text-xs bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-transparent">TM</sup>
             </h1>
 
 

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MetrixController;
+use App\Http\Controllers\EntityController;
 
 
 
@@ -27,21 +28,26 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
     Route::get('/district/', [DashboardController::class, 'mosquesInCityDetails'])->name('mosquesInCityDetails');
-    Route::get('/mosques/', [DashboardController::class, 'showEntityList'])->name('showEntityList');
-    Route::get('/branches/', [DashboardController::class, 'showBranchList'])->name('showBranchList');
-    Route::get('/admins/', [DashboardController::class, 'showAdminList'])->name('showAdminList');
-    Route::get('/api/mosques/{id}', [DashboardController::class, 'getMosqueDetails']);
-    Route::put('/update/mosques/{id}', [DashboardController::class, 'update']);
-    Route::post('/add/mosques/', [DashboardController::class, 'store']);
+
+
+
+
+
+    Route::get('/mosques/', [EntityController::class, 'showEntityList'])->name('showEntityList');
+    Route::get('/branches/', [EntityController::class, 'showBranchList'])->name('showBranchList');
+    Route::get('/admins/', [EntityController::class, 'showAdminList'])->name('showAdminList');
+    Route::get('/api/mosques/{id}', [EntityController::class, 'getMosqueDetails']);
+    Route::put('/update/mosques/{id}', [EntityController::class, 'update']);
+    Route::post('/add/mosques/', [EntityController::class, 'store']);
 
     // Route::get('/getAdminDetails/{id}', [DashboardController::class, 'getAdminDetails']);
 
 
-    Route::get('/getAdminDetails/{id}', [DashboardController::class, 'getDetails']);
-    Route::post('/updateAdmin/{id}', [DashboardController::class, 'updateAdmin']);
+    Route::get('/getAdminDetails/{id}', [EntityController::class, 'getDetails']);
+    Route::post('/updateAdmin/{id}', [EntityController::class, 'updateAdmin']);
 
-    Route::get('/api/branches/{id}', [DashboardController::class, 'getBranchDetails']);
-    Route::post('/update/branches/{id}', [DashboardController::class, 'updateBranch']);
+    Route::get('/api/branches/{id}', [EntityController::class, 'getBranchDetails']);
+    Route::post('/update/branches/{id}', [EntityController::class, 'updateBranch']);
 
 
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');

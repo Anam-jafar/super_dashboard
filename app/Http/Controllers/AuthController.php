@@ -82,20 +82,8 @@ class AuthController extends Controller
 public function updateProfile(Request $request)
 {
     $user = Auth::user();
-
-    // Validate the input data
-    // $request->validate([
-    //     'name' => 'required|string|max:255',
-    //     'email' => 'required|email|max:255',
-    //     'phone' => 'required|string|max:20',
-    // ]);
-
-    // Update the user profile
-    $user->update([
-        'name' => $request->name,
-        'mel' => $request->email,
-        'hp' => $request->phone,
-    ]);
+    
+    $user->update($request->all());
 
     return redirect()->back()->with('success', 'Profile updated successfully!');
 }
@@ -110,20 +98,15 @@ public function updatePassword(Request $request)
 {
     $user = Auth::user();
 
-    // Validate the input data
-    $request->validate([
-        'current_password' => 'required',
-        'new_password' => 'required|min:8|confirmed',
-    ]);
 
     // Check if the current password is correct
-    if (!Hash::check($request->current_password, $user->pass)) {
+    if (md5($request->current_password) !== $user->pass) {
         return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
     }
 
-    // Update the password
+    // Update the password (hash the new one)
     $user->update([
-        'pass' => Hash::make($request->new_password),
+        'pass' => md5($request->new_password),  // If you are using MD5 (but it's not recommended)
     ]);
 
     return redirect()->back()->with('success', 'Password updated successfully!');

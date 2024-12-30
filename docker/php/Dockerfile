@@ -38,12 +38,9 @@ RUN composer dump-autoload --ignore-platform-reqs
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap /var/www/html/bootstrap/cache
 RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap /var/www/html/bootstrap/cache
 
-# Install Node.js (use NodeSource to get specific version)
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs \
-    && npm install -g npm@latest  # Optionally update npm to latest version
+    && apt-get install -y nodejs
 
-# Install NPM dependencies
 RUN npm install
 
 # # Run Vite development server

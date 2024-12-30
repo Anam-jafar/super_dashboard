@@ -344,7 +344,7 @@ function openModal(mosqueId = null) {
         return;
     }
 
-    fetch(`/api/mosques/${mosqueId}`)
+    fetch(`/mais/get_mosque_detail/${mosqueId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -424,7 +424,7 @@ function updateMosque() {
     };
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const url = currentMosqueData ? `/update/mosques/${currentMosqueData.id}` : '/add/mosques/';
+    const url = currentMosqueData ? `/mais/update/mosques/${currentMosqueData.id}` : 'mais/add/mosques/';
     const method = currentMosqueData ? 'PUT' : 'POST';
 
     fetch(url, {

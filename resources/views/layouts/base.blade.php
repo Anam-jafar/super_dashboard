@@ -31,7 +31,8 @@
             </button>
 
             <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-transparent">
-                Sistem Laporan Kewangan MAIS
+            <span class="text-lg italic font-normal">Sistem Laporan Kewangan</span>
+            MAIS
             </h1>
 
 
@@ -103,8 +104,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('compensation.list') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showBranchList') ? 'bg-gray-200 text-gray-900' : '' }}">
-                            <img src="{{ asset('assets/temp/compensation.svg') }}" alt="Branch Icon" class="h-6 w-6 ml-3 mr-3">
+                        <a href="{{ route('compensation.list') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('compensation.list') ? 'bg-gray-200 text-gray-900' : '' }}">
+                            <img src="{{ asset('assets/temp/compensation.svg') }}" alt="Kaffarah Icon" class="h-6 w-6 ml-3 mr-3">
                             <span x-show="sidebarOpen">Kaffarah</span>
                         </a>
                     </li>
@@ -143,7 +144,7 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('compensation.list') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showBranchList') ? 'bg-gray-200 text-gray-900' : '' }}">
+            <a href="{{ route('compensation.list') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('compensation.list') ? 'bg-gray-200 text-gray-900' : '' }}">
                 <img src="{{ asset('assets/temp/compensation.svg') }}" alt="Branch Icon" class="h-6 w-6 ml-3 mr-3">
                 <span x-show="sidebarOpen">Kaffarah</span>
             </a>

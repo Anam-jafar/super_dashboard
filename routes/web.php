@@ -5,8 +5,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MetrixController;
 use App\Http\Controllers\EntityController;
-
-
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,56 +17,48 @@ use App\Http\Controllers\EntityController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-use App\Http\Controllers\DashboardController;
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('submit.login');
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::prefix('mais')->group(function () {
+    // Authentication Routes
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('submit.login');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+    // Routes requiring authentication
+    Route::middleware(['auth'])->group(function () {
+        // Dashboard Routes
+        Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::get('/district', [DashboardController::class, 'mosquesInCityDetails'])->name('mosquesInCityDetails');
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('index');
-    Route::get('/district/', [DashboardController::class, 'mosquesInCityDetails'])->name('mosquesInCityDetails');
+        // Entity Management Routes
+        Route::controller(EntityController::class)->group(function () {
+            Route::get('/mosques', 'showEntityList')->name('showEntityList');
+            Route::get('/branches', 'showBranchList')->name('showBranchList');
+            Route::get('/admins', 'showAdminList')->name('showAdminList');
+            Route::get('/get_mosque_detail/{id}', 'getMosqueDetails');
+            Route::put('/update/mosques/{id}', 'update');
+            Route::post('/add/mosques/', 'store');
+            Route::get('/getAdminDetails/{id}', 'getDetails');
+            Route::post('/updateAdmin/{id}', 'updateAdmin');
+            Route::get('/get_branche_detail/{id}', 'getBranchDetails');
+            Route::post('/update/branches/{id}', 'updateBranch');
+        });
 
+        // Profile Management Routes
+        Route::controller(AuthController::class)->group(function () {
+            Route::get('/profile', 'profile')->name('profile');
+            Route::put('/profile/update', 'updateProfile')->name('updateProfile');
+            Route::put('/profile/password', 'updatePassword')->name('updatePassword');
+        });
 
-
-
-
-    Route::get('/mosques/', [EntityController::class, 'showEntityList'])->name('showEntityList');
-    Route::get('/branches/', [EntityController::class, 'showBranchList'])->name('showBranchList');
-    Route::get('/admins/', [EntityController::class, 'showAdminList'])->name('showAdminList');
-    Route::get('/api/mosques/{id}', [EntityController::class, 'getMosqueDetails']);
-    Route::put('/update/mosques/{id}', [EntityController::class, 'update']);
-    Route::post('/add/mosques/', [EntityController::class, 'store']);
-
-    // Route::get('/getAdminDetails/{id}', [DashboardController::class, 'getAdminDetails']);
-
-
-    Route::get('/getAdminDetails/{id}', [EntityController::class, 'getDetails']);
-    Route::post('/updateAdmin/{id}', [EntityController::class, 'updateAdmin']);
-
-    Route::get('/api/branches/{id}', [EntityController::class, 'getBranchDetails']);
-    Route::post('/update/branches/{id}', [EntityController::class, 'updateBranch']);
-
-
-    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
-    Route::put('/profile/update', [AuthController::class, 'updateProfile'])->name('updateProfile');
-    Route::put('/profile/password', [AuthController::class, 'updatePassword'])->name('updatePassword');
-
-    Route::get('/compensation', [MetrixController::class, 'compensationList'])->name('compensation.list');
-    Route::get('/compensation/create', [MetrixController::class, 'create'])->name('compensation.create');
-    Route::post('/compensation/store', [MetrixController::class, 'store'])->name('compensation.store');
-    Route::post('/compensation/mark-as-active/{id}', [MetrixController::class, 'markAsActive'])->name('compensation.markAsActive');
-
-
-    
-
-
-
-
-
+        // Kaffarah Settings Routes
+        Route::controller(MetrixController::class)->group(function () {
+            Route::get('/compensation', 'compensationList')->name('compensation.list');
+            Route::get('/compensation/create', 'create')->name('compensation.create');
+            Route::post('/compensation/store', 'store')->name('compensation.store');
+            Route::post('/compensation/mark-as-active/{id}', 'markAsActive')->name('compensation.markAsActive');
+        });
+    });
 });
-
-
 
 

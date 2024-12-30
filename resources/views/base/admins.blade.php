@@ -259,7 +259,7 @@ function openModal(adminId) {
     const form = document.getElementById('editForm');
     
     // Fetch admin data from the server
-    fetch(`/getAdminDetails/${adminId}`)
+    fetch(`/mais/getAdminDetails/${adminId}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
@@ -300,7 +300,7 @@ function saveChanges() {
         status: form.status.value
     };
 
-    fetch(`/updateAdmin/${currentAdminId}`, {
+    fetch(`/mais/updateAdmin/${currentAdminId}`, {
         method: 'POST',
         body: JSON.stringify(updatedData),
         headers: {
@@ -343,16 +343,6 @@ function updateTableRow(data) {
     }
 }
 
-function getStatusColor(status) {
-    switch(status) {
-        case 'A':
-            return 'bg-green-100 text-green-800';
-        case 'I':
-            return 'bg-red-100 text-red-800';
-        default:
-            return 'bg-gray-100 text-gray-800';
-    }
-}
 
 function refreshData() {
     if (currentAdminId) {

@@ -217,7 +217,7 @@ function updatePagination(recordsPerPage) {
 let currentBranchData = null;
 
 function openModal(branchId) {
-    fetch(`/api/branches/${branchId}`)
+    fetch(`/mais/get_branche_detail/${branchId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -303,7 +303,7 @@ function updateBranch() {
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    fetch(`/update/branches/${currentBranchData.id}`, {
+    fetch(`/mais/update/branches/${currentBranchData.id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

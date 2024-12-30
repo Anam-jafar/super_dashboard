@@ -42,7 +42,7 @@
         <div class="relative">
             <!-- Profile Menu Button -->
             <button @click="profileOpen = !profileOpen" class="flex items-center space-x-2" aria-haspopup="true" aria-expanded="false" aria-controls="profileMenu">
-                <img src="{{ asset('assets/temp/sd_default_profile.svg') }}" alt="Profile" class="w-8 h-8 rounded-full">
+                <img src="{{ asset('assets/icons/sd_default_profile.svg') }}" alt="Profile" class="w-8 h-8 rounded-full">
                 <span class="text-gray-700 hidden sm:inline">
                     {{ Auth::check() ? Auth::user()->name : 'Guest' }}
                 </span>
@@ -81,31 +81,31 @@
                 <ul class="flex-1 px-2 py-4 space-y-2 overflow-y-auto">
                     <li>
                         <a href="{{ route('index') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('index') ? 'bg-gray-200 text-gray-900' : '' }}">
-                            <img src="{{ asset('assets/temp/sd_dashboard.svg') }}" alt="Mosque Icon" class="h-6 w-6 ml-3 mr-3">
+                            <img src="{{ asset('assets/icons/sd_dashboard.svg') }}" alt="Mosque Icon" class="h-6 w-6 ml-3 mr-3">
                             <span x-show="sidebarOpen">Dashboard</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('showEntityList') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showEntityList') ? 'bg-gray-200 text-gray-900' : '' }}">
-                            <img src="{{ asset('assets/temp/sd_mosque03.svg') }}" alt="Masjid Icon" class="h-6 w-6 ml-3 mr-3">
+                            <img src="{{ asset('assets/icons/sd_mosque03.svg') }}" alt="Masjid Icon" class="h-6 w-6 ml-3 mr-3">
                             <span x-show="sidebarOpen">Masjid</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('showAdminList') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showAdminList') ? 'bg-gray-200 text-gray-900' : '' }}">
-                            <img src="{{ asset('assets/temp/sd_account.svg') }}" alt="Admin Icon" class="h-6 w-6 ml-3 mr-3">
+                            <img src="{{ asset('assets/icons/sd_account.svg') }}" alt="Admin Icon" class="h-6 w-6 ml-3 mr-3">
                             <span x-show="sidebarOpen">Admin</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('showBranchList') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showBranchList') ? 'bg-gray-200 text-gray-900' : '' }}">
-                            <img src="{{ asset('assets/temp/sd_branch.svg') }}" alt="Branch Icon" class="h-6 w-6 ml-3 mr-3">
+                            <img src="{{ asset('assets/icons/sd_branch.svg') }}" alt="Branch Icon" class="h-6 w-6 ml-3 mr-3">
                             <span x-show="sidebarOpen">Branch</span>
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('compensation.list') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('compensation.list') ? 'bg-gray-200 text-gray-900' : '' }}">
-                            <img src="{{ asset('assets/temp/compensation.svg') }}" alt="Kaffarah Icon" class="h-6 w-6 ml-3 mr-3">
+                            <img src="{{ asset('assets/icons/compensation.svg') }}" alt="Kaffarah Icon" class="h-6 w-6 ml-3 mr-3">
                             <span x-show="sidebarOpen">Kaffarah</span>
                         </a>
                     </li>
@@ -121,31 +121,31 @@
     <ul class="flex-1 px-2 py-4 space-y-2 overflow-y-auto">
         <li>
             <a href="{{ route('index') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('index') ? 'bg-gray-200 text-gray-900' : '' }}">
-                <img src="{{ asset('assets/temp/sd_dashboard.svg') }}" alt="Mosque Icon" class="h-6 w-6 ml-3 mr-3">
+                <img src="{{ asset('assets/icons/sd_dashboard.svg') }}" alt="Mosque Icon" class="h-6 w-6 ml-3 mr-3">
                 <span x-show="sidebarOpen">Dashboard</span>
             </a>
         </li>
         <li>
             <a href="{{ route('showEntityList') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showEntityList') ? 'bg-gray-200 text-gray-900' : '' }}">
-                <img src="{{ asset('assets/temp/sd_mosque03.svg') }}" alt="Masjid Icon" class="h-6 w-6 ml-3 mr-3">
+                <img src="{{ asset('assets/icons/sd_mosque03.svg') }}" alt="Masjid Icon" class="h-6 w-6 ml-3 mr-3">
                 <span x-show="sidebarOpen">Masjid</span>
             </a>
         </li>
         <li>
             <a href="{{ route('showAdminList') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showAdminList') ? 'bg-gray-200 text-gray-900' : '' }}">
-                <img src="{{ asset('assets/temp/sd_account.svg') }}" alt="Admin Icon" class="h-6 w-6 ml-3 mr-3">
+                <img src="{{ asset('assets/icons/sd_account.svg') }}" alt="Admin Icon" class="h-6 w-6 ml-3 mr-3">
                 <span x-show="sidebarOpen">Admin</span>
             </a>
         </li>
         <li>
             <a href="{{ route('showBranchList') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showBranchList') ? 'bg-gray-200 text-gray-900' : '' }}">
-                <img src="{{ asset('assets/temp/sd_branch.svg') }}" alt="Branch Icon" class="h-6 w-6 ml-3 mr-3">
+                <img src="{{ asset('assets/icons/sd_branch.svg') }}" alt="Branch Icon" class="h-6 w-6 ml-3 mr-3">
                 <span x-show="sidebarOpen">Branch</span>
             </a>
         </li>
         <li>
             <a href="{{ route('compensation.list') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('compensation.list') ? 'bg-gray-200 text-gray-900' : '' }}">
-                <img src="{{ asset('assets/temp/compensation.svg') }}" alt="Branch Icon" class="h-6 w-6 ml-3 mr-3">
+                <img src="{{ asset('assets/icons/sd_compensation.svg') }}" alt="Branch Icon" class="h-6 w-6 ml-3 mr-3">
                 <span x-show="sidebarOpen">Kaffarah</span>
             </a>
         </li>

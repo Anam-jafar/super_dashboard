@@ -77,21 +77,35 @@
                     </svg>
                     <span class="sr-only">Close sidebar</span>
                 </button>
-                <ul class="mt-6 space-y-4">
+                <ul class="flex-1 px-2 py-4 space-y-2 overflow-y-auto">
                     <li>
-                        <a href="{{route('index')}}" class="flex items-center text-gray-700 hover:text-gray-900 {{ request()->routeIs('index') ? 'bg-gray-200 text-gray-900' : '' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                            </svg>
-                            Dashboard
+                        <a href="{{ route('index') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('index') ? 'bg-gray-200 text-gray-900' : '' }}">
+                            <img src="{{ asset('assets/temp/sd_dashboard.svg') }}" alt="Mosque Icon" class="h-6 w-6 ml-3 mr-3">
+                            <span x-show="sidebarOpen">Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('showEntityList') }}" class="flex items-center text-gray-700 hover:text-gray-900">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 3v18m4.5-18v18M3 9.75h18m-18 4.5h18" />
-                            </svg>
-                            Masjid
+                        <a href="{{ route('showEntityList') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showEntityList') ? 'bg-gray-200 text-gray-900' : '' }}">
+                            <img src="{{ asset('assets/temp/sd_mosque03.svg') }}" alt="Masjid Icon" class="h-6 w-6 ml-3 mr-3">
+                            <span x-show="sidebarOpen">Masjid</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('showAdminList') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showAdminList') ? 'bg-gray-200 text-gray-900' : '' }}">
+                            <img src="{{ asset('assets/temp/sd_account.svg') }}" alt="Admin Icon" class="h-6 w-6 ml-3 mr-3">
+                            <span x-show="sidebarOpen">Admin</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('showBranchList') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showBranchList') ? 'bg-gray-200 text-gray-900' : '' }}">
+                            <img src="{{ asset('assets/temp/sd_branch.svg') }}" alt="Branch Icon" class="h-6 w-6 ml-3 mr-3">
+                            <span x-show="sidebarOpen">Branch</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('compensation.list') }}" class="flex items-center p-2 rounded-md hover:bg-gray-200 {{ request()->routeIs('showBranchList') ? 'bg-gray-200 text-gray-900' : '' }}">
+                            <img src="{{ asset('assets/temp/compensation.svg') }}" alt="Branch Icon" class="h-6 w-6 ml-3 mr-3">
+                            <span x-show="sidebarOpen">Kaffarah</span>
                         </a>
                     </li>
                 </ul>

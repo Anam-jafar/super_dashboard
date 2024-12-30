@@ -13,7 +13,7 @@ class MetrixController extends Controller
 
     public function __construct()
     {
-        $this->client = new MongoClient('mongodb+srv://development:XT7GquBxdsk5wMru@ebossdevelopment.ekek02t.mongodb.net/?retryWrites=true&w=majority');
+        $this->client = new MongoClient(env('MONGO_URI'));
         $this->collection = $this->client->mais->payment_metrix;
     }
 

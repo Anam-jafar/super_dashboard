@@ -59,7 +59,16 @@ class EntityController extends Controller
             'city' => 'city'
         ]);
 
-        return view('base.mosques', compact('clients', 'cities', 'schs'));
+        $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
+        $categories = DB::table('type')->where('grp', 'type_CLIENT')->get();
+        $states = DB::table('type')->where('grp', 'state')->get();
+        
+        $areas = DB::table('type')->where('grp', 'clientcate1')->get();
+
+
+
+
+        return view('base.mosques', compact('clients', 'cities', 'schs', 'statuses', 'categories', 'states', 'areas'));
     }
 
     public function showBranchList(Request $request)
@@ -82,7 +91,11 @@ class EntityController extends Controller
         ];
         $schs = DB::select('SELECT sname, sid FROM sch');
         $admins = $this->getListingData('usr', $request, ['sch' => 'sch_id']);
-        return view('base.admins', compact('admins', 'schs', 'formFields'));
+
+        $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
+        $syslevels = DB::table('type')->where('grp', 'syslevel')->get();
+
+        return view('base.admins', compact('admins', 'schs', 'formFields', 'statuses', 'syslevels'));
     }
 
     // Generic CRUD operations

@@ -1,150 +1,137 @@
 @extends('layouts.base')
 
 @section('content')
+<div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-50">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Branches</h1>
 
-<div class="max-w-full mx-auto p-4 sm:p-6 bg-gray-100">
-    <div class="flex flex-wrap -mx-4">
-        <h1 class="text-xl font-bold mb-4">Branches</h1>
+    <!-- Filter and Search Card -->
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <form method="GET" action="{{ route('showBranchList') }}" class="space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
+            <div class="flex-grow">
+                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search by Name</label>
+                <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Enter branch name" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div class="flex items-end">
+                <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Apply Filters
+                </button>
+            </div>
+        </form>
+    </div>
 
-        <!-- Filter and Search Card -->
-        <div class="w-full mb-4 bg-white shadow-md rounded-lg p-4">
-            <form method="GET" action="{{ route('showBranchList') }}" class="flex flex-wrap items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <!-- Name Search -->
-                <div class="flex-1">
-                    <label for="search" class="block text-sm font-medium text-gray-700">Search by Name</label>
-                    <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Enter branch name" 
-                           class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <!-- Submit Button -->
-                <div class="flex-none">
-                    <label class="block text-sm font-medium text-transparent">Submit</label>
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300">
-                        Apply
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Table to display data -->
-        <div class="w-full overflow-x-auto bg-white shadow-md rounded-lg p-4">
-            <table class="min-w-full border-collapse border border-gray-300">
-                <thead>
-                    <tr>
-                        <th class="border border-gray-300 px-4 py-2 text-left">#</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">Short Name</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">Telephone</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">Email</th>
-                        <th class="border border-gray-300 px-4 py-2 text-left">URL</th>
+    <!-- Table to display data -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Short Name</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telephone</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">URL</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @forelse($branches as $key => $branch)
+                    <tr class="hover:bg-gray-50 cursor-pointer" onclick="openModal('{{ $branch->id }}')">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ ($branches->currentPage() - 1) * $branches->perPage() + $key + 1 }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $branch->name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $branch->sname }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $branch->tel }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $branch->mel }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            <a href="{{ $branch->url }}" target="_blank" class="text-indigo-600 hover:text-indigo-900">
+                                {{ $branch->url }}
+                            </a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @forelse($branches  as $key => $branch)
-                        <tr class="cursor-pointer hover:bg-gray-100" onclick="openModal('{{ $branch->id }}')">
-                        <td class="border border-gray-300 px-4 py-2">{{ ($branches->currentPage() - 1) * $branches->perPage() + $key + 1 }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $branch->name }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $branch->sname }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $branch->tel }}</td>
-                            <td class="border border-gray-300 px-4 py-2">{{ $branch->mel }}</td>
-                            <td class="border border-gray-300 px-4 py-2">
-                                <a href="{{ $branch->url }}" target="_blank" class="text-blue-500 hover:underline">
-                                    {{ $branch->url }}
-                                </a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="border border-gray-300 px-4 py-2 text-center">No records found.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                @empty
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">No records found.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
 
-<!-- Pagination Section -->
-<div class="mt-4 flex justify-between items-center">
-    <!-- Showing Records Info (Left Side) -->
-    <div class="text-sm font-medium text-gray-700">
-        Showing 
-        {{ $branches->firstItem() }} - {{ $branches->lastItem() }} 
-        from total {{ $branches->total() }}
-    </div>
+        <!-- Pagination Section -->
+        <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+            <div class="flex justify-between items-center">
+                <div class="text-sm text-gray-700">
+                    Showing {{ $branches->firstItem() }} - {{ $branches->lastItem() }} 
+                    of {{ $branches->total() }} results
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        @if ($branches->currentPage() > 1)
+                            <a href="{{ $branches->previousPageUrl() }}" 
+                               class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                                Previous
+                            </a>
+                        @else
+                            <span class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-400 bg-gray-100 cursor-not-allowed">
+                                Previous
+                            </span>
+                        @endif
 
-    <!-- Pagination Links and Records Per Page (Right Side) -->
-    <div class="flex items-center space-x-4">
-        <!-- Pagination Links (Prev and Next Buttons) -->
-        <div class="flex items-center space-x-2">
-            <!-- Prev Button -->
-            @if ($branches->currentPage() > 1)
-                <a href="{{ $clients->previousPageUrl() }}" 
-                   class="p-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                    Prev
-                </a>
-            @else
-                <span class="p-2 border border-gray-300 rounded-md bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed">
-                    Prev
-                </span>
-            @endif
-
-            <!-- Next Button -->
-            @if ($branches->hasMorePages())
-                <a href="{{ $clients->nextPageUrl() }}" 
-                   class="p-2 border border-gray-300 rounded-md bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
-                    Next
-                </a>
-            @else
-                <span class="p-2 border border-gray-300 rounded-md bg-gray-100 text-sm font-medium text-gray-400 cursor-not-allowed">
-                    Next
-                </span>
-            @endif
-        </div>
-
-        <!-- Records Per Page Dropdown -->
-        <div class="flex items-center space-x-2">
-            <select id="recordsPerPage" name="recordsPerPage" 
-                    onchange="updatePagination(this.value)" 
-                    class="p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                <option value="25" {{ request('recordsPerPage') == 25 ? 'selected' : '' }}>25/Ms</option>
-                <option value="50" {{ request('recordsPerPage') == 50 ? 'selected' : '' }}>50/Ms</option>
-                <option value="100" {{ request('recordsPerPage') == 100 ? 'selected' : '' }}>100/Ms</option>
-                <option value="200" {{ request('recordsPerPage') == 200 ? 'selected' : '' }}>200/Ms</option>
-            </select>
-        </div>
-    </div>
-</div>
-
-
+                        @if ($branches->hasMorePages())
+                            <a href="{{ $branches->nextPageUrl() }}" 
+                               class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                                Next
+                            </a>
+                        @else
+                            <span class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-400 bg-gray-100 cursor-not-allowed">
+                                Next
+                            </span>
+                        @endif
+                    </div>
+                    <div>
+                        <select id="recordsPerPage" name="recordsPerPage" 
+                                onchange="updatePagination(this.value)" 
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                            <option value="25" {{ request('recordsPerPage') == 25 ? 'selected' : '' }}>25 per page</option>
+                            <option value="50" {{ request('recordsPerPage') == 50 ? 'selected' : '' }}>50 per page</option>
+                            <option value="100" {{ request('recordsPerPage') == 100 ? 'selected' : '' }}>100 per page</option>
+                            <option value="200" {{ request('recordsPerPage') == 200 ? 'selected' : '' }}>200 per page</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Modal -->
-<div id="branchModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
-    <div class="relative top-20 mx-auto p-5 border w-3/4 shadow-lg rounded-md bg-white">
+<div id="branchModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
         <div class="mt-3">
             <!-- Modal Header -->
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modalTitle">Branch Details</h3>
-                <div>
-                    <button onclick="refreshModal()" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 mr-2">
+            <div class="flex justify-between items-center pb-3">
+                <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-title">Branch Details</h3>
+                <div class="flex space-x-2">
+                    <button onclick="refreshModal()" class="px-3 py-1 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-300">
                         Refresh
                     </button>
-                    <button onclick="updateBranch()" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 mr-2">
+                    <button onclick="updateBranch()" class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300">
                         Update
                     </button>
-                    <button onclick="closeModal()" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                    <button onclick="closeModal()" class="px-3 py-1 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
                         Close
                     </button>
                 </div>
             </div>
             
             <!-- Tabs -->
-            <div class="mb-4">
-                <ul class="flex border-b">
-                    <li class="-mb-px mr-1">
-                        <a class="bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700 font-semibold" onclick="changeTab(event, 'general')" href="#">General</a>
+            <div class="mb-4 border-b border-gray-200">
+                <ul class="flex flex-wrap -mb-px" role="tablist">
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 rounded-t-lg" id="general-tab" onclick="changeTab(event, 'general')" type="button" role="tab" aria-controls="general" aria-selected="true">General</button>
                     </li>
-                    <li class="mr-1">
-                        <a class="bg-white inline-block py-2 px-4 text-blue-500 hover:text-blue-800 font-semibold" onclick="changeTab(event, 'address')" href="#">Address</a>
+                    <li class="mr-2" role="presentation">
+                        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300" id="address-tab" onclick="changeTab(event, 'address')" type="button" role="tab" aria-controls="address" aria-selected="false">Address</button>
                     </li>
                 </ul>
             </div>
@@ -153,61 +140,65 @@
             <div id="tabContent">
                 <!-- General Tab -->
                 <div id="general" class="tab-content">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalName">Centre/Program:</label>
-                        <input type="text" id="modalName" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalSname">Singkatan:</label>
-                        <input type="text" id="modalSname" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalSchcat">Kategori:</label>
-                        <input type="text" id="modalSchcat" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalTel">Telefon:</label>
-                        <input type="tel" id="modalTel" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalMel">Emel:</label>
-                        <input type="email" id="modalMel" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalUrl">Web:</label>
-                        <input type="url" id="modalUrl" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div>
+                            <label for="modalName" class="block text-sm font-medium text-gray-700">Centre/Program</label>
+                            <input type="text" id="modalName" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="modalSname" class="block text-sm font-medium text-gray-700">Singkatan</label>
+                            <input type="text" id="modalSname" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="modalSchcat" class="block text-sm font-medium text-gray-700">Kategori</label>
+                            <input type="text" id="modalSchcat" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="modalTel" class="block text-sm font-medium text-gray-700">Telefon</label>
+                            <input type="tel" id="modalTel" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="modalMel" class="block text-sm font-medium text-gray-700">Emel</label>
+                            <input type="email" id="modalMel" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="modalUrl" class="block text-sm font-medium text-gray-700">Web</label>
+                            <input type="url" id="modalUrl" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Address Tab -->
                 <div id="address" class="tab-content hidden">
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalAddr">Alamat Baris 1:</label>
-                        <input type="text" id="modalAddr" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalAddr2">Alamat Baris 2:</label>
-                        <input type="text" id="modalAddr2" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalAddr3">Alamat Baris 3:</label>
-                        <input type="text" id="modalAddr3" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalDaerah">Daerah:</label>
-                        <input type="text" id="modalDaerah" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalPoskod">Poskod:</label>
-                        <input type="text" id="modalPoskod" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalState">Negeri:</label>
-                        <input type="text" id="modalState" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="modalCountry">Negara:</label>
-                        <input type="text" id="modalCountry" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div class="sm:col-span-2">
+                            <label for="modalAddr" class="block text-sm font-medium text-gray-700">Alamat Baris 1</label>
+                            <input type="text" id="modalAddr" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label for="modalAddr2" class="block text-sm font-medium text-gray-700">Alamat Baris 2</label>
+                            <input type="text" id="modalAddr2" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label for="modalAddr3" class="block text-sm font-medium text-gray-700">Alamat Baris 3</label>
+                            <input type="text" id="modalAddr3" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="modalDaerah" class="block text-sm font-medium text-gray-700">Daerah</label>
+                            <input type="text" id="modalDaerah" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="modalPoskod" class="block text-sm font-medium text-gray-700">Poskod</label>
+                            <input type="text" id="modalPoskod" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="modalState" class="block text-sm font-medium text-gray-700">Negeri</label>
+                            <input type="text" id="modalState" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                        <div>
+                            <label for="modalCountry" class="block text-sm font-medium text-gray-700">Negara</label>
+                            <input type="text" id="modalCountry" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -216,17 +207,16 @@
 </div>
 
 <script>
-
 function updatePagination(recordsPerPage) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('recordsPerPage', recordsPerPage);
-        url.searchParams.set('page', 1); // Reset to the first page when the number of records changes
-        window.location.href = url.toString();
-    }
+    const url = new URL(window.location.href);
+    url.searchParams.set('recordsPerPage', recordsPerPage);
+    url.searchParams.set('page', 1); // Reset to the first page when the number of records changes
+    window.location.href = url.toString();
+}
+
 let currentBranchData = null;
 
 function openModal(branchId) {
-    // Fetch branch data using AJAX
     fetch(`/api/branches/${branchId}`)
         .then(response => {
             if (!response.ok) {
@@ -236,29 +226,29 @@ function openModal(branchId) {
         })
         .then(branch => {
             currentBranchData = branch;
-
-            // Set the data in the modal
-            document.getElementById('modalName').value = branch.name || '';
-            document.getElementById('modalSname').value = branch.sname || '';
-            document.getElementById('modalSchcat').value = branch.schcat || '';
-            document.getElementById('modalTel').value = branch.tel || '';
-            document.getElementById('modalMel').value = branch.mel || '';
-            document.getElementById('modalUrl').value = branch.url || '';
-            document.getElementById('modalAddr').value = branch.addr || '';
-            document.getElementById('modalAddr2').value = branch.addr2 || '';
-            document.getElementById('modalAddr3').value = branch.addr3 || '';
-            document.getElementById('modalDaerah').value = branch.daerah || '';
-            document.getElementById('modalPoskod').value = branch.poskod || '';
-            document.getElementById('modalState').value = branch.state || '';
-            document.getElementById('modalCountry').value = branch.country || '';
-
-            // Show the modal
+            setModalData(branch);
             document.getElementById('branchModal').classList.remove('hidden');
         })
         .catch(error => {
             console.error('Error fetching branch data:', error);
             alert('Failed to fetch branch details. Please try again.');
         });
+}
+
+function setModalData(branch) {
+    document.getElementById('modalName').value = branch.name || '';
+    document.getElementById('modalSname').value = branch.sname || '';
+    document.getElementById('modalSchcat').value = branch.schcat || '';
+    document.getElementById('modalTel').value = branch.tel || '';
+    document.getElementById('modalMel').value = branch.mel || '';
+    document.getElementById('modalUrl').value = branch.url || '';
+    document.getElementById('modalAddr').value = branch.addr || '';
+    document.getElementById('modalAddr2').value = branch.addr2 || '';
+    document.getElementById('modalAddr3').value = branch.addr3 || '';
+    document.getElementById('modalDaerah').value = branch.daerah || '';
+    document.getElementById('modalPoskod').value = branch.poskod || '';
+    document.getElementById('modalState').value = branch.state || '';
+    document.getElementById('modalCountry').value = branch.country || '';
 }
 
 function closeModal() {
@@ -268,24 +258,19 @@ function closeModal() {
 
 function changeTab(event, tabName) {
     event.preventDefault();
-
-    // Hide all tab contents
     const tabContents = document.getElementsByClassName('tab-content');
-    for (let i = 0; i < tabContents.length; i++) {
-        tabContents[i].classList.add('hidden');
-    }
-
-    // Show the selected tab content
+    Array.from(tabContents).forEach(content => content.classList.add('hidden'));
     document.getElementById(tabName).classList.remove('hidden');
 
-    // Update active tab styling
-    const tabs = document.querySelectorAll('.flex.border-b a');
+    const tabs = document.querySelectorAll('[role="tab"]');
     tabs.forEach(tab => {
-        tab.classList.remove('text-blue-700', 'border-l', 'border-t', 'border-r', 'rounded-t');
-        tab.classList.add('text-blue-500', 'hover:text-blue-800');
+        tab.setAttribute('aria-selected', 'false');
+        tab.classList.remove('text-indigo-600', 'border-indigo-600');
+        tab.classList.add('text-gray-500', 'border-transparent');
     });
-    event.target.classList.remove('text-blue-500', 'hover:text-blue-800');
-    event.target.classList.add('text-blue-700', 'border-l', 'border-t', 'border-r', 'rounded-t');
+    event.currentTarget.setAttribute('aria-selected', 'true');
+    event.currentTarget.classList.remove('text-gray-500', 'border-transparent');
+    event.currentTarget.classList.add('text-indigo-600', 'border-indigo-600');
 }
 
 function refreshModal() {
@@ -308,8 +293,8 @@ function updateBranch() {
         mel: document.getElementById('modalMel').value,
         url: document.getElementById('modalUrl').value,
         addr: document.getElementById('modalAddr').value,
-        addr1: document.getElementById('modalAddr2').value,
-        addr2: document.getElementById('modalAddr3').value,
+        addr2: document.getElementById('modalAddr2').value,
+        addr3: document.getElementById('modalAddr3').value,
         daerah: document.getElementById('modalDaerah').value,
         poskod: document.getElementById('modalPoskod').value,
         state: document.getElementById('modalState').value,
@@ -319,36 +304,34 @@ function updateBranch() {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     fetch(`/update/branches/${currentBranchData.id}`, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': csrfToken
-    },
-    body: JSON.stringify(updatedData)
-})
-.then(response => {
-    if (!response.ok) {
-        return response.json().then(err => {
-            throw new Error(JSON.stringify(err));
-        });
-    }
-    return response.json();
-})
-.then(data => {
-    alert('Branch data updated successfully!');
-    currentBranchData = data;
-    refreshModal();
-})
-.catch(error => {
-    console.error('Error updating branch data:', error);
-    alert(`Failed to update branch details. Error: ${error.message}`);
-});
-
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: JSON.stringify(updatedData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(JSON.stringify(err));
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert('Branch data updated successfully!');
+        currentBranchData = data;
+        refreshModal();
+    })
+    .catch(error => {
+        console.error('Error updating branch data:', error);
+        alert(`Failed to update branch details. Error: ${error.message}`);
+    });
 }
 
-// Initialize the first tab as active
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector('.flex.border-b a').click();
+    document.getElementById('general-tab').click();
 });
 </script>
 

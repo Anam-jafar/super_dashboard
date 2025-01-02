@@ -61,4 +61,8 @@ Route::prefix('mais')->group(function () {
     });
 });
 
+Route::get('/test', function () {
+    return view('test');
+});
+
 

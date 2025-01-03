@@ -28,6 +28,8 @@ Route::prefix('mais')->group(function () {
     Route::middleware(['auth'])->group(function () {
         // Dashboard Routes
         Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::get('/ov', [DashboardController::class, 'overview'])->name('overview');
+
         Route::get('/district', [DashboardController::class, 'mosquesInCityDetails'])->name('mosquesInCityDetails');
 
         // Entity Management Routes
@@ -65,4 +67,7 @@ Route::get('/test', function () {
     return view('test');
 });
 
+Route::get('/new', function () {
+    return view('new');
+});
 

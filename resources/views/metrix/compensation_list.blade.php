@@ -1,6 +1,44 @@
-@extends('layouts.base')
+@extends('layouts.app')
+
+@section('styles')
+<style>
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translate3d(0, -20px, 0);
+        }
+        to {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    @keyframes fadeOutUp {
+        from {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+        to {
+            opacity: 0;
+            transform: translate3d(0, -20px, 0);
+        }
+    }
+
+    .animate-fade-in-down {
+        animation: fadeInDown 0.3s ease-out;
+    }
+
+    .animate-fade-out-up {
+        animation: fadeOutUp 0.3s ease-in;
+    }
+</style>
+
+@endsection
 
 @section('content')
+
+<div class="main-content app-content">
+<div class="container-fluid">
 <div class="max-w-full mx-auto mt-4 p-4 sm:p-6 lg:p-8 bg-gray-50 min-h-[80vh]">
     <div class="flex flex-col sm:flex-row justify-between items-center mb-4 space-y-2 sm:space-y-0">
         <h1 class="text-xl font-bold text-gray-800">Kaffarah Settings</h1>
@@ -110,6 +148,12 @@
     </div>
 </div>
 
+</div>
+</div>
+@endsection
+
+
+@section('scripts')
 <script>
     function toggleCard(id) {
         const element = document.getElementById(id);
@@ -126,36 +170,6 @@
     }
 </script>
 
-<style>
-    @keyframes fadeInDown {
-        from {
-            opacity: 0;
-            transform: translate3d(0, -20px, 0);
-        }
-        to {
-            opacity: 1;
-            transform: translate3d(0, 0, 0);
-        }
-    }
 
-    @keyframes fadeOutUp {
-        from {
-            opacity: 1;
-            transform: translate3d(0, 0, 0);
-        }
-        to {
-            opacity: 0;
-            transform: translate3d(0, -20px, 0);
-        }
-    }
-
-    .animate-fade-in-down {
-        animation: fadeInDown 0.3s ease-out;
-    }
-
-    .animate-fade-out-up {
-        animation: fadeOutUp 0.3s ease-in;
-    }
-</style>
 
 @endsection

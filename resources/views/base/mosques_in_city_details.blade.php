@@ -1,6 +1,15 @@
-@extends('layouts.base')
+@extends('layouts.app')
+
+@section('styles')
+  
+
+@endsection
 
 @section('content')
+
+<div class="main-content app-content">
+<div class="container-fluid">
+
 
 <div class="max-w-full mx-auto p-4 sm:p-6 bg-gray-100">
     <div class="flex flex-wrap -mx-4">
@@ -197,7 +206,12 @@
     <!-- End -->
     </div>
 </div>
+</div>
+</div>
+@endsection
 
+
+@section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {

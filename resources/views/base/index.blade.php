@@ -1,8 +1,49 @@
-@extends('layouts.base')
+@extends('layouts.app')
+
+@section('styles')
+  
+
+@endsection
 
 @section('content')
 
-<div class="max-w-full mx-auto p-4 sm:p-6 bg-gray-100">
+            <!-- Start::app-content -->
+            <div class="main-content app-content">
+                <div class="container-fluid">
+
+                    <!-- Start::page-header -->
+                    <div class="flex items-center justify-between page-header-breadcrumb flex-wrap gap-2">
+                        <div>
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="javascript:void(0);">
+                                        Dashboards
+                                    </a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">Sales</li>
+                            </ol>
+                            <h1 class="page-title font-medium text-lg mb-0">Sales Dashboard</h1>
+                        </div>
+                        <div class="flex gap-2 flex-wrap">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-text bg-white dark:bg-bodybg border"> <i class="ri-calendar-line"></i> </div>
+                                    <input type="text" class="form-control breadcrumb-input" id="daterange" placeholder="Search By Date Range">
+                                </div>
+                            </div>
+                            <div class="ti-btn-list">
+                                <button class="ti-btn bg-white dark:bg-bodybg border border-defaultborder dark:border-defaultborder/10 btn-wave !my-0 !m-0 !me-[0.35rem]">
+                                    <i class="ri-filter-3-line align-middle leading-none"></i> Filter
+                                </button>
+                                <button class="ti-btn ti-btn-primary btn-wave !border-0 me-0 !m-0">
+                                    <i class="ri-share-forward-line"></i> Share
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End::page-header -->
+
+                    <div class="max-w-full mx-auto p-4 sm:p-6 bg-gray-100">
     <div class="flex flex-wrap -mx-4">
         <!-- Cards and Chart Container -->
         <div class="w-full lg:flex lg:space-x-24">
@@ -276,6 +317,14 @@
     </div>
 </div>
 
+
+            </div>
+            <!-- End::app-content -->
+        
+@endsection
+
+@section('scripts')
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -458,4 +507,3 @@
 
 
 @endsection
-

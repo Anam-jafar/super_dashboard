@@ -1,6 +1,14 @@
-@extends('layouts.base')
+@extends('layouts.app')
+
+@section('styles')
+  
+
+@endsection
 
 @section('content')
+
+<div class="main-content app-content">
+<div class="container-fluid">
 
 <div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-5xl mx-auto">
@@ -118,7 +126,12 @@
         </div>
     </div>
 </div>
+</div>
+</div>
+@endsection
 
+
+@section('scripts')
 <script>
     let offenseTypeIndex = 1;
     let kaffarahItemIndex = 1;

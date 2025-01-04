@@ -1,6 +1,14 @@
-@extends('layouts.base')
+@extends('layouts.app')
+
+@section('styles')
+  
+
+@endsection
 
 @section('content')
+
+<div class="main-content app-content">
+<div class="container-fluid">
     <!-- Check if you're on the profile page -->
     @if (request()->routeIs('profile'))
         <div class="max-w-full mx-auto p-4 sm:p-6 bg-gray-100">
@@ -126,6 +134,13 @@
             </div>
         </div>
     @endif
+
+    </div>
+</div>
+@endsection
+
+
+@section('scripts')
 
     <script>
         function changeTab(event, tabId) {

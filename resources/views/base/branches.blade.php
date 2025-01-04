@@ -1,6 +1,14 @@
-@extends('layouts.base')
+@extends('layouts.app')
+
+@section('styles')
+  
+
+@endsection
 
 @section('content')
+
+<div class="main-content app-content">
+<div class="container-fluid">
 <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-50">
     <h1 class="text-3xl font-bold text-gray-900 mb-8">Branches</h1>
 
@@ -205,6 +213,12 @@
         </div>
     </div>
 </div>
+</div>
+</div>
+@endsection
+
+
+@section('scripts')
 
 <script>
 function updatePagination(recordsPerPage) {

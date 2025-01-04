@@ -93,17 +93,25 @@
                     <div
                         class="ti-dropdown-item text-center border-b border-defaultborder dark:border-defaultborder/10 block">
                         <span>
-                            Mr.Henry
+                        {{ Auth::check() ? Auth::user()->name : 'Guest' }}
                         </span>
-                        <span class="block text-xs text-textmuted dark:text-textmuted/50">UI/UX Designer</span>
+                        <span class="block text-xs text-textmuted dark:text-textmuted/50">{{ Auth::check() ? Auth::user()->syslevel : 'System Level' }}</span>
                     </div>
                 </li>
-                <li><a class="ti-dropdown-item flex items-center" href="{{url('profile')}}"><i
+                <li><a class="ti-dropdown-item flex items-center" href="{{route('profile')}}"><i
                             class="fe fe-user p-1 rounded-full bg-primary/10 text-primary me-2 text-[1rem]"></i>Profile</a>
                 </li>
-                <li><a class="ti-dropdown-item flex items-center" href="{{url('signin-cover')}}"><i
-                            class="fe fe-lock p-1 rounded-full bg-primary/10 text-primary ut me-2 text-[1rem]"></i>Log
-                        Out</a></li>
+                <li>
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="ti-dropdown-item flex items-center w-full text-left">
+                            <i class="fe fe-lock p-1 rounded-full bg-primary/10 text-primary ut me-2 text-[1rem]"></i>
+                            Log Out
+                        </button>
+                    </form>
+                </li>
+
+                        
             </ul>
         </li>
         <!-- End::header-element -->

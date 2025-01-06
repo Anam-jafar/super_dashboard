@@ -114,15 +114,19 @@ public function updatePassword(Request $request)
 
 public function activityLogs()
 {
+    // Get the per_page value from the request, default to 10
     $perPage = request()->get('per_page', 10); 
 
+    // Validate the per_page value
     $perPage = in_array($perPage, [10, 20, 50, 100]) ? $perPage : 10;
 
+    // Fetch the logs with pagination
     $logs = DB::table('sys_log as s')
         ->rightJoin('usr as u', 's.uid', '=', 'u.uid')
         ->select('s.*', 'u.uid', 'u.name', 'u.ic')
         ->paginate($perPage);
 
+    // Pass the 'perPage' value and the logs to the view
     return view('auth.activity_logs', ['logs' => $logs, 'perPage' => $perPage]);
 }
 

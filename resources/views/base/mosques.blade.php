@@ -399,12 +399,6 @@ function updateMosque() {
     });
 }
 
-function updatePagination(perPage) {
-    const url = new URL(window.location.href);
-    url.searchParams.set('perPage', perPage);
-    url.searchParams.set('page', 1); // Reset to the first page when changing items per page
-    window.location.href = url.toString();
-}
 
 document.addEventListener('DOMContentLoaded', function() {
     const perPageSelect = document.getElementById('perPage');

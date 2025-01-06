@@ -32,23 +32,34 @@ class EntityController extends Controller
         
         return $query;
     }
-        // Generic listing method to handle mosque, branch, and admin listings
-        private function getListingData($table, Request $request, $additionalFilters = [])
-        {
-            $query = DB::table($table);
-            
-            if ($request->filled('search')) {
-                $query->where('name', 'like', '%' . $request->input('search') . '%');
-            }
-            
-            foreach ($additionalFilters as $filter => $field) {
-                if ($request->filled($filter)) {
-                    $query->where($field, $request->input($filter));
-                }
-            }
-            
-            return $query->paginate($request->get('recordsPerPage', 25));
+    private function getListingData($table, Request $request, $additionalFilters = [])
+    {
+        $query = DB::table($table);
+    
+        // Handle search filter
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
+    
+        // Handle additional filters
+        foreach ($additionalFilters as $filter => $field) {
+            if ($request->filled($filter)) {
+                $query->where($field, $request->input($filter));
+            }
+        }
+    
+        // Get the pagination limit per page from request
+        $recordsPerPage = $request->get('per_page', 10);
+    
+        // Paginate the results
+        $paginatedData = $query->paginate($recordsPerPage);
+    
+        // Add the query parameters to pagination links to maintain the filters
+        $paginatedData->withQueryString(); // Retains all query parameters like search, perPage, etc.
+    
+        return $paginatedData;
+    }
+    
     public function showEntityList(Request $request)
     {
         $cities = DB::table('client')->distinct()->pluck('city');

@@ -117,8 +117,6 @@ public function activityLogs()
     // Get the per_page value from the request, default to 10
     $perPage = request()->get('per_page', 10); 
 
-    // Validate the per_page value
-    $perPage = in_array($perPage, [10, 20, 50, 100]) ? $perPage : 10;
 
     // Fetch the logs with pagination
     $logs = DB::table('sys_log as s')

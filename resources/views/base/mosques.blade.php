@@ -11,59 +11,21 @@
 <div class="container-fluid">
 <div class="max-w-full mx-auto p-6 bg-gray-100 min-h-screen">
     <h1 class="text-3xl font-bold mb-6 text-gray-800">Mosques Management</h1>
-
-    <!-- Filter and Search Card -->
-    <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
-        <form method="GET" action="{{ route('showEntityList') }}" class="space-y-4 md:space-y-0 md:flex md:flex-wrap md:items-end md:-mx-2">
-            <div class="md:w-1/5 md:px-2 mb-4 md:mb-0">
-                <label for="sch" class="block text-sm font-medium text-gray-700 mb-1">Filter by School</label>
-                <select id="sch" name="sch" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                    <option value="" {{ request('sch') == '' ? 'selected' : '' }}>All Schools</option>
-                    @foreach ($schs as $sch)
-                        <option value="{{ $sch->sid }}" {{ request('sch') == $sch->sid ? 'selected' : '' }}>
-                            {{ $sch->sname }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="md:w-1/5 md:px-2 mb-4 md:mb-0">
-                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search by Name</label>
-                <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Enter mosque name" 
-                       class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-            </div>
-            <div class="md:w-1/5 md:px-2 mb-4 md:mb-0">
-                <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Filter by Status</label>
-                <select id="status" name="status" 
-                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                    <option value="">All Statuses</option>
-                    <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Active</option>
-                    <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Inactive</option>
-                    <option value="2" {{ request('status') === '2' ? 'selected' : '' }}>Terminated</option>
-                    <option value="3" {{ request('status') === '3' ? 'selected' : '' }}>Reserved</option>
-                </select>
-            </div>
-            <div class="md:w-1/5 md:px-2 mb-4 md:mb-0">
-                <label for="city" class="block text-sm font-medium text-gray-700 mb-1">Filter by City</label>
-                <select id="city" name="city" 
-                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                    <option value="">All Cities</option>
-                    @foreach($cities as $city)
-                        <option value="{{ $city }}" {{ request('city') === $city ? 'selected' : '' }}>
-                            {{ $city }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="md:w-1/5 md:px-2 flex items-end justify-between">
-                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Apply Filters
-                </button>
-                <button type="button" onclick="openModal()" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+    <button type="button" onclick="openModal()" class="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                     Add New
                 </button>
-            </div>
-        </form>
-    </div>
+
+    <x-filter-card 
+        :filters="[
+            ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
+            ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
+            ['name' => 'status', 'label' => 'Filter by Status', 'type' => 'select', 'options' => ['0' => 'Active', '1' => 'Inactive', '2' => 'Terminated', '3' => 'Reserved']],
+            ['name' => 'city', 'label' => 'Filter by City', 'type' => 'select', 'options' => $cities],
+        ]"
+        :route="route('showEntityList')"
+        button-label="Apply Filters"
+    />
+
 
     <x-table 
     :headers="[ 'Name', 'Status', 'Category', 'Link', 'Code', 'SID', 'District']" 
@@ -73,14 +35,8 @@
 />
 
 
-
-
-
     <!-- Pagination Section -->
     <x-pagination :items="$clients" label="mosques" />
-
-
-
 
 
 </div>

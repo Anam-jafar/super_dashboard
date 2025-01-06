@@ -62,8 +62,16 @@ class EntityController extends Controller
     
     public function showEntityList(Request $request)
     {
-        $cities = DB::table('client')->distinct()->pluck('city');
+        $cities = DB::table('client')
+            ->distinct()
+            ->pluck('city')
+            ->mapWithKeys(fn($city) => [$city => $city])
+            ->toArray();
+
         $schs = DB::select('SELECT sname, sid FROM sch');
+        $schs = collect($schs)->mapWithKeys(function ($item) {
+            return [$item->sid => $item->sname];
+        })->toArray();
         $clients = $this->getListingData('client', $request, [
             'status' => 'sta',
             'sch' => 'sid',
@@ -101,6 +109,9 @@ class EntityController extends Controller
             ['id' => 'status', 'label' => 'Status']
         ];
         $schs = DB::select('SELECT sname, sid FROM sch');
+        $schs = collect($schs)->mapWithKeys(function ($item) {
+            return [$item->sid => $item->sname];
+        })->toArray();
         $admins = $this->getListingData('usr', $request, ['sch' => 'sch_id']);
 
         $statuses = DB::table('type')->where('grp', 'clientstatus')->get();

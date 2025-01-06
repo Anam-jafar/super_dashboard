@@ -12,34 +12,14 @@
 <div class="max-w-full mx-auto p-6 bg-gray-100 min-h-screen">
     <h1 class="text-3xl font-bold mb-6 text-gray-800">Admins</h1>
 
-    <!-- Filter and Search Card -->
-    <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
-        <form method="GET" action="{{ route('showAdminList') }}" class="space-y-4 sm:space-y-0 sm:flex sm:items-end sm:space-x-4">
-            <div class="flex-1">
-                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search by Name</label>
-                <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Enter admin name" 
-                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-            </div>
-
-            <div class="flex-1">
-                <label for="sch" class="block text-sm font-medium text-gray-700 mb-1">Filter by School</label>
-                <select id="sch" name="sch" class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
-                    <option value="" {{ request('sch') == '' ? 'selected' : '' }}>All Schools</option>
-                    @foreach ($schs as $sch)
-                        <option value="{{ $sch->sid }}" {{ request('sch') == $sch->sid ? 'selected' : '' }}>
-                            {{ $sch->sname }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
-                <button type="submit" class="w-full sm:w-auto px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition">
-                    Apply Filters
-                </button>
-            </div>
-        </form>
-    </div>
+    <x-filter-card 
+        :filters="[
+            ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
+            ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
+        ]"
+        :route="route('showAdminList')"
+        button-label="Apply Filters"
+    />
 
     <!-- Admin Table -->
     <div class="bg-white shadow-lg rounded-lg overflow-hidden">

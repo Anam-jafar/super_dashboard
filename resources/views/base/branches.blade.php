@@ -12,21 +12,13 @@
 <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-50">
     <h1 class="text-3xl font-bold text-gray-900 mb-8">Branches</h1>
 
-    <!-- Filter and Search Card -->
-    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
-        <form method="GET" action="{{ route('showBranchList') }}" class="space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
-            <div class="flex-grow">
-                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search by Name</label>
-                <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Enter branch name" 
-                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-            </div>
-            <div class="flex items-end">
-                <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Apply Filters
-                </button>
-            </div>
-        </form>
-    </div>
+    <x-filter-card 
+        :filters="[
+            ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
+        ]"
+        :route="route('showBranchList')"
+        button-label="Apply Filters"
+    />
 
     <!-- Table to display data -->
     <div class="bg-white shadow-md rounded-lg overflow-hidden">

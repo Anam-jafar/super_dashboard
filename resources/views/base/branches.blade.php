@@ -65,50 +65,8 @@
             </tbody>
         </table>
 
-        <!-- Pagination Section -->
-        <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-            <div class="flex justify-between items-center">
-                <div class="text-sm text-gray-700">
-                    Showing {{ $branches->firstItem() }} - {{ $branches->lastItem() }} 
-                    of {{ $branches->total() }} results
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        @if ($branches->currentPage() > 1)
-                            <a href="{{ $branches->previousPageUrl() }}" 
-                               class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                                Previous
-                            </a>
-                        @else
-                            <span class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-400 bg-gray-100 cursor-not-allowed">
-                                Previous
-                            </span>
-                        @endif
+        <x-pagination :items="$branches" label="branches" />
 
-                        @if ($branches->hasMorePages())
-                            <a href="{{ $branches->nextPageUrl() }}" 
-                               class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                                Next
-                            </a>
-                        @else
-                            <span class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-400 bg-gray-100 cursor-not-allowed">
-                                Next
-                            </span>
-                        @endif
-                    </div>
-                    <div>
-                        <select id="recordsPerPage" name="recordsPerPage" 
-                                onchange="updatePagination(this.value)" 
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                            <option value="25" {{ request('recordsPerPage') == 25 ? 'selected' : '' }}>25 per page</option>
-                            <option value="50" {{ request('recordsPerPage') == 50 ? 'selected' : '' }}>50 per page</option>
-                            <option value="100" {{ request('recordsPerPage') == 100 ? 'selected' : '' }}>100 per page</option>
-                            <option value="200" {{ request('recordsPerPage') == 200 ? 'selected' : '' }}>200 per page</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 

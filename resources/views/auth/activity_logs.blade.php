@@ -3,13 +3,14 @@
 @section('content')
 <div class="main-content app-content">
     <div class="container-fluid">
-        <div class="max-w-full mx-auto p-4 sm:p-6 bg-gray-100">
+        <div class="max-w-full mx-auto p-4 sm:p-6">
             <h1 class="text-2xl font-bold mb-4">Activity Logs</h1>
 
             <div class="overflow-x-auto">
                 <table class="table-auto border-collapse border border-gray-200 w-full text-sm text-left bg-white shadow-sm rounded-lg">
                     <thead>
                         <tr class="bg-gray-200 text-gray-700">
+                            <th class="border border-gray-300 px-4 py-2">#</th>
                             <th class="border border-gray-300 px-4 py-2">Name</th>
                             <th class="border border-gray-300 px-4 py-2">IC</th>
                             <th class="border border-gray-300 px-4 py-2">UID</th>
@@ -23,6 +24,8 @@
                     <tbody>
                         @forelse ($logs as $log)
                             <tr class="hover:bg-gray-100">
+                                <!-- Numbering Column -->
+                                <td class="border border-gray-300 px-4 py-2">{{ $logs->firstItem() + $loop->iteration - 1 }}</td>
                                 <td class="border border-gray-300 px-4 py-2">{{ $log->name }}</td>
                                 <td class="border border-gray-300 px-4 py-2">{{ $log->ic }}</td>
                                 <td class="border border-gray-300 px-4 py-2">{{ $log->uid }}</td>
@@ -34,63 +37,17 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="border border-gray-300 px-4 py-2 text-center">No logs available</td>
+                                <td colspan="9" class="border border-gray-300 px-4 py-2 text-center">No logs available</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+            <x-pagination :items="$logs" label="log" />
 
-            <!-- Pagination Section -->
-            <div class="grid justify-center sm:flex sm:justify-between sm:items-center gap-4 flex-wrap mt-6">
-                <nav class="flex items-center gap-x-1">
-                    <!-- Previous Button -->
-                    <a href="{{ $logs->previousPageUrl() }}&per_page={{ $perPage }}"
-                    class="min-h-[32px] min-w-8 py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-md text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10">
-                        <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path d="m15 18-6-6 6-6" />
-                        </svg>
-                        <span aria-hidden="true" class="sr-only">Previous</span>
-                    </a>
 
-                    <!-- Pagination Numbers -->
-                    <div class="flex items-center gap-x-1">
-                        @for ($i = 1; $i <= $logs->lastPage(); $i++)
-                            <a href="{{ $logs->url($i) }}&per_page={{ $perPage }}"
-                            class="min-h-[32px] min-w-8 flex justify-center items-center {{ $logs->currentPage() == $i ? 'bg-primary text-white' : 'text-gray-800 hover:bg-gray-100' }} py-1 px-2.5 text-sm rounded-md focus:outline-none focus:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none dark:bg-primary dark:text-white dark:focus:bg-gray-500"
-                            {{ $logs->currentPage() == $i ? 'aria-current="page"' : '' }}>
-                                {{ $i }}
-                            </a>
-                        @endfor
-                    </div>
 
-                    <!-- Next Button -->
-                    <a href="{{ $logs->nextPageUrl() }}&per_page={{ $perPage }}"
-                    class="min-h-[32px] min-w-8 py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-md text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10">
-                        <span aria-hidden="true" class="sr-only">Next</span>
-                        <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round">
-                            <path d="m9 18 6-6-6-6" />
-                        </svg>
-                    </a>
-                </nav>
 
-                <!-- Go To Page Section -->
-                <div class="flex items-center gap-x-4">
-                    <form method="GET" action="{{ url()->current() }}" class="flex items-center gap-x-2">
-                        <label for="per_page" class="text-sm">Show:</label>
-                        <select name="per_page" id="per_page" class="form-select" onchange="this.form.submit()">
-                            <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10</option>
-                            <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20</option>
-                            <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50</option>
-                            <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100</option>
-                        </select>
-                    </form>
-                </div>
-            </div>
         </div>
     </div>
 </div>

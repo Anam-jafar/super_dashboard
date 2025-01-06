@@ -90,52 +90,8 @@
             </table>
         </div>
 
-        <!-- Pagination Section -->
-        <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-            <div class="flex justify-between items-center">
-                <div class="text-sm text-gray-700">
-                    Showing 
-                    <span class="font-medium">{{ $admins->firstItem() }}</span>
-                    to
-                    <span class="font-medium">{{ $admins->lastItem() }}</span>
-                    of
-                    <span class="font-medium">{{ $admins->total() }}</span>
-                    results
-                </div>
-                <div class="flex items-center space-x-4">
-                    <div class="flex items-center space-x-2">
-                        @if ($admins->onFirstPage())
-                            <span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default rounded-md">
-                                Previous
-                            </span>
-                        @else
-                            <a href="{{ $admins->previousPageUrl() }}" class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                Previous
-                            </a>
-                        @endif
+        <x-pagination :items="$admins" label="Admin" />
 
-                        @if ($admins->hasMorePages())
-                            <a href="{{ $admins->nextPageUrl() }}" class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                                Next
-                            </a>
-                        @else
-                            <span class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default rounded-md">
-                                Next
-                            </span>
-                        @endif
-                    </div>
-                    <div>
-                        <select id="recordsPerPage" name="recordsPerPage" onchange="updatePagination(this.value)" 
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                            <option value="25" {{ request('recordsPerPage') == 25 ? 'selected' : '' }}>25 per page</option>
-                            <option value="50" {{ request('recordsPerPage') == 50 ? 'selected' : '' }}>50 per page</option>
-                            <option value="100" {{ request('recordsPerPage') == 100 ? 'selected' : '' }}>100 per page</option>
-                            <option value="200" {{ request('recordsPerPage') == 200 ? 'selected' : '' }}>200 per page</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 

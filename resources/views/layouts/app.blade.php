@@ -89,6 +89,9 @@
         @vite('resources/assets/js/custom-switcher.js')
         
 
+
+
+
         <!-- END SCRIPTS -->
     </body>
 

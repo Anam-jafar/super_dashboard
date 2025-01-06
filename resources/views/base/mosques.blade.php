@@ -12,7 +12,7 @@
     <button type="button" onclick="openModal()" class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
         Add New
     </button>
-
+ 
     <x-filter-card 
         :filters="[
             ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
@@ -206,9 +206,9 @@
 </div>
 </div>
 @endsection
-
+ 
 @section('scripts')
 
 <script src="{{ asset('js/modalHandler.js') }}"></script>
 <script src="{{ asset('js/mosqueHandler.js') }}"></script>
-@endsection
+@endsection 

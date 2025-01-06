@@ -51,6 +51,8 @@ Route::prefix('mais')->group(function () {
             Route::get('/profile', 'profile')->name('profile');
             Route::put('/profile/update', 'updateProfile')->name('updateProfile');
             Route::put('/profile/password', 'updatePassword')->name('updatePassword');
+            Route::get('/activity-logs', 'activityLogs')->name('activityLogs');
+
         });
 
         // Kaffarah Settings Routes

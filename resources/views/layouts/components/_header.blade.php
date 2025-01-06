@@ -101,6 +101,9 @@
                 <li><a class="ti-dropdown-item flex items-center" href="{{route('profile')}}"><i
                             class="fe fe-user p-1 rounded-full bg-primary/10 text-primary me-2 text-[1rem]"></i>Profile</a>
                 </li>
+                <li><a class="ti-dropdown-item flex items-center" href="{{route('activityLogs')}}"><i
+                            class="fe fe-activity p-1 rounded-full bg-primary/10 text-primary me-2 text-[1rem]"></i>Activity Logs</a>
+                </li>
                 <li>
                     <form action="{{ route('logout') }}" method="POST" class="inline">
                         @csrf

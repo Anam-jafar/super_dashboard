@@ -112,4 +112,19 @@ public function updatePassword(Request $request)
     return redirect()->back()->with('success', 'Password updated successfully!');
 }
 
+public function activityLogs()
+{
+    $perPage = request()->get('per_page', 10); 
+
+    $perPage = in_array($perPage, [10, 20, 50, 100]) ? $perPage : 10;
+
+    $logs = DB::table('sys_log as s')
+        ->rightJoin('usr as u', 's.uid', '=', 'u.uid')
+        ->select('s.*', 'u.uid', 'u.name', 'u.ic')
+        ->paginate($perPage);
+
+    return view('auth.activity_logs', ['logs' => $logs, 'perPage' => $perPage]);
+}
+
+
 }

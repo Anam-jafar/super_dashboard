@@ -24,6 +24,10 @@
         </div>
         <ul class="main-menu">
 
+            <!-- Start::slide__category -->
+            <li class="slide__category"><span class="category-name">Main</span></li>
+            <!-- End::slide__category -->
+
             <li class="slide">
                 <a href="{{route('index')}}" class="side-menu__item">
 
@@ -34,6 +38,10 @@
                     <span class="side-menu__label">Dashboard</span>
                 </a>
             </li>
+
+            <!-- Start::slide__category -->
+            <li class="slide__category"><span class="category-name">General</span></li>
+            <!-- End::slide__category -->
 
             <li class="slide">
                 <a href="{{route('showEntityList')}}" class="side-menu__item">

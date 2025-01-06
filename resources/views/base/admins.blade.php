@@ -25,8 +25,8 @@
     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
 
         <x-table 
-        :headers="['Name', 'IC', 'HP', 'Email', 'JobDiv', 'Status']" 
-        :columns="['name', 'ic', 'hp', 'mel', 'jobdiv', 'status']"
+        :headers="['Name', 'Status', 'IC', 'HP', 'Email', 'JobDiv']" 
+        :columns="['name', 'status', 'ic', 'hp', 'mel', 'jobdiv']"
         :rows="$admins" 
         :statuses="$statuses" 
     />

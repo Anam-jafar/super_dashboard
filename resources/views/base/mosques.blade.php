@@ -65,56 +65,13 @@
         </form>
     </div>
 
-    <!-- Table to display data -->
-    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registration</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Link</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SID</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">District</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @forelse($clients as $key => $mosque)
-                    <tr class="hover:bg-gray-50 cursor-pointer" onclick="openModal('{{ $mosque->id }}')">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ ($clients->currentPage() - 1) * $clients->perPage() + $key + 1 }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ $mosque->name }}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $mosque->regdt }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                {{ $mosque->sta == 0 ? 'bg-green-100 text-green-800' : 
-                                   ($mosque->sta == 1 ? 'bg-yellow-100 text-yellow-800' : 
-                                   ($mosque->sta == 2 ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800')) }}">
-                                {{ $statuses->firstWhere('val', $mosque->sta)?->prm ?? 'Unknown' }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $mosque->cate }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $mosque->mel }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $mosque->rem1 }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $mosque->rem2 }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $mosque->rem3 }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $mosque->city }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="10" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">No records found.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+    <x-table 
+    :headers="[ 'Name', 'Status', 'Category', 'Link', 'Code', 'SID', 'District']" 
+    :columns="['name', 'sta', 'cate', 'rem1', 'rem2', 'rem3', 'city']"
+    :rows="$clients" 
+    :statuses="$statuses" 
+/>
+
 
 
 

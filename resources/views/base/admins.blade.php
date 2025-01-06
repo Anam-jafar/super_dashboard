@@ -43,52 +43,13 @@
 
     <!-- Admin Table -->
     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IC</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">HP</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">JobDiv</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($admins as $key => $admin)
-                        <tr class="hover:bg-gray-50 transition cursor-pointer" data-id="{{ $admin->id }}" onclick="openModal('{{ $admin->id }}')">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ ($admins->currentPage() - 1) * $admins->perPage() + $key + 1 }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $admin->name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $admin->ic }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $admin->hp }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $admin->mel }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $admin->jobdiv }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                @php
-                                    $statusText = $statuses->firstWhere('val', $admin->status)?->prm ?? 'Unknown';
-                                    $statusColor = match($admin->status) {
-                                        'A' => 'bg-green-100 text-green-800',
-                                        'I' => 'bg-red-100 text-red-800',
-                                        default => 'bg-gray-100 text-gray-800'
-                                    };
-                                @endphp
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColor }}">
-                                    {{ $statusText }}
-                                </span>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">No records found.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+
+        <x-table 
+        :headers="['Name', 'IC', 'HP', 'Email', 'JobDiv', 'Status']" 
+        :columns="['name', 'ic', 'hp', 'mel', 'jobdiv', 'status']"
+        :rows="$admins" 
+        :statuses="$statuses" 
+    />
 
         <x-pagination :items="$admins" label="Admin" />
 

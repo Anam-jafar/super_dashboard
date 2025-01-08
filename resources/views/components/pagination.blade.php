@@ -14,7 +14,7 @@
         <nav class="flex items-center gap-x-1">
             <!-- Previous Button -->
             <a href="{{ $items->previousPageUrl() }}&per_page={{ request('per_page', 10) }}"
-            class="min-h-[32px] min-w-8 py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-md text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 {{ !$items->previousPageUrl() ? 'disabled opacity-50 pointer-events-none' : '' }}">
+                class="min-h-[32px] min-w-8 py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-md text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 {{ !$items->previousPageUrl() ? 'disabled opacity-50 pointer-events-none' : '' }}">
                 <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">
@@ -23,9 +23,41 @@
                 Previous
             </a>
 
+            <!-- Pagination Numbers -->
+            <div class="flex items-center gap-x-1">
+                @php
+                    $startPage = max(1, $items->currentPage() - 2); // Show 2 pages before current
+                    $endPage = min($items->lastPage(), $items->currentPage() + 2); // Show 2 pages after current
+                @endphp
+
+                @if ($startPage > 1)
+                    <a href="{{ $items->url(1) }}&per_page={{ request('per_page', 10) }}"
+                        class="text-gray-800 hover:bg-gray-100 py-1 px-2.5 text-sm rounded-md">1</a>
+                    @if ($startPage > 2)
+                        <span class="text-gray-800 py-1 px-2.5 text-sm rounded-md">...</span>
+                    @endif
+                @endif
+
+                @for ($i = $startPage; $i <= $endPage; $i++)
+                    <a href="{{ $items->url($i) }}&per_page={{ request('per_page', 10) }}"
+                        class="min-h-[32px] min-w-8 flex justify-center items-center {{ $items->currentPage() == $i ? 'bg-primary text-white' : 'text-gray-800 hover:bg-gray-100' }} py-1 px-2.5 text-sm rounded-md focus:outline-none focus:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none dark:bg-primary dark:text-white dark:focus:bg-gray-500"
+                        {{ $items->currentPage() == $i ? 'aria-current="page"' : '' }}>
+                        {{ $i }}
+                    </a>
+                @endfor
+
+                @if ($endPage < $items->lastPage())
+                    @if ($endPage < $items->lastPage() - 1)
+                        <span class="text-gray-800 py-1 px-2.5 text-sm rounded-md">...</span>
+                    @endif
+                    <a href="{{ $items->url($items->lastPage()) }}&per_page={{ request('per_page', 10) }}"
+                        class="text-gray-800 hover:bg-gray-100 py-1 px-2.5 text-sm rounded-md">{{ $items->lastPage() }}</a>
+                @endif
+            </div>
+
             <!-- Next Button -->
             <a href="{{ $items->nextPageUrl() }}&per_page={{ request('per_page', 10) }}"
-            class="min-h-[32px] min-w-8 py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-md text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 {{ !$items->nextPageUrl() ? 'disabled opacity-50 pointer-events-none' : '' }}">
+                class="min-h-[32px] min-w-8 py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-md text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 {{ !$items->nextPageUrl() ? 'disabled opacity-50 pointer-events-none' : '' }}">
                 Next
                 <svg class="flex-shrink-0 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"

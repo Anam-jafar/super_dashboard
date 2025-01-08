@@ -6,32 +6,46 @@
 @section('content')
     <div class="main-content app-content">
         <div class="container-fluid">
-            <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-50">
-                <h1 class="text-3xl font-bold text-gray-900 mb-8">Mosques</h1>
 
+            <!-- Start::page-header -->
+            <div class="flex items-center justify-between page-header-breadcrumb flex-wrap gap-2">
+                <div>
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0);">
+                                Rekod Masjid
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Senari Masjid</li>
+                    </ol>
+                    <h1 class="page-title font-medium text-lg mb-0">Senari Masjid</h1>
+                </div>
+
+            </div>
+            <!-- End::page-header -->
+
+            <x-filter-card :filters="[
+                ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
+                ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
+                [
+                    'name' => 'status',
+                    'label' => 'Filter by Status',
+                    'type' => 'select',
+                    'options' => ['0' => 'Active', '1' => 'Inactive', '2' => 'Terminated', '3' => 'Reserved'],
+                ],
+                ['name' => 'city', 'label' => 'Filter by City', 'type' => 'select', 'options' => $cities],
+            ]" :route="route('showEntityList')" button-label="Apply Filters" />
+
+            <x-table :headers="['Name', 'Status', 'Category', 'Link', 'Code', 'SID', 'District']" :columns="['name', 'sta', 'cate', 'rem1', 'rem2', 'rem3', 'city']" :rows="$clients" :statuses="$statuses" />
+
+            <x-pagination :items="$clients" label="mosques" />
+
+
+            <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-50">
                 <button type="button" onclick="openModal()"
                     class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                     Add New
                 </button>
-
-                <x-filter-card :filters="[
-                    ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
-                    ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
-                    [
-                        'name' => 'status',
-                        'label' => 'Filter by Status',
-                        'type' => 'select',
-                        'options' => ['0' => 'Active', '1' => 'Inactive', '2' => 'Terminated', '3' => 'Reserved'],
-                    ],
-                    ['name' => 'city', 'label' => 'Filter by City', 'type' => 'select', 'options' => $cities],
-                ]" :route="route('showEntityList')" button-label="Apply Filters" />
-
-                <!-- Table to display data -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <x-table :headers="['Name', 'Status', 'Category', 'Link', 'Code', 'SID', 'District']" :columns="['name', 'sta', 'cate', 'rem1', 'rem2', 'rem3', 'city']" :rows="$clients" :statuses="$statuses" />
-
-                    <x-pagination :items="$clients" label="mosques" />
-                </div>
             </div>
 
             <!-- Modal -->

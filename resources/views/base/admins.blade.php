@@ -6,23 +6,32 @@
 @section('content')
     <div class="main-content app-content">
         <div class="container-fluid">
-            <div class="max-w-full mx-auto p-6 bg-gray-100 min-h-screen">
-                <h1 class="text-3xl font-bold mb-6 text-gray-800">Admins</h1>
-
-                <x-filter-card :filters="[
-                    ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
-                    ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
-                ]" :route="route('showAdminList')" button-label="Apply Filters" />
-
-                <!-- Admin Table -->
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-
-                    <x-table :headers="['Name', 'Status', 'IC', 'HP', 'Email', 'JobDiv']" :columns="['name', 'status', 'ic', 'hp', 'mel', 'jobdiv']" :rows="$admins" :statuses="$statuses" />
-
-                    <x-pagination :items="$admins" label="Admin" />
-
+            <!-- Start::page-header -->
+            <div class="flex items-center justify-between page-header-breadcrumb flex-wrap gap-2">
+                <div>
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0);">
+                                Rekod Masjid
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Senari Masjid</li>
+                    </ol>
+                    <h1 class="page-title font-medium text-lg mb-0">Senari Masjid</h1>
                 </div>
+
             </div>
+            <!-- End::page-header -->
+
+            <x-filter-card :filters="[
+                ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
+                ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
+            ]" :route="route('showAdminList')" button-label="Apply Filters" />
+
+            <x-table :headers="['Name', 'Status', 'IC', 'HP', 'Email', 'JobDiv']" :columns="['name', 'status', 'ic', 'hp', 'mel', 'jobdiv']" :rows="$admins" :statuses="$statuses" />
+
+            <x-pagination :items="$admins" label="Admin" />
+
 
             <!-- Modal -->
             <div id="adminModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden"

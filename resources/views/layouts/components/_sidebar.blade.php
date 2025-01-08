@@ -61,23 +61,23 @@
                                 fill="white" />
                         </svg>
 
-                        <span class="side-menu__label">Rekod Institusi</span>
+                        <span class="side-menu__label">Rekod Masjid</span>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">Rekod Institusi</a>
+                            <a href="javascript:void(0)">Rekod Masjid</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('showEntityList') }}" class="side-menu__item">Senarai Institusi</a>
+                            <a href="{{ route('showEntityList') }}" class="side-menu__item">Senarai Masjid</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('showAdminList') }}" class="side-menu__item">Daftar Institusi</a>
+                            <a href="{{ route('showAdminList') }}" class="side-menu__item">Daftar Masjid</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('showBranchList') }}" class="side-menu__item">Profil Institusi</a>
+                            <a href="{{ route('showBranchList') }}" class="side-menu__item">Profil Masjid</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('showBranchList') }}" class="side-menu__item">Permohonan Baharu</a>
+                            <a href="#" class="side-menu__item">Permohonan Baharu</a>
                         </li>
 
                     </ul>
@@ -98,13 +98,6 @@
                         <span class="side-menu__label">Compensation</span>
                     </a>
                 </li>
-
-
-
-
-
-
-
 
             </ul>
             <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"

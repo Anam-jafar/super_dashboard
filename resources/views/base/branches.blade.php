@@ -6,21 +6,33 @@
 @section('content')
     <div class="main-content app-content">
         <div class="container-fluid">
-            <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-50">
-                <h1 class="text-3xl font-bold text-gray-900 mb-8">Branches</h1>
-
-                <x-filter-card :filters="[
-                    ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
-                ]" :route="route('showBranchList')" button-label="Apply Filters" />
-
-                <!-- Table to display data -->
-                <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                    <x-table :headers="['Name', 'Short Name', 'Telephone', 'Email', 'URL']" :columns="['name', 'sname', 'tel', 'mel', 'url']" :rows="$branches" />
-
-                    <x-pagination :items="$branches" label="branches" />
-
+            <!-- Start::page-header -->
+            <div class="flex items-center justify-between page-header-breadcrumb flex-wrap gap-2">
+                <div>
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item">
+                            <a href="javascript:void(0);">
+                                Rekod Masjid
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Senari Masjid</li>
+                    </ol>
+                    <h1 class="page-title font-medium text-lg mb-0">Senari Masjid</h1>
                 </div>
+
             </div>
+            <!-- End::page-header -->
+
+            <x-filter-card :filters="[
+                ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
+            ]" :route="route('showBranchList')" button-label="Apply Filters" />
+
+
+
+
+            <x-table :headers="['Name', 'Short Name', 'Telephone', 'Email', 'URL']" :columns="['name', 'sname', 'tel', 'mel', 'url']" :rows="$branches" />
+
+            <x-pagination :items="$branches" label="branches" />
 
             <!-- Modal -->
             <div id="branchModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden"
@@ -109,19 +121,22 @@
                             <div id="address" class="tab-content hidden">
                                 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                     <div class="sm:col-span-2">
-                                        <label for="modalAddr" class="block text-sm font-medium text-gray-700">Alamat Baris
+                                        <label for="modalAddr" class="block text-sm font-medium text-gray-700">Alamat
+                                            Baris
                                             1</label>
                                         <input type="text" id="modalAddr"
                                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                     </div>
                                     <div class="sm:col-span-2">
-                                        <label for="modalAddr2" class="block text-sm font-medium text-gray-700">Alamat Baris
+                                        <label for="modalAddr2" class="block text-sm font-medium text-gray-700">Alamat
+                                            Baris
                                             2</label>
                                         <input type="text" id="modalAddr2"
                                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                     </div>
                                     <div class="sm:col-span-2">
-                                        <label for="modalAddr3" class="block text-sm font-medium text-gray-700">Alamat Baris
+                                        <label for="modalAddr3" class="block text-sm font-medium text-gray-700">Alamat
+                                            Baris
                                             3</label>
                                         <input type="text" id="modalAddr3"
                                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">

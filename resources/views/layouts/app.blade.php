@@ -17,7 +17,7 @@
     <title> Mais </title>
 
     <!-- FAVICON -->
-    <link rel="icon" href="{{ asset('build/assets/images/brand-logos/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('assets/icons/sd_logo_half.svg') }}" type="image/x-icon">
 
     <!-- ICONS CSS -->
     <link href="{{ asset('build/assets/icon-fonts/icons.css') }}" rel="stylesheet">

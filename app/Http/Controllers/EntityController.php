@@ -174,7 +174,7 @@ public function store(Request $request)
     // if ($validator->fails()) {
     //     return response()->json(['errors' => $validator->errors()], 422);
     // }
-
+ 
     try {
         $insertId = DB::table('client')->insertGetId([
             'name' => $request->input('name'),

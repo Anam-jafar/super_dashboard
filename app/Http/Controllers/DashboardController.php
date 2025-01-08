@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use MongoDB\Client as MongoClient;
-use App\Reports\DashboardReport;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -284,25 +283,6 @@ class DashboardController extends Controller
 
         return view('base.index', $data);
     }
-
-        // Controller methods for web routes
-        public function overview()
-        {
-            $data = [
-                'totalMosques' => $this->_getTotalMosques(),
-                'totalKariah' => $this->_getTotalKariah(),
-                'totalStaff' => $this->_getTotalStaff(),
-                'totalKariah_MaleFemale' => $this->_getKariahMaleFemale(),
-                'totalKariahPerDistrict' => $this->_getTotalKariahPerDistrict(),
-                'kariahPerType' => $this->_getKariahPerType(),
-                'kariahPerAgeRange' => $this->_getKariahPerAgeRange(),
-                'kariahNationality' => $this->_getKariahNationality(),
-                'districtTable' => $this->_getDistrictTable(),
-                'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn($item) => [$item->prm => $item->total])
-            ];
-    
-            return view('dashboard.overview', $data);
-        }
 
 
 

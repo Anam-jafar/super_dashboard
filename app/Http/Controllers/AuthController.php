@@ -72,61 +72,61 @@ class AuthController extends Controller
         return view('auth.profile', compact('user'));
     }
 
-    
-/**
- * Update the authenticated user's profile information.
- *
- * @param  \Illuminate\Http\Request  $request
- * @return \Illuminate\Http\RedirectResponse
- */
-public function updateProfile(Request $request)
-{
-    $user = Auth::user();
-    
-    $user->update($request->all());
+        
+    /**
+     * Update the authenticated user's profile information.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
+        
+        $user->update($request->all());
 
-    return redirect()->back()->with('success', 'Profile updated successfully!');
-}
-
-/**
- * Update the authenticated user's password.
- *
- * @param  \Illuminate\Http\Request  $request
- * @return \Illuminate\Http\RedirectResponse
- */
-public function updatePassword(Request $request)
-{
-    $user = Auth::user();
-
-
-    // Check if the current password is correct
-    if (md5($request->current_password) !== $user->pass) {
-        return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
 
-    // Update the password (hash the new one)
-    $user->update([
-        'pass' => md5($request->new_password),  // If you are using MD5 (but it's not recommended)
-    ]);
-
-    return redirect()->back()->with('success', 'Password updated successfully!');
-}
-
-public function activityLogs()
-{
-    // Get the per_page value from the request, default to 10
-    $perPage = request()->get('per_page', 10); 
+    /**
+     * Update the authenticated user's password.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updatePassword(Request $request)
+    {
+        $user = Auth::user();
 
 
-    // Fetch the logs with pagination
-    $logs = DB::table('sys_log as s')
-        ->rightJoin('usr as u', 's.uid', '=', 'u.uid')
-        ->select('s.*', 'u.uid', 'u.name', 'u.ic')
-        ->paginate($perPage);
+        // Check if the current password is correct
+        if (md5($request->current_password) !== $user->pass) {
+            return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
+        }
 
-    // Pass the 'perPage' value and the logs to the view
-    return view('auth.activity_logs', ['logs' => $logs, 'perPage' => $perPage]);
-}
+        // Update the password (hash the new one)
+        $user->update([
+            'pass' => md5($request->new_password),  // If you are using MD5 (but it's not recommended)
+        ]);
+
+        return redirect()->back()->with('success', 'Password updated successfully!');
+    }
+
+    public function activityLogs()
+    {
+        // Get the per_page value from the request, default to 10
+        $perPage = request()->get('per_page', 10); 
+
+
+        // Fetch the logs with pagination
+        $logs = DB::table('sys_log as s')
+            ->rightJoin('usr as u', 's.uid', '=', 'u.uid')
+            ->select('s.*', 'u.uid', 'u.name', 'u.ic')
+            ->paginate($perPage);
+
+        // Pass the 'perPage' value and the logs to the view
+        return view('auth.activity_logs', ['logs' => $logs, 'perPage' => $perPage]);
+    }
 
 
 }

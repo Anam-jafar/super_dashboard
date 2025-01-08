@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MetrixController;
 use App\Http\Controllers\EntityController;
@@ -28,8 +27,6 @@ Route::prefix('mais')->group(function () {
     Route::middleware(['auth'])->group(function () {
         // Dashboard Routes
         Route::get('/', [DashboardController::class, 'index'])->name('index');
-        Route::get('/ov', [DashboardController::class, 'overview'])->name('overview');
-
         Route::get('/district', [DashboardController::class, 'mosquesInCityDetails'])->name('mosquesInCityDetails');
 
         // Entity Management Routes
@@ -65,11 +62,4 @@ Route::prefix('mais')->group(function () {
     });
 });
 
-Route::get('/test', function () {
-    return view('test');
-});
-
-Route::get('/new', function () {
-    return view('new');
-});
 

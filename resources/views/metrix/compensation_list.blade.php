@@ -129,8 +129,8 @@
                                         @foreach ($setting['kaffarah_item'] as $item)
                                         <tr>
                                             <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ $item['name'] }}</td>
-                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ $item['price'] }}</td>
-                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ $item['rate_value'] }}</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">RM. {{ $item['price'] }}</td>
+                                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">RM. {{ $item['rate_value'] }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

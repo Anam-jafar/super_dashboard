@@ -1,14 +1,10 @@
 @extends('layouts.app')
 
-@section('styles')
-@endsection
-
 @section('content')
     <div class="main-content app-content">
         <div class="container-fluid">
 
             <x-page-header :title="'Senari Masjid'" :breadcrumbs="[['label' => 'Rekod Masjid', 'url' => 'javascript:void(0);'], ['label' => 'Senari Masjid']]" />
-
 
             <x-filter-card :filters="[
                 ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
@@ -25,9 +21,7 @@
             <x-table :headers="['Name', 'Status', 'Category', 'Link', 'Code', 'SID', 'District']" :columns="['name', 'sta', 'cate', 'rem1', 'rem2', 'rem3', 'city']" :rows="$clients" :statuses="$statuses" />
 
             <x-pagination :items="$clients" label="mosques" />
+
         </div>
     </div>
-@endsection
-
-@section('scripts')
 @endsection

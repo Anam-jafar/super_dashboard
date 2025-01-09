@@ -15,10 +15,10 @@
                     'options' => ['0' => 'Active', '1' => 'Inactive', '2' => 'Terminated', '3' => 'Reserved'],
                 ],
                 ['name' => 'city', 'label' => 'Filter by City', 'type' => 'select', 'options' => $cities],
-                ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Search....'],
+                ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
             ]" :route="route('showEntityList')" button-label="Tambah Masjid" :button-route="route('createInstitute')" />
 
-            <x-table :headers="['Name', 'Status', 'Category', 'Link', 'Code', 'SID', 'District']" :columns="['name', 'sta', 'cate', 'rem1', 'rem2', 'rem3', 'city']" :rows="$clients" :statuses="$statuses" />
+            <x-table :headers="['Nama', 'Status', 'Kategory', 'Link', 'Code', 'SID', 'Daerah']" :columns="['name', 'sta', 'cate', 'rem1', 'rem2', 'rem3', 'city']" :rows="$clients" :statuses="$statuses" />
 
             <x-pagination :items="$clients" label="mosques" />
 

@@ -1,4 +1,4 @@
-<footer class="mt-8 py-4 bg-white dark:bg-bodybg text-center">
+<footer class="mt-4 py-4 bg-white dark:bg-bodybg text-center">
     <div class="container">
         <span class="text-textmuted dark:text-textmuted/50">
             Copyright © <span id="year"></span>

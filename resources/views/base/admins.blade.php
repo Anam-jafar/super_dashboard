@@ -8,10 +8,10 @@
 
             <x-filter-card :filters="[
                 ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
-                ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
+                ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
             ]" :route="route('showAdminList')" button-label="Tambah Pentadbir" :button-route="route('createAdmin')" />
 
-            <x-table :headers="['Name', 'Status', 'IC', 'HP', 'Email', 'JobDiv']" :columns="['name', 'status', 'ic', 'hp', 'mel', 'jobdiv']" :rows="$admins" :statuses="$statuses" />
+            <x-table :headers="['Nama', 'Status', 'No KP', 'HP', 'Emel', 'Jawatan']" :columns="['name', 'status', 'ic', 'hp', 'mel', 'jobdiv']" :rows="$admins" :statuses="$statuses" />
 
             <x-pagination :items="$admins" label="Admin" />
 

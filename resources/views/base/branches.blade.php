@@ -7,10 +7,10 @@
             <x-page-header :title="'Senarai Cawangan'" :breadcrumbs="[['label' => 'Cawangan', 'url' => 'javascript:void(0);'], ['label' => 'Senarai Cawangan']]" />
 
             <x-filter-card :filters="[
-                ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
+                ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
             ]" :route="route('showBranchList')" button-label="Cawangan Baru" :button-route="route('createBranch')" />
 
-            <x-table :headers="['Name', 'Short Name', 'Telephone', 'Email', 'URL']" :columns="['name', 'sname', 'tel', 'mel', 'url']" :rows="$branches" />
+            <x-table :headers="['Nama', 'Singkatan', 'Telefon', 'Emel', 'Web']" :columns="['name', 'sname', 'tel', 'mel', 'url']" :rows="$branches" />
 
             <x-pagination :items="$branches" label="branches" />
 

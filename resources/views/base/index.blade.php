@@ -14,12 +14,12 @@
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item">
                             <a href="javascript:void(0);">
-                                Dashboards
+                                Papan Pemuka
                             </a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">Sales</li>
+                        <li class="breadcrumb-item active" aria-current="page">Maklumat Masjid Selangor</li>
                     </ol>
-                    <h1 class="page-title font-medium text-lg mb-0">Sales Dashboard</h1>
+                    <h1 class="page-title font-medium text-lg mb-0">Maklumat Masjid Selangor</h1>
                 </div>
                 <div class="flex gap-2 flex-wrap">
                     <div class="form-group">

@@ -6,7 +6,8 @@
                 <!-- Search Input with Button -->
                 <div class="flex rounded-sm">
                     <input type="text" id="search-input" name="search" value="{{ request('search') }}"
-                        class="ti-form-input rounded-none rounded-s-sm focus:z-10 w-40" placeholder="Search...">
+                        class="ti-form-input rounded-none rounded-s-sm focus:z-10 w-40"
+                        placeholder={{ $filter['placeholder'] }}>
                     <button aria-label="button" type="submit"
                         class="inline-flex flex-shrink-0 justify-center items-center h-[2.875rem] w-[2.875rem] rounded-e-sm rounded-r-md border border-transparent font-semibold bg-primary text-white hover:bg-primary focus:z-10 focus:outline-none focus:ring-0 focus:ring-primary transition-all text-sm">
                         <svg class="h-5 w-5 m-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16"

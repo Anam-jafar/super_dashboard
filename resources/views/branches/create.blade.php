@@ -7,7 +7,7 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senari Masjid'" :breadcrumbs="[['label' => 'Rekod Masjid', 'url' => 'javascript:void(0);'], ['label' => 'Senari Masjid']]" />
+            <x-page-header :title="'Tambah Cawangan Baru'" :breadcrumbs="[['label' => 'Cawangan', 'url' => 'javascript:void(0);'], ['label' => 'Cawangan Baru']]" />
 
             <form class="grid grid-cols-1 gap-6">
                 <!-- General Section -->

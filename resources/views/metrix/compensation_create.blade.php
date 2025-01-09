@@ -4,7 +4,7 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senari Masjid'" :breadcrumbs="[['label' => 'Rekod Masjid', 'url' => 'javascript:void(0);'], ['label' => 'Senari Masjid']]" />
+            <x-page-header :title="'Tambah Tetapan Kaffarah Baharu'" :breadcrumbs="[['label' => 'Kaffarah', 'url' => 'javascript:void(0);'], ['label' => 'Tambah Tetapan']]" />
 
             <form action="{{ route('compensation.store') }}" method="POST" class="space-y-8">
                 @csrf

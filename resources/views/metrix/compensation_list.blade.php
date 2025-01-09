@@ -17,7 +17,10 @@
 @section('content')
     <div class="main-content app-content">
         <div class="container-fluid">
-            <x-page-header :title="'Senari Masjid'" :breadcrumbs="[['label' => 'Rekod Masjid', 'url' => 'javascript:void(0);'], ['label' => 'Senari Masjid']]" />
+            <x-page-header :title="'Senarai Tetapan Kaffarah'" :breadcrumbs="[
+                ['label' => 'Kaffarah', 'url' => 'javascript:void(0);'],
+                ['label' => 'Senari Tetapan Kaffarah'],
+            ]" />
 
 
             @if (session('success'))
@@ -36,7 +39,7 @@
                     <a href="{{ route('compensation.create') }}"
                         class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
                         style="padding: 9px 12px;">
-                        New Setting
+                        Tambah Tetapan
                         <i class="fe fe-plus"></i>
                     </a>
                 </div>

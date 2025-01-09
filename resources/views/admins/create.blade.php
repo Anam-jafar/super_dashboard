@@ -7,7 +7,7 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senari Masjid'" :breadcrumbs="[['label' => 'Rekod Masjid', 'url' => 'javascript:void(0);'], ['label' => 'Senari Masjid']]" />
+            <x-page-header :title="'Tambah Pentadbir Baru'" :breadcrumbs="[['label' => 'Pentadbir', 'url' => 'javascript:void(0);'], ['label' => 'Tambah Pentadbir']]" />
 
             <form method="POST" action="#">
                 @csrf

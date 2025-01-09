@@ -31,7 +31,7 @@
             <ul class="main-menu">
 
                 <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">Main</span></li>
+                <li class="slide__category"><span class="category-name">Utama</span></li>
                 <!-- End::slide__category -->
 
                 <li class="slide">
@@ -43,7 +43,7 @@
                                 d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                         </svg>
 
-                        <span class="side-menu__label">Dashboard</span>
+                        <span class="side-menu__label">Papan Pemuka</span>
                     </a>
                 </li>
 
@@ -60,7 +60,7 @@
                         </svg>
 
 
-                        <span class="side-menu__label">Mosques</span>
+                        <span class="side-menu__label">Masjid</span>
                     </a>
                 </li>
 
@@ -74,7 +74,7 @@
                         </svg>
 
 
-                        <span class="side-menu__label">Admins</span>
+                        <span class="side-menu__label">Pentadbir</span>
                     </a>
                 </li>
 
@@ -95,7 +95,7 @@
                         </svg>
 
 
-                        <span class="side-menu__label">Branches</span>
+                        <span class="side-menu__label">Cawangan</span>
                     </a>
                 </li>
 
@@ -107,7 +107,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span class="side-menu__label">Compensation</span>
+                        <span class="side-menu__label">Kaffarah</span>
                     </a>
                 </li>
 

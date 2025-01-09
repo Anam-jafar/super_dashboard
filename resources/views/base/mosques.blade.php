@@ -4,7 +4,7 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senari Masjid'" :breadcrumbs="[['label' => 'Rekod Masjid', 'url' => 'javascript:void(0);'], ['label' => 'Senari Masjid']]" />
+            <x-page-header :title="'Senari Masjid'" :breadcrumbs="[['label' => 'Masjid', 'url' => 'javascript:void(0);'], ['label' => 'Senari Masjid']]" />
 
             <x-filter-card :filters="[
                 ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
@@ -16,7 +16,7 @@
                 ],
                 ['name' => 'city', 'label' => 'Filter by City', 'type' => 'select', 'options' => $cities],
                 ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Search....'],
-            ]" :route="route('showEntityList')" button-label="Apply Filters" :button-route="route('createInstitute')" />
+            ]" :route="route('showEntityList')" button-label="Tambah Masjid" :button-route="route('createInstitute')" />
 
             <x-table :headers="['Name', 'Status', 'Category', 'Link', 'Code', 'SID', 'District']" :columns="['name', 'sta', 'cate', 'rem1', 'rem2', 'rem3', 'city']" :rows="$clients" :statuses="$statuses" />
 

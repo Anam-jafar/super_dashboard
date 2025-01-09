@@ -1,5 +1,4 @@
-<footer
-    class="mt-auto py-4 bg-white dark:bg-bodybg text-center border-t border-defaultborder dark:border-defaultborder/10">
+<footer class="mt-8 py-4 bg-white dark:bg-bodybg text-center">
     <div class="container">
         <span class="text-textmuted dark:text-textmuted/50">
             Copyright © <span id="year"></span>

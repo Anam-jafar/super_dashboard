@@ -6,22 +6,9 @@
 @section('content')
     <div class="main-content app-content">
         <div class="container-fluid">
-            <!-- Start::page-header -->
-            <div class="flex items-center justify-between page-header-breadcrumb flex-wrap gap-2">
-                <div>
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item">
-                            <a href="javascript:void(0);">
-                                Rekod Masjid
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item active" aria-current="page">Senari Masjid</li>
-                    </ol>
-                    <h1 class="page-title font-medium text-lg mb-0">Senari Masjid</h1>
-                </div>
 
-            </div>
-            <!-- End::page-header -->
+            <x-page-header :title="'Senari Masjid'" :breadcrumbs="[['label' => 'Rekod Masjid', 'url' => 'javascript:void(0);'], ['label' => 'Senari Masjid']]" />
+
 
             <x-filter-card :filters="[
                 ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],

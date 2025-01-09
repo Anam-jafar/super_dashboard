@@ -9,15 +9,17 @@ class FilterCard extends Component
     public $filters;
     public $route;
     public $buttonLabel;
+    public $buttonRoute; // New property
 
     /**
      * Create a new component instance.
      */
-    public function __construct($filters, $route, $buttonLabel = 'Apply Filters')
+    public function __construct($filters, $route, $buttonLabel = 'Apply Filters', $buttonRoute = null)
     {
         $this->filters = $filters;
         $this->route = $route;
         $this->buttonLabel = $buttonLabel;
+        $this->buttonRoute = $buttonRoute;
     }
 
     /**
@@ -28,4 +30,3 @@ class FilterCard extends Component
         return view('components.filter-card');
     }
 }
-

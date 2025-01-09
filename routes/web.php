@@ -62,4 +62,8 @@ Route::prefix('mais')->group(function () {
     });
 });
 
+Route::get('/create-institute', [EntityController::class, 'createInstitute'])->name('createInstitute');
+Route::get('/create-admin', [EntityController::class, 'createAdmin'])->name('createAdmin');
+Route::get('/create-branches', [EntityController::class, 'createBranch'])->name('createBranch');
+
 

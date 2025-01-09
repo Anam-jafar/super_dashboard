@@ -23,29 +23,9 @@
                 @foreach ($columns as $column)
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-black break-words">
                         @if ($column === 'sta')
-                            <span
-                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {{ $row->$column == 0
-                                        ? 'bg-green-100 text-green-800'
-                                        : ($row->$column == 1
-                                            ? 'bg-yellow-100 text-yellow-800'
-                                            : ($row->$column == 2
-                                                ? 'bg-red-100 text-red-800'
-                                                : 'bg-gray-100 text-gray-800')) }}">
-                                {{ $statuses->firstWhere('val', $row->$column)?->prm ?? 'Unknown' }}
-                            </span>
+                            {{ $statuses->firstWhere('val', $row->$column)?->prm ?? 'Unknown' }}
                         @elseif ($column === 'status')
-                            <span
-                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {{ $row->$column == 0
-                                        ? 'bg-green-100 text-green-800'
-                                        : ($row->$column == 1
-                                            ? 'bg-yellow-100 text-yellow-800'
-                                            : ($row->$column == 2
-                                                ? 'bg-red-100 text-red-800'
-                                                : 'bg-gray-100 text-gray-800')) }}">
-                                {{ $statuses->firstWhere('val', $row->$column)?->prm ?? 'Unknown' }}
-                            </span>
+                            {{ $statuses->firstWhere('val', $row->$column)?->prm ?? 'Unknown' }}
                         @else
                             {{ $row->$column ?? 'N/A' }}
                         @endif

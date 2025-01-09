@@ -34,7 +34,8 @@
     </form>
 
     <!-- New Page Link -->
-    <a href="#" class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
+    <a href="{{ $buttonRoute ?? '#' }}"
+        class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
         style="padding: 9px 12px;">
         {{ $buttonLabel }}
         <i class="fe fe-plus"></i>

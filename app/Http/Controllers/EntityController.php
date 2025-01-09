@@ -147,6 +147,73 @@ class EntityController extends Controller
     public function getBranchDetails($id) { return $this->handleEntityOperation('sch', $id); }
     public function updateBranch(Request $request, $id) { return $this->handleEntityOperation('sch', $id, $request); }
 
+    public function createInstitute(){
+
+                $cities = DB::table('client')
+            ->distinct()
+            ->pluck('city')
+            ->mapWithKeys(fn($city) => [$city => $city])
+            ->toArray();
+
+        $schs = DB::select('SELECT sname, sid FROM sch');
+        $schs = collect($schs)->mapWithKeys(function ($item) {
+            return [$item->sid => $item->sname];
+        })->toArray();
+
+        $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
+        $categories = DB::table('type')->where('grp', 'type_CLIENT')->get();
+        $states = DB::table('type')->where('grp', 'state')->get();
+        
+        $areas = DB::table('type')->where('grp', 'clientcate1')->get();
+
+        return view('institutes.create', compact('cities', 'schs', 'statuses', 'categories', 'states', 'areas'));
+    }
+
+    public function createAdmin(){
+                    $cities = DB::table('client')
+            ->distinct()
+            ->pluck('city')
+            ->mapWithKeys(fn($city) => [$city => $city])
+            ->toArray();
+
+        $schs = DB::select('SELECT sname, sid FROM sch');
+        $schs = collect($schs)->mapWithKeys(function ($item) {
+            return [$item->sid => $item->sname];
+        })->toArray();
+
+        $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
+        $categories = DB::table('type')->where('grp', 'type_CLIENT')->get();
+        $states = DB::table('type')->where('grp', 'state')->get();
+        
+        $areas = DB::table('type')->where('grp', 'clientcate1')->get();
+        $syslevels = DB::table('type')->where('grp', 'syslevel')->get();
+        
+    return view('admins.create', compact('cities', 'schs', 'statuses', 'categories', 'states', 'areas', 'syslevels'));
+
+    }
+
+    public function createBranch(){
+
+                            $cities = DB::table('client')
+            ->distinct()
+            ->pluck('city')
+            ->mapWithKeys(fn($city) => [$city => $city])
+            ->toArray();
+
+        $schs = DB::select('SELECT sname, sid FROM sch');
+        $schs = collect($schs)->mapWithKeys(function ($item) {
+            return [$item->sid => $item->sname];
+        })->toArray();
+
+        $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
+        $categories = DB::table('type')->where('grp', 'type_CLIENT')->get();
+        $states = DB::table('type')->where('grp', 'state')->get();
+        
+        $areas = DB::table('type')->where('grp', 'clientcate1')->get();
+        
+    return view('branches.create', compact('cities', 'schs', 'statuses', 'categories', 'states', 'areas'));
+    }
+
 
 public function store(Request $request)
 {

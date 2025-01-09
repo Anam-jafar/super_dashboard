@@ -12,7 +12,6 @@
 
             <x-filter-card :filters="[
                 ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
-                ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Enter name'],
                 [
                     'name' => 'status',
                     'label' => 'Filter by Status',
@@ -20,6 +19,7 @@
                     'options' => ['0' => 'Active', '1' => 'Inactive', '2' => 'Terminated', '3' => 'Reserved'],
                 ],
                 ['name' => 'city', 'label' => 'Filter by City', 'type' => 'select', 'options' => $cities],
+                ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Search....'],
             ]" :route="route('showEntityList')" button-label="Apply Filters" />
 
             <x-table :headers="['Name', 'Status', 'Category', 'Link', 'Code', 'SID', 'District']" :columns="['name', 'sta', 'cate', 'rem1', 'rem2', 'rem3', 'city']" :rows="$clients" :statuses="$statuses" />
@@ -27,12 +27,12 @@
             <x-pagination :items="$clients" label="mosques" />
 
 
-            <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-50">
+            {{-- <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-gray-50">
                 <button type="button" onclick="openModal()"
                     class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                     Add New
                 </button>
-            </div>
+            </div> --}}
 
             <!-- Modal -->
             <div id="mosqueModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden"

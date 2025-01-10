@@ -54,10 +54,15 @@ Route::prefix('mais')->group(function () {
 
         // Kaffarah Settings Routes
         Route::controller(MetrixController::class)->group(function () {
-            Route::get('/compensation', 'compensationList')->name('compensation.list');
-            Route::get('/compensation/create', 'create')->name('compensation.create');
-            Route::post('/compensation/store', 'store')->name('compensation.store');
-            Route::post('/compensation/mark-as-active/{id}', 'markAsActive')->name('compensation.markAsActive');
+            Route::get('/expiation', 'expiationList')->name('compensation.list');
+            Route::get('/expiation/create', 'expiationCreate')->name('compensation.create');
+            Route::post('/expiation/store', 'expiationStore')->name('compensation.store');
+            Route::post('/expiation/mark-as-active/{id}', 'expiationMarkAsActive')->name('compensation.markAsActive');
+
+            Route::get('/compensation', 'compensationList')->name('compensation_.list');
+            Route::get('/compensation/create', 'compensationCreate')->name('compensation_.create');
+            Route::post('/compensation/store', 'compensationStore')->name('compensation_.store');
+            Route::post('/compensation/mark-as-active/{id}', 'compensationMarkAsActive')->name('compensation_.markAsActive');
         });
     });
 });

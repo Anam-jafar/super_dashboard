@@ -17,7 +17,7 @@ class MetrixController extends Controller
         $this->collection = $this->client->mais->payment_metrix;
     }
 
-    public function compensationList()
+    public function expiationList()
     {
         $settings = $this->collection->findOne(['setting_category' => 'kaffarah']);
     
@@ -29,14 +29,32 @@ class MetrixController extends Controller
     
         return view('metrix.compensation_list', compact('payment_metrix', 'activeSetting'));
     }
+
+    public function compensationList()
+    {
+        $settings = $this->collection->findOne(['setting_category' => 'fidyah']);
+    
+        $payment_metrix = isset($settings['fidyah']['fidyah_settings'])
+            ? $settings['fidyah']['fidyah_settings']
+            : [];
+    
+        $activeSetting = $settings['fidyah']['active_setting'] ?? null;
+    
+        return view('metrix.settings_list', compact('payment_metrix', 'activeSetting'));
+    }
     
 
-    public function create()
+    public function expiationCreate()
     {
         return view('metrix.compensation_create');
     }
 
-    public function store(Request $request)
+    public function compensationCreate()
+    {
+        return view('metrix.settings_create');
+    }
+
+    public function expiationStore(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -50,7 +68,7 @@ class MetrixController extends Controller
         $newSetting = [
             '_id' => new ObjectId(),
             'title' => $validated['title'],
-            'code' => $this->generateCode(),
+            'code' => $this->generateCode('kaffarah'),
             'offense_type' => array_map(function ($offense, $index) {
                 return array_merge($offense, ['index' => $index + 1]);
             }, $validated['offense_type'], array_keys($validated['offense_type'])),
@@ -73,26 +91,109 @@ class MetrixController extends Controller
         return redirect()->route('compensation.list')->with('success', 'Kaffarah setting added successfully!');
     }
 
-    private function generateCode()
-    {
-        // Retrieve the settings
-        $settings = $this->collection->findOne(['setting_category' => 'kaffarah']);
-        
-        // Check if 'kaffarah_settings' is set and is a BSONArray, then convert it to a regular array
-        $kaffarahSettings = isset($settings['kaffarah']['kaffarah_settings'])
-            ? iterator_to_array($settings['kaffarah']['kaffarah_settings'])
-            : [];
-    
-        // Get the count of existing settings
-        $count = count($kaffarahSettings);
-    
-        // Generate the new code based on the count
-        $newCode = str_pad($count + 1, 4, '0', STR_PAD_LEFT); // e.g., '0006', '0121'
-    
-        return $newCode;
+        public function compensationStore(Request $request)
+{
+        $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'individual_status.*.parameter' => 'required|string',
+        'individual_status.*.categories.*.parameter' => 'required|string',
+        'fidyah_item.*.name' => 'required|string',
+        'fidyah_item.*.price' => 'required|numeric',
+        'rate' => 'required|numeric',
+    ]);
+
+    $newSetting = [
+        '_id' => new ObjectId(),
+        'title' => $validated['title'],
+        'code' => $this->generateCode('fidyah'),
+        'individual_status' => array_map(function ($status, $statusIndex) {
+            $status['categories'] = array_map(function ($category, $categoryIndex) {
+                $category['code'] = 'cat' . str_pad($categoryIndex + 1, 2, '0', STR_PAD_LEFT);
+                return $category;
+            }, $status['categories'], array_keys($status['categories']));
+            $status['code'] = 'st' . str_pad($statusIndex + 1, 2, '0', STR_PAD_LEFT);
+            return $status;
+        }, $validated['individual_status'], array_keys($validated['individual_status'])),
+        'fidyah_item' => array_map(function ($item) use ($validated) {
+            $item['rate_value'] = ceil($item['price'] * $validated['rate']);
+            return $item;
+        }, $validated['fidyah_item']),
+        'rate' => (float) $validated['rate'],
+        'is_active' => false,
+    ];
+
+    $this->collection->updateOne(
+        ['setting_category' => 'fidyah'],
+        ['$push' => ['fidyah.fidyah_settings' => $newSetting]],
+        ['upsert' => true]
+    );
+
+    return redirect()->route('compensation_.list')->with('success', 'Fidyah setting added successfully!');
+}
+
+
+
+
+private function generateCode(string $settingCategory)
+{
+    // Retrieve the settings based on the category
+    $settings = $this->collection->findOne(['setting_category' => $settingCategory]);
+
+    // Ensure the structure is correct and retrieve the settings array
+    $settingsKey = "{$settingCategory}_settings"; // e.g., "kaffarah_settings" or "fidyah_settings"
+    $categorySettings = $settings[$settingCategory][$settingsKey] ?? [];
+
+    // If the settings array is a BSONArray, convert it to a regular array
+    if ($categorySettings instanceof \MongoDB\Model\BSONArray) {
+        $categorySettings = $categorySettings->getArrayCopy();
     }
+
+    // Get the count of existing settings
+    $count = count($categorySettings);
+
+    // Generate the new code based on the count
+    $newCode = str_pad($count + 1, 4, '0', STR_PAD_LEFT); // e.g., '0006', '0121'
+
+    return $newCode;
+}
+
     
-    public function markAsActive(Request $request, $id)
+    public function compensationMarkAsActive(Request $request, $id)
+    {
+        $settings = $this->collection->findOne(['setting_category' => 'fidyah']);
+
+        if (!$settings) {
+            return back()->with('error', 'Fidyah settings not found.');
+        }
+
+        $kaffarahSettings = $settings['fidyah']['fidyah_settings'] ?? [];
+
+        foreach ($kaffarahSettings as $index => &$setting) {
+            $setting['is_active'] = false;
+
+            if ((string) $setting['_id'] === $id) {
+                $setting['is_active'] = true;
+                $settings['fidyah']['active_setting'] = [
+                    'setting_id' => $setting['_id'],
+                    'setting_code' => $setting['code'],
+                ];
+            }
+        }
+
+        $this->collection->updateOne(
+            ['setting_category' => 'fidyah'],
+            [
+                '$set' => [
+                    'fidyah.fidyah_settings' => $kaffarahSettings,
+                    'fidyah.active_setting' => $settings['fidyah']['active_setting'],
+                ],
+            ]
+        );
+
+        return back()->with('success', 'Fidya setting marked as active.');
+    }
+        
+    public function expiationMarkAsActive(Request $request, $id)
     {
         $settings = $this->collection->findOne(['setting_category' => 'kaffarah']);
 

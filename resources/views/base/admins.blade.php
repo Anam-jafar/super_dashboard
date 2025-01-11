@@ -11,7 +11,7 @@
                 ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
             ]" :route="route('showAdminList')" button-label="Tambah Pentadbir" :button-route="route('createAdmin')" />
 
-            <x-table :headers="['Nama', 'Status', 'No KP', 'HP', 'Emel', 'Jawatan']" :columns="['name', 'status', 'ic', 'hp', 'mel', 'jobdiv']" :rows="$admins" :statuses="$statuses" />
+            <x-table :headers="['Nama', 'Status', 'No KP', 'HP', 'Emel', 'Jawatan']" :columns="['name', 'status', 'ic', 'hp', 'mel', 'jobdiv']" :rows="$admins" :statuses="$statuses" route="editAdmin" />
 
             <x-pagination :items="$admins" label="Admin" />
 

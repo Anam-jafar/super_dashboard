@@ -10,7 +10,7 @@
                 ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
             ]" :route="route('showBranchList')" button-label="Cawangan Baru" :button-route="route('createBranch')" />
 
-            <x-table :headers="['Nama', 'Singkatan', 'Telefon', 'Emel', 'Web']" :columns="['name', 'sname', 'tel', 'mel', 'url']" :rows="$branches" />
+            <x-table :headers="['Nama', 'Singkatan', 'Telefon', 'Emel', 'Web']" :columns="['name', 'sname', 'tel', 'mel', 'url']" :rows="$branches" route="editBranch" />
 
             <x-pagination :items="$branches" label="branches" />
 

@@ -12,11 +12,16 @@
                         {{ $header }}
                     </th>
                 @endforeach
+                <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-start"
+                    style="color: #2624D0 !important; font-weight: bold !important;">
+                    Actions
+                </th>
             </tr>
         </thead>
         <tbody class="bg-white">
             @forelse($rows as $key => $row)
-                <tr class="hover:bg-gray-50 cursor-pointer" onclick="openModal('{{ $row->id }}')">
+                <tr class="hover:bg-gray-50 cursor-pointer"
+                    @if ($route) onclick="window.location='{{ route($route, $row->id) }}'" @endif>
                     <!-- Index Column -->
                     <td class="px-2 py-3 whitespace-nowrap text-xs text-gray-500 text-center">
                         {{ $rows->firstItem() + $key }}
@@ -33,11 +38,21 @@
                             @endif
                         </td>
                     @endforeach
+                    <!-- Actions Column -->
+                    <td class="px-4 py-3 whitespace-nowrap text-xs text-black break-words text-center">
+                        @if ($route)
+                            <a href="{{ route($route, $row->id) }}" class="text-blue-500 hover:underline">
+                                <i class="fe fe-edit"></i>
+                            </a>
+                        @endif
+                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="{{ count($headers) + 1 }}"
-                        class="px-6 py-4 whitespace-nowrap text-xs text-gray-500 text-center">No records found.</td>
+                    <td colspan="{{ count($headers) + 2 }}"
+                        class="px-6 py-4 whitespace-nowrap text-xs text-gray-500 text-center">
+                        No records found.
+                    </td>
                 </tr>
             @endforelse
         </tbody>

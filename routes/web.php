@@ -32,8 +32,19 @@ Route::prefix('mais')->group(function () {
         // Entity Management Routes
         Route::controller(EntityController::class)->group(function () {
             Route::get('/mosques', 'showEntityList')->name('showEntityList');
+            Route::get('/mosques/show/{id}', 'showEntity')->name('editEntity');
+            Route::put('/mosques/update/{id}', 'updateEntity')->name('updateEntity');
+
             Route::get('/branches', 'showBranchList')->name('showBranchList');
+            Route::get('/branches/show/{id}', 'showBranch')->name('editBranch');
+            Route::put('/branches/update/{id}', 'updateBranch')->name('updateBranch');
+
+
             Route::get('/admins', 'showAdminList')->name('showAdminList');
+            Route::get('/admins/show/{id}', 'showAdmin')->name('editAdmin');
+            Route::put('/admins/update/{id}', 'updateAdmin')->name('updateAdmin');
+
+
             Route::get('/get_mosque_detail/{id}', 'getMosqueDetails');
             Route::put('/update/mosques/{id}', 'update');
             Route::post('/add/mosques/', 'store');

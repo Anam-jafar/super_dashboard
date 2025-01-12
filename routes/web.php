@@ -30,28 +30,12 @@ Route::prefix('mais')->group(function () {
         Route::get('/district', [DashboardController::class, 'mosquesInCityDetails'])->name('mosquesInCityDetails');
 
         // Entity Management Routes
-        Route::controller(EntityController::class)->group(function () {
-            Route::get('/mosques', 'showEntityList')->name('showEntityList');
-            Route::get('/mosques/show/{id}', 'showEntity')->name('editEntity');
-            Route::put('/mosques/update/{id}', 'updateEntity')->name('updateEntity');
-
-            Route::get('/branches', 'showBranchList')->name('showBranchList');
-            Route::get('/branches/show/{id}', 'showBranch')->name('editBranch');
-            Route::put('/branches/update/{id}', 'updateBranch')->name('updateBranch');
-
-
-            Route::get('/admins', 'showAdminList')->name('showAdminList');
-            Route::get('/admins/show/{id}', 'showAdmin')->name('editAdmin');
-            Route::put('/admins/update/{id}', 'updateAdmin')->name('updateAdmin');
-
-
-            Route::get('/get_mosque_detail/{id}', 'getMosqueDetails');
-            Route::put('/update/mosques/{id}', 'update');
-            Route::post('/add/mosques/', 'store');
-            Route::get('/getAdminDetails/{id}', 'getDetails');
-            Route::post('/updateAdmin/{id}', 'updateAdmin');
-            Route::get('/get_branche_detail/{id}', 'getBranchDetails');
-            Route::post('/update/branches/{id}', 'updateBranch');
+        Route::controller(EntityController::class)->prefix('/{type}')->whereIn('type', ['mosques', 'branches', 'admins'])->group(function () {
+            Route::get('/', 'index')->name('showList');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/store', 'store')->name('store');
+            Route::get('/show/{id}', 'show')->name('edit');
+            Route::put('/update/{id}', 'update')->name('update');
         });
 
         // Profile Management Routes
@@ -78,8 +62,5 @@ Route::prefix('mais')->group(function () {
     });
 });
 
-Route::get('/create-institute', [EntityController::class, 'createInstitute'])->name('createInstitute');
-Route::get('/create-admin', [EntityController::class, 'createAdmin'])->name('createAdmin');
-Route::get('/create-branches', [EntityController::class, 'createBranch'])->name('createBranch');
 
 

@@ -1,12 +1,12 @@
-<div class="flex items-center justify-between w-full gap-4">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4">
     <!-- Filters Form -->
-    <form method="GET" action="{{ $route }}" class="flex items-center gap-4 flex-1">
+    <form method="GET" action="{{ $route }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
         @foreach ($filters as $filter)
             @if ($filter['name'] === 'search')
                 <!-- Search Input with Button -->
-                <div class="flex rounded-sm">
+                <div class="flex rounded-sm w-full sm:w-auto">
                     <input type="text" id="search-input" name="search" value="{{ request('search') }}"
-                        class="ti-form-input rounded-none rounded-s-sm focus:z-10 w-40"
+                        class="ti-form-input rounded-none rounded-s-sm focus:z-10 w-full sm:w-40"
                         placeholder={{ $filter['placeholder'] }}>
                     <button aria-label="button" type="submit"
                         class="inline-flex flex-shrink-0 justify-center items-center h-[2.875rem] w-[2.875rem] rounded-e-sm rounded-r-md border border-transparent font-semibold bg-primary text-white hover:bg-primary focus:z-10 focus:outline-none focus:ring-0 focus:ring-primary transition-all text-sm">
@@ -20,7 +20,7 @@
             @elseif ($filter['type'] === 'select')
                 <!-- Select Input -->
                 <select id="{{ $filter['name'] }}" name="{{ $filter['name'] }}"
-                    class="ti-form-select rounded-sm py-2 px-3 w-40" onchange="this.form.submit()">
+                    class="ti-form-select rounded-sm py-2 px-3 w-full sm:w-40" onchange="this.form.submit()">
                     <option value="" {{ request($filter['name']) == '' ? 'selected' : '' }}>
                         All {{ $filter['label'] }}
                     </option>

@@ -7,7 +7,21 @@ use Illuminate\Support\Facades\DB;
 
 class EntityController extends Controller
 {
-    // Map route/view entity types to actual database tables
+    private const FILTER_MAPPINGS = [
+        'mosques' => [
+            'status' => 'sta',
+            'sch' => 'sid',
+            'city' => 'city',
+        ],
+        'admins' => [
+            'status' => 'status',
+            'sch' => 'sch_id',
+        ],
+        'branches' => [
+            'status' => 'status',
+        ],
+    ];
+
     private const TABLE_MAPPING = [
         'mosques' => 'client',
         'admins' => 'usr',
@@ -33,7 +47,6 @@ class EntityController extends Controller
     ];
 
 
-    // Centralized method to fetch common lookup data
     private function getCommonLookupData()
     {
         return [
@@ -53,15 +66,13 @@ class EntityController extends Controller
         ];
     }
 
-    // Generic listing method for all entity types
     public function index(Request $request, string $entityType)
     {
         $table = self::ENTITY_TYPES[$entityType]['table'];
-        $data = $this->getListingData($table, $request, [
-            'status' => 'sta',
-            'sch' => 'sid',
-            'city' => 'city'
-        ]);
+
+        $filterMappings = self::FILTER_MAPPINGS[$entityType] ?? [];
+
+        $data = $this->getListingData($table, $request, $filterMappings);
         
         $viewData = array_merge(
             ['entities' => $data],
@@ -71,7 +82,6 @@ class EntityController extends Controller
         return view(self::ENTITY_TYPES[$entityType]['view'] . '.index', $viewData);
     }
 
-    // Generic show method for all entity types
     public function show(string $entityType, $id)
     {
         $table = self::ENTITY_TYPES[$entityType]['table'];
@@ -91,7 +101,6 @@ class EntityController extends Controller
     }
 
 
-    // Generic create method for all entity types
     public function create(string $entityType)
     {
         return view(
@@ -102,26 +111,21 @@ class EntityController extends Controller
 
     public function store(Request $request, string $entityType)
 {
-    // Get validation rules for the entity
     $validationRules = self::ENTITY_TYPES[$entityType]['validation'] ?? [];
     
-    // Apply validation if rules are defined
     if (!empty($validationRules)) {
         $request->validate($validationRules);
     }
 
     $table = self::ENTITY_TYPES[$entityType]['table'];
     
-    // Merge default values and request data
     $data = array_merge(
         $request->except(['_token']),
         $this->getDefaultValues($entityType)
     );
     
-    // Insert data into the table
     $created = DB::table($table)->insert($data);
 
-    // Generate appropriate route for redirection
     $route = self::ENTITY_TYPES[$entityType]['view'] . '.index';
     
     return $created
@@ -131,22 +135,18 @@ class EntityController extends Controller
 
 public function update(Request $request, string $entityType, $id)
 {
-    // Get validation rules for the entity
     $validationRules = self::ENTITY_TYPES[$entityType]['validation'] ?? [];
     
-    // Apply validation if rules are defined
     if (!empty($validationRules)) {
         $request->validate($validationRules);
     }
 
     $table = self::ENTITY_TYPES[$entityType]['table'];
     
-    // Update the record in the database
     $updated = DB::table($table)
         ->where('id', $id)
         ->update($request->except(['_token', '_method']));
 
-    // Generate appropriate route for redirection
     $route = self::ENTITY_TYPES[$entityType]['view'] . '.index';
     
 
@@ -156,7 +156,6 @@ public function update(Request $request, string $entityType, $id)
 }
 
 
-    // Helper method for pagination and filtering
     private function getListingData($table, Request $request, $additionalFilters = [])
     {
         $query = DB::table($table);
@@ -174,19 +173,17 @@ public function update(Request $request, string $entityType, $id)
         return $query->paginate($request->get('per_page', 10))->withQueryString();
     }
 
-    // Helper method to get default values for new entities
     private function getDefaultValues(string $entityType)
     {
         $defaults = [
             'mosques' => [
-                'uid' => 'c002020',
+                'uid' => 'C002020',
                 'firebase_id' => '',
                 'imgProfile' => '',
                 'isustaz' => '',
                 'iskariah' => '',
                 'sid' => 0
             ]
-            // Add defaults for other entity types as needed
         ];
         return $defaults[$entityType] ?? [];
     }

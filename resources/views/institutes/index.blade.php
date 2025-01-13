@@ -5,6 +5,7 @@
         <div class="container-fluid">
 
             <x-page-header :title="'Senari Masjid'" :breadcrumbs="[['label' => 'Masjid', 'url' => 'javascript:void(0);'], ['label' => 'Senari Masjid']]" />
+            <x-alert />
 
             <x-filter-card :filters="[
                 ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],

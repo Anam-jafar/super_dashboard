@@ -18,35 +18,20 @@ class EntityController extends Controller
         'mosques' => [
             'table' => 'client',
             'view' => 'institutes',
-            'validation' => [
-                'name' => 'required|string|max:255',
-                'hp' => 'nullable|string|max:50',
-                'cate' => 'nullable|string|max:50',
-                'sta' => 'nullable|string|max:50',
-                // ... add other validation rules
-            ]
+            'validation' => [] 
         ],
         'admins' => [
             'table' => 'usr',
             'view' => 'admins',
-            'validation' => [
-                'name' => 'required|string|max:255',
-                'syslevel' => 'required|string',
-                'ic' => 'required|string|max:12',
-                // ... add other validation rules
-            ]
+            'validation' => [] 
         ],
         'branches' => [
             'table' => 'sch',
             'view' => 'branches',
-            'validation' => [
-                'name' => 'required|string|max:255',
-                'sname' => 'nullable|string|max:255',
-                'tel' => 'nullable|string|max:15',
-                // ... add other validation rules
-            ]
+            'validation' => [] 
         ]
     ];
+
 
     // Centralized method to fetch common lookup data
     private function getCommonLookupData()
@@ -105,22 +90,6 @@ class EntityController extends Controller
         return view(self::ENTITY_TYPES[$entityType]['view'] . '.show', $viewData);
     }
 
-    // Generic update method for all entity types
-    public function update(Request $request, string $entityType, $id)
-    {
-        $request->validate(self::ENTITY_TYPES[$entityType]['validation']);
-        
-        $table = self::ENTITY_TYPES[$entityType]['table'];
-        $updated = DB::table($table)
-            ->where('id', $id)
-            ->update($request->except(['_token', '_method']));
-
-        $route = self::ENTITY_TYPES[$entityType]['view'] . '.index';
-        
-        return $updated
-            ? redirect()->route($route)->with('success', ucfirst($entityType) . ' updated successfully.')
-            : redirect()->back()->with('error', 'Failed to update ' . $entityType);
-    }
 
     // Generic create method for all entity types
     public function create(string $entityType)
@@ -131,27 +100,60 @@ class EntityController extends Controller
         );
     }
 
-    // Generic store method for all entity types
     public function store(Request $request, string $entityType)
-    {
-        $request->validate(self::ENTITY_TYPES[$entityType]['validation']);
-
-        try {
-            $table = self::ENTITY_TYPES[$entityType]['table'];
-            $data = array_merge(
-                $request->except(['_token']),
-                $this->getDefaultValues($entityType)
-            );
-
-            $insertId = DB::table($table)->insertGetId($data);
-            $entity = DB::table($table)->where('id', $insertId)->first();
-
-            return response()->json($entity, 201);
-        } catch (\Exception $e) {
-            \Log::error("Error inserting into {$table} table: " . $e->getMessage());
-            return response()->json(['error' => "Failed to insert {$entityType} data."], 500);
-        }
+{
+    // Get validation rules for the entity
+    $validationRules = self::ENTITY_TYPES[$entityType]['validation'] ?? [];
+    
+    // Apply validation if rules are defined
+    if (!empty($validationRules)) {
+        $request->validate($validationRules);
     }
+
+    $table = self::ENTITY_TYPES[$entityType]['table'];
+    
+    // Merge default values and request data
+    $data = array_merge(
+        $request->except(['_token']),
+        $this->getDefaultValues($entityType)
+    );
+    
+    // Insert data into the table
+    $created = DB::table($table)->insert($data);
+
+    // Generate appropriate route for redirection
+    $route = self::ENTITY_TYPES[$entityType]['view'] . '.index';
+    
+    return $created
+        ? redirect()->route($route)->with('success', ucfirst($entityType) . ' created successfully.')
+        : redirect()->back()->with('error', 'Failed to create ' . $entityType);
+}
+
+public function update(Request $request, string $entityType, $id)
+{
+    // Get validation rules for the entity
+    $validationRules = self::ENTITY_TYPES[$entityType]['validation'] ?? [];
+    
+    // Apply validation if rules are defined
+    if (!empty($validationRules)) {
+        $request->validate($validationRules);
+    }
+
+    $table = self::ENTITY_TYPES[$entityType]['table'];
+    
+    // Update the record in the database
+    $updated = DB::table($table)
+        ->where('id', $id)
+        ->update($request->except(['_token', '_method']));
+
+    // Generate appropriate route for redirection
+    $route = self::ENTITY_TYPES[$entityType]['view'] . '.index';
+    
+    return $updated
+        ? redirect()->route($route)->with('success', ucfirst($entityType) . ' updated successfully.')
+        : redirect()->back()->with('error', 'Failed to update ' . $entityType);
+}
+
 
     // Helper method for pagination and filtering
     private function getListingData($table, Request $request, $additionalFilters = [])

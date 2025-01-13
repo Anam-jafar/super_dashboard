@@ -61,7 +61,7 @@
                     <div>
                         <label for="modalEmail" class="ti-form-label">Email</label>
                         <input type="email" name="mel" id="modalEmail" class="form-control" placeholder="Email"
-                            value="{{ old('email', $entity->mel) }}">
+                            value="{{ old('mel', $entity->mel) }}">
                     </div>
                     <div>
                         <label for="modalPhone" class="ti-form-label">Mobile Phone</label>
@@ -91,7 +91,7 @@
                     <div>
                         <label for="modalPcode" class="ti-form-label">Postal Code</label>
                         <input type="text" name="pcode" id="modalPcode" class="form-control" placeholder="Postal Code"
-                            value="{{ old('postal_code', $entity->pcode) }}">
+                            value="{{ old('pcode', $entity->pcode) }}">
                     </div>
                     <div>
                         <label for="modalState" class="ti-form-label">State</label>

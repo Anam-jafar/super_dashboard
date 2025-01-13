@@ -8,6 +8,8 @@
         <div class="container-fluid">
 
             <x-page-header :title="'Tambah Pentadbir Baru'" :breadcrumbs="[['label' => 'Pentadbir', 'url' => 'javascript:void(0);'], ['label' => 'Tambah Pentadbir']]" />
+            <x-alert />
+
 
             <form method="POST" action="#">
                 @csrf

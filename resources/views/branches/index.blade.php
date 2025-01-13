@@ -5,6 +5,7 @@
         <div class="container-fluid">
 
             <x-page-header :title="'Senarai Cawangan'" :breadcrumbs="[['label' => 'Cawangan', 'url' => 'javascript:void(0);'], ['label' => 'Senarai Cawangan']]" />
+            <x-alert />
 
             <x-filter-card :filters="[
                 ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],

@@ -125,8 +125,8 @@ class EntityController extends Controller
     $route = self::ENTITY_TYPES[$entityType]['view'] . '.index';
     
     return $created
-        ? redirect()->route($route)->with('success', ucfirst($entityType) . ' created successfully.')
-        : redirect()->back()->with('error', 'Failed to create ' . $entityType);
+        ? redirect()->route('showList', ['type' => $entityType])->with('success', ucfirst($entityType) . ' updated successfully.')
+        : redirect()->back()->with('error', 'Failed to update ' . $entityType);
 }
 
 public function update(Request $request, string $entityType, $id)
@@ -149,8 +149,9 @@ public function update(Request $request, string $entityType, $id)
     // Generate appropriate route for redirection
     $route = self::ENTITY_TYPES[$entityType]['view'] . '.index';
     
+
     return $updated
-        ? redirect()->route($route)->with('success', ucfirst($entityType) . ' updated successfully.')
+        ? redirect()->route('showList', ['type' => $entityType])->with('success', ucfirst($entityType) . ' updated successfully.')
         : redirect()->back()->with('error', 'Failed to update ' . $entityType);
 }
 

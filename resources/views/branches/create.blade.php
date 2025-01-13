@@ -15,42 +15,35 @@
                     <!-- Centre/Program -->
                     <div>
                         <label for="modalName" class="block text-sm font-medium text-gray-700">Centre/Program</label>
-                        <input type="text" id="modalName" name="modalName" placeholder="Enter Centre/Program"
+                        <input type="text" id="modalName" name="name" placeholder="Enter Centre/Program"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
 
                     <!-- Singkatan -->
                     <div>
                         <label for="modalSname" class="block text-sm font-medium text-gray-700">Singkatan</label>
-                        <input type="text" id="modalSname" name="modalSname" placeholder="Enter Singkatan"
-                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                    </div>
-
-                    <!-- Kategori -->
-                    <div>
-                        <label for="modalSchcat" class="block text-sm font-medium text-gray-700">Kategori</label>
-                        <input type="text" id="modalSchcat" name="modalSchcat" placeholder="Enter Kategori"
+                        <input type="text" id="modalSname" name="sname" placeholder="Enter Singkatan"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
 
                     <!-- Telefon -->
                     <div>
                         <label for="modalTel" class="block text-sm font-medium text-gray-700">Telefon</label>
-                        <input type="tel" id="modalTel" name="modalTel" placeholder="Enter Telefon"
+                        <input type="tel" id="modalTel" name="tel" placeholder="Enter Telefon"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
 
                     <!-- Emel -->
                     <div>
                         <label for="modalMel" class="block text-sm font-medium text-gray-700">Emel</label>
-                        <input type="email" id="modalMel" name="modalMel" placeholder="Enter Emel"
+                        <input type="email" id="modalMel" name="mel" placeholder="Enter Emel"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
 
                     <!-- Web -->
                     <div>
                         <label for="modalUrl" class="block text-sm font-medium text-gray-700">Web</label>
-                        <input type="url" id="modalUrl" name="modalUrl" placeholder="Enter Web URL"
+                        <input type="url" id="modalUrl" name="url" placeholder="Enter Web URL"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
                 </div>
@@ -60,49 +53,49 @@
                     <!-- Alamat Baris 1 -->
                     <div class="sm:col-span-2">
                         <label for="modalAddr" class="block text-sm font-medium text-gray-700">Alamat Baris 1</label>
-                        <input type="text" id="modalAddr" name="modalAddr" placeholder="Enter Alamat Baris 1"
+                        <input type="text" id="modalAddr" name="addr" placeholder="Enter Alamat Baris 1"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
 
                     <!-- Alamat Baris 2 -->
                     <div class="sm:col-span-2">
                         <label for="modalAddr2" class="block text-sm font-medium text-gray-700">Alamat Baris 2</label>
-                        <input type="text" id="modalAddr2" name="modalAddr2" placeholder="Enter Alamat Baris 2"
+                        <input type="text" id="modalAddr2" name="addr1" placeholder="Enter Alamat Baris 2"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
 
                     <!-- Alamat Baris 3 -->
                     <div class="sm:col-span-2">
                         <label for="modalAddr3" class="block text-sm font-medium text-gray-700">Alamat Baris 3</label>
-                        <input type="text" id="modalAddr3" name="modalAddr3" placeholder="Enter Alamat Baris 3"
+                        <input type="text" id="modalAddr3" name="addr2" placeholder="Enter Alamat Baris 3"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
 
                     <!-- Daerah -->
                     <div>
                         <label for="modalDaerah" class="block text-sm font-medium text-gray-700">Daerah</label>
-                        <input type="text" id="modalDaerah" name="modalDaerah" placeholder="Enter Daerah"
+                        <input type="text" id="modalDaerah" name="daerah" placeholder="Enter Daerah"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
 
                     <!-- Poskod -->
                     <div>
                         <label for="modalPoskod" class="block text-sm font-medium text-gray-700">Poskod</label>
-                        <input type="text" id="modalPoskod" name="modalPoskod" placeholder="Enter Poskod"
+                        <input type="text" id="modalPoskod" name="poskod" placeholder="Enter Poskod"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
 
                     <!-- Negeri -->
                     <div>
                         <label for="modalState" class="block text-sm font-medium text-gray-700">Negeri</label>
-                        <input type="text" id="modalState" name="modalState" placeholder="Enter Negeri"
+                        <input type="text" id="modalState" name="state" placeholder="Enter Negeri"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
 
                     <!-- Negara -->
                     <div>
                         <label for="modalCountry" class="block text-sm font-medium text-gray-700">Negara</label>
-                        <input type="text" id="modalCountry" name="modalCountry" placeholder="Enter Negara"
+                        <input type="text" id="modalCountry" name="country" placeholder="Enter Negara"
                             class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                     </div>
                 </div>

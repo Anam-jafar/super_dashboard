@@ -11,7 +11,7 @@
             <x-alert />
 
 
-            <form method="POST" action="#">
+            <form method="POST" action="{{ route('store', ['type' => 'admins']) }}">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Nama -->

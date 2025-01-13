@@ -26,6 +26,9 @@ class MetrixController extends Controller
             : [];
     
         $activeSetting = $settings['kaffarah']['active_setting'] ?? null;
+
+        $payment_metrix = collect($payment_metrix)->sortByDesc('is_active');
+
     
         return view('metrix.compensation_list', compact('payment_metrix', 'activeSetting'));
     }
@@ -227,4 +230,168 @@ private function generateCode(string $settingCategory)
 
         return back()->with('success', 'Kaffarah setting marked as active.');
     }
+
+    public function expiationEdit($id)
+{
+    $setting = $this->collection->findOne(
+        ['setting_category' => 'kaffarah', 'kaffarah.kaffarah_settings._id' => new ObjectId($id)],
+        ['projection' => ['kaffarah.kaffarah_settings.$' => 1]]
+    );
+
+    if (!$setting || empty($setting['kaffarah']['kaffarah_settings'])) {
+        return redirect()->route('compensation.list')->with('error', 'Kaffarah setting not found.');
+    }
+
+    $setting = $setting['kaffarah']['kaffarah_settings'][0];
+
+    return view('metrix.compensation_edit', compact('setting'));
+}
+
+public function expiationUpdate(Request $request, $id)
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'offense_type.*.parameter' => 'required|string',
+        'offense_type.*.value' => 'required|numeric',
+        'kaffarah_item.*.name' => 'required|string',
+        'kaffarah_item.*.price' => 'required|numeric',
+        'rate' => 'required|numeric',
+    ]);
+
+    // Retrieve the existing Kaffarah setting based on the provided $id
+    $existingSetting = $this->collection->findOne(
+        ['setting_category' => 'kaffarah', 'kaffarah.kaffarah_settings._id' => new ObjectId($id)]
+    );
+
+    // Find the specific Kaffarah setting we are updating, based on the _id
+    $kaffarahSetting = collect($existingSetting['kaffarah']['kaffarah_settings'])
+        ->firstWhere('_id', new ObjectId($id));
+
+    // Prepare updated setting data with preserved code
+    $updatedSetting = [
+        'title' => $validated['title'],
+        'offense_type' => array_map(function ($offense, $index) {
+            return array_merge($offense, ['index' => $index + 1]);
+        }, $validated['offense_type'], array_keys($validated['offense_type'])),
+        'kaffarah_item' => array_map(function ($item) use ($validated) {
+            $item['price'] = (float) $item['price'];
+            return array_merge($item, [
+                'rate_value' => ceil($item['price'] * (float) $validated['rate']),
+            ]);
+        }, $validated['kaffarah_item']),
+        'rate' => (float) $validated['rate'],
+    ];
+
+    // Preserve the code from the existing setting and the _id
+    $updatedSettingWithCode = array_merge([
+        '_id' => new ObjectId($id),
+        'code' => $kaffarahSetting['code'], // Preserve the existing code
+        'is_active' => $kaffarahSetting['is_active'],
+    ], $updatedSetting);
+
+    // Perform the update operation
+    $this->collection->updateOne(
+        [
+            'setting_category' => 'kaffarah',
+            'kaffarah.kaffarah_settings._id' => new ObjectId($id),
+        ],
+        [
+            '$set' => [
+                'kaffarah.kaffarah_settings.$' => $updatedSettingWithCode,
+            ],
+        ]
+    );
+
+    return redirect()->route('compensation.list')->with('success', 'Kaffarah setting updated successfully!');
+}
+
+public function expiationUpdateAndMarkAsActive(Request $request, $id)
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'offense_type.*.parameter' => 'required|string',
+        'offense_type.*.value' => 'required|numeric',
+        'kaffarah_item.*.name' => 'required|string',
+        'kaffarah_item.*.price' => 'required|numeric',
+        'rate' => 'required|numeric',
+    ]);
+
+    // Retrieve the existing Kaffarah setting based on the provided $id
+    $existingSetting = $this->collection->findOne(
+        ['setting_category' => 'kaffarah', 'kaffarah.kaffarah_settings._id' => new ObjectId($id)]
+    );
+
+    // Find the specific Kaffarah setting we are updating, based on the _id
+    $kaffarahSetting = collect($existingSetting['kaffarah']['kaffarah_settings'])
+        ->firstWhere('_id', new ObjectId($id));
+
+    // Prepare updated setting data with preserved code
+    $updatedSetting = [
+        'title' => $validated['title'],
+        'offense_type' => array_map(function ($offense, $index) {
+            return array_merge($offense, ['index' => $index + 1]);
+        }, $validated['offense_type'], array_keys($validated['offense_type'])),
+        'kaffarah_item' => array_map(function ($item) use ($validated) {
+            $item['price'] = (float) $item['price'];
+            return array_merge($item, [
+                'rate_value' => ceil($item['price'] * (float) $validated['rate']),
+            ]);
+        }, $validated['kaffarah_item']),
+        'rate' => (float) $validated['rate'],
+    ];
+
+    // Preserve the code from the existing setting and the _id
+    $updatedSettingWithCode = array_merge([
+        '_id' => new ObjectId($id),
+        'code' => $kaffarahSetting['code'], // Preserve the existing code
+        'is_active' => true, // Mark as active immediately
+    ], $updatedSetting);
+
+    // Perform the update operation
+    $this->collection->updateOne(
+        [
+            'setting_category' => 'kaffarah',
+            'kaffarah.kaffarah_settings._id' => new ObjectId($id),
+        ],
+        [
+            '$set' => [
+                'kaffarah.kaffarah_settings.$' => $updatedSettingWithCode,
+            ],
+        ]
+    );
+
+    // Mark the updated setting as active by setting 'is_active' to true for this setting
+    $settings = $this->collection->findOne(['setting_category' => 'kaffarah']);
+    $kaffarahSettings = $settings['kaffarah']['kaffarah_settings'] ?? [];
+
+    foreach ($kaffarahSettings as $index => &$setting) {
+        // Deactivate all settings
+        $setting['is_active'] = false;
+
+        // Activate the updated setting
+        if ((string) $setting['_id'] === $id) {
+            $setting['is_active'] = true;
+            $settings['kaffarah']['active_setting'] = [
+                'setting_id' => $setting['_id'],
+                'setting_code' => $setting['code'],
+            ];
+        }
+    }
+
+    // Update the active setting in the database
+    $this->collection->updateOne(
+        ['setting_category' => 'kaffarah'],
+        [
+            '$set' => [
+                'kaffarah.kaffarah_settings' => $kaffarahSettings,
+                'kaffarah.active_setting' => $settings['kaffarah']['active_setting'],
+            ],
+        ]
+    );
+
+    return redirect()->route('compensation.list')->with('success', 'Kaffarah setting updated and marked as active.');
+}
+
+
+
 }

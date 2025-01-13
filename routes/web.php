@@ -58,6 +58,11 @@ Route::prefix('mais')->group(function () {
             Route::get('/compensation/create', 'compensationCreate')->name('compensation_.create');
             Route::post('/compensation/store', 'compensationStore')->name('compensation_.store');
             Route::post('/compensation/mark-as-active/{id}', 'compensationMarkAsActive')->name('compensation_.markAsActive');
+            Route::get('/compensation/{id}/edit','expiationEdit')->name('compensation.edit');
+            Route::post('/compensation/{id}/update', 'expiationUpdate')->name('compensation.update');
+            Route::post('/compensation/update-and-mark-active/{id}', 'expiationUpdateAndMarkAsActive')->name('compensation.updateAndMarkAsActive');
+
+
         });
     });
 });

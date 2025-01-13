@@ -1,5 +1,5 @@
 <div class="grid justify-center sm:flex sm:justify-between sm:items-center gap-4 flex-wrap mt-6">
-    <div>
+    <div class="p-2 sm:p-2">
         <p class="text-sm text-gray-700">
             Showing
             <span class="font-medium">{{ $items->firstItem() }}</span>

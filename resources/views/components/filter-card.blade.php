@@ -1,4 +1,4 @@
-<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4 text-xs">
     <!-- Filters Form -->
     <form method="GET" action="{{ $route }}" class="flex flex-col sm:flex-row sm:items-center gap-4 flex-1">
         @foreach ($filters as $filter)

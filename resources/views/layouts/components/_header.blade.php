@@ -60,6 +60,53 @@
             </li>
 
 
+
+
+            <!-- Start::header-element -->
+            <li class="header-element ti-dropdown hs-dropdown">
+                <!-- Start::header-link|dropdown-toggle -->
+                <a href="javascript:void(0);" class="header-link hs-dropdown-toggle ti-dropdown-toggle"
+                    id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    <div class="flex items-center">
+                        <div>
+                            <img src="{{ asset('build/assets/images/faces/15.jpg') }}" alt="img"
+                                class="avatar avatar-sm mb-0">
+                        </div>
+                    </div>
+                </a>
+                <!-- End::header-link|dropdown-toggle -->
+                <ul class="main-header-dropdown hs-dropdown-menu ti-dropdown-menu pt-0 overflow-hidden header-profile-dropdown hidden"
+                    aria-labelledby="mainHeaderProfile">
+                    <li>
+                        <div
+                            class="ti-dropdown-item text-center border-b border-defaultborder dark:border-defaultborder/10 block">
+                            <span
+                                class="block text-xs text-textmuted dark:text-textmuted/50">{{ Auth::check() ? Auth::user()->syslevel : 'System Level' }}</span>
+                        </div>
+                    </li>
+                    <li><a class="ti-dropdown-item flex items-center" href="{{ route('profile') }}"><i
+                                class="fe fe-user p-1 rounded-full bg-primary/10 text-primary me-2 text-[1rem]"></i>Profile</a>
+                    </li>
+                    <li><a class="ti-dropdown-item flex items-center" href="{{ route('activityLogs') }}"><i
+                                class="fe fe-activity p-1 rounded-full bg-primary/10 text-primary me-2 text-[1rem]"></i>Activity
+                            Logs</a>
+                    </li>
+                    <li>
+                        <form action="{{ route('logout') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="ti-dropdown-item flex items-center w-full text-left">
+                                <i
+                                    class="fe fe-lock p-1 rounded-full bg-primary/10 text-primary ut me-2 text-[1rem]"></i>
+                                Log Out
+                            </button>
+                        </form>
+                    </li>
+
+
+                </ul>
+            </li>
+            <!-- End::header-element -->
+
             <!-- Start::header-element -->
             <li
                 class="header-element notifications-dropdown !hidden xl:!block hs-dropdown ti-dropdown [--auto-close:inside]">
@@ -93,11 +140,13 @@
                                 </div>
                                 <div class="grow flex items-center justify-between">
                                     <div>
-                                        <p class="mb-0 font-medium"><a href="{{ url('chat') }}">New Messages</a></p>
+                                        <p class="mb-0 font-medium"><a href="{{ url('chat') }}">New Messages</a>
+                                        </p>
                                         <div
                                             class="text-textmuted dark:text-textmuted/50 font-normal text-xs header-notification-text truncate">
                                             Jane Sam sent you a message.</div>
-                                        <div class="font-normal text-[10px] text-textmuted dark:text-textmuted/50 op-8">
+                                        <div
+                                            class="font-normal text-[10px] text-textmuted dark:text-textmuted/50 op-8">
                                             Now</div>
                                     </div>
                                     <div>
@@ -117,12 +166,14 @@
                                 </div>
                                 <div class="grow flex items-center justify-between">
                                     <div>
-                                        <p class="mb-0 font-medium"><a href="{{ url('chat') }}">Order Updates</a></p>
+                                        <p class="mb-0 font-medium"><a href="{{ url('chat') }}">Order Updates</a>
+                                        </p>
                                         <div
                                             class="text-textmuted dark:text-textmuted/50 font-normal text-xs header-notification-text truncate">
                                             Order <span class="text-primarytint1color">#54321</span> has been shipped.
                                         </div>
-                                        <div class="font-normal text-[10px] text-textmuted dark:text-textmuted/50 op-8">
+                                        <div
+                                            class="font-normal text-[10px] text-textmuted dark:text-textmuted/50 op-8">
                                             2 hours ago</div>
                                     </div>
                                     <div>
@@ -230,52 +281,6 @@
                     </div>
                 </div>
                 <!-- End::main-header-dropdown -->
-            </li>
-            <!-- End::header-element -->
-
-            <!-- Start::header-element -->
-            <li class="header-element ti-dropdown hs-dropdown">
-                <!-- Start::header-link|dropdown-toggle -->
-                <a href="javascript:void(0);" class="header-link hs-dropdown-toggle ti-dropdown-toggle"
-                    id="mainHeaderProfile" data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                    aria-expanded="false">
-                    <div class="flex items-center">
-                        <div>
-                            <img src="{{ asset('build/assets/images/faces/15.jpg') }}" alt="img"
-                                class="avatar avatar-sm mb-0">
-                        </div>
-                    </div>
-                </a>
-                <!-- End::header-link|dropdown-toggle -->
-                <ul class="main-header-dropdown hs-dropdown-menu ti-dropdown-menu pt-0 overflow-hidden header-profile-dropdown hidden"
-                    aria-labelledby="mainHeaderProfile">
-                    <li>
-                        <div
-                            class="ti-dropdown-item text-center border-b border-defaultborder dark:border-defaultborder/10 block">
-                            <span
-                                class="block text-xs text-textmuted dark:text-textmuted/50">{{ Auth::check() ? Auth::user()->syslevel : 'System Level' }}</span>
-                        </div>
-                    </li>
-                    <li><a class="ti-dropdown-item flex items-center" href="{{ route('profile') }}"><i
-                                class="fe fe-user p-1 rounded-full bg-primary/10 text-primary me-2 text-[1rem]"></i>Profile</a>
-                    </li>
-                    <li><a class="ti-dropdown-item flex items-center" href="{{ route('activityLogs') }}"><i
-                                class="fe fe-activity p-1 rounded-full bg-primary/10 text-primary me-2 text-[1rem]"></i>Activity
-                            Logs</a>
-                    </li>
-                    <li>
-                        <form action="{{ route('logout') }}" method="POST" class="inline">
-                            @csrf
-                            <button type="submit" class="ti-dropdown-item flex items-center w-full text-left">
-                                <i
-                                    class="fe fe-lock p-1 rounded-full bg-primary/10 text-primary ut me-2 text-[1rem]"></i>
-                                Log Out
-                            </button>
-                        </form>
-                    </li>
-
-
-                </ul>
             </li>
             <!-- End::header-element -->
 

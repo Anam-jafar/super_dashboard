@@ -6,7 +6,8 @@
 
             <x-page-header :title="'Edit Kaffarah Setting'" :breadcrumbs="[['label' => 'Kaffarah', 'url' => 'javascript:void(0);'], ['label' => 'Edit Setting']]" />
 
-            <form action="{{ route('compensation.update', $setting['_id']) }}" method="POST" class="space-y-8">
+            <form action="{{ route('metrix.compensation.update', ['category' => 'kaffarah', 'id' => $setting['_id']]) }}"
+                method="POST" class="space-y-8">
                 @csrf
 
                 <!-- Title -->
@@ -75,7 +76,8 @@
                     </button>
 
                     <!-- Update & Mark as Active Button -->
-                    <button type="submit" formaction="{{ route('compensation.updateAndMarkAsActive', $setting['_id']) }}"
+                    <button type="submit"
+                        formaction="{{ route('metrix.compensation.update-and-activate', ['category' => 'kaffarah', 'id' => $setting['_id']]) }}"
                         class="inline-flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out">
                         Update & Mark as Active
                     </button>

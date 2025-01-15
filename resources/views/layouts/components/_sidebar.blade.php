@@ -116,10 +116,12 @@
                             <a href="javascript:void(0)">Tetapan Matrix</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('compensation.list') }}" class="side-menu__item">Kaffarah</a>
+                            <a href="{{ route('metrix.compensation.list', ['category' => 'kaffarah']) }}"
+                                class="side-menu__item">Kaffarah</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('compensation_.list') }}" class="side-menu__item">Fidyah</a>
+                            <a href="{{ route('metrix.settings.list', ['category' => 'fidyah']) }}"
+                                class="side-menu__item">Fidyah</a>
                         </li>
                     </ul>
                 </li>

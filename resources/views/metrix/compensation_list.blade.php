@@ -25,7 +25,7 @@
             <x-alert />
 
             <div class="flex justify-end w-full sm:w-auto">
-                <a href="{{ route('compensation.create') }}"
+                <a href="{{ route('metrix.compensation.create', ['category' => 'kaffarah']) }}"
                     class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
                     style="padding: 9px 12px;">
                     Tambah Tetapan
@@ -86,7 +86,7 @@
                                             <i class="fe fe-eye text-lg"></i>
                                         </a>
 
-                                        <a href="{{ route('compensation.edit', (string) $setting['_id']) }}"
+                                        <a href="{{ route('metrix.compensation.edit', ['category' => 'kaffarah', 'id' => $setting['_id']]) }}"
                                             class="text-blue-600 hover:text-green-800 ml-2" title="Edit">
                                             <i class="fe fe-edit text-lg"></i>
                                         </a>
@@ -202,7 +202,8 @@
 
                             <div class="mt-4 flex justify-end">
                                 @if (!$setting['is_active'])
-                                    <form action="{{ route('compensation.markAsActive', (string) $setting['_id']) }}"
+                                    <form
+                                        action="{{ route('metrix.compensation.mark-active', ['category' => 'kaffarah', 'id' => $setting['_id']]) }}"
                                         method="POST" class="inline-block" onclick="event.stopPropagation();">
                                         @csrf
                                         @method('POST')

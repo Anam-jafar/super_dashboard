@@ -48,22 +48,63 @@ Route::prefix('mais')->group(function () {
         });
 
         // Kaffarah Settings Routes
-        Route::controller(MetrixController::class)->group(function () {
-            Route::get('/expiation', 'expiationList')->name('compensation.list');
-            Route::get('/expiation/create', 'expiationCreate')->name('compensation.create');
-            Route::post('/expiation/store', 'expiationStore')->name('compensation.store');
-            Route::post('/expiation/mark-as-active/{id}', 'expiationMarkAsActive')->name('compensation.markAsActive');
+        // Route::controller(MetrixController::class)->group(function () {
+        //     Route::get('/expiation', 'expiationList')->name('compensation.list');
+        //     Route::get('/expiation/create', 'expiationCreate')->name('compensation.create');
+        //     Route::post('/expiation/store', 'expiationStore')->name('compensation.store');
+        //     Route::post('/expiation/mark-as-active/{id}', 'expiationMarkAsActive')->name('compensation.markAsActive');
 
-            Route::get('/compensation', 'compensationList')->name('compensation_.list');
-            Route::get('/compensation/create', 'compensationCreate')->name('compensation_.create');
-            Route::post('/compensation/store', 'compensationStore')->name('compensation_.store');
-            Route::post('/compensation/mark-as-active/{id}', 'compensationMarkAsActive')->name('compensation_.markAsActive');
-            Route::get('/compensation/{id}/edit','expiationEdit')->name('compensation.edit');
-            Route::post('/compensation/{id}/update', 'expiationUpdate')->name('compensation.update');
-            Route::post('/compensation/update-and-mark-active/{id}', 'expiationUpdateAndMarkAsActive')->name('compensation.updateAndMarkAsActive');
+        //     Route::get('/compensation', 'compensationList')->name('compensation_.list');
+        //     Route::get('/compensation/create', 'compensationCreate')->name('compensation_.create');
+        //     Route::post('/compensation/store', 'compensationStore')->name('compensation_.store');
+        //     Route::post('/compensation/mark-as-active/{id}', 'compensationMarkAsActive')->name('compensation_.markAsActive');
+        //     Route::get('/compensation/{id}/edit','expiationEdit')->name('compensation.edit');
+        //     Route::post('/compensation/{id}/update', 'expiationUpdate')->name('compensation.update');
+        //     Route::post('/compensation/update-and-mark-active/{id}', 'expiationUpdateAndMarkAsActive')->name('compensation.updateAndMarkAsActive');
 
 
+        // });
+
+Route::prefix('metrix')->name('metrix.')->group(function () {
+    // Helper function to register common category routes
+    $registerCategoryRoutes = function ($prefix, $category) {
+        Route::group([
+            'prefix' => $prefix,
+            'as' => $prefix . '.',
+            'where' => ['category' => 'kaffarah|fidyah']
+        ], function () use ($category) {
+            // Resource routes
+            Route::get('/{category}', [MetrixController::class, 'index'])
+                ->name('list')
+                ->where('category', $category);
+            Route::get('/{category}/create', [MetrixController::class, 'create'])
+                ->name('create')
+                ->where('category', $category);
+            Route::post('/{category}', [MetrixController::class, 'store'])
+                ->name('store')
+                ->where('category', $category);
+            Route::get('/{category}/{id}/edit', [MetrixController::class, 'edit'])
+                ->name('edit')
+                ->where('category', $category);
+            Route::put('/{category}/{id}', [MetrixController::class, 'update'])
+                ->name('update')
+                ->where('category', $category);
+            
+            // Custom actions
+            Route::put('/{category}/{id}/active', [MetrixController::class, 'markAsActive'])
+                ->name('mark-active')
+                ->where('category', $category);
+            Route::put('/{category}/{id}/update-and-activate', [MetrixController::class, 'update'])
+                ->name('update-and-activate')
+                ->where('category', $category)
+                ->defaults('markAsActive', true);
         });
+    };
+
+    // Register routes for both categories
+    $registerCategoryRoutes('compensation', 'kaffarah');
+    $registerCategoryRoutes('settings', 'fidyah');
+});
     });
 });
 

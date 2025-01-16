@@ -9,6 +9,8 @@
             <form action="{{ route('metrix.compensation.update', ['category' => 'kaffarah', 'id' => $setting['_id']]) }}"
                 method="POST" class="space-y-8">
                 @csrf
+                @method('PUT')
+
 
                 <!-- Title -->
                 <div class="space-y-2">

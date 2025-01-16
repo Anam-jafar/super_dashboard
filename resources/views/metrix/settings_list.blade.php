@@ -33,7 +33,7 @@
             <div class="bg-white rounded-lg shadow-md p-4 mb-6">
                 <div class="flex flex-col sm:flex-row justify-between items-center mb-4 space-y-2 sm:space-y-0">
                     <h1 class="text-lg font-bold text-gray-800">Active Setting</h1>
-                    <a href="{{ route('compensation_.create') }}"
+                    <a href="{{ route('metrix.settings.store', ['category' => 'fidyah']) }}"
                         class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
                         style="padding: 9px 12px;">
                         Tambah Tetapan
@@ -65,10 +65,11 @@
                                 </span>
                             </div>
                             @if (!$setting['is_active'])
-                                <form action="{{ route('compensation_.markAsActive', (string) $setting['_id']) }}"
+                                <form
+                                    action="{{ route('metrix.settings.mark-active', ['category' => 'fidyah', 'id' => $setting['_id']]) }}"
                                     method="POST" onclick="event.stopPropagation();">
                                     @csrf
-                                    @method('POST')
+                                    @method('PUT')
                                     <button type="submit"
                                         class="px-4 py-1 text-sm text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                                         Mark as Active

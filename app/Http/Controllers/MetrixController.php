@@ -64,8 +64,81 @@ class MetrixController extends Controller
         return [$payment_metrix, $activeSetting];
     }
 
-    public function index(string $category)
+    private function prepareUpdateData(string $category, array $validated, string $id, $currentSetting, bool $markAsActive): array
     {
+        // Convert BSONDocument to array if needed
+        $currentSetting = $currentSetting instanceof \MongoDB\Model\BSONDocument 
+            ? $currentSetting->getArrayCopy() 
+            : (array) $currentSetting;
+
+        $updatedSetting = [
+            '_id' => new ObjectId($id),
+            'title' => $validated['title'],
+            'code' => $currentSetting['code'] ?? strtoupper(uniqid()),
+            'is_active' => $markAsActive ? true : ($currentSetting['is_active'] ?? false),
+            'rate' => $validated['rate'],
+            'created_at' => $currentSetting['created_at'] ?? now(),
+            'updated_at' => now()
+        ];
+
+        // Add category-specific fields
+        if ($category === 'kaffarah') {
+            $updatedSetting['offense_type'] = $validated['offense_type'];
+            $updatedSetting['kaffarah_item'] = array_map(function ($item) use ($validated) {
+                $item['rate_value'] = ceil($item['price'] * (float) $validated['rate']);
+                return $item;
+            }, $validated['kaffarah_item']);
+        } elseif ($category === 'fidyah') {
+            $updatedSetting['individual_status'] = $validated['individual_status'];
+            $updatedSetting['fidyah_item'] = array_map(function ($item) use ($validated) {
+                $item['rate_value'] = ceil($item['price'] * (float) $validated['rate']);
+                return $item;
+            }, $validated['fidyah_item']);
+        }
+
+        return $updatedSetting;
+    }
+
+    private function prepareData(string $category, array $validated, ?string $id = null, $currentSetting = null, bool $markAsActive = false): array
+    {
+        $currentSetting = $currentSetting instanceof \MongoDB\Model\BSONDocument 
+            ? $currentSetting->getArrayCopy() 
+            : (array) $currentSetting;
+
+        $isUpdate = !is_null($id); 
+
+        $preparedData = [
+            '_id' => $isUpdate ? new ObjectId($id) : new ObjectId(),
+            'title' => $validated['title'],
+            'code' => $isUpdate ? ($currentSetting['code'] ?? strtoupper(uniqid())) : strtoupper(uniqid()),
+            'is_active' => $markAsActive ? true : ($currentSetting['is_active'] ?? false),
+            'rate' => $validated['rate'],
+            'created_at' => $isUpdate ? ($currentSetting['created_at'] ?? now()) : now(),
+            'updated_at' => now(),
+        ];
+
+        // Add category-specific fields
+        if ($category === 'kaffarah') {
+            $preparedData['offense_type'] = $validated['offense_type'];
+            $preparedData['kaffarah_item'] = array_map(function ($item) use ($validated) {
+                $item['rate_value'] = ceil($item['price'] * (float) $validated['rate']);
+                return $item;
+            }, $validated['kaffarah_item']);
+        } elseif ($category === 'fidyah') {
+            $preparedData['individual_status'] = $validated['individual_status'];
+            $preparedData['fidyah_item'] = array_map(function ($item) use ($validated) {
+                $item['rate_value'] = ceil($item['price'] * (float) $validated['rate']);
+                return $item;
+            }, $validated['fidyah_item']);
+        }
+
+        return $preparedData;
+    }
+
+
+    public function index(Request $request)
+    {
+        $category = $request->route('category');
         [$payment_metrix, $activeSetting] = $this->getSettings($category);
         $payment_metrix = collect($payment_metrix)->sortByDesc('is_active');
         $viewPrefix = self::CATEGORIES[$category]['view_prefix'];
@@ -73,18 +146,20 @@ class MetrixController extends Controller
         return view("metrix.{$viewPrefix}_list", compact('payment_metrix', 'activeSetting'));
     }
 
-    public function create(string $category)
+    public function create(Request $request)
     {
+        $category = $request->route('category');
         $viewPrefix = self::CATEGORIES[$category]['view_prefix'];
         return view("metrix.{$viewPrefix}_create");
     }
 
-    public function store(Request $request, string $category)
+    public function store(Request $request)
     {
+        $category = $request->route('category');
         $validated = $request->validate(self::CATEGORIES[$category]['validation_rules']);
         $settingsKey = self::CATEGORIES[$category]['settings_key'];
         
-        $newSetting = $this->prepareSettingData($category, $validated);
+        $newSetting = $this->prepareData($category, $validated);
         
         $this->collection->updateOne(
             ['setting_category' => $category],
@@ -92,12 +167,13 @@ class MetrixController extends Controller
             ['upsert' => true]
         );
 
-        return redirect()->route(self::CATEGORIES[$category]['route'])
+        return redirect()->route(self::CATEGORIES[$category]['route'], ['category' => $category])
             ->with('success', ucfirst($category) . ' setting added successfully!');
     }
 
-    public function edit(string $category, string $id)
+    public function edit(Request $request, string $category, string $id)
     {
+        // $category = $request->route('category');
         $setting = $this->collection->findOne(
             [
                 'setting_category' => $category,
@@ -117,8 +193,9 @@ class MetrixController extends Controller
         return view("metrix.{$viewPrefix}_edit", compact('setting'));
     }
 
-    public function update(Request $request, string $category, string $id)
+    public function update(Request $request,string $category,  string $id)
     {
+        // $category = $request->route('category');
         $markAsActive = $request->route('markAsActive', false);
         $validated = $request->validate(self::CATEGORIES[$category]['validation_rules']);
         $settingsKey = self::CATEGORIES[$category]['settings_key'];
@@ -131,12 +208,12 @@ class MetrixController extends Controller
         $currentSetting = collect($existingSetting[$category][$settingsKey])
             ->firstWhere('_id', new ObjectId($id));
 
-        $updatedSetting = $this->prepareUpdateData($category, $validated, $id, $currentSetting, $markAsActive);
+        $updatedSetting = $this->prepareData($category, $validated, $id, $currentSetting, $markAsActive);
 
         $this->collection->updateOne(
             [
                 'setting_category' => $category,
-                $category . '.' . $settingsKey . '._id' => new ObjectId($id)
+                $category . '.' . self::CATEGORIES[$category]['settings_key'] . '._id' => new ObjectId($id)
             ],
             ['$set' => [$category . '.' . $settingsKey . '.$' => $updatedSetting]]
         );
@@ -145,12 +222,13 @@ class MetrixController extends Controller
             $this->markAsActive($request, $category, $id);
         }
 
-        return redirect()->route(self::CATEGORIES[$category]['route'])
+        return redirect()->route(self::CATEGORIES[$category]['route'], ['category' => $category])
             ->with('success', ucfirst($category) . ' setting ' . ($markAsActive ? 'updated and marked as active' : 'updated') . ' successfully!');
     }
 
     public function markAsActive(Request $request, string $category, string $id)
     {
+        // $category = $request->route('category');
         $settings = $this->collection->findOne(['setting_category' => $category]);
         if (!$settings) {
             return back()->with('error', ucfirst($category) . ' settings not found.');

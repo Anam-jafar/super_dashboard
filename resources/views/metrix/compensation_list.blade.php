@@ -206,7 +206,7 @@
                                         action="{{ route('metrix.compensation.mark-active', ['category' => 'kaffarah', 'id' => $setting['_id']]) }}"
                                         method="POST" class="inline-block" onclick="event.stopPropagation();">
                                         @csrf
-                                        @method('POST')
+                                        @method('PUT')
                                         <button type="submit"
                                             class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-800"
                                             title="Mark as Active">

@@ -46,25 +46,25 @@ class MetrixController extends Controller
     }
 
 
-    private function getSettings(string $category)
+    private function getSettings(string $type)
     {
-        if (!isset(self::CATEGORIES[$category])) {
-            throw new \InvalidArgumentException("Invalid category: {$category}");
+        if (!isset(self::CATEGORIES[$type])) {
+            throw new \InvalidArgumentException("Invalid category: {$type}");
         }
 
-        $settings = $this->collection->findOne(['setting_category' => $category]);
-        $settingsKey = self::CATEGORIES[$category]['settings_key'];
+        $settings = $this->collection->findOne(['setting_category' => $type]);
+        $settingsKey = self::CATEGORIES[$type]['settings_key'];
         
-        $payment_metrix = isset($settings[$category][$settingsKey])
-            ? $settings[$category][$settingsKey]
+        $payment_metrix = isset($settings[$type][$settingsKey])
+            ? $settings[$type][$settingsKey]
             : [];
         
-        $activeSetting = $settings[$category]['active_setting'] ?? null;
+        $activeSetting = $settings[$type]['active_setting'] ?? null;
         
         return [$payment_metrix, $activeSetting];
     }
 
-    private function prepareUpdateData(string $category, array $validated, string $id, $currentSetting, bool $markAsActive): array
+    private function prepareUpdateData(string $type, array $validated, string $id, $currentSetting, bool $markAsActive): array
     {
         // Convert BSONDocument to array if needed
         $currentSetting = $currentSetting instanceof \MongoDB\Model\BSONDocument 
@@ -82,13 +82,13 @@ class MetrixController extends Controller
         ];
 
         // Add category-specific fields
-        if ($category === 'kaffarah') {
+        if ($type === 'kaffarah') {
             $updatedSetting['offense_type'] = $validated['offense_type'];
             $updatedSetting['kaffarah_item'] = array_map(function ($item) use ($validated) {
                 $item['rate_value'] = ceil($item['price'] * (float) $validated['rate']);
                 return $item;
             }, $validated['kaffarah_item']);
-        } elseif ($category === 'fidyah') {
+        } elseif ($type === 'fidyah') {
             $updatedSetting['individual_status'] = $validated['individual_status'];
             $updatedSetting['fidyah_item'] = array_map(function ($item) use ($validated) {
                 $item['rate_value'] = ceil($item['price'] * (float) $validated['rate']);
@@ -99,7 +99,7 @@ class MetrixController extends Controller
         return $updatedSetting;
     }
 
-    private function prepareData(string $category, array $validated, ?string $id = null, $currentSetting = null, bool $markAsActive = false): array
+    private function prepareData(string $type, array $validated, ?string $id = null, $currentSetting = null, bool $markAsActive = false): array
     {
         $currentSetting = $currentSetting instanceof \MongoDB\Model\BSONDocument 
             ? $currentSetting->getArrayCopy() 
@@ -118,13 +118,13 @@ class MetrixController extends Controller
         ];
 
         // Add category-specific fields
-        if ($category === 'kaffarah') {
+        if ($type === 'kaffarah') {
             $preparedData['offense_type'] = $validated['offense_type'];
             $preparedData['kaffarah_item'] = array_map(function ($item) use ($validated) {
                 $item['rate_value'] = ceil($item['price'] * (float) $validated['rate']);
                 return $item;
             }, $validated['kaffarah_item']);
-        } elseif ($category === 'fidyah') {
+        } elseif ($type === 'fidyah') {
             $preparedData['individual_status'] = $validated['individual_status'];
             $preparedData['fidyah_item'] = array_map(function ($item) use ($validated) {
                 $item['rate_value'] = ceil($item['price'] * (float) $validated['rate']);
@@ -136,111 +136,127 @@ class MetrixController extends Controller
     }
 
 
-    public function index(Request $request)
-    {
-        $category = $request->route('category');
-        [$payment_metrix, $activeSetting] = $this->getSettings($category);
-        $payment_metrix = collect($payment_metrix)->sortByDesc('is_active');
-        $viewPrefix = self::CATEGORIES[$category]['view_prefix'];
-        
-        return view("metrix.{$viewPrefix}_list", compact('payment_metrix', 'activeSetting'));
-    }
+public function index(Request $request)
+{
+    $type = $request->route('type');
+    [$payment_metrix, $activeSetting] = $this->getSettings($type);
+
+    // Convert to a collection, sort, and paginate
+    $payment_metrix = collect($payment_metrix)
+        ->sortByDesc('is_active')
+        ->values(); // Reset the keys after sorting
+
+    $perPage = 25; // Number of items per page
+    $currentPage = $request->input('page', 1); // Current page, default is 1
+    $payment_metrix = new \Illuminate\Pagination\LengthAwarePaginator(
+        $payment_metrix->forPage($currentPage, $perPage),
+        $payment_metrix->count(),
+        $perPage,
+        $currentPage,
+        ['path' => $request->url(), 'query' => $request->query()] // Maintain query parameters
+    );
+
+    $viewPrefix = self::CATEGORIES[$type]['view_prefix'];
+
+    return view("metrix.{$viewPrefix}_list", compact('payment_metrix', 'activeSetting'));
+}
+
 
     public function create(Request $request)
     {
-        $category = $request->route('category');
-        $viewPrefix = self::CATEGORIES[$category]['view_prefix'];
+        $type = $request->route('type');
+        $viewPrefix = self::CATEGORIES[$type]['view_prefix'];
         return view("metrix.{$viewPrefix}_create");
     }
 
     public function store(Request $request)
     {
-        $category = $request->route('category');
-        $validated = $request->validate(self::CATEGORIES[$category]['validation_rules']);
-        $settingsKey = self::CATEGORIES[$category]['settings_key'];
+        $type = $request->route('type');
+        $validated = $request->validate(self::CATEGORIES[$type]['validation_rules']);
+        $settingsKey = self::CATEGORIES[$type]['settings_key'];
         
-        $newSetting = $this->prepareData($category, $validated);
+        $newSetting = $this->prepareData($type, $validated);
         
         $this->collection->updateOne(
-            ['setting_category' => $category],
-            ['$push' => [$category . '.' . $settingsKey => $newSetting]],
+            ['setting_category' => $type],
+            ['$push' => [$type . '.' . $settingsKey => $newSetting]],
             ['upsert' => true]
         );
 
-        return redirect()->route(self::CATEGORIES[$category]['route'], ['category' => $category])
-            ->with('success', ucfirst($category) . ' setting added successfully!');
+        return redirect()->route(self::CATEGORIES[$type]['route'], ['type' => $type])
+            ->with('success', ucfirst($type) . ' setting added successfully!');
     }
 
-    public function edit(Request $request, string $category, string $id)
+    public function edit(Request $request, string $type, string $id)
     {
         // $category = $request->route('category');
         $setting = $this->collection->findOne(
             [
-                'setting_category' => $category,
-                $category . '.' . self::CATEGORIES[$category]['settings_key'] . '._id' => new ObjectId($id)
+                'setting_category' => $type,
+                $type . '.' . self::CATEGORIES[$type]['settings_key'] . '._id' => new ObjectId($id)
             ],
-            ['projection' => [$category . '.' . self::CATEGORIES[$category]['settings_key'] . '.$' => 1]]
+            ['projection' => [$type . '.' . self::CATEGORIES[$type]['settings_key'] . '.$' => 1]]
         );
 
-        if (!$setting || empty($setting[$category][self::CATEGORIES[$category]['settings_key']])) {
-            return redirect()->route(self::CATEGORIES[$category]['route'])
-                ->with('error', ucfirst($category) . ' setting not found.');
+        if (!$setting || empty($setting[$type][self::CATEGORIES[$type]['settings_key']])) {
+            return redirect()->route(self::CATEGORIES[$type]['route'])
+                ->with('error', ucfirst($type) . ' setting not found.');
         }
 
-        $setting = $setting[$category][self::CATEGORIES[$category]['settings_key']][0];
-        $viewPrefix = self::CATEGORIES[$category]['view_prefix'];
+        $setting = $setting[$type][self::CATEGORIES[$type]['settings_key']][0];
+        $viewPrefix = self::CATEGORIES[$type]['view_prefix'];
 
         return view("metrix.{$viewPrefix}_edit", compact('setting'));
     }
 
-    public function update(Request $request,string $category,  string $id)
+    public function update(Request $request,string $type,  string $id)
     {
         // $category = $request->route('category');
         $markAsActive = $request->route('markAsActive', false);
-        $validated = $request->validate(self::CATEGORIES[$category]['validation_rules']);
-        $settingsKey = self::CATEGORIES[$category]['settings_key'];
+        $validated = $request->validate(self::CATEGORIES[$type]['validation_rules']);
+        $settingsKey = self::CATEGORIES[$type]['settings_key'];
 
         $existingSetting = $this->collection->findOne([
-            'setting_category' => $category,
-            $category . '.' . $settingsKey . '._id' => new ObjectId($id)
+            'setting_category' => $type,
+            $type . '.' . $settingsKey . '._id' => new ObjectId($id)
         ]);
 
-        $currentSetting = collect($existingSetting[$category][$settingsKey])
+        $currentSetting = collect($existingSetting[$type][$settingsKey])
             ->firstWhere('_id', new ObjectId($id));
 
-        $updatedSetting = $this->prepareData($category, $validated, $id, $currentSetting, $markAsActive);
+        $updatedSetting = $this->prepareData($type, $validated, $id, $currentSetting, $markAsActive);
 
         $this->collection->updateOne(
             [
-                'setting_category' => $category,
-                $category . '.' . self::CATEGORIES[$category]['settings_key'] . '._id' => new ObjectId($id)
+                'setting_category' => $type,
+                $type . '.' . self::CATEGORIES[$type]['settings_key'] . '._id' => new ObjectId($id)
             ],
-            ['$set' => [$category . '.' . $settingsKey . '.$' => $updatedSetting]]
+            ['$set' => [$type . '.' . $settingsKey . '.$' => $updatedSetting]]
         );
 
         if ($markAsActive) {
-            $this->markAsActive($request, $category, $id);
+            $this->markAsActive($request, $type, $id);
         }
 
-        return redirect()->route(self::CATEGORIES[$category]['route'], ['category' => $category])
-            ->with('success', ucfirst($category) . ' setting ' . ($markAsActive ? 'updated and marked as active' : 'updated') . ' successfully!');
+        return redirect()->route(self::CATEGORIES[$type]['route'], ['type' => $type])
+            ->with('success', ucfirst($type) . ' setting ' . ($markAsActive ? 'updated and marked as active' : 'updated') . ' successfully!');
     }
 
-    public function markAsActive(Request $request, string $category, string $id)
+    public function markAsActive(Request $request, string $type, string $id)
     {
         // $category = $request->route('category');
-        $settings = $this->collection->findOne(['setting_category' => $category]);
+        $settings = $this->collection->findOne(['setting_category' => $type]);
         if (!$settings) {
-            return back()->with('error', ucfirst($category) . ' settings not found.');
+            return back()->with('error', ucfirst($type) . ' settings not found.');
         }
 
-        $settingsKey = self::CATEGORIES[$category]['settings_key'];
-        $categorySettings = $settings[$category][$settingsKey] ?? [];
+        $settingsKey = self::CATEGORIES[$type]['settings_key'];
+        $categorySettings = $settings[$type][$settingsKey] ?? [];
 
         foreach ($categorySettings as &$setting) {
             $setting['is_active'] = (string)$setting['_id'] === $id;
             if ($setting['is_active']) {
-                $settings[$category]['active_setting'] = [
+                $settings[$type]['active_setting'] = [
                     'setting_id' => $setting['_id'],
                     'setting_code' => $setting['code'],
                 ];
@@ -248,15 +264,15 @@ class MetrixController extends Controller
         }
 
         $this->collection->updateOne(
-            ['setting_category' => $category],
+            ['setting_category' => $type],
             [
                 '$set' => [
-                    $category . '.' . $settingsKey => $categorySettings,
-                    $category . '.active_setting' => $settings[$category]['active_setting'],
+                    $type . '.' . $settingsKey => $categorySettings,
+                    $type . '.active_setting' => $settings[$type]['active_setting'],
                 ],
             ]
         );
 
-        return back()->with('success', ucfirst($category) . ' setting marked as active.');
+        return back()->with('success', ucfirst($type) . ' setting marked as active.');
     }
 }

@@ -25,7 +25,7 @@
             <x-alert />
 
             <div class="flex justify-end w-full sm:w-auto">
-                <a href="{{ route('metrix.compensation.create', ['category' => 'kaffarah']) }}"
+                <a href="{{ route('metrix.compensation.create', ['type' => 'kaffarah']) }}"
                     class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
                     style="padding: 9px 12px;">
                     Tambah Tetapan
@@ -33,79 +33,11 @@
                 </a>
             </div>
 
-            <!-- Settings Table -->
-            <div class="bg-white mt-4">
-                <div class="overflow-auto sm:p-2">
-                    <table class="min-w-full divide-y divide-gray-200" style="table-layout: fixed;">
-                        <thead>
-                            <tr class="border-b border-defaultborder">
-                                <th scope="col" class="px-1 py-1 text-left text-xs font-medium text-start"
-                                    style="color: #2624D0 !important; font-weight: bold !important; width: 50px;">
-                                    Bil.
-                                </th>
-                                <th scope="col" class="px-2 py-1 text-left text-xs font-medium text-start"
-                                    style="color: #2624D0 !important; font-weight: bold !important;">
-                                    Title
-                                </th>
-                                <th scope="col" class="px-2 py-1 text-left text-xs font-medium text-start"
-                                    style="color: #2624D0 !important; font-weight: bold !important;">
-                                    Code
-                                </th>
-                                <th scope="col" class="px-2 py-1 text-left text-xs font-medium text-start"
-                                    style="color: #2624D0 !important; font-weight: bold !important;">
-                                    Status
-                                </th>
-                                <th scope="col" class="px-2 py-1 text-left text-xs font-medium text-center"
-                                    style="color: #2624D0 !important; font-weight: bold !important;">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white">
-                            @forelse($payment_metrix as $index => $setting)
-                                <tr class="hover:bg-gray-50 cursor-pointer">
-                                    <td class="px-1 py-2 whitespace-nowrap text-xs text-black text-start">
-                                        {{ $index + 1 }}
-                                    </td>
-                                    <td class="px-2 py-2 whitespace-nowrap text-xs text-black">
-                                        {{ $setting['title'] }}
-                                    </td>
-                                    <td class="px-2 py-2 whitespace-nowrap text-xs text-black">
-                                        {{ $setting['code'] }}
-                                    </td>
-                                    <td class="px-2 py-2 whitespace-nowrap text-xs">
-                                        <p
-                                            class="{{ $setting['is_active'] ? 'text-green-500 font-semibold' : 'text-black' }}">
-                                            {{ $setting['is_active'] ? 'Active' : 'Inactive' }}
-                                        </p>
-                                    </td>
 
-                                    <td class="px-2 py-2 whitespace-nowrap text-xs text-black text-center">
-                                        <a onclick="openModal('modal-{{ $index }}')"
-                                            class="text-green-600 hover:text-green-800 ml-2" title="Edit">
-                                            <i class="fe fe-eye text-lg"></i>
-                                        </a>
 
-                                        <a href="{{ route('metrix.compensation.edit', ['category' => 'kaffarah', 'id' => $setting['_id']]) }}"
-                                            class="text-blue-600 hover:text-green-800 ml-2" title="Edit">
-                                            <i class="fe fe-edit text-lg"></i>
-                                        </a>
-                                    </td>
+            <x-table :headers="['Title', 'Code', 'Status']" :columns="['title', 'code', 'is_active']" :id="'_id'" :rows="$payment_metrix" route="metrix.compensation.edit"
+                routeType="kaffarah" />
 
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5"
-                                        class="px-6 py-4 whitespace-nowrap text-xs text-gray-500 text-center">
-                                        No records found.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-
-                    </table>
-                </div>
-            </div>
 
             <!-- Modals (Outside the table) -->
             @foreach ($payment_metrix as $index => $setting)
@@ -203,7 +135,7 @@
                             <div class="mt-4 flex justify-end">
                                 @if (!$setting['is_active'])
                                     <form
-                                        action="{{ route('metrix.compensation.mark-active', ['category' => 'kaffarah', 'id' => $setting['_id']]) }}"
+                                        action="{{ route('metrix.compensation.mark-active', ['type' => 'kaffarah', 'id' => $setting['_id']]) }}"
                                         method="POST" class="inline-block" onclick="event.stopPropagation();">
                                         @csrf
                                         @method('PUT')

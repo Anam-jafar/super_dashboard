@@ -20,8 +20,7 @@
         </thead>
         <tbody class="bg-white">
             @forelse($rows as $key => $row)
-                <tr class="hover:bg-gray-50 cursor-pointer"
-                    @if ($route) onclick="window.location='{{ route($route, ['type' => $routeType, 'id' => $row->id]) }}'" @endif>
+                <tr class="hover:bg-gray-50 cursor-pointer">
                     <!-- Index Column -->
                     <td class="px-1 py-2 whitespace-nowrap text-xs text-black text-center">
                         {{ $rows->firstItem() + $key }}
@@ -38,15 +37,17 @@
                             @endif
                         </td>
                     @endforeach
+
                     <!-- Actions Column -->
                     <td class="px-2 py-2 whitespace-nowrap text-xs text-black break-words text-center">
                         @if ($route)
-                            <a href="{{ route($route, ['type' => $routeType, 'id' => $row->id]) }}"
+                            <a href="{{ route($route, ['type' => $routeType, 'id' => $row->$id]) }}"
                                 class="text-blue-500 hover:underline">
                                 <i class="fe fe-edit"></i>
                             </a>
                         @endif
                     </td>
+
                 </tr>
             @empty
                 <tr>

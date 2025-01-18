@@ -67,36 +67,36 @@ Route::prefix('mais')->group(function () {
 
 Route::prefix('metrix')->name('metrix.')->group(function () {
     // Helper function to register common category routes
-    $registerCategoryRoutes = function ($prefix, $category) {
+    $registerCategoryRoutes = function ($prefix, $type) {
         Route::group([
             'prefix' => $prefix,
             'as' => $prefix . '.',
-            'where' => ['category' => 'kaffarah|fidyah']
-        ], function () use ($category) {
+            'where' => ['type' => 'kaffarah|fidyah']
+        ], function () use ($type) {
             // Resource routes
-            Route::get('/{category}', [MetrixController::class, 'index'])
+            Route::get('/{type}', [MetrixController::class, 'index'])
                 ->name('list')
-                ->where('category', $category);
-            Route::get('/{category}/create', [MetrixController::class, 'create'])
+                ->where('type', $type);
+            Route::get('/{type}/create', [MetrixController::class, 'create'])
                 ->name('create')
-                ->where('category', $category);
-            Route::post('/{category}', [MetrixController::class, 'store'])
+                ->where('type', $type);
+            Route::post('/{type}', [MetrixController::class, 'store'])
                 ->name('store')
-                ->where('category', $category);
-            Route::get('/{category}/{id}/edit', [MetrixController::class, 'edit'])
+                ->where('type', $type);
+            Route::get('/{type}/{id}/edit', [MetrixController::class, 'edit'])
                 ->name('edit')
-                ->where('category', $category);
-            Route::put('/{category}/{id}', [MetrixController::class, 'update'])
+                ->where('type', $type);
+            Route::put('/{type}/{id}', [MetrixController::class, 'update'])
                 ->name('update')
-                ->where('category', $category);
+                ->where('type', $type);
             
             // Custom actions
-            Route::put('/{category}/{id}/active', [MetrixController::class, 'markAsActive'])
+            Route::put('/{type}/{id}/active', [MetrixController::class, 'markAsActive'])
                 ->name('mark-active')
-                ->where('category', $category);
-            Route::put('/{category}/{id}/update-and-activate', [MetrixController::class, 'update'])
+                ->where('type', $type);
+            Route::put('/{type}/{id}/update-and-activate', [MetrixController::class, 'update'])
                 ->name('update-and-activate')
-                ->where('category', $category)
+                ->where('type', $type)
                 ->defaults('markAsActive', true);
         });
     };

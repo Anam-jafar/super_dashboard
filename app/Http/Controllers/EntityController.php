@@ -127,9 +127,13 @@ class EntityController extends Controller
     $created = DB::table($table)->insert($data);
 
     $route = self::ENTITY_TYPES[$entityType]['view'] . '.index';
-    
+    if ($created) {
+        $this->logActivity('Stored new '.$entityType, $entityType.' Store attempt successful');
+    } else {
+        $this->logActivity('Stored new '.$entityType, $entityType.' Store attempt failed');
+    }
     return $created
-        ? redirect()->route('showList', ['type' => $entityType])->with('success', ucfirst($entityType) . ' updated successfully.')
+        ? redirect()->route('showList', ['type' => $entityType])->with('success', ucfirst($entityType) . ' stored successfully.')
         : redirect()->back()->with('error', 'Failed to update ' . $entityType);
 }
 
@@ -149,7 +153,11 @@ public function update(Request $request, string $entityType, $id)
 
     $route = self::ENTITY_TYPES[$entityType]['view'] . '.index';
     
-
+    if ($updated) {
+        $this->logActivity('Updated '.$entityType, $entityType.' Update attempt successful');
+    } else {
+        $this->logActivity('Updated '.$entityType, $entityType.' Update attempt failed');
+    }
     return $updated
         ? redirect()->route('showList', ['type' => $entityType])->with('success', ucfirst($entityType) . ' updated successfully.')
         : redirect()->back()->with('error', 'Failed to update ' . $entityType);

@@ -12,10 +12,12 @@
                         {{ $header }}
                     </th>
                 @endforeach
-                <th scope="col" class="px-2 py-1 text-left text-xs font-medium text-center"
-                    style="color: #2624D0 !important; font-weight: bold !important;">
-                    Actions
-                </th>
+                @if ($route || $extraRoute)
+                    <th scope="col" class="px-2 py-1 text-left text-xs font-medium text-center"
+                        style="color: #2624D0 !important; font-weight: bold !important;">
+                        Actions
+                    </th>
+                @endif
             </tr>
         </thead>
         <tbody class="bg-white">

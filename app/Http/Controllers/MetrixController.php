@@ -149,7 +149,7 @@ public function index(Request $request)
             ['$push' => [$type . '.' . $settingsKey => $newSetting]],
             ['upsert' => true]
         );
-
+        $this->logActivity('Added new '.$type, $type.' store  attempt successful');
         return redirect()->route(self::CATEGORIES[$type]['route'], ['type' => $type])
             ->with('success', ucfirst($type) . ' setting added successfully!');
     }
@@ -203,7 +203,11 @@ public function index(Request $request)
 
         if ($markAsActive) {
             $this->markAsActive($request, $type, $id);
+            $this->logActivity('Update '.$type, $type.' update and mark as active  attempt successful.Code : '.$updatedSetting['code']);
+
         }
+        $this->logActivity('Update '.$type, $type.' update attempt successful. Code : '.$updatedSetting['code']);
+
 
         return redirect()->route(self::CATEGORIES[$type]['route'], ['type' => $type])
             ->with('success', ucfirst($type) . ' setting ' . ($markAsActive ? 'updated and marked as active' : 'updated') . ' successfully!');
@@ -220,6 +224,7 @@ public function index(Request $request)
         $settingsKey = self::CATEGORIES[$type]['settings_key'];
         $categorySettings = $settings[$type][$settingsKey] ?? [];
 
+        $active_code = null;
         foreach ($categorySettings as &$setting) {
             $setting['is_active'] = (string)$setting['_id'] === $id;
             if ($setting['is_active']) {
@@ -227,6 +232,7 @@ public function index(Request $request)
                     'setting_id' => $setting['_id'],
                     'setting_code' => $setting['code'],
                 ];
+                $active_code = $setting['code'];
             }
         }
 
@@ -239,7 +245,7 @@ public function index(Request $request)
                 ],
             ]
         );
-
+        $this->logActivity($type.' marked as active', $type.' activation attempt successful. Code : '.$active_code);
         return back()->with('success', ucfirst($type) . ' setting marked as active.');
     }
 }

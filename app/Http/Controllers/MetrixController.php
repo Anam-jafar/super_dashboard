@@ -66,41 +66,6 @@ class MetrixController extends Controller
         return [$payment_metrix, $activeSetting];
     }
 
-    private function prepareUpdateData(string $type, array $validated, string $id, $currentSetting, bool $markAsActive): array
-    {
-        // Convert BSONDocument to array if needed
-        $currentSetting = $currentSetting instanceof \MongoDB\Model\BSONDocument 
-            ? $currentSetting->getArrayCopy() 
-            : (array) $currentSetting;
-
-        $updatedSetting = [
-            '_id' => new ObjectId($id),
-            'title' => $validated['title'],
-            'code' => $currentSetting['code'] ?? strtoupper(uniqid()),
-            'is_active' => $markAsActive ? true : ($currentSetting['is_active'] ?? false),
-            'rate' => $validated['rate'],
-            'created_at' => $currentSetting['created_at'] ?? now(),
-            'updated_at' => now()
-        ];
-
-        // Add category-specific fields
-        if ($type === 'kaffarah') {
-            $updatedSetting['offense_type'] = $validated['offense_type'];
-            $updatedSetting['kaffarah_item'] = array_map(function ($item) use ($validated) {
-                $item['rate_value'] = ceil($item['price'] * (float) $validated['rate']);
-                return $item;
-            }, $validated['kaffarah_item']);
-        } elseif ($type === 'fidyah') {
-            $updatedSetting['individual_status'] = $validated['individual_status'];
-            $updatedSetting['fidyah_item'] = array_map(function ($item) use ($validated) {
-                $item['rate_value'] = ceil($item['price'] * (float) $validated['rate']);
-                return $item;
-            }, $validated['fidyah_item']);
-        }
-
-        return $updatedSetting;
-    }
-
     private function prepareData(string $type, array $validated, ?string $id = null, $currentSetting = null, bool $markAsActive = false): array
     {
         $currentSetting = $currentSetting instanceof \MongoDB\Model\BSONDocument 

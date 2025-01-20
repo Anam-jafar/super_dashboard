@@ -6,7 +6,7 @@
 
             <x-page-header :title="'Tambah Tetapan Fidyah Baharu'" :breadcrumbs="[['label' => 'Fidyah', 'url' => 'javascript:void(0);'], ['label' => 'Tambah Tetapan']]" />
 
-            <form action="{{ route('compensation_.store') }}" method="POST" class="space-y-8">
+            <form action="{{ route('metrix.settings.store', ['type' => 'fidyah']) }}" method="POST" class="space-y-8">
                 @csrf
 
                 <!-- Title -->

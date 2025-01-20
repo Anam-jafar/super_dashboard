@@ -31,7 +31,7 @@
             @endif
 
             <div class="flex justify-end w-full sm:w-auto">
-                <a href="{{ route('metrix.settings.store', ['type' => 'fidyah']) }}"
+                <a href="{{ route('metrix.settings.create', ['type' => 'fidyah']) }}"
                     class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
                     style="padding: 9px 12px;">
                     Tambah Tetapan

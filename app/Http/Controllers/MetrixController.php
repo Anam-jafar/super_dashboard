@@ -31,7 +31,9 @@ class MetrixController extends Controller
             'validation_rules' => [
                 'title' => 'required|string|max:255',
                 'individual_status.*.parameter' => 'required|string',
+                'individual_status.*.code' => 'string',
                 'individual_status.*.categories.*.parameter' => 'required|string',
+                'individual_status.*.categories.*.code' => 'string',
                 'fidyah_item.*.name' => 'required|string',
                 'fidyah_item.*.price' => 'required|numeric',
                 'rate' => 'required|numeric',

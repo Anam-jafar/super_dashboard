@@ -30,55 +30,20 @@
                 </div>
             @endif
 
-            <div class="bg-white rounded-lg shadow-md p-4 mb-6">
-                <div class="flex flex-col sm:flex-row justify-between items-center mb-4 space-y-2 sm:space-y-0">
-                    <h1 class="text-lg font-bold text-gray-800">Active Setting</h1>
-                    <a href="{{ route('metrix.settings.store', ['category' => 'fidyah']) }}"
-                        class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
-                        style="padding: 9px 12px;">
-                        Tambah Tetapan
-                        <i class="fe fe-plus"></i>
-                    </a>
-                </div>
-                @if ($activeSetting)
-                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p class="mb-1 text-sm"><span class="font-semibold text-blue-700">Code:</span>
-                            {{ $activeSetting['setting_code'] }}</p>
-                        <p class="text-sm"><span class="font-semibold text-blue-700">ID:</span>
-                            {{ $activeSetting['setting_id'] }}</p>
-                    </div>
-                @else
-                    <p class="text-gray-600 italic text-sm">No active setting found.</p>
-                @endif
+            <div class="flex justify-end w-full sm:w-auto">
+                <a href="{{ route('metrix.settings.store', ['type' => 'fidyah']) }}"
+                    class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
+                    style="padding: 9px 12px;">
+                    Tambah Tetapan
+                    <i class="fe fe-plus"></i>
+                </a>
             </div>
 
             <div class="space-y-4">
-                @foreach ($payment_metrix as $index => $setting)
-                    <div class="bg-white shadow-lg rounded-lg overflow-hidden transition duration-300 ease-in-out transform hover:shadow-xl cursor-pointer"
-                        onclick="openModal('modal-{{ $index }}')">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4">
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center mb-3 sm:mb-0">
-                                <h3 class="text-lg font-semibold text-gray-800 mr-2">{{ $setting['title'] }}</h3>
-                                <span
-                                    class="mt-1 sm:mt-0 px-2 py-1 rounded-full text-xs font-medium {{ $setting['is_active'] ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    {{ $setting['is_active'] ? 'Active' : 'Inactive' }}
-                                </span>
-                            </div>
-                            @if (!$setting['is_active'])
-                                <form
-                                    action="{{ route('metrix.settings.mark-active', ['category' => 'fidyah', 'id' => $setting['_id']]) }}"
-                                    method="POST" onclick="event.stopPropagation();">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit"
-                                        class="px-4 py-1 text-sm text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                                        Mark as Active
-                                    </button>
-                                </form>
-                            @endif
-                        </div>
-                    </div>
 
+                <x-table :headers="['Title', 'Code', 'Status']" :columns="['title', 'code', 'is_active']" :id="'_id'" :rows="$payment_metrix"
+                    route="metrix.settings.edit" routeType="fidyah" extraRoute="'true'" />
+                @foreach ($payment_metrix as $index => $setting)
                     <!-- Modal -->
                     <div id="modal-{{ $index }}"
                         class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
@@ -156,8 +121,21 @@
                                     </div>
                                 </div>
 
-                                <div class="mt-4">
-                                    <button class="px-4 py-2 bg-gray-500 text-white rounded-lg mr-2"
+                                <div class="mt-4 flex justify-end">
+                                    @if (!$setting['is_active'])
+                                        <form
+                                            action="{{ route('metrix.settings.mark-active', ['type' => 'fidyah', 'id' => $setting['_id']]) }}"
+                                            method="POST" class="inline-block" onclick="event.stopPropagation();">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit"
+                                                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-800"
+                                                title="Mark as Active">
+                                                Mark as Active
+                                            </button>
+                                        </form>
+                                    @endif
+                                    <button class="px-4 py-2 bg-gray-500 text-white rounded-lg ml-2"
                                         onclick="closeModal('modal-{{ $index }}')">Close</button>
                                 </div>
                             </div>

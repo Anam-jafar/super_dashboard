@@ -26,7 +26,7 @@
             <!-- End::header-element -->
 
             <!-- Start::header-element -->
-            <div class="header-element mx-lg-0">
+            <div class="header-element mx-lg-0 h-[3rem] w-[3rem]">
                 <a aria-label="Hide Sidebar"
                     class="sidemenu-toggle header-link animated-arrow hor-toggle horizontal-navtoggle"
                     data-bs-toggle="sidebar" href="javascript:void(0);"><span></span></a>

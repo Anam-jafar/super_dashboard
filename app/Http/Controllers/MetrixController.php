@@ -245,7 +245,7 @@ public function index(Request $request)
                 ],
             ]
         );
-        $this->logActivity($type.' marked as active', $type.' activation attempt successful. Code : '.$active_code);
+        $this->logActivity($type.' actived', $type.' activation attempt successful. Code : '.$active_code);
         return back()->with('success', ucfirst($type) . ' setting marked as active.');
     }
 }

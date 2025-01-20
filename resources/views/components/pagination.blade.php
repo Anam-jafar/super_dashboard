@@ -74,10 +74,11 @@
                     <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                 @endforeach
                 <select name="per_page" id="per_page" class="form-select" onchange="this.form.submit()">
-                    <option value="10" {{ request('per_page', 10) == 10 ? 'selected' : '' }}>10/MS</option>
-                    <option value="20" {{ request('per_page', 10) == 20 ? 'selected' : '' }}>20/MS</option>
-                    <option value="50" {{ request('per_page', 10) == 50 ? 'selected' : '' }}>50/MS</option>
-                    <option value="100" {{ request('per_page', 10) == 100 ? 'selected' : '' }}>100/MS</option>
+                    <option value="25" {{ request('per_page', 25) == 25 ? 'selected' : '' }}>25/MS</option>
+                    <option value="50" {{ request('per_page', 25) == 50 ? 'selected' : '' }}>50/MS</option>
+                    <option value="100" {{ request('per_page', 25) == 100 ? 'selected' : '' }}>100/MS</option>
+                    <option value="200" {{ request('per_page', 25) == 200 ? 'selected' : '' }}>200/MS</option>
+
                 </select>
             </form>
         </div>

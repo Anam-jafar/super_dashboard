@@ -120,7 +120,7 @@ class AuthController extends Controller
 public function activityLogs()
 {
     // Get the per_page value from the request, default to 10
-    $perPage = request()->get('per_page', 10); 
+    $perPage = request()->get('per_page', 25); 
 
     // Fetch the logs with pagination, ordered by date and time in descending order
     $logs = DB::table('sys_log as s')

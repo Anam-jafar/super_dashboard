@@ -7,7 +7,7 @@
             <img src="{{ asset('assets/icons/sd_logo_half.svg') }}" alt="logo" class="toggle-dark">
 
             <img src="{{ asset('assets/icons/sd_logo_full.svg') }}" alt="logo" class="desktop-dark"
-                style="height: auto; width: auto;">
+                style="height: 70px; width: 140px;">
 
             <img src="{{ asset('assets/icons/sd_logo_half.svg') }}" alt="logo" class="toggle-logo">
             <img src="{{ asset('assets/icons/sd_logo_half.svg') }}" alt="logo" class="toggle-white">

@@ -178,7 +178,7 @@ public function update(Request $request, string $entityType, $id)
             }
         }
     
-        return $query->paginate($request->get('per_page', 10))->withQueryString();
+        return $query->paginate($request->get('per_page', 25))->withQueryString();
     }
 
     private function getDefaultValues(string $entityType)

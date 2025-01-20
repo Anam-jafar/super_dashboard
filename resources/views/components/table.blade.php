@@ -2,7 +2,7 @@
     <table class="min-w-full divide-y divide-gray-200 mt-4" style="table-layout: fixed;">
         <thead>
             <tr class="border-b border-defaultborder">
-                <th scope="col" class="px-1 py-1 text-left text-xs font-medium text-start"
+                <th scope="col" class="px-1 py-1 text-left text-xs font-medium text-center"
                     style="color: #2624D0 !important; font-weight: bold !important; width: 50px;">
                     Bil.
                 </th>
@@ -12,7 +12,7 @@
                         {{ $header }}
                     </th>
                 @endforeach
-                <th scope="col" class="px-2 py-1 text-left text-xs font-medium text-start"
+                <th scope="col" class="px-2 py-1 text-left text-xs font-medium text-center"
                     style="color: #2624D0 !important; font-weight: bold !important;">
                     Actions
                 </th>

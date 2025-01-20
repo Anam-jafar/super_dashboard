@@ -13,6 +13,7 @@ class Table extends Component
     public $route;
     public $routeType;
     public $id;
+    public $extraRoute;
 
     /**
      * Create a new component instance.
@@ -23,7 +24,7 @@ class Table extends Component
      * @param  string|null $route
      * @return void
      */
-    public function __construct($headers, $rows, $columns, $statuses = null, $route = null, $routeType = null, $id = null)
+    public function __construct($headers, $rows, $columns, $statuses = null, $route = null, $routeType = null, $id = null, $extraRoute = null)  
     {
         $this->headers = $headers;
         $this->rows = $rows;
@@ -32,6 +33,7 @@ class Table extends Component
         $this->route = $route;
         $this->routeType = $routeType;
         $this->id = $id;    
+        $this->extraRoute = $extraRoute;
     }
 
     /**

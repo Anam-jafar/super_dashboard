@@ -13,7 +13,8 @@
                     ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
                 ]" :route="route('showList', ['type' => 'branches'])" button-label="Cawangan Baru" :button-route="route('create', ['type' => 'branches'])" />
 
-                <x-table :headers="['Nama', 'Singkatan', 'Telefon', 'Emel', 'Web']" :columns="['name', 'sname', 'tel', 'mel', 'url']" :rows="$entities" route="edit" routeType="branches" />
+                <x-table :headers="['Nama', 'Singkatan', 'Telefon', 'Emel', 'Web']" :columns="['name', 'sname', 'tel', 'mel', 'url']" :rows="$entities" :id="'id'" route="edit"
+                    routeType="branches" />
 
                 <x-pagination :items="$entities" label="branches" />
 

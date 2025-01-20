@@ -36,7 +36,7 @@
 
 
             <x-table :headers="['Title', 'Code', 'Status']" :columns="['title', 'code', 'is_active']" :id="'_id'" :rows="$payment_metrix" route="metrix.compensation.edit"
-                routeType="kaffarah" />
+                routeType="kaffarah" extraRoute="'true'" />
 
 
             <!-- Modals (Outside the table) -->

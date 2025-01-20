@@ -20,8 +20,8 @@
                     ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
                 ]" :route="route('showList', ['type' => 'mosques'])" button-label="Tambah Masjid" :button-route="route('create', ['type' => 'mosques'])" />
 
-                <x-table :headers="['Nama', 'HP', 'Emel', 'Status', 'Kategory', 'Link', 'App Code', 'SID', 'Daerah']" :columns="['name', 'hp', 'mel', 'sta', 'cate', 'rem1', 'rem2', 'rem3', 'city']" :rows="$entities" :statuses="$statuses" route="edit"
-                    routeType="mosques" />
+                <x-table :headers="['Nama', 'HP', 'Emel', 'Status', 'Kategory', 'Link', 'App Code', 'SID', 'Daerah']" :columns="['name', 'hp', 'mel', 'sta', 'cate', 'rem1', 'rem2', 'rem3', 'city']" :rows="$entities" :statuses="$statuses" :id="'id'"
+                    route="edit" routeType="mosques" />
                 <x-pagination :items="$entities" label="mosques" />
 
             </div>

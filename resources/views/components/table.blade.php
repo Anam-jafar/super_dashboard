@@ -39,7 +39,15 @@
                     @endforeach
 
                     <!-- Actions Column -->
-                    <td class="px-2 py-2 whitespace-nowrap text-xs text-black break-words text-center">
+                    <td class="px-2 py-2 whitespace-nowrap text-xs text-black text-center">
+
+                        @if ($extraRoute)
+                            <a onclick="openModal('modal-{{ $key }}')"
+                                class="text-green-600 hover:text-green-800 ml-2" title="Edit">
+                                <i class="fe fe-eye text-lg"></i>
+                            </a>
+                        @endif
+
                         @if ($route)
                             <a href="{{ route($route, ['type' => $routeType, 'id' => $row->$id]) }}"
                                 class="text-blue-500 hover:underline">

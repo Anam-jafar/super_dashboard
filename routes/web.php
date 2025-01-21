@@ -25,18 +25,10 @@ Route::prefix('mais')->group(function () {
 
     // Routes requiring authentication
     Route::middleware(['auth'])->group(function () {
+
         // Dashboard Routes
         Route::get('/', [DashboardController::class, 'index'])->name('index');
         Route::get('/district', [DashboardController::class, 'mosquesInCityDetails'])->name('mosquesInCityDetails');
-
-        // Entity Management Routes
-        Route::controller(EntityController::class)->prefix('/{type}')->whereIn('type', ['mosques', 'branches', 'admins'])->group(function () {
-            Route::get('/', 'index')->name('showList');
-            Route::get('/create', 'create')->name('create');
-            Route::post('/store', 'store')->name('store');
-            Route::get('/show/{id}', 'show')->name('edit');
-            Route::put('/update/{id}', 'update')->name('update');
-        });
 
         // Profile Management Routes
         Route::controller(AuthController::class)->group(function () {
@@ -47,6 +39,14 @@ Route::prefix('mais')->group(function () {
 
         });
 
+        // Entity Management Routes
+        Route::controller(EntityController::class)->prefix('/{type}')->whereIn('type', ['mosques', 'branches', 'admins'])->group(function () {
+            Route::get('/', 'index')->name('showList');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/store', 'store')->name('store');
+            Route::get('/show/{id}', 'show')->name('edit');
+            Route::put('/update/{id}', 'update')->name('update');
+        });
 
         Route::prefix('metrix')->name('metrix.')->group(function () {
             $registerCategoryRoutes = function ($prefix, $type) {

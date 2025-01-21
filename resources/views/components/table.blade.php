@@ -34,6 +34,12 @@
                                 {{ $statuses->firstWhere('val', $row->$column)?->prm ?? 'Unknown' }}
                             @elseif ($column === 'status')
                                 {{ $statuses->firstWhere('val', $row->$column)?->prm ?? 'Unknown' }}
+                            @elseif($column === 'is_active')
+                                @if ($row->$column)
+                                    <span class="text-green-600 font-bold">Active</span>
+                                @else
+                                    <span class="text-gray-600">Inactive</span>
+                                @endif
                             @else
                                 {{ $row->$column ?? '--' }}
                             @endif

@@ -11,22 +11,11 @@ use App\Models\User;
 class AuthController extends Controller
 {
 
-    /**
-     * Display the login form.
-     *
-     * @return \Illuminate\View\View
-     */
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    /**
-     * Handle the user login request.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function login(Request $request)
     {
         $request->validate([
@@ -50,11 +39,6 @@ class AuthController extends Controller
         return back()->with('error', 'Invalid credentials.');
     }
 
-    /**
-     * Log out the authenticated user.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function logout()
     {
 
@@ -64,10 +48,6 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    /**
-     * Show the user profile.
-     *
-     */
     public function profile()
     {
 
@@ -78,51 +58,40 @@ class AuthController extends Controller
     }
 
         
-    /**
-     * Update the authenticated user's profile information.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function updateProfile(Request $request)
-    {
-        $user = Auth::user();
-        
-        $user->update($request->all());
-        $this->logActivity('User Profile Update', 'User profile update successful');
-        return redirect()->back()->with('success', 'Profile updated successfully!');
-    }
+public function updateProfile(Request $request)
+{
+    $user = Auth::user();
 
-    /**
-     * Update the authenticated user's password.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function updatePassword(Request $request)
-    {
-        $user = Auth::user();
+    try {
+        $user->update($request->only(['name', 'ic', 'hp', 'mel']));
 
+        if ($request->filled('current_password') && $request->filled('new_password')) {
+            if (md5($request->current_password) !== $user->pass) {
+                return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
+            }
 
-        // Check if the current password is correct
-        if (md5($request->current_password) !== $user->pass) {
-            return redirect()->back()->withErrors(['current_password' => 'Current password is incorrect.']);
+            $user->update([
+                'pass' => md5($request->new_password),
+            ]);
+            $this->logActivity('Password Update', 'User password update successful');
         }
 
-        // Update the password (hash the new one)
-        $user->update([
-            'pass' => md5($request->new_password),  // If you are using MD5 (but it's not recommended)
-        ]);
-        $this->logActivity('User Password Update', 'User password update successful');
-        return redirect()->back()->with('success', 'Password updated successfully!');
+        $this->logActivity('Profile Update', 'User profile update successful');
+        return redirect()->back()->with('success', 'Profile updated successfully!');
+
+    } catch (\Exception $e) {
+        \Log::error('Profile update failed: ' . $e->getMessage());
+
+        return redirect()->back()->withErrors(['error' => 'There was an issue updating the profile. Please try again later.']);
     }
+}
+
+
 
 public function activityLogs()
 {
-    // Get the per_page value from the request, default to 10
     $perPage = request()->get('per_page', 25); 
 
-    // Fetch the logs with pagination, ordered by date and time in descending order
     $logs = DB::table('sys_log as s')
         ->rightJoin('usr as u', 's.uid', '=', 'u.uid')
         ->select('s.*', 'u.uid', 'u.name', 'u.ic')
@@ -130,7 +99,6 @@ public function activityLogs()
         ->orderBy('s.tm', 'desc')
         ->paginate($perPage);
 
-    // Pass the 'perPage' value and the logs to the view
     return view('auth.activity_logs', ['logs' => $logs, 'perPage' => $perPage]);
 }
 

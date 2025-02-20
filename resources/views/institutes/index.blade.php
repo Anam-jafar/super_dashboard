@@ -6,7 +6,7 @@
 
             <x-page-header :title="'Senari Masjid'" :breadcrumbs="[['label' => 'Masjid', 'url' => 'javascript:void(0);'], ['label' => 'Senari Masjid']]" />
             <x-alert />
-            <div class="bg-white sm:p-2">
+            <div class="py-8 px-4 rounded-lg shadow bg-white">
 
                 <x-filter-card :filters="[
                     ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],

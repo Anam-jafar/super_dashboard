@@ -1,8 +1,9 @@
 <div class="overflow-auto sm:p-2">
-    <table class="min-w-full divide-y divide-gray-200 mt-4" style="table-layout: fixed;">
+    <table class="min-w-full divide-y divide-gray-200 mt-4 border-separate border-spacing-y-4"
+        style="table-layout: fixed;">
         <thead>
             <tr class="border-b border-defaultborder">
-                <th scope="col" class="px-1 py-1 text-left text-xs font-medium text-center"
+                <th scope="col" class="px-1 py-1 text-xs font-medium text-center"
                     style="color: #2624D0 !important; font-weight: bold !important; width: 50px;">
                     Bil.
                 </th>
@@ -20,7 +21,7 @@
                 @endif
             </tr>
         </thead>
-        <tbody class="bg-white">
+        <tbody class="bg-white space-y-2">
             @forelse($rows as $key => $row)
                 <tr class="hover:bg-gray-50 cursor-pointer">
                     <!-- Index Column -->

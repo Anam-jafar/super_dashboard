@@ -6,7 +6,7 @@
 
             <x-page-header :title="'Senarai Cawangan'" :breadcrumbs="[['label' => 'Cawangan', 'url' => 'javascript:void(0);'], ['label' => 'Senarai Cawangan']]" />
             <x-alert />
-            <div class="bg-white sm:p-2">
+            <div class="py-8 px-4 rounded-lg shadow bg-white">
 
 
                 <x-filter-card :filters="[

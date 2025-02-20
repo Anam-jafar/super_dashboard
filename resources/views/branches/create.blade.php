@@ -9,7 +9,8 @@
 
             <x-page-header :title="'Tambah Cawangan Baru'" :breadcrumbs="[['label' => 'Cawangan', 'url' => 'javascript:void(0);'], ['label' => 'Cawangan Baru']]" />
 
-            <form method="POST" action="{{ route('store', ['type' => 'branches']) }}" class="bg-white sm:p-2 text-xs">
+            <form method="POST" action="{{ route('store', ['type' => 'branches']) }}"
+                class="py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs">
                 <!-- General Section -->
                 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                     <!-- Centre/Program -->

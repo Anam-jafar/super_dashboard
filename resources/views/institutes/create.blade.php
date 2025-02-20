@@ -10,7 +10,8 @@
             <x-page-header :title="'Tambah Masjid Baru'" :breadcrumbs="[['label' => 'Masjid', 'url' => 'javascript:void(0);'], ['label' => 'Tambah Masjid']]" />
             <x-alert />
 
-            <form method="POST" action="{{ route('store', ['type' => 'mosques']) }}" class="bg-white sm:p-2 text-xs">
+            <form method="POST" action="{{ route('store', ['type' => 'mosques']) }}"
+                class="py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs">
                 @csrf
 
                 <!-- Profile Section -->

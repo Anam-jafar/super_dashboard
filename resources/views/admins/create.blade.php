@@ -11,7 +11,9 @@
             <x-alert />
 
 
-            <form method="POST" action="{{ route('store', ['type' => 'admins']) }}" class="bg-white sm:p-2 text-xs">
+            <form method="POST" action="{{ route('store', ['type' => 'admins']) }}"
+                class="py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs">
+
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Nama -->

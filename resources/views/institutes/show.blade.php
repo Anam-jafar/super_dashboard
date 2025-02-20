@@ -10,7 +10,7 @@
             <x-page-header :title="'Edit Mosque'" :breadcrumbs="[['label' => 'Mosque', 'url' => 'javascript:void(0);'], ['label' => 'Edit Mosque']]" />
 
             <form method="POST" action="{{ route('update', ['type' => 'mosques', 'id' => $entity->id]) }}"
-                class="bg-white sm:p-2 text-xs h-full">
+                class="py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs">
                 @csrf
                 @method('PUT')
 

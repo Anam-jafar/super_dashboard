@@ -43,7 +43,7 @@
             </div>
             <!-- End::page-header -->
 
-            <div class="max-w-full mx-auto p-4 sm:p-6 bg-gray-100">
+            <div class="max-w-full mx-auto p-4 sm:p-6">
                 <div class="flex flex-wrap -mx-4">
                     <!-- Cards and Chart Container -->
                     <div class="w-full lg:flex lg:space-x-24">
@@ -53,7 +53,8 @@
                             <div class="bg-sky-500 rounded-lg p-6 text-white relative overflow-hidden">
                                 <div class="flex justify-between items-start">
                                     <div>
-                                        <h2 class="text-sm font-medium opacity-90 uppercase tracking-wide mb-2">
+                                        <h2
+                                            class="text-base !font-bold text-white opacity-90 uppercase tracking-wide mb-2 ">
                                             JUMLAH MASJID DALAM SELANGOR <!-- Access Title -->
                                         </h2>
                                         <p class="text-4xl font-bold">{{ $totalMosques }}</p> <!-- Access Value -->
@@ -71,7 +72,7 @@
                             <div class="bg-emerald-600 rounded-lg p-6 text-white relative overflow-hidden">
                                 <div class="flex justify-between items-start">
                                     <div>
-                                        <h2 class="text-sm font-medium opacity-90 uppercase tracking-wide mb-2">
+                                        <h2 class="text-base !font-bold text-white opacity-90 uppercase tracking-wide mb-2">
                                             JUMLAH KARIAH MASJID DALAM SELANGOR <!-- Access Title -->
                                         </h2>
                                         <p class="text-4xl font-bold">{{ $totalKariah }}</p> <!-- Access Value -->
@@ -90,7 +91,7 @@
                                 class="bg-orange-500 rounded-lg p-6 text-white relative overflow-hidden md:col-span-2 lg:col-span-2">
                                 <div class="flex justify-between items-start">
                                     <div>
-                                        <h2 class="text-sm font-medium opacity-90 uppercase tracking-wide mb-2">
+                                        <h2 class="text-base !font-bold text-white opacity-90 uppercase tracking-wide mb-2">
                                             JUMLAH STAFF MASJID DALAM SELANGOR <!-- Access Title -->
                                         </h2>
                                         <p class="text-4xl font-bold">{{ $totalStaff }}</p> <!-- Access Value -->
@@ -298,7 +299,7 @@
                                 {{-- Male Card --}}
                                 <div class="bg-sky-500 rounded-lg p-6 text-white flex-grow">
                                     <div class="flex items-center justify-between mb-4">
-                                        <h4 class="text-lg font-semibold">Ahli Kariah (Lelaki)</h4>
+                                        <h4 class="text-base !font-bold text-white">Ahli Kariah (Lelaki)</h4>
                                         <svg class="w-8 h-8 opacity-80" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -313,7 +314,7 @@
                                 {{-- Female Card --}}
                                 <div class="bg-pink-500 rounded-lg p-6 text-white flex-grow">
                                     <div class="flex items-center justify-between mb-4">
-                                        <h4 class="text-lg font-semibold">Ahli Kariah (Wanita)</h4>
+                                        <h4 class="text-base !font-bold text-white">Ahli Kariah (Wanita)</h4>
                                         <svg class="w-8 h-8 opacity-80" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

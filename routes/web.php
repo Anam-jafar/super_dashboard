@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MetrixController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\SubscriptionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -71,6 +71,11 @@ Route::prefix('mais')->group(function () {
 
             $registerCategoryRoutes('compensation', 'kaffarah');
             $registerCategoryRoutes('settings', 'fidyah');
+        });
+
+        Route::controller(SubscriptionController::class)->group(function () {
+            Route::get('/active-subscriptions', 'activeSubscriptions')->name('activeSubscriptions');
+
         });
 
     });

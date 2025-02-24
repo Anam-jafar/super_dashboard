@@ -1,108 +1,103 @@
-@extends('layouts.loginLayout')
+         <!DOCTYPE html>
+         <html lang="ms">
 
-@section('content')
-<div class="min-h-screen flex flex-col">
-    <!-- Main Content -->
-    <div class="flex-1 flex items-start justify-center p-6 sm:items-center">
-        <div class="w-full max-w-[1000px]">
-            <!-- Container for both panels -->
-            <div class="w-full sm:flex sm:bg-white sm:rounded-2xl sm:shadow-xl sm:overflow-hidden">
-                <!-- Left Panel (Hidden on mobile) -->
-                <div class="hidden sm:flex sm:flex-col sm:flex-1 sm:p-12 sm:justify-start sm:bg-gray-50">
-                    <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent">
-                        Awfa tech
-                    </h1>
-                    <p class="text-xl text-gray-600">Sign in to continue to Dashboard</p>
-                </div>
+         <head>
+             <meta charset="UTF-8">
+             <meta name="viewport" content="width=device-width, initial-scale=1.0">
+             <title>MAIS</title>
+             <script src="https://cdn.tailwindcss.com"></script>
+             <style>
+                 .bg-gradient-custom {
+                     background: linear-gradient(135deg, rgb(15, 24, 124) 0%, rgb(0, 5, 22) 100%);
+                 }
+             </style>
+         </head>
 
-                <!-- Right Panel -->
-                <div class="w-full sm:flex-1 sm:p-12">
-                    <!-- Mobile Only Logo -->
-                    <div class="sm:hidden space-y-4 mb-8">
-                        <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-900 to-blue-500 bg-clip-text text-transparent">
-                            Awfa tech
-                        </h1>
-                        <div>
-                            <h2 class="text-2xl font-normal">Sign in</h2>
-                            <p class="text-base text-gray-600 mt-1">to continue to Awfa tech Dashboard</p>
-                        </div>
-                    </div>
+         <body class="min-h-screen">
+             <div class="flex min-h-screen">
+                 <!-- Left side - hidden on mobile -->
+                 <div
+                     class="hidden md:flex md:w-8/12 bg-gradient-custom text-white flex-col items-center justify-center relative p-8">
+                     <div class="max-w-2xl mx-auto text-center space-y-8">
+                         <h2 class="text-2xl mb-4">Selamat Datang</h2>
+                         <h1 class="text-4xl font-bold leading-tight">
+                             Smart<br />
+                             Masjid Management<br />
+                             (MAIS)
+                         </h1>
 
-                    <!-- Desktop Only Title -->
-                    <div class="hidden sm:block mb-8">
-                        <h2 class="text-2xl font-normal">Sign in</h2>
-                    </div>
+                         <img src="{{ asset('assets/icons/fin_bars.svg') }}" alt="Financial Graph"
+                             class="w-[20rem] mx-auto my-8" />
 
-                    <!-- Login Form -->
-                    <form method="POST" action="{{ route('submit.login') }}" class="space-y-5">
-                        @csrf
-                        <div>
-                            <input 
-                                type="text" 
-                                name="ic" 
-                                id="ic"
-                                placeholder="Username or IC"
-                                required
-                                class="w-full px-3 py-3.5 text-base text-gray-900 border border-gray-300 rounded-md hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                        </div>
-                        
-                        <div>
-                            <input 
-                                type="password" 
-                                name="pass" 
-                                id="password"
-                                placeholder="Enter your password"
-                                required
-                                class="w-full px-3 py-3.5 text-base text-gray-900 border border-gray-300 rounded-md hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                        </div>
+                         <p class="text-xl">Pantau Laporan Kewangan Institusi Dengan Mudah</p>
 
-                        <div>
-                            <a href="#" class="text-sm text-blue-600 hover:text-blue-800">
-                                Forgot password?
-                            </a>
-                        </div>
-                        <p class="text-sm text-gray-500">Don't have an account? Contact admin to get an account.</p>
+                     </div>
+                 </div>
 
-                        <div class="flex justify-end pt-4">
-                            <button type="submit" class="min-w-[80px] px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                Login
-                            </button>
-                        </div>
-                    </form>
+                 <!-- Right side -->
+                 <div class="w-full md:w-4/12 p-8 flex flex-col">
+                     <div class="min-h-[85vh]">
+                         <div class="flex justify-center items-center mb-4">
+                             <label for="language" class="sr-only">Select Language</label>
+                             <select id="language" name="language"
+                                 class="w-28 p-1 text-gray-700 bg-gray-200 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-center"
+                                 onchange="location = this.value;">
+                                 <option value="?lang=bm">🇲🇾 BM</option>
+                                 <option value="?lang=en">🇬🇧 EN</option>
+                             </select>
+                         </div>
 
-                </div>
-            </div>
 
-            <!-- Desktop Footer -->
-            <footer class="hidden sm:flex w-full p-4 items-center justify-between text-sm text-gray-600">
-                <select class="bg-transparent border-none text-sm text-gray-600 focus:outline-none focus:ring-0">
-                    <option>English (United States)</option>
-                    <option>Español</option>
-                    <option>Français</option>
-                </select>
-                <div class="flex gap-8">
-                    <a href="#" class="hover:text-gray-900">Help</a>
-                    <a href="#" class="hover:text-gray-900">Privacy</a>
-                    <a href="#" class="hover:text-gray-900">Terms</a>
-                </div>
-            </footer>
-        </div>
-    </div>
+                         <div class="text-center text-blue-600 text-[1.125rem] font-medium mb-8">
+                             {{-- <span>{{ $arabicDateTime }}</span><br />
+                             <span>{{ $englishDateTime }}</span><br /> --}}
+                         </div>
+                         <div class="flex justify-center mb-8">
+                             <img src="{{ asset('assets/icons/fin_logo.svg') }}" alt="MAIS Logo"
+                                 class="h-[7.5rem] w-auto" />
+                         </div>
 
-    <!-- Mobile Footer -->
-    <footer class="sm:hidden w-full p-4 flex flex-wrap items-center justify-between text-sm text-gray-600 mt-auto">
-        <select class="bg-transparent border-none text-sm text-gray-600 focus:outline-none focus:ring-0">
-            <option>English (United States)</option>
-            <option>Español</option>
-            <option>Français</option>
-        </select>
-        <div class="flex gap-8">
-            <a href="#" class="hover:text-gray-900">Help</a>
-            <a href="#" class="hover:text-gray-900">Privacy</a>
-            <a href="#" class="hover:text-gray-900">Terms</a>
-        </div>
-    </footer>
-</div>
-@endsection
+
+                         <div class="max-w-sm mx-auto w-full">
+                             <h2 class="text-center text-[1rem] mb-8">Log Masuk</h2>
+                             <x-alert />
+                             <form class="space-y-4" action="{{ route('submit.login') }}" method="POST">
+                                 @csrf
+                                 <input type="text" placeholder="Masukkan IC" name='ic'
+                                     class="w-full h-[3rem] px-4 py-2 border !border-[#6E829F] rounded-lg !text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" />
+                                 <input type="password" placeholder="Masukkan Kata Laluan" name='pass'
+                                     class="w-full h-[3rem] px-4 py-2 border !border-[#6E829F] rounded-lg !text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" />
+
+                                 <div class="text-center">
+                                     {{-- <a href="{{ route('forgetPassword') }}" class="text-red-500 text-sm font-semibold">Lupa Kata --}}
+                                     <a href=# class="text-red-500 text-sm font-semibold">Lupa Kata
+                                         Laluan?</a>
+                                 </div>
+
+                                 <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                                     <button
+                                         class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                         type="submit">
+                                         Log Masuk
+                                     </button>
+                                 </div>
+                             </form>
+
+
+                         </div>
+                     </div>
+                     <div class="mt-8 text-center">
+                         <a href="{{ route('login') }}" class="text-[#5C67F7] flex items-center justify-center gap-2">
+                             {{-- <img src="{{ asset('assets/icons/fin_eos_admin.svg') }}" alt="Admin" class="w-18 h-18" /> --}}
+                             Log masuk sebagai pengguna </a>
+                     </div>
+
+                     <div class="mt-2 text-center text-sm text-gray-600 flex items-center justify-center gap-2">
+                         <img src="{{ asset('assets/icons/fin_logo_tiny.svg') }}" alt="Admin" class="w-18 h-18" />
+                         <span>Hakcipta terpelihara oleh Majlis Agama Islam Selangor (MAIS)</span>
+                     </div>
+                 </div>
+             </div>
+         </body>
+
+         </html>

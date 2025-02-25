@@ -177,10 +177,10 @@
                             <a href="javascript:void(0)">Langganan SPM</a>
                         </li>
                         <li class="slide">
-                            <a href="#" class="side-menu__item">Rekod Langganan</a>
+                            <a href="{{ route('requestSubscriptions') }}" class="side-menu__item">Rekod Langganan</a>
                         </li>
                         <li class="slide">
-                            <a href="#" class="side-menu__item">Rekod
+                            <a href="{{ route('outstandingSubscriptions') }}" class="side-menu__item">Rekod
                                 Tunggakan</a>
                         </li>
                         <li class="slide">

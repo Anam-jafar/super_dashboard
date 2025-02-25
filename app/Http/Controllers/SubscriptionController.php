@@ -13,8 +13,9 @@ class SubscriptionController extends Controller
     public function activeSubscriptions() 
     {
         $subscriptions = DB::table('client')
-            ->where('isActivated', 1)
+            ->whereNotIn('subscription_status', [0, 1]) // Exclude 0 and 1
             ->paginate(10);
+
 
         $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
 
@@ -25,10 +26,25 @@ class SubscriptionController extends Controller
     public function requestSubscriptions()
     {
         $subscriptions = DB::table('client')
-            ->where('opt1', 1)
+            ->where('subscription_status', 1) 
             ->paginate(10);
+
+        $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
+
         
-        return view('subscription.new_subscription_application', compact('subscriptions'));
+        return view('subscription.new_subscription_application', compact(['subscriptions', 'statuses']));
+    }
+
+    public function outstandingSubscriptions()
+    {
+        $subscriptions = DB::table('client')
+            ->where('subscription_status', 0) 
+            ->paginate(10);
+
+        $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
+
+        
+        return view('subscription.outstanding_list', compact(['subscriptions', 'statuses']));
     }
 
 

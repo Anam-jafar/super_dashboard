@@ -4,7 +4,10 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senarai Pentadbir'" :breadcrumbs="[['label' => 'Pentadbir', 'url' => 'javascript:void(0);'], ['label' => 'Senarai Pentadbir']]" />
+            <x-page-header :title="'Senarai Pengguna Aktif Sistem Pengurusan Masjid'" :breadcrumbs="[
+                ['label' => 'Langganan SPM', 'url' => 'javascript:void(0);'],
+                ['label' => 'Rekod Pengguna Aktif'],
+            ]" />
             <x-alert />
             <div class="py-8 px-4 rounded-lg shadow bg-white">
 

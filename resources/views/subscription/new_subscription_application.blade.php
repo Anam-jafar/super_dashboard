@@ -26,8 +26,8 @@
                 @foreach ($subscriptions as $index => $subscription)
                     <!-- First Modal - with dropdown directly integrated -->
                     <div id="modal-{{ $index }}"
-                        class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
-                        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50 z-[90]"></div>
+                        class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-[9999]">
+                        <div class="modal-overlay fixed inset-0 w-screen h-screen bg-gray-900 opacity-50"></div>
                         <div
                             class="modal-container bg-white w-11/12 md:max-w-xl mx-auto !rounded-lg shadow-lg z-[100] overflow-y-auto">
                             <div class="modal-content py-4 text-left px-6">
@@ -94,8 +94,8 @@
 
                     <!-- Second Modal - Success (renamed from modal-second to just modal-second) -->
                     <div id="modal-second-{{ $index }}"
-                        class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
-                        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50 z-[90]"></div>
+                        class="modal opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-[9999]">
+                        <div class="modal-overlay fixed inset-0 w-screen h-screen bg-gray-900 opacity-50"></div>
                         <div
                             class="modal-container bg-white w-11/12 md:max-w-xl mx-auto !rounded-lg shadow-lg z-[100] overflow-y-auto">
                             <div class="modal-content py-4 text-left px-6">

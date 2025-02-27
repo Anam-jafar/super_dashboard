@@ -31,16 +31,8 @@
                     <!-- Dynamic Data Columns -->
                     @foreach ($columns as $column)
                         <td class="px-2 py-2 whitespace-nowrap text-xs text-black break-words">
-                            @if ($column === 'sta')
-                                {{ $statuses->firstWhere('val', $row->$column)?->prm ?? 'Unknown' }}
-                            @elseif ($column === 'status')
-                                {{ $statuses->firstWhere('val', $row->$column)?->prm ?? 'Unknown' }}
-                            @elseif($column === 'is_active')
-                                @if ($row->$column)
-                                    <span class="text-green-600 font-bold">Active</span>
-                                @else
-                                    <span class="text-gray-600">Inactive</span>
-                                @endif
+                            @if (in_array($column, ['sta', 'status', 'subscription_status']))
+                                <x-status-badge :column="$column" :value="$row->$column" />
                             @else
                                 {{ $row->$column ?? '--' }}
                             @endif

@@ -7,6 +7,26 @@ use Illuminate\Support\Facades\DB;
 
 class EntityController extends Controller
 {
+
+    /*
+     mosque types
+     SELECT * FROM `type` WHERE grp="type_CLIENT";
+
+     user status
+     SELECT * FROM `type` WHERE grp="clientstatus";
+
+     States
+     SELECT * FROM `type` WHERE grp="state";
+
+     Areas
+     SELECT * FROM `type` WHERE grp="clientcate1";
+
+     Syslevels
+     SELECT * FROM `type` WHERE grp="syslevel";
+
+    */
+
+
     private const FILTER_MAPPINGS = [
         'mosques' => [
             'status' => 'sta',
@@ -177,7 +197,7 @@ class EntityController extends Controller
             }
         }
 
-        return $query->paginate($request->get('per_page', 25))->withQueryString();
+        return $query->paginate($request->get('per_page', 10))->withQueryString();
     }
 
     private function getDefaultValues(string $entityType)

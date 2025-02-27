@@ -177,7 +177,8 @@
                             <a href="javascript:void(0)">Langganan SPM</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('requestSubscriptions') }}" class="side-menu__item">Rekod Langganan</a>
+                            <a href="{{ route('requestSubscriptions') }}" class="side-menu__item">Permohonan
+                                Baharu</a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('outstandingSubscriptions') }}" class="side-menu__item">Rekod

@@ -20,7 +20,7 @@
                 ]" :route="route('requestSubscriptions')" />
 
                 <x-table :headers="['Nama', 'Jenis Institusi', 'Daerah', 'Tarikh Mohon', 'Status']" :columns="['name', 'cate', 'cate1', 'rem6', 'subscription_status']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
-                    extraRoute="'true'" />
+                    popupTriggerButton="'true'" />
 
                 <!-- For each subscription, you'll need just two modals instead of three -->
                 @foreach ($subscriptions as $index => $subscription)

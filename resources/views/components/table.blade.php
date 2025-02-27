@@ -1,5 +1,5 @@
 <div class="overflow-auto sm:p-2">
-    <table class="min-w-full divide-y divide-gray-200 mt-4 border-separate border-spacing-y-4"
+    <table class="min-w-full min-h-[50vh] divide-y divide-gray-200 mt-4 border-separate border-spacing-y-4"
         style="table-layout: fixed;">
         <thead>
             <tr class="border-b border-defaultborder">
@@ -13,7 +13,7 @@
                         {{ $header }}
                     </th>
                 @endforeach
-                @if ($route || $extraRoute)
+                @if ($route || $extraRoute || $popupTriggerButton)
                     <th scope="col" class="px-2 py-1 text-left text-xs font-medium text-center"
                         style="color: #2624D0 !important; font-weight: bold !important;">
                         Actions
@@ -40,22 +40,9 @@
                     @endforeach
 
                     <!-- Actions Column -->
-                    <td class="px-2 py-2 whitespace-nowrap text-xs text-black text-center">
 
-                        @if ($extraRoute)
-                            <a onclick="openModal('modal-{{ $key }}')"
-                                class="text-green-600 hover:text-green-800 ml-2" title="Edit">
-                                <i class="fe fe-eye text-lg"></i>
-                            </a>
-                        @endif
-
-                        @if ($route)
-                            <a href="{{ route($route, ['type' => $routeType, 'id' => $row->$id]) }}"
-                                class="text-blue-500 hover:underline">
-                                <i class="fe fe-edit"></i>
-                            </a>
-                        @endif
-                    </td>
+                    <x-action-buttons :route="$route" :extraRoute="$extraRoute" :routeType="$routeType" :id="$row->$id"
+                        :key="$key" :popupTriggerButton="$popupTriggerButton" :popupTriggerButtonIcon="$popupTriggerButtonIcon" />
 
                 </tr>
             @empty

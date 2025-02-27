@@ -80,6 +80,16 @@ class SubscriptionController extends Controller
         return view('subscription.outstanding_list', compact(['subscriptions', 'statuses']));
     }
 
+    public function subscriptionFeeAdd(Request $request)
+    {
+        $subscriptionId = $request->input('subscriptionId');
+        $amount = $request->input('amount');
+
+        // Process the subscription fee addition here
+        // You might want to update the subscription record or create a new record for the fee
+
+        return response()->json(['success' => true, 'message' => 'Subscription fee added successfully']);
+    }
 
 
 }

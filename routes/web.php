@@ -77,6 +77,7 @@ Route::prefix('mais')->group(function () {
             Route::get('/active-subscriptions', 'activeSubscriptions')->name('activeSubscriptions');
             Route::get('/request-subscriptions', 'requestSubscriptions')->name('requestSubscriptions');
             Route::get('/outstanding-subscriptions', 'outstandingSubscriptions')->name('outstandingSubscriptions');
+            Route::post('/subscription-fee-add', 'subscriptionFeeAdd')->name('subscriptionFeeAdd');
 
         });
 

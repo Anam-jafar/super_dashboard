@@ -22,13 +22,14 @@
                 <x-table :headers="['Nama', 'Jenis Institusi', 'Daerah', 'Tarikh Mohon', 'Status']" :columns="['name', 'cate', 'cate1', 'rem6', 'subscription_status']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
                     extraRoute="'true'" />
 
+                <!-- For each subscription, you'll need just two modals instead of three -->
                 @foreach ($subscriptions as $index => $subscription)
-                    <!-- First Modal - Initial Application -->
+                    <!-- First Modal - with dropdown directly integrated -->
                     <div id="modal-{{ $index }}"
                         class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
                         <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50 z-[90]"></div>
                         <div
-                            class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-[100] overflow-y-auto">
+                            class="modal-container bg-white w-11/12 md:max-w-xl mx-auto !rounded-lg shadow-lg z-[100] overflow-y-auto">
                             <div class="modal-content py-4 text-left px-6">
                                 <!-- Header -->
                                 <div class="bg-blue-600 -mx-6 -mt-4 py-3 px-6 mb-4">
@@ -36,57 +37,7 @@
                                 </div>
 
                                 <!-- Content -->
-                                <div class="text-center mb-6">
-                                    <h4 class="font-bold text-lg">{{ $subscription->name }}</h4>
-                                    <p class="font-bold">{{ $subscription->cate1 }}</p>
-
-                                    <div class="mt-4">
-                                        <p>Penyata Pendapatan {{ $subscription->rem6 }}:</p>
-                                        <p class="text-blue-600 font-bold text-xl">
-                                            RM{{ number_format($subscription->rem3, 2) }}</p>
-                                    </div>
-
-                                    <div class="mt-4 text-left">
-                                        <p>Kos Langganan:</p>
-                                        <div class="relative mt-2">
-                                            <div class="flex items-center border rounded-md p-2 cursor-pointer"
-                                                id="dropdown-trigger-{{ $subscription->id }}">
-                                                <span id="selected-price-{{ $subscription->id }}">RM 1,200.00</span>
-                                                <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 9l-7 7-7-7"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Footer -->
-                                <div class="mt-6">
-                                    <button id="generate-invoice-btn-{{ $subscription->id }}"
-                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline">
-                                        JANA INVOIS
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Second Modal - Price Selection -->
-                    <div id="modal-second-{{ $index }}"
-                        class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
-                        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50 z-[90]"></div>
-                        <div
-                            class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-[100] overflow-y-auto">
-                            <div class="modal-content py-4 text-left px-6">
-                                <!-- Header -->
-                                <div class="bg-blue-600 -mx-6 -mt-4 py-3 px-6 mb-4">
-                                    <h3 class="text-white text-xl font-medium text-center">Permohonan Baru</h3>
-                                </div>
-
-                                <!-- Content -->
-                                <div class="text-center mb-6">
+                                <div class="text-center mt-4 mb-6">
                                     <h4 class="font-bold text-lg">{{ $subscription->name }}</h4>
                                     <p class="font-bold">{{ $subscription->cate1 }}</p>
 
@@ -99,10 +50,10 @@
                                     <div class="mt-4 text-left">
                                         <p>Kos Langganan:</p>
                                         <div class="mt-2">
-                                            <!-- Dropdown display when closed -->
+                                            <!-- Dropdown display -->
                                             <div id="dropdown-display-{{ $subscription->id }}"
                                                 class="flex items-center border rounded-md p-2 cursor-pointer mb-2">
-                                                <span id="second-modal-price-{{ $subscription->id }}">RM 1,200.00</span>
+                                                <span id="selected-price-{{ $subscription->id }}">RM 1,200.00</span>
                                                 <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -131,9 +82,9 @@
                                 </div>
 
                                 <!-- Footer -->
-                                <div class="mt-6">
-                                    <button id="confirm-price-btn-{{ $subscription->id }}"
-                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline">
+                                <div class="mt-8 mb-4">
+                                    <button id="generate-invoice-btn-{{ $subscription->id }}"
+                                        class="w-full h-[3rem] bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 !rounded-lg focus:outline-none focus:shadow-outline">
                                         JANA INVOIS
                                     </button>
                                 </div>
@@ -141,12 +92,12 @@
                         </div>
                     </div>
 
-                    <!-- Third Modal - Success -->
-                    <div id="modal-third-{{ $index }}"
+                    <!-- Second Modal - Success (renamed from modal-second to just modal-second) -->
+                    <div id="modal-second-{{ $index }}"
                         class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
                         <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50 z-[90]"></div>
                         <div
-                            class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-[100] overflow-y-auto">
+                            class="modal-container bg-white w-11/12 md:max-w-xl mx-auto !rounded-lg shadow-lg z-[100] overflow-y-auto">
                             <div class="modal-content py-4 text-left px-6">
                                 <!-- Header -->
                                 <div class="bg-green-500 -mx-6 -mt-4 py-3 px-6 mb-4">
@@ -154,7 +105,7 @@
                                 </div>
 
                                 <!-- Content -->
-                                <div class="text-center mb-6">
+                                <div class="text-center mb-6 mt-4">
                                     <p class="mb-4">Invois telah berjaya dijana<br>dan notifikasi email @ whatsapp telah
                                         dihantar<br>ke institusi masjid</p>
 
@@ -168,10 +119,10 @@
                                 </div>
 
                                 <!-- Footer -->
-                                <div class="mt-6">
+                                <div class="mt-8 mb-4">
                                     <button id="complete-btn-{{ $index }}"
                                         data-subscription-id="{{ $subscription->id }}"
-                                        class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline">
+                                        class="w-full h-[3rem] bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 !rounded-lg focus:outline-none focus:shadow-outline">
                                         SELESAI
                                     </button>
                                 </div>
@@ -256,14 +207,16 @@
                 if (dropdownTrigger) {
                     dropdownTrigger.addEventListener('click', function() {
                         console.log('Dropdown trigger clicked');
-                        closeModal(`modal-${index}`);
-                        openModal(`modal-second-${index}`);
+                        // Now just directly update the price in the dropdown
+                        const selectedPriceElement = document.getElementById(
+                            `selected-price-${subscriptionId}`);
+                        if (selectedPriceElement) selectedPriceElement.textContent = selectedPrice;
                     });
                 } else {
                     console.error(`Dropdown trigger not found for subscription ID ${subscriptionId}`);
                 }
 
-                // Second modal dropdown display
+                // First modal price options setup
                 const dropdownDisplay = document.getElementById(`dropdown-display-${subscriptionId}`);
                 const dropdownOptions = document.getElementById(`dropdown-options-${subscriptionId}`);
 
@@ -276,7 +229,7 @@
                     console.error(`Dropdown display or options not found for subscription ID ${subscriptionId}`);
                 }
 
-                // Second modal price options
+                // First modal price options selection
                 const priceOptions = document.querySelectorAll(`#dropdown-options-${subscriptionId} .price-option`);
                 priceOptions.forEach(option => {
                     option.addEventListener('click', function() {
@@ -286,34 +239,16 @@
                         // Update price in all modals
                         const selectedPriceElement = document.getElementById(
                             `selected-price-${subscriptionId}`);
-                        const secondModalPriceElement = document.getElementById(
-                            `second-modal-price-${subscriptionId}`);
                         const finalPriceElement = document.getElementById(
                             `final-price-${subscriptionId}`);
 
                         if (selectedPriceElement) selectedPriceElement.textContent = selectedPrice;
-                        if (secondModalPriceElement) secondModalPriceElement.textContent =
-                            selectedPrice;
                         if (finalPriceElement) finalPriceElement.textContent = selectedPrice;
 
                         // Hide dropdown options after selection
                         if (dropdownOptions) dropdownOptions.classList.add('hidden');
                     });
                 });
-
-                // Second modal confirm button
-                const confirmPriceBtn = document.getElementById(`confirm-price-btn-${subscriptionId}`);
-                if (confirmPriceBtn) {
-                    confirmPriceBtn.addEventListener('click', function() {
-                        console.log('Confirm price button clicked');
-                        closeModal(`modal-second-${index}`);
-                        const finalPriceElement = document.getElementById(`final-price-${subscriptionId}`);
-                        if (finalPriceElement) finalPriceElement.textContent = selectedPrice;
-                        openModal(`modal-third-${index}`);
-                    });
-                } else {
-                    console.error(`Confirm price button not found for subscription ID ${subscriptionId}`);
-                }
 
                 // First modal generate invoice button
                 const generateInvoiceBtn = document.getElementById(`generate-invoice-btn-${subscriptionId}`);
@@ -323,7 +258,7 @@
                         closeModal(`modal-${index}`);
                         const finalPriceElement = document.getElementById(`final-price-${subscriptionId}`);
                         if (finalPriceElement) finalPriceElement.textContent = selectedPrice;
-                        openModal(`modal-third-${index}`);
+                        openModal(`modal-second-${index}`);
                     });
                 } else {
                     console.error(`Generate invoice button not found for subscription ID ${subscriptionId}`);
@@ -334,26 +269,30 @@
                 if (completeBtn) {
                     completeBtn.addEventListener('click', function() {
                         console.log('Complete button clicked');
-                        // Get the subscription ID from the data attribute
-                        const subscriptionId = this.getAttribute('data-subscription-id');
 
+                        // Get the subscription ID from the data attribute
+                        const subscriptionId = document.querySelector(`#complete-btn-${index}`)
+                            .getAttribute(
+                                'data-subscription-id');
+                        {{-- console.log('Subscription ID:', subscriptionId);
+                        console.log('Selected price:', selectedPrice); --}}
                         // Send the amount to the backend function
-                        fetch('/subscription-fee-add', {
+                        fetch('subscription-fee-add', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                        .getAttribute('content')
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+
                                 },
                                 body: JSON.stringify({
-                                    subscriptionId: subscriptionId,
+                                    subscriptionId: "502",
                                     amount: selectedPrice.replace('RM ', '')
                                 })
                             })
                             .then(response => response.json())
                             .then(data => {
                                 console.log('Success:', data);
-                                closeModal(`modal-third-${index}`);
+                                closeModal(`modal-second-${index}`);
                                 // You might want to update the UI or show a success message here
                             })
                             .catch((error) => {

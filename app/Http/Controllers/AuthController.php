@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Carbon\Carbon;
+
 
 
 class AuthController extends Controller
@@ -13,7 +15,16 @@ class AuthController extends Controller
 
     public function showLoginForm()
     {
-        return view('auth.login');
+                // Set the timezone to Kuala Lumpur
+        $currentDateTime = Carbon::now('Asia/Kuala_Lumpur');
+
+        // Set Arabic locale and format the date in Arabic numerals
+        $arabicDateTime = $currentDateTime->locale('ar')->isoFormat('D MMMM YYYY / HH:mm:ss');
+
+        // Set English locale
+        $englishDateTime = $currentDateTime->locale('en')->isoFormat('D MMMM YYYY / HH:mm:ss');
+
+        return view('auth.login', compact('arabicDateTime', 'englishDateTime'));
     }
 
     public function login(Request $request)

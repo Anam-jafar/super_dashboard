@@ -26,7 +26,7 @@ class Table extends Component
      * @param  string|null $route
      * @return void
      */
-    public function __construct($headers, $rows, $columns, $statuses = null, $route = null, $routeType = null, $id = null, $extraRoute = null, $popupTriggerButton = false, $popupTriggerButtonIcon = 'check-circle')  
+    public function __construct($headers, $rows, $columns, $statuses = null, $route = null, $routeType = null, $id = null, $extraRoute = null, $popupTriggerButton = false, $popupTriggerButtonIcon = 'edit')  
     {
         $this->headers = $headers;
         $this->rows = $rows;
@@ -37,7 +37,7 @@ class Table extends Component
         $this->id = $id;    
         $this->extraRoute = $extraRoute;
 
-        
+
         $this->popupTriggerButton = $popupTriggerButton;
         $this->popupTriggerButtonIcon = $popupTriggerButtonIcon;
     }

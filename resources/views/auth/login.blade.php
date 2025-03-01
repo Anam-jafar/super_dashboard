@@ -49,8 +49,8 @@
 
 
                          <div class="text-center text-blue-600 text-[1.125rem] font-medium mb-8">
-                             {{-- <span>{{ $arabicDateTime }}</span><br />
-                             <span>{{ $englishDateTime }}</span><br /> --}}
+                             <span>{{ $arabicDateTime }}</span><br />
+                             <span>{{ $englishDateTime }}</span><br />
                          </div>
                          <div class="flex justify-center mb-8">
                              <img src="{{ asset('assets/icons/fin_logo.svg') }}" alt="MAIS Logo"
@@ -59,7 +59,7 @@
 
 
                          <div class="max-w-sm mx-auto w-full">
-                             <h2 class="text-center text-[1rem] mb-8">Log Masuk</h2>
+                             <h2 class="text-center text-[1rem] font-bold mb-8">Log Masuk</h2>
                              <x-alert />
                              <form class="space-y-4" action="{{ route('submit.login') }}" method="POST">
                                  @csrf

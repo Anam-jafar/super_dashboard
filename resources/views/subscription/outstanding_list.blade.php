@@ -8,10 +8,18 @@
             <div class="py-8 px-4 rounded-lg shadow bg-white">
 
                 <x-filter-card :filters="[
+                    [
+                        'name' => 'institute_type',
+                        'label' => 'Institusi',
+                        'type' => 'select',
+                        'options' => $instituteType,
+                    ],
+                    ['name' => 'area', 'label' => 'Daerah', 'type' => 'select', 'options' => $daerah],
+                
                     ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
-                ]" :route="route('activeSubscriptions')" />
+                ]" :route="route('outstandingSubscriptions')" />
 
-                <x-table :headers="['Nama', 'Status', 'In Charge', 'HP', 'Emel']" :columns="['name', 'sta', 'con1', 'hp', 'mel']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
+                <x-table :headers="['Institusi', 'Nama Institusi', 'Daerah', 'Jumlah (RM)', 'Status']" :columns="['etc', 'name', 'cate1', 'amount', 'subscription_status']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
                     route="edit" routeType="subscriptions" />
 
                 <x-pagination :items="$subscriptions" label="Admin" />

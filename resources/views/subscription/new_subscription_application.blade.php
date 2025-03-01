@@ -4,22 +4,27 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Rekod Langganan'" :breadcrumbs="[['label' => 'Langganan SPM', 'url' => 'javascript:void(0);'], ['label' => 'Rekod Langganan']]" />
-            <x-alert />
+            <x-page-header :title="'Senarai Permohonan Langganan Baharu'" :breadcrumbs="[['label' => 'Langganan SPM', 'url' => 'javascript:void(0);'], ['label' => 'Permohonan Baharu']]" />
+            @if (session('success'))
+                <div class="bg-green-100 text-green-800 p-3 rounded-lg mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="py-8 px-4 rounded-lg shadow bg-white">
 
                 <x-filter-card :filters="[
-                    ['name' => 'area', 'label' => 'Daerah', 'type' => 'select', 'options' => $daerah],
                     [
                         'name' => 'institute_type',
-                        'label' => 'Jenis Institusi',
+                        'label' => 'Institusi',
                         'type' => 'select',
                         'options' => $instituteType,
                     ],
+                    ['name' => 'area', 'label' => 'Daerah', 'type' => 'select', 'options' => $daerah],
+                
                     ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
                 ]" :route="route('requestSubscriptions')" />
 
-                <x-table :headers="['Nama', 'Jenis Institusi', 'Daerah', 'Tarikh Mohon', 'Status']" :columns="['name', 'cate', 'cate1', 'rem6', 'subscription_status']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
+                <x-table :headers="['Tarikh Mohon', 'Institusi', 'Nama Institusi', 'Daerah', 'Status']" :columns="['rem6', 'etc', 'name', 'cate1', 'subscription_status']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
                     popupTriggerButton="'true'" />
 
                 <!-- For each subscription, you'll need just two modals instead of three -->
@@ -32,8 +37,9 @@
                             class="modal-container bg-white w-11/12 md:max-w-xl mx-auto !rounded-lg shadow-lg z-[100] overflow-y-auto">
                             <div class="modal-content py-4 text-left px-6">
                                 <!-- Header -->
-                                <div class="bg-blue-600 -mx-6 -mt-4 py-3 px-6 mb-4">
-                                    <h3 class="text-white text-xl font-medium text-center">Permohonan Baru</h3>
+                                <div class="bg-[#202947] -mx-6 -mt-4 py-3 px-6 mb-4">
+                                    <h3 class="text-white text-xxl !font-semibold text-center mt-3 mb-3">Permohonan Baru
+                                    </h3>
                                 </div>
 
                                 <!-- Content -->
@@ -42,9 +48,13 @@
                                     <p class="font-bold">{{ $subscription->cate1 }}</p>
 
                                     <div class="mt-4">
-                                        <p>Penyata Pendapatan {{ $subscription->rem6 }}:</p>
+                                        {{-- <p>Penyata Pendapatan {{ $subscription->rem6 }}:</p> --}}
+                                        <p class="text-lg">Penyata Pendapatan 2024 :</p>
+
                                         <p class="text-blue-600 font-bold text-xl">
-                                            RM{{ number_format($subscription->rem3, 2) }}</p>
+                                            {{-- RM{{ number_format($subscription->rem3, 2) }}</p> --}}
+                                            RM 80,765.90</p>
+
                                     </div>
 
                                     <div class="mt-4 text-left">
@@ -52,8 +62,9 @@
                                         <div class="mt-2">
                                             <!-- Dropdown display -->
                                             <div id="dropdown-display-{{ $subscription->id }}"
-                                                class="flex items-center border rounded-md p-2 cursor-pointer mb-2">
-                                                <span id="selected-price-{{ $subscription->id }}">RM 1,200.00</span>
+                                                class="flex items-center border rounded-md p-2 cursor-pointer mb-2 h-[3rem]">
+                                                <span id="selected-price-{{ $subscription->id }}" data-package-id="7">RM
+                                                    1,200.00</span>
                                                 <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -64,18 +75,13 @@
                                             <!-- Dropdown options (initially hidden) -->
                                             <div id="dropdown-options-{{ $subscription->id }}"
                                                 class="border rounded-md p-4 hidden">
-                                                <div class="price-option py-2 cursor-pointer hover:bg-gray-100"
-                                                    data-price="RM 1,200.00">
-                                                    RM 1,200.00
-                                                </div>
-                                                <div class="price-option py-2 cursor-pointer hover:bg-gray-100"
-                                                    data-price="RM 900.00">
-                                                    RM 900.00
-                                                </div>
-                                                <div class="price-option py-2 cursor-pointer hover:bg-gray-100"
-                                                    data-price="RM 0.00">
-                                                    RM 0.00
-                                                </div>
+                                                @foreach ($packages as $id => $amount)
+                                                    <div class="price-option py-2 cursor-pointer hover:bg-gray-100"
+                                                        data-price="RM {{ number_format((float) $amount, 2) }}"
+                                                        data-package-id="{{ $id }}">
+                                                        RM {{ number_format((float) $amount, 2) }}
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>
@@ -84,7 +90,7 @@
                                 <!-- Footer -->
                                 <div class="mt-8 mb-4">
                                     <button id="generate-invoice-btn-{{ $subscription->id }}"
-                                        class="w-full h-[3rem] bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 !rounded-lg focus:outline-none focus:shadow-outline">
+                                        class="w-full h-[3rem] bg-[#202947] hover:bg-indigo-900 text-white font-bold py-3 px-4 !rounded-lg focus:outline-none focus:shadow-outline">
                                         JANA INVOIS
                                     </button>
                                 </div>
@@ -101,7 +107,8 @@
                             <div class="modal-content py-4 text-left px-6">
                                 <!-- Header -->
                                 <div class="bg-green-500 -mx-6 -mt-4 py-3 px-6 mb-4">
-                                    <h3 class="text-white text-xl font-medium text-center">Invois Berjaya Dijana</h3>
+                                    <h3 class="text-white text-xxl !font-semibold text-center mt-3 mb-3">Invois Berjaya
+                                        Dijana</h3>
                                 </div>
 
                                 <!-- Content -->
@@ -113,8 +120,8 @@
 
                                     <div class="mt-4">
                                         <p>Kos Langganan:</p>
-                                        <p class="text-blue-600 font-bold text-xl"
-                                            id="final-price-{{ $subscription->id }}">RM 1,200.00</p>
+                                        <p class="text-blue-600 font-bold text-xl" id="final-price-{{ $subscription->id }}"
+                                            data-package-id="7">RM 1,200.00</p>
                                     </div>
                                 </div>
 
@@ -147,10 +154,7 @@
                 modal.classList.remove('opacity-0', 'pointer-events-none');
                 modal.classList.add('opacity-100');
                 document.body.classList.add('modal-active');
-                console.log('Modal opened successfully:', modalId);
-            } else {
-                console.error(`Modal with id ${modalId} not found`);
-            }
+            } else {}
         }
 
         function closeModal(modalId) {
@@ -160,18 +164,23 @@
                 modal.classList.remove('opacity-100');
                 modal.classList.add('opacity-0', 'pointer-events-none');
                 document.body.classList.remove('modal-active');
-                console.log('Modal closed successfully:', modalId);
-            } else {
-                console.error(`Modal with id ${modalId} not found`);
-            }
+            } else {}
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM fully loaded and parsed');
+            let successMessage = sessionStorage.getItem('successMessage');
+            if (successMessage) {
+                let messageBox = document.createElement('div');
+                messageBox.className = "bg-green-100 text-green-800 p-3 rounded-lg mb-4";
+                messageBox.innerText = successMessage;
 
+                document.body.prepend(messageBox);
+
+                // Clear message from sessionStorage
+                sessionStorage.removeItem('successMessage');
+            }
             // Get all the "View" buttons
             const viewButtons = document.querySelectorAll('a[onclick^="openModal"]');
-            console.log('Found view buttons:', viewButtons.length);
 
             viewButtons.forEach((button) => {
                 // Extract the modal ID from the onclick attribute
@@ -180,11 +189,9 @@
                 if (!match) return;
 
                 const modalId = match[1];
-                console.log('Extracted modal ID:', modalId);
 
                 // Extract the index from the modal ID
                 const index = modalId.split('-')[1];
-                console.log('Extracted index:', index);
 
                 button.addEventListener('click', function(event) {
                     event.preventDefault();
@@ -199,6 +206,7 @@
             function setupModalListeners(index) {
                 console.log('Setting up listeners for index:', index);
                 let selectedPrice = "RM 1,200.00";
+                let selectedPackageId = "7"; // Default package ID
                 const subscriptionId = document.querySelector(`#complete-btn-${index}`).getAttribute(
                     'data-subscription-id');
 
@@ -210,11 +218,12 @@
                         // Now just directly update the price in the dropdown
                         const selectedPriceElement = document.getElementById(
                             `selected-price-${subscriptionId}`);
-                        if (selectedPriceElement) selectedPriceElement.textContent = selectedPrice;
+                        if (selectedPriceElement) {
+                            selectedPriceElement.textContent = selectedPrice;
+                            selectedPriceElement.setAttribute('data-package-id', selectedPackageId);
+                        }
                     });
-                } else {
-                    console.error(`Dropdown trigger not found for subscription ID ${subscriptionId}`);
-                }
+                } else {}
 
                 // First modal price options setup
                 const dropdownDisplay = document.getElementById(`dropdown-display-${subscriptionId}`);
@@ -222,19 +231,17 @@
 
                 if (dropdownDisplay && dropdownOptions) {
                     dropdownDisplay.addEventListener('click', function() {
-                        console.log('Toggling dropdown options');
                         dropdownOptions.classList.toggle('hidden');
                     });
-                } else {
-                    console.error(`Dropdown display or options not found for subscription ID ${subscriptionId}`);
-                }
+                } else {}
 
                 // First modal price options selection
                 const priceOptions = document.querySelectorAll(`#dropdown-options-${subscriptionId} .price-option`);
                 priceOptions.forEach(option => {
                     option.addEventListener('click', function() {
                         selectedPrice = this.getAttribute('data-price');
-                        console.log('Price selected:', selectedPrice);
+                        selectedPackageId = this.getAttribute('data-package-id');
+
 
                         // Update price in all modals
                         const selectedPriceElement = document.getElementById(
@@ -242,66 +249,78 @@
                         const finalPriceElement = document.getElementById(
                             `final-price-${subscriptionId}`);
 
-                        if (selectedPriceElement) selectedPriceElement.textContent = selectedPrice;
-                        if (finalPriceElement) finalPriceElement.textContent = selectedPrice;
+                        if (selectedPriceElement) {
+                            selectedPriceElement.textContent = selectedPrice;
+                            selectedPriceElement.setAttribute('data-package-id', selectedPackageId);
+                        }
+                        if (finalPriceElement) {
+                            finalPriceElement.textContent = selectedPrice;
+                            finalPriceElement.setAttribute('data-package-id', selectedPackageId);
+                        }
 
                         // Hide dropdown options after selection
                         if (dropdownOptions) dropdownOptions.classList.add('hidden');
                     });
                 });
-
                 // First modal generate invoice button
                 const generateInvoiceBtn = document.getElementById(`generate-invoice-btn-${subscriptionId}`);
                 if (generateInvoiceBtn) {
                     generateInvoiceBtn.addEventListener('click', function() {
-                        console.log('Generate invoice button clicked');
-                        closeModal(`modal-${index}`);
-                        const finalPriceElement = document.getElementById(`final-price-${subscriptionId}`);
-                        if (finalPriceElement) finalPriceElement.textContent = selectedPrice;
-                        openModal(`modal-second-${index}`);
-                    });
-                } else {
-                    console.error(`Generate invoice button not found for subscription ID ${subscriptionId}`);
-                }
-
-                // Third modal complete button
-                const completeBtn = document.getElementById(`complete-btn-${index}`);
-                if (completeBtn) {
-                    completeBtn.addEventListener('click', function() {
-                        console.log('Complete button clicked');
-
                         // Get the subscription ID from the data attribute
-                        const subscriptionId = document.querySelector(`#complete-btn-${index}`)
-                            .getAttribute(
-                                'data-subscription-id');
-                        {{-- console.log('Subscription ID:', subscriptionId);
-                        console.log('Selected price:', selectedPrice); --}}
-                        // Send the amount to the backend function
+                        const completeBtn = document.getElementById(`complete-btn-${index}`);
+                        const subscriptionId = completeBtn.getAttribute('data-subscription-id');
+
+                        // Get the package ID from the selected price element
+                        const selectedPriceElement = document.getElementById(
+                            `selected-price-${subscriptionId}`);
+                        const packageId = selectedPriceElement.getAttribute('data-package-id');
+
+                        // Send the package ID to the backend function
                         fetch('subscription-fee-add', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
                                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
-
                                 },
                                 body: JSON.stringify({
-                                    subscriptionId: "502",
-                                    amount: selectedPrice.replace('RM ', '')
+                                    subscriptionId: subscriptionId,
+                                    packageId: packageId
                                 })
                             })
                             .then(response => response.json())
                             .then(data => {
-                                console.log('Success:', data);
-                                closeModal(`modal-second-${index}`);
-                                // You might want to update the UI or show a success message here
+                                // Update the final price in the success modal
+                                const finalPriceElement = document.getElementById(
+                                    `final-price-${subscriptionId}`);
+                                if (finalPriceElement) {
+                                    finalPriceElement.textContent = selectedPriceElement.textContent;
+                                    finalPriceElement.setAttribute('data-package-id', packageId);
+                                }
+
+                                // Close the first modal and open the success modal
+                                closeModal(`modal-${index}`);
+                                openModal(`modal-second-${index}`);
                             })
                             .catch((error) => {
-                                console.error('Error:', error);
                                 // Handle any errors here
+                                console.error('Error:', error);
                             });
                     });
                 } else {
-                    console.error(`Complete button not found for index ${index}`);
+                    console.log(`Generate invoice button not found for subscription ${subscriptionId}`);
+                }
+
+                // Second modal complete button
+                const completeBtn = document.getElementById(`complete-btn-${index}`);
+                if (completeBtn) {
+                    completeBtn.addEventListener('click', function() {
+                        closeModal(`modal-second-${index}`);
+                        setTimeout(() => {
+                            location.reload(); // Reload the page after closing the modal
+                        }, 300); // Add a small delay to ensure smooth UI transition
+                    });
+                } else {
+                    console.log(`Complete button not found for index ${index}`);
                 }
             }
 

@@ -1,5 +1,5 @@
-<div class="overflow-auto sm:p-2">
-    <table class="min-w-full min-h-[50vh] divide-y divide-gray-200 mt-4 border-separate border-spacing-y-4"
+<div class="overflow-auto sm:p-2 min-h-[55vh]">
+    <table class="min-w-full  divide-y divide-gray-200 mt-4 border-separate border-spacing-y-4"
         style="table-layout: fixed;">
         <thead>
             <tr class="border-b border-defaultborder">
@@ -33,8 +33,10 @@
                         <td class="px-2 py-2 whitespace-nowrap text-xs text-black break-words">
                             @if (in_array($column, ['sta', 'status', 'subscription_status']))
                                 <x-status-badge :column="$column" :value="$row->$column" />
+                            @elseif($column == 'amount')
+                                RM 9000
                             @else
-                                {{ $row->$column ?? '--' }}
+                                {{ $row->$column ?? '-' }}
                             @endif
                         </td>
                     @endforeach

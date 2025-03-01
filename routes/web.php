@@ -28,6 +28,7 @@ Route::prefix('mais')->group(function () {
 
         // Dashboard Routes
         Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('/district', [DashboardController::class, 'mosquesInCityDetails'])->name('mosquesInCityDetails');
 
         // Profile Management Routes

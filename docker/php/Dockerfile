@@ -1,9 +1,8 @@
 FROM php:8.1-fpm
 
-# Copy Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install system dependencies
+
 RUN apt-get update -y && apt-get install -y \
     libicu-dev \
     libmariadb-dev \
@@ -21,29 +20,24 @@ RUN apt-get update -y && apt-get install -y \
     libssl-dev \
     && apt-get clean
 
-# Install PHP extensions
 RUN docker-php-ext-install gettext intl pdo_mysql zip \
     && docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
-# Install MongoDB PHP extension
 RUN pecl install mongodb && docker-php-ext-enable mongodb
 
-# Set working directory
 WORKDIR /var/www/html
+
+COPY . /var/www/html
+
+COPY --chown=www-data:www-data . .
 
 # Copy Composer files first (for caching optimization)
 COPY composer.json composer.lock /var/www/html/
 
-# Install PHP dependencies
-RUN composer install --ignore-platform-reqs --no-dev --no-interaction --prefer-dist
+
+RUN composer install --ignore-platform-reqs
 RUN composer dump-autoload --ignore-platform-reqs
-
-# Copy the rest of the application files
-COPY . /var/www/html
-COPY --chown=www-data:www-data . .
-
-# Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap /var/www/html/bootstrap/cache
 RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap /var/www/html/bootstrap/cache
 

@@ -43,5 +43,5 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
 
 RUN npm install
 
-# # Run Vite development server
-# CMD ["npm", "run", "dev"]
+# Run Vite development server
+ CMD ["npm", "run", "dev"]

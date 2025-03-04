@@ -16,64 +16,92 @@
 
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Nama -->
-                    <div class="xl:col-span-4 lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
-                        <label for="name" class="ti-form-label">Nama</label>
-                        <input type="text" id="name" name="name" placeholder="Nama" class="form-control h-[3rem]">
+
+                    <div class="flex flex-col gap-4">
+                        <h2 class="text-base font-medium">Profile Picture</h2>
+
+                        <div class="flex flex-row gap-4">
+                            <div
+                                class="w-[150px] h-[150px] border border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                </svg>
+                            </div>
+                            <div class="flex flex-col justify-end gap-2">
+                                <button
+                                    class="w-[12rem] h-[3rem] bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm flex items-center justify-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                    </svg>
+                                    Muat Naik Imej
+                                </button>
+                                <p class="text-sm text-gray-500 flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                    </svg>
+                                    use JPEG and PNG, best size 150x150 pixels. Keep it under 3MB
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <x-input-field level="Nama Penuh" id="fullname" name="fullname" type="text"
+                            placeholder="Enter Full Name" />
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="No. Kod Pengenadan" id="nric_number" name="nric_number" type="text"
+                                placeholder="" />
+                            <x-input-field level="No. H/P" id="mobile_number" name="mobile_number" type="text"
+                                placeholder="" />
+                        </div>
                     </div>
 
-                    <!-- Level Sistem -->
-                    <div class="xl:col-span-4 lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
-                        <label for="syslevel" class="ti-form-label">Level Sistem</label>
-                        <select id="syslevel" name="syslevel" class="form-control h-[3rem]">
-                            @foreach ($syslevels as $syslevel)
-                                <option value="{{ $syslevel->prm }}">{{ $syslevel->prm }}</option>
-                            @endforeach
-                        </select>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6">
+
+                            <x-input-field level="Email" id="email" name="email" type="email" placeholder="" />
+                            <x-input-field level="Jabatan" id="department" name="department" type="select"
+                                placeholder="Pilih" :valueList="$departments" />
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Jawatan" id="position" name="position" type="select" placeholder="Pilih"
+                                :valueList="$positions" />
+                            <x-input-field level="Akses Daerah" id="district_access" name="district_access" type="select"
+                                placeholder="Semua" :valueList="$districts" />
+                        </div>
                     </div>
 
-                    <!-- Nombor KP -->
-                    <div class="xl:col-span-4 lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
-                        <label for="ic" class="ti-form-label">Nombor KP</label>
-                        <input type="text" id="ic" name="ic" placeholder="Nombor KP"
-                            class="form-control h-[3rem]">
+                    <div class="mt-8 lg:w-1/2 rounded-sm border border-[#2624D0] p-4">
+                        <p class="text-sm font-bold text-[#2624D0]">Tindakan</p>
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Peringkat Pengguna" id="user_group" name="user_group" type="select"
+                                placeholder="Pilih" :valueList="$userGroups" />
+                            <x-input-field level="Status" id="status" name="status" type="select" placeholder="Pilih"
+                                :valueList="$statuses" />
+
+                        </div>
                     </div>
 
-                    <!-- Capaian Sistem -->
-                    <div class="xl:col-span-4 lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
-                        <label for="sysaccess" class="ti-form-label">Capaian Sistem</label>
-                        <input type="text" id="sysaccess" name="sysaccess" placeholder="Capaian Sistem"
-                            class="form-control h-[3rem]">
-                    </div>
 
-                    <!-- Tel. Bimbit -->
-                    <div class="xl:col-span-4 lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
-                        <label for="hp" class="ti-form-label">Tel. Bimbit</label>
-                        <input type="text" id="hp" name="hp" placeholder="Tel. Bimbit"
-                            class="form-control h-[3rem]">
-                    </div>
 
-                    <!-- Tarikh Mula -->
-                    <div class="xl:col-span-4 lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
-                        <label for="jobstart" class="ti-form-label">Tarikh Mula</label>
-                        <input type="date" id="jobstart" name="jobstart" class="form-control h-[3rem]">
-                    </div>
 
-                    <!-- Emel -->
-                    <div class="xl:col-span-4 lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
-                        <label for="mel" class="ti-form-label">Emel</label>
-                        <input type="email" id="mel" name="mel" placeholder="Emel"
-                            class="form-control h-[3rem]">
-                    </div>
+                    <div class="flex justify-between mt-8">
+                        {{-- <button onclick="window.location='{{ route('userList') }}'" type="button" --}}
+                        <button type="button"
+                            class="bg-[#6E829F] ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg">
+                            Kembali
+                        </button>
 
-                    <!-- Status -->
-                    <div class="xl:col-span-4 lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12">
-                        <label for="status" class="ti-form-label">Status</label>
-                        <select id="status" name="status" class="form-control h-[3rem]">
-                            @foreach ($statuses as $status)
-                                <option value="{{ $status->val }}">{{ $status->prm }}</option>
-                            @endforeach
-                        </select>
+                        <button
+                            class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
+                            type="submit">
+                            Simpan
+                        </button>
                     </div>
                 </div>
 

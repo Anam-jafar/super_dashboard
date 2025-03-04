@@ -78,7 +78,12 @@ class EntityController extends Controller
                 ->mapWithKeys(fn ($item) => [$item->sid => $item->sname])
                 ->toArray(),
             'states' => DB::table('type')->where('grp', 'state')->get(),
-            'syslevels' => DB::table('type')->where('grp', 'syslevel')->get(),
+            'syslevels' => DB::table('type')
+                ->where('grp', 'syslevel')
+                ->distinct()
+                ->pluck('prm')
+                ->mapWithKeys(fn ($prm) => [$prm => $prm])
+                ->toArray(),
             
             'statuses' => DB::table('type')
                 ->where('grp', 'clientstatus')
@@ -132,6 +137,40 @@ class EntityController extends Controller
         );
 
         return view(self::ENTITY_TYPES[$entityType]['view'].'.show', $viewData);
+    }
+
+    public function detailList(Request $request, string $entityType)
+    {
+        $table = self::ENTITY_TYPES[$entityType]['table'];
+
+        $filterMappings = self::FILTER_MAPPINGS[$entityType] ?? [];
+
+        $data = $this->getListingData($table, $request, $filterMappings);
+
+        $viewData = array_merge(
+            ['entities' => $data],
+            $this->getCommonLookupData()
+        );
+
+        return view(self::ENTITY_TYPES[$entityType]['view'].'.detail_list', $viewData);
+    }
+    
+    public function detail(string $entityType, $id)
+    {
+        $table = self::ENTITY_TYPES[$entityType]['table'];
+        $entity = DB::table($table)->where('id', $id)->first();
+
+        if (!$entity) {
+            return redirect()->route(self::ENTITY_TYPES[$entityType]['view'].'.detail_list')
+                ->with('error', 'Record not found.');
+        }
+
+        $viewData = array_merge(
+            ['entity' => $entity],
+            $this->getCommonLookupData()
+        );
+
+        return view(self::ENTITY_TYPES[$entityType]['view'].'.detail', $viewData);
     }
 
     public function create(string $entityType)

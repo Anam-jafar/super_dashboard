@@ -47,6 +47,9 @@ Route::prefix('mais')->group(function () {
             Route::post('/store', 'store')->name('store');
             Route::get('/show/{id}', 'show')->name('edit');
             Route::put('/update/{id}', 'update')->name('update');
+            Route::get('/detail-list', 'detailList')->name('detailList');
+            Route::get('/detail/{id}', 'detail')->name('detail');
+
         });
 
         Route::prefix('metrix')->name('metrix.')->group(function () {

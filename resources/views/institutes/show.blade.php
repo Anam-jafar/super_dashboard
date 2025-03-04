@@ -7,7 +7,10 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Edit Mosque'" :breadcrumbs="[['label' => 'Mosque', 'url' => 'javascript:void(0);'], ['label' => 'Edit Mosque']]" />
+            <x-page-header :title="'Kemaskini Maklumat Institusi'" :breadcrumbs="[
+                ['label' => 'Rekod Institusi', 'url' => 'javascript:void(0);'],
+                ['label' => 'Kemaskini Maklumat Institusi'],
+            ]" />
 
             <form method="POST" action="{{ route('update', ['type' => 'mosques', 'id' => $entity->id]) }}"
                 class="py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs">

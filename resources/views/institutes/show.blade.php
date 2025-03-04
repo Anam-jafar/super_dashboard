@@ -14,7 +14,55 @@
                 @csrf
                 @method('PUT')
 
-                <!-- Profile Section -->
+                <div class="min-h-[50vh] space-y-6">
+
+                    <div class="grid grid-col-2 md:grid-cols-4 gap-6">
+                        <div class="col-span-2">
+
+                            <div class="grid grid-cols-2 gap-6">
+                                <x-input-field level="ID Masjid" id="inst_refno" name="uid" type="text"
+                                    placeholder="Enter Institute Ref No" value="{{ $entity->uid }}" readonly="true" />
+                                <x-input-field level="Status" id="inst_type" name="sta" type="select"
+                                    placeholder="-- Type --" value="{{ $entity->sta }}" :valueList="$statuses" />
+                            </div>
+                        </div>
+                        <div class="col-span-2">
+                            <x-input-field level="Institute Name" id="inst_name" name="name" type="text"
+                                placeholder="Enter Institute Name" value="{{ $entity->name }}" />
+                        </div>
+                    </div>
+
+
+                    <div class="grid grid-col-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Institute Category" id="inst_category" name="cate" type="select"
+                                placeholder="-- Category --" value="{{ $entity->cate }}" :valueList="$categories" />
+                            <x-input-field level="Institute Type" id="inst_type" name="" type="select"
+                                placeholder="-- Type --" value="{{ $entity->cate }}" :valueList="$categories" />
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="District" id="inst_district" name="city" type="select"
+                                placeholder="-- District --" value="{{ $entity->city }}" :valueList="$areas" />
+                            <x-input-field level="Sub District" id="inst_sub_district" name="" type="select"
+                                placeholder="-- Sub District --" value="{{ $entity->city }}" :valueList="$areas" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="flex justify-between mt-8">
+                    <button class="bg-[#6E829F] ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg">
+                        Kembali
+                    </button>
+
+                    <button
+                        class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
+                        type="submit">
+                        Simpan
+                    </button>
+                </div>
+
+                {{-- <!-- Profile Section -->
                 <div class="profile-section">
                     <h3 class="font-semibold text-lg mb-2">Profil</h3>
                     <hr class="mb-4">
@@ -152,7 +200,7 @@
                         class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none">
                         Update
                     </button>
-                </div>
+                </div> --}}
             </form>
         </div>
     </div>

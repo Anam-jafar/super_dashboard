@@ -77,11 +77,26 @@ class EntityController extends Controller
             'schs' => collect(DB::select('SELECT sname, sid FROM sch'))
                 ->mapWithKeys(fn ($item) => [$item->sid => $item->sname])
                 ->toArray(),
-            'statuses' => DB::table('type')->where('grp', 'clientstatus')->get(),
-            'categories' => DB::table('type')->where('grp', 'type_CLIENT')->get(),
             'states' => DB::table('type')->where('grp', 'state')->get(),
-            'areas' => DB::table('type')->where('grp', 'clientcate1')->get(),
             'syslevels' => DB::table('type')->where('grp', 'syslevel')->get(),
+            
+            'statuses' => DB::table('type')
+                ->where('grp', 'clientstatus')
+                ->distinct()
+                ->pluck('prm', 'val')
+                ->toArray(),
+            'areas' => DB::table('type')
+                ->where('grp', 'clientcate1')
+                ->distinct()
+                ->pluck('prm')
+                ->mapWithKeys(fn ($prm) => [$prm => $prm])
+                ->toArray(),
+            'categories' => DB::table('type')
+                ->where('grp', 'type_CLIENT')
+                ->distinct()
+                ->pluck('prm')
+                ->mapWithKeys(fn ($prm) => [$prm => $prm])
+                ->toArray(),
         ];
     }
 
@@ -143,12 +158,11 @@ class EntityController extends Controller
         );
 
         $created = DB::table($table)->insert($data);
-
         $route = self::ENTITY_TYPES[$entityType]['view'].'.index';
         if ($created) {
-            $this->logActivity('Stored new '.$entityType, $entityType.' Store attempt successful');
+            $this->logActivity('Stored '.$entityType, $entityType.' Store attempt successful');
         } else {
-            $this->logActivity('Stored new '.$entityType, $entityType.' Store attempt failed');
+            $this->logActivity('Stored '.$entityType, $entityType.' Store attempt failed');
         }
 
         return $created
@@ -200,19 +214,38 @@ class EntityController extends Controller
         return $query->paginate($request->get('per_page', 10))->withQueryString();
     }
 
+
     private function getDefaultValues(string $entityType)
     {
         $defaults = [
             'mosques' => [
-                'uid' => 'C002020',
+                'uid' => $this->generateUniqueUid(),
                 'firebase_id' => '',
                 'imgProfile' => '',
                 'isustaz' => '',
                 'iskariah' => '',
-                'sid' => 0,
+                'sid' => 1,
             ],
         ];
 
         return $defaults[$entityType] ?? [];
     }
+
+
+    private function generateUniqueUid()
+    {
+        $lastUid = DB::table('client')->orderBy('uid', 'desc')->value('uid');
+
+        $numericPart = intval(substr($lastUid, 1)) ?? 0;
+
+        do {
+            $numericPart++;
+            $newUid = 'C' . str_pad($numericPart, 5, '0', STR_PAD_LEFT);
+            $exists = DB::table('client')->where('uid', $newUid)->exists();
+
+        } while ($exists); 
+
+        return $newUid;
+    }
+
 }

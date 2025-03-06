@@ -91,10 +91,10 @@
                             <a href="{{ route('showList', ['type' => 'mosques']) }}" class="side-menu__item">Senarai
                                 Institusi</a>
                         </li>
-                        <li class="slide">
+                        {{-- <li class="slide">
                             <a href="{{ route('detailList', ['type' => 'mosques']) }}" class="side-menu__item">Profil
                                 Institusi</a>
-                        </li>
+                        </li> --}}
 
                         <li class="slide">
                             <a href="" class="side-menu__item">Permohonan

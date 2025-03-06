@@ -13,12 +13,12 @@
             ]" />
             <x-alert />
 
-            <form method="POST" action="{{ route('store', ['type' => 'mosques']) }}"
-                class="py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs">
+            <form method="POST" action="{{ route('store', ['type' => 'mosques']) }}" class="">
                 @csrf
-                <div class="min-h-[50vh] space-y-6">
+                <div class="space-y-2 py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs">
 
-
+                    <h3 class="font-semibold text-lg mb-2">Maklumat Institusi</h3>
+                    <hr class="mb-4">
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
                         <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text" placeholder="" />
                         <div class="grid grid-cols-2 gap-6">
@@ -38,20 +38,107 @@
                         </div>
                     </div>
                 </div>
+                <div class="space-y-2 py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs mt-4">
+                    <h3 class="font-semibold text-lg mb-2">Maklumat Terperinci</h3>
+                    <hr class="mb-4">
 
-                <!-- Submit Button -->
-                <div class="flex justify-between mt-8">
-                    {{-- <button onclick="window.location='{{ route('instituteList') }}'" type="button" --}}
-                    <button type="button"
-                        class="bg-[#6E829F] ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg">
-                        Kembali
-                    </button>
+                    {{-- <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 space-y-6">
+                    <x-input-field level="Tarikh Mohon" id="tarikh_mohon" name="" type="text"
+                        placeholder="Tarik Mohon" value="{{ $entity->regdt ?? '' }}"   />
+                </div> --}}
 
-                    <button
-                        class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
-                        type="submit">
-                        Simpan
-                    </button>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <x-input-field level="Alamat (Baris 1)" id="address1" name="addr" type="text"
+                            placeholder="" />
+                        <x-input-field level="Alamat (Baris 2)" id="address2" name="addr1" type="text"
+                            placeholder="" />
+
+
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-3 gap-4">
+                            <x-input-field level="Poskod" id="poskod" name="pcode" type="text" placeholder="" />
+
+                            <x-input-field level="Bandar" id="city" name="city" type="text" placeholder="" />
+
+                            <x-input-field level="Negeri" id="negeri" name="state" type="text" placeholder="" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-2 gap-6">
+                                <x-input-field level="No. Telefon" id="tel" name="hp" type="text"
+                                    placeholder="" />
+                                <x-input-field level="No. Fax" id="fax" name="fax" type="text"
+                                    placeholder="" />
+                            </div>
+                            <x-input-field level="Emel" id="emel" name="mel" type="email" placeholder="" />
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Website" id="web" name="web" type="text" placeholder="" />
+                            <x-input-field level="Media Social" id="social" name="rem1" type="text"
+                                placeholder="" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Keluasan Institusi" id="area" name="rem2" type="text"
+                                placeholder="" />
+                            <x-input-field level="Kapasiti Institusi Jemaah" id="capacity" name="rem3"
+                                type="text" placeholder="" />
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Dun" id="dun" name="rem4" type="text"
+                                placeholder="" />
+
+                            <x-input-field level="Parliament" id="parliament" name="rem5" type="text"
+                                placeholder="" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <x-input-field level="Tarikh Kelulusan Jawatankuasa (JATUMS)" id="jatums" name="rem7"
+                            type="text" placeholder="" />
+
+                        <x-input-field level="Koordinat Institusi" id="coordinates" name="rem8" type="text"
+                            placeholder="" />
+                    </div>
+
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Nama Pegawai/Wakil Institusi" id="incharge" name="con1"
+                                type="text" placeholder="" />
+                            <x-input-field level="No. Kod Pengenalam" id="nric" name="ic" type="text"
+                                placeholder="" />
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Jawatan" id="pos" name="pos1" type="select" placeholder=""
+                                :valueList="$user_positions" />
+                            <x-input-field level="No. H/P" id="hp" name="tel1" type="text"
+                                placeholder="" />
+                        </div>
+                    </div>
+
+
+
+                    <div class="flex justify-between mt-8">
+                        <button
+                            class="bg-[#6E829F] ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg">
+                            Kembali
+                        </button>
+
+                        <button
+                            class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
+                            type="submit">
+                            Simpan
+                        </button>
+                    </div>
                 </div>
             </form>
 

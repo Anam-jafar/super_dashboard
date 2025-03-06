@@ -140,6 +140,12 @@ class EntityController extends Controller
                 ->pluck('prm')
                 ->mapWithKeys(fn ($prm) => [$prm => $prm])
                 ->toArray(),
+            'user_positions' => DB::table('type')
+                ->where('grp', 'externalposition')
+                ->distinct()
+                ->pluck('prm')
+                ->mapWithKeys(fn ($prm) => [$prm => $prm])
+                ->toArray(),
         ];
     }
 

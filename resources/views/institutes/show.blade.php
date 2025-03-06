@@ -12,13 +12,13 @@
                 ['label' => 'Kemaskini Maklumat Institusi'],
             ]" />
 
-            <form method="POST" action="{{ route('update', ['type' => 'mosques', 'id' => $entity->id]) }}"
-                class="py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs">
+            <form method="POST" action="{{ route('update', ['type' => 'mosques', 'id' => $entity->id]) }}" class="">
                 @csrf
                 @method('PUT')
 
-                <div class="min-h-[50vh] space-y-6">
-
+                <div class="space-y-2 py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs">
+                    <h3 class="font-semibold text-lg mb-2">Maklumat Institusi</h3>
+                    <hr class="mb-4">
                     <div class="grid grid-col-2 md:grid-cols-4 gap-6">
                         <div class="col-span-2">
 
@@ -36,7 +36,7 @@
                     </div>
 
 
-                    <div class="grid grid-col-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-col-1 md:grid-cols-2 gap-6 !mb-4">
                         <div class="grid grid-cols-2 gap-6">
                             <x-input-field level="Institute Category" id="inst_category" name="type" type="select"
                                 placeholder="-- Category --" value="{{ $entity->type }}" :valueList="$institute_types" />
@@ -52,158 +52,116 @@
                     </div>
                 </div>
 
-
-                <div class="flex justify-between mt-8">
-                    <button class="bg-[#6E829F] ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg">
-                        Kembali
-                    </button>
-
-                    <button
-                        class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
-                        type="submit">
-                        Simpan
-                    </button>
-                </div>
-
-                {{-- <!-- Profile Section -->
-                <div class="profile-section">
-                    <h3 class="font-semibold text-lg mb-2">Profil</h3>
+                <div class="space-y-2 py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs mt-4">
+                    <h3 class="font-semibold text-lg mb-2">Maklumat Terperinci</h3>
                     <hr class="mb-4">
-                    <div
-                        class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:col-span-4 lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12 h-full">
-                        <div>
-                            <label for="modalName" class="ti-form-label">Nama/Syarikat</label>
-                            <input type="text" name="name" id="modalName" class="form-control h-[3rem]"
-                                placeholder="Mosque Name" value="{{ old('name', $entity->name) }}">
-                        </div>
-                        <div>
-                            <label for="modalContact" class="ti-form-label">Contact Utama(En/Pn/Dato. Contoh Encik
-                                Ali)</label>
-                            <input type="text" name="hp" id="modalContact" class="form-control h-[3rem]"
-                                placeholder="Primary Contact" value="{{ old('hp', $entity->hp) }}">
-                        </div>
-                        <div>
-                            <label for="modalCategory" class="ti-form-label">Kategori</label>
-                            <select name="cate" id="modalCategory" class="form-control h-[3rem]">
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->prm }}"
-                                        {{ $category->prm == old('category', $entity->cate) ? 'selected' : '' }}>
-                                        {{ $category->prm }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label for="modalStatus" class="ti-form-label">Status</label>
-                            <select name="sta" id="modalStatus" class="form-control h-[3rem]">
-                                @foreach ($statuses as $status)
-                                    <option value="{{ $status->val }}"
-                                        {{ $status->val == old('status', $entity->sta) ? 'selected' : '' }}>
-                                        {{ $status->prm }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label for="modalGroup" class="ti-form-label">Kumpulan</label>
-                            <select name="cate1" id="modalGroup" class="form-control h-[3rem]">
-                                @foreach ($areas as $area)
-                                    <option value="{{ $area->prm }}"
-                                        {{ $area->prm == old('group', $entity->cate1) ? 'selected' : '' }}>
-                                        {{ $area->prm }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label for="modalEmail" class="ti-form-label">Emel</label>
-                            <input type="email" name="mel" id="modalEmail" class="form-control h-[3rem]"
-                                placeholder="Email" value="{{ old('mel', $entity->mel) }}">
-                        </div>
-                        <div>
-                            <label for="modalPhone" class="ti-form-label">Tel. Bimbit</label>
-                            <input type="tel" name="tel" id="modalPhone" class="form-control h-[3rem]"
-                                placeholder="Mobile Phone" value="{{ old('mobile_phone', $entity->tel) }}">
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Address Section -->
-                <div class="address-section mt-6">
-                    <h3 class="font-semibold text-lg mb-2">Alamat</h3>
-                    <hr class="mb-4">
-                    <div
-                        class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:col-span-4 lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12 h-full">
-                        <div class="sm:col-span-2">
-                            <label for="modalAddress1" class="ti-form-label">Alamat Baris 1</label>
-                            <input type="text" name="addr" id="modalAddress1" class="form-control h-[3rem]"
-                                placeholder="Address Line 1" value="{{ old('address_line1', $entity->addr) }}">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label for="modalAddress2" class="ti-form-label">Alamat Baris 2</label>
-                            <input type="text" name="addr1" id="modalAddress2" class="form-control h-[3rem]"
-                                placeholder="Address Line 2" value="{{ old('address_line2', $entity->addr1) }}">
-                        </div>
-                        <div>
-                            <label for="modalCity" class="ti-form-label">Bandar</label>
-                            <input type="text" name="city" id="modalCity" class="form-control h-[3rem]"
-                                placeholder="City" value="{{ old('city', $entity->city) }}">
-                        </div>
-                        <div>
-                            <label for="modalPcode" class="ti-form-label">Poskod</label>
-                            <input type="text" name="pcode" id="modalPcode" class="form-control h-[3rem]"
-                                placeholder="Postal Code" value="{{ old('pcode', $entity->pcode) }}">
-                        </div>
-                        <div>
-                            <label for="modalState" class="ti-form-label">Negeri</label>
-                            <select name="state" id="modalState" class="form-control h-[3rem]">
-                                @foreach ($states as $state)
-                                    <option value="{{ $state->prm }}"
-                                        {{ $state->prm == old('state', $entity->state) ? 'selected' : '' }}>
-                                        {{ $state->prm }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label for="modalCountry" class="ti-form-label">Negara</label>
-                            <input type="text" name="country" id="modalCountry" class="form-control h-[3rem]"
-                                placeholder="Country" value="{{ old('country', $entity->country) }}">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Additional Info Section -->
-                <div class="links-section mt-6">
-                    <h3 class="font-semibold text-lg mb-2">Maklumat Tambahan</h3>
-                    <hr class="mb-4">
-                    <div
-                        class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:col-span-4 lg:col-span-6 md:col-span-6 sm:col-span-12 col-span-12 h-full">
-                        <div>
-                            <label for="modalCustomerLink" class="ti-form-label">Customer Link</label>
-                            <input type="text" name="rem1" id="modalCustomerLink" class="form-control h-[3rem]"
-                                placeholder="Customer Link" value="{{ old('customer_link', $entity->rem1) }}">
-                        </div>
-                        <div>
-                            <label for="modalAppCode" class="ti-form-label">Directory / App Code</label>
-                            <input type="text" name="rem2" id="modalAppCode" class="form-control h-[3rem]"
-                                placeholder="App Code" value="{{ old('app_code', $entity->rem2) }}">
-                        </div>
-                        <div>
-                            <label for="modalCenterId" class="ti-form-label">Center ID</label>
-                            <input type="text" name="rem3" id="modalCenterId" class="form-control h-[3rem]"
-                                placeholder="Center ID" value="{{ old('center_id', $entity->rem3) }}">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Submit Button -->
-                <div class="mt-4">
-                    <button type="submit"
-                        class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none">
-                        Update
-                    </button>
+                    {{-- <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 space-y-6">
+                    <x-input-field level="Tarikh Mohon" id="tarikh_mohon" name="" type="text"
+                        placeholder="Tarik Mohon" value="{{ $entity->regdt ?? '' }}" disabled="true" />
                 </div> --}}
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <x-input-field level="Alamat (Baris 1)" id="address1" name="addr" type="text" placeholder=""
+                            value="{{ $entity->addr ?? '' }}" disabled="true" />
+                        <x-input-field level="Alamat (Baris 2)" id="address2" name="addr1" type="text" placeholder=""
+                            value="{{ $entity->addr1 ?? '' }}" disabled="true" />
+
+
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-3 gap-4">
+                            <x-input-field level="Poskod" id="poskod" name="pcode" type="text" placeholder=""
+                                value="{{ $entity->pcode ?? '' }}" disabled="true" />
+
+                            <x-input-field level="Bandar" id="city" name="city" type="text" placeholder=""
+                                value="{{ $entity->city ?? '' }}" disabled="true" />
+
+                            <x-input-field level="Negeri" id="negeri" name="state" type="text" placeholder=""
+                                value="{{ $entity->state ?? '' }}" disabled="true" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-2 gap-6">
+                                <x-input-field level="No. Telefon" id="tel" name="hp" type="text"
+                                    placeholder="" value="{{ $entity->hp ?? '' }}" disabled="true" />
+                                <x-input-field level="No. Fax" id="fax" name="fax" type="text"
+                                    placeholder="" value="{{ $entity->fax ?? '' }}" disabled="true" />
+                            </div>
+                            <x-input-field level="Emel" id="emel" name="mel" type="email" placeholder=""
+                                value="{{ $entity->mel ?? '' }}" />
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Website" id="web" name="web" type="text" placeholder=""
+                                value="{{ $entity->web ?? '' }}" disabled="true" />
+                            <x-input-field level="Media Social" id="social" name="rem1" type="text"
+                                placeholder="" value="{{ $entity->rem1 ?? '' }}" disabled="true" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Keluasan Institusi" id="area" name="rem2" type="text"
+                                placeholder="" value="{{ $entity->rem2 ?? '' }}" disabled="true" />
+                            <x-input-field level="Kapasiti Institusi Jemaah" id="capacity" name="rem3"
+                                type="text" placeholder="" value="{{ $entity->rem3 ?? '' }}" disabled="true" />
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Dun" id="dun" name="rem4" type="text" placeholder=""
+                                value="{{ $entity->rem4 ?? '' }}" disabled="true" />
+
+                            <x-input-field level="Parliament" id="parliament" name="rem5" type="text"
+                                placeholder="" value="{{ $entity->rem5 ?? '' }}" disabled="true" />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                        <x-input-field level="Tarikh Kelulusan Jawatankuasa (JATUMS)" id="jatums" name="rem7"
+                            type="text" placeholder="" value="{{ $entity->rem7 ?? '' }}" disabled="true" />
+
+                        <x-input-field level="Koordinat Institusi" id="coordinates" name="rem8" type="text"
+                            placeholder="" value="{{ $entity->rem8 ?? '' }}" disabled="true" />
+                    </div>
+
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Nama Pegawai/Wakil Institusi" id="incharge" name="con1"
+                                type="text" placeholder="" value="{{ $entity->con1 ?? '' }}" disabled="true" />
+                            <x-input-field level="No. Kod Pengenalam" id="nric" name="ic" type="text"
+                                placeholder="" value="{{ $entity->ic ?? '' }}" disabled="true" />
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Jawatan" id="pos" name="pos1" type="text" placeholder=""
+                                value="{{ $entity->pos1 ?? '' }}" disabled="true" />
+                            <x-input-field level="No. H/P" id="hp" name="tel1" type="text" placeholder=""
+                                value="{{ $entity->tel1 ?? '' }}" disabled="true" />
+                        </div>
+                    </div>
+
+
+
+                    <div class="flex justify-between mt-8">
+                        <button
+                            class="bg-[#6E829F] ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg">
+                            Kembali
+                        </button>
+
+                        <button
+                            class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
+                            type="submit">
+                            Simpan
+                        </button>
+                    </div>
+                </div>
+
+
             </form>
         </div>
     </div>

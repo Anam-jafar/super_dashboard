@@ -32,6 +32,8 @@ class EntityController extends Controller
             'status' => 'sta',
             'sch' => 'sid',
             'city' => 'city',
+            'type' => 'type',
+            'cate' => 'cate',
         ],
         'admins' => [
             'status' => 'status',
@@ -98,6 +100,42 @@ class EntityController extends Controller
                 ->toArray(),
             'categories' => DB::table('type')
                 ->where('grp', 'type_CLIENT')
+                ->distinct()
+                ->pluck('prm')
+                ->mapWithKeys(fn ($prm) => [$prm => $prm])
+                ->toArray(),
+            'institute_types' => DB::table('type')
+                ->where('grp', 'clientcate1')
+                ->distinct()
+                ->pluck('prm')
+                ->mapWithKeys(fn ($prm) => [$prm => $prm])
+                ->toArray(),  
+            'institute_categories' => DB::table('type')
+                ->where('grp', 'type_CLIENT')
+                ->distinct()
+                ->pluck('prm')
+                ->mapWithKeys(fn ($prm) => [$prm => $prm])
+                ->toArray(),              
+            'districts' => DB::table('type')
+                ->where('grp', 'district')
+                ->distinct()
+                ->pluck('prm')
+                ->mapWithKeys(fn ($prm) => [$prm => $prm])
+                ->toArray(),
+            'sub_districts' => DB::table('type')
+                ->where('grp', 'sub_district')
+                ->distinct()
+                ->pluck('prm')
+                ->mapWithKeys(fn ($prm) => [$prm => $prm])
+                ->toArray(),
+            'departments' => DB::table('type')
+                ->where('grp', 'jobdiv')
+                ->distinct()
+                ->pluck('prm')
+                ->mapWithKeys(fn ($prm) => [$prm => $prm])
+                ->toArray(),
+            'admin_positions' => DB::table('type')
+                ->where('grp', 'job')
                 ->distinct()
                 ->pluck('prm')
                 ->mapWithKeys(fn ($prm) => [$prm => $prm])
@@ -238,7 +276,7 @@ class EntityController extends Controller
 
     private function getListingData($table, Request $request, $additionalFilters = [])
     {
-        $query = DB::table($table);
+        $query = DB::table($table)->orderBy('id', 'desc');
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%'.$request->input('search').'%');

@@ -12,18 +12,25 @@
             <div class="py-8 px-4 rounded-lg shadow bg-white">
 
                 <x-filter-card :filters="[
-                    ['name' => 'sch', 'label' => 'Filter by Sch', 'type' => 'select', 'options' => $schs],
+                    ['name' => 'type', 'label' => 'Institusi', 'type' => 'select', 'options' => $institute_types],
+                    [
+                        'name' => 'cate',
+                        'label' => 'Jenis Institusi',
+                        'type' => 'select',
+                        'options' => $institute_categories,
+                    ],
                     [
                         'name' => 'status',
                         'label' => 'Filter by Status',
                         'type' => 'select',
                         'options' => ['0' => 'Active', '1' => 'Inactive', '2' => 'Terminated', '3' => 'Reserved'],
                     ],
+                
                     ['name' => 'city', 'label' => 'Filter by City', 'type' => 'select', 'options' => $cities],
                     ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
                 ]" :route="route('detailList', ['type' => 'mosques'])" button-label="Tambah Masjid" :button-route="route('create', ['type' => 'mosques'])" />
 
-                <x-table :headers="['Institusi', 'Nama Institusi', 'Mukim', 'HP', 'Emel', 'Status']" :columns="['cate', 'name', 'city', 'hp', 'mel', 'sta']" :rows="$entities" :statuses="$statuses" :id="'id'"
+                <x-table :headers="['Institusi', 'Jenis Institusi', 'Nama Institusi', 'Mukim', 'HP', 'Emel', 'Status']" :columns="['type', 'cate', 'name', 'city', 'hp', 'mel', 'sta']" :rows="$entities" :statuses="$statuses" :id="'id'"
                     route="detail" routeType="mosques" />
                 <x-pagination :items="$entities" label="mosques" />
 

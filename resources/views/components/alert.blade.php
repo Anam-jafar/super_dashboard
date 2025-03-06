@@ -42,7 +42,7 @@
 
     <style>
         .animate-fade-out {
-            animation: fadeOut 5s ease-in-out;
+            animation: fadeOut 4s ease-in-out;
             opacity: 1;
         }
 
@@ -62,7 +62,7 @@
         document.querySelectorAll('.alert').forEach(alert => {
             setTimeout(() => {
                 alert.remove();
-            }, 5000); // 10 seconds
+            }, 4000); // 10 seconds
         });
     </script>
 </div>

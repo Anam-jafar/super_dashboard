@@ -22,19 +22,19 @@
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
                         <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text" placeholder="" />
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Institusi" id="inst_category" name="cate" type="select" placeholder=""
-                                :valueList="$categories" />
-                            <x-input-field level="Jenis Institusi" id="inst_type" name="" type="select"
-                                placeholder="" :valueList="$categories" />
+                            <x-input-field level="Institusi" id="inst_category" name="type" type="select" placeholder=""
+                                :valueList="$institute_types" />
+                            <x-input-field level="Jenis Institusi" id="inst_type" name="cate" type="select"
+                                placeholder="" :valueList="$institute_categories" />
                         </div>
                     </div>
 
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Daerah" id="inst_district" name="city" type="select" placeholder=""
-                                :valueList="$areas" />
-                            <x-input-field level="Mukim" id="inst_sub_district" name="" type="select"
-                                placeholder="" :valueList="$areas" />
+                            <x-input-field level="Daerah" id="inst_district" name="district" type="select" placeholder=""
+                                :valueList="$districts" />
+                            <x-input-field level="Mukim" id="inst_sub_district" name="city" type="select"
+                                placeholder="" :valueList="$sub_districts" />
                         </div>
                     </div>
                 </div>

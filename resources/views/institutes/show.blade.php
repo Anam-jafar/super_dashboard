@@ -38,16 +38,16 @@
 
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Institute Category" id="inst_category" name="cate" type="select"
-                                placeholder="-- Category --" value="{{ $entity->cate }}" :valueList="$categories" />
-                            <x-input-field level="Institute Type" id="inst_type" name="" type="select"
-                                placeholder="-- Type --" value="{{ $entity->cate }}" :valueList="$categories" />
+                            <x-input-field level="Institute Category" id="inst_category" name="type" type="select"
+                                placeholder="-- Category --" value="{{ $entity->type }}" :valueList="$institute_types" />
+                            <x-input-field level="Institute Type" id="inst_type" name="cate" type="select"
+                                placeholder="-- Type --" value="{{ $entity->cate }}" :valueList="$institute_categories" />
                         </div>
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="District" id="inst_district" name="city" type="select"
-                                placeholder="-- District --" value="{{ $entity->city }}" :valueList="$areas" />
-                            <x-input-field level="Sub District" id="inst_sub_district" name="" type="select"
-                                placeholder="-- Sub District --" value="{{ $entity->city }}" :valueList="$areas" />
+                            <x-input-field level="District" id="inst_district" name="district" type="select"
+                                placeholder="-- District --" value="{{ $entity->district }}" :valueList="$districts" />
+                            <x-input-field level="Sub District" id="inst_sub_district" name="city" type="select"
+                                placeholder="-- Sub District --" value="{{ $entity->city }}" :valueList="$sub_districts" />
                         </div>
                     </div>
                 </div>

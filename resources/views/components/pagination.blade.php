@@ -1,5 +1,5 @@
-<div class="grid justify-center sm:flex sm:justify-between sm:items-center gap-4 flex-wrap mt-6">
-    <div class="p-2 sm:p-2">
+<div class="grid justify-center sm:flex sm:justify-end sm:items-center gap-4 flex-wrap mt-6">
+    {{-- <div class="p-2 sm:p-2">
         <p class="text-sm text-gray-700">
             Showing
             <span class="font-medium">{{ $items->firstItem() }}</span>
@@ -9,7 +9,7 @@
             <span class="font-medium">{{ $items->total() }}</span>
             {{ Str::plural($label, $items->total()) }}
         </p>
-    </div>
+    </div> --}}
     <div class="flex items-center space-x-4">
         <nav class="flex items-center gap-x-1">
             <!-- Previous Button -->

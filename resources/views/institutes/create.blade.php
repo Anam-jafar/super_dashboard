@@ -7,7 +7,7 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Daftar Institusi'" :breadcrumbs="[
+            <x-page-header :title="'Daftar Institusi Baru'" :breadcrumbs="[
                 ['label' => 'Rekod Institusi', 'url' => 'javascript:void(0);'],
                 ['label' => 'Daftar Institusi'],
             ]" />
@@ -20,21 +20,22 @@
                     <h3 class="font-semibold text-lg mb-2">Maklumat Institusi</h3>
                     <hr class="mb-4">
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
-                        <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text" placeholder="" />
+                        <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text" placeholder=""
+                            :required="true" />
                         <div class="grid grid-cols-2 gap-6">
                             <x-input-field level="Institusi" id="inst_category" name="type" type="select" placeholder=""
-                                :valueList="$institute_types" />
+                                :valueList="$institute_types" :required="true" />
                             <x-input-field level="Jenis Institusi" id="inst_type" name="cate" type="select"
-                                placeholder="" :valueList="$institute_categories" />
+                                placeholder="" :valueList="$institute_categories" :required="true" />
                         </div>
                     </div>
 
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
                         <div class="grid grid-cols-2 gap-6">
                             <x-input-field level="Daerah" id="inst_district" name="district" type="select" placeholder=""
-                                :valueList="$districts" />
+                                :valueList="$districts" :required="true" />
                             <x-input-field level="Mukim" id="inst_sub_district" name="city" type="select"
-                                placeholder="" :valueList="$sub_districts" />
+                                placeholder="" :valueList="$sub_districts" :required="true" />
                         </div>
                     </div>
                 </div>
@@ -113,7 +114,7 @@
                         <div class="grid grid-cols-2 gap-6">
                             <x-input-field level="Nama Pegawai/Wakil Institusi" id="incharge" name="con1"
                                 type="text" placeholder="" />
-                            <x-input-field level="No. Kod Pengenalam" id="nric" name="ic" type="text"
+                            <x-input-field level="No. Kod Pengenalan" id="nric" name="ic" type="text"
                                 placeholder="" />
                         </div>
 

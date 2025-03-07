@@ -15,7 +15,7 @@
                     ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
                 ]" :route="route('activeSubscriptions')" />
 
-                <x-table :headers="['Nama', 'Status', 'In Charge', 'HP', 'Emel']" :columns="['name', 'sta', 'con1', 'hp', 'mel']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
+                <x-table :headers="['Nama Institusi', 'Wakil Institusi', 'No. Telefon', 'Emel', 'Status']" :columns="['name', 'con1', 'hp', 'mel', 'sta']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
                     route="edit" routeType="subscriptions" />
 
                 <x-pagination :items="$subscriptions" label="Admin" />

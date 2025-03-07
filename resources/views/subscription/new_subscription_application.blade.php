@@ -4,7 +4,7 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senarai Permohonan Langganan Baharu'" :breadcrumbs="[['label' => 'Langganan SPM', 'url' => 'javascript:void(0);'], ['label' => 'Permohonan Baharu']]" />
+            <x-page-header :title="'Senarai Permohonan Langganan Baru'" :breadcrumbs="[['label' => 'Langganan SPM', 'url' => 'javascript:void(0);'], ['label' => 'Permohonan Baru']]" />
             @if (session('success'))
                 <div class="bg-green-100 text-green-800 p-3 rounded-lg mb-4">
                     {{ session('success') }}
@@ -15,11 +15,11 @@
                 <x-filter-card :filters="[
                     [
                         'name' => 'institute_type',
-                        'label' => 'Institusi',
+                        'label' => 'Semua Institusi',
                         'type' => 'select',
                         'options' => $instituteType,
                     ],
-                    ['name' => 'area', 'label' => 'Daerah', 'type' => 'select', 'options' => $daerah],
+                    ['name' => 'area', 'label' => 'Semua Daerah', 'type' => 'select', 'options' => $daerah],
                 
                     ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
                 ]" :route="route('requestSubscriptions')" />

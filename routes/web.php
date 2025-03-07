@@ -51,6 +51,7 @@ Route::prefix('mais')->group(function () {
             Route::get('/detail/{id}', 'detail')->name('detail');
 
         });
+        Route::get('/mosques/activation-request-list', [EntityController::class, 'instituteActivateRequestList'])->name('instituteActivateRequestList');
 
         Route::prefix('metrix')->name('metrix.')->group(function () {
             $registerCategoryRoutes = function ($prefix, $type) {
@@ -84,6 +85,8 @@ Route::prefix('mais')->group(function () {
             Route::post('/subscription-fee-add', 'subscriptionFeeAdd')->name('subscriptionFeeAdd');
 
         });
+        Route::get('/under-maintainance', [SubscriptionController::class, 'underMaintainance'])->name('underMaintainance');
+        
 
     });
 });

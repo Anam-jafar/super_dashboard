@@ -91,15 +91,16 @@
                             <a href="{{ route('showList', ['type' => 'mosques']) }}" class="side-menu__item">Senarai
                                 Institusi</a>
                         </li>
-                        {{-- <li class="slide">
-                            <a href="{{ route('detailList', ['type' => 'mosques']) }}" class="side-menu__item">Profil
-                                Institusi</a>
-                        </li> --}}
-
                         <li class="slide">
+                            <a href="{{ route('instituteActivateRequestList') }}" class="side-menu__item">Permohonan
+                                Baru
+                            </a>
+                        </li>
+
+                        {{-- <li class="slide">
                             <a href="" class="side-menu__item">Permohonan
                                 Baharu</a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
                 <!-- End::slide -->
@@ -126,23 +127,23 @@
                             </defs>
                         </svg>
 
-                        <span class="side-menu__label">Laporan Penyata</span>
+                        <span class="side-menu__label">Laporan Kewangan</span>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">Laporan Penyata</a>
+                            <a href="javascript:void(0)">Laporan Kewangan</a>
                         </li>
                         <li class="slide">
-                            <a href="" class="side-menu__item">Penyata
-                                Baharu</a>
+                            <a href="{{ route('underMaintainance') }}" class="side-menu__item">Penghantaran
+                                Baru</a>
                         </li>
                         <li class="slide">
-                            <a href="" class="side-menu__item">Senarai
-                                Penyata</a>
+                            <a href="{{ route('underMaintainance') }}" class="side-menu__item">
+                                Rekod Penghantaran</a>
                         </li>
-                        <li class="slide">
+                        {{-- <li class="slide">
                             <a href="" class="side-menu__item">Rekod Pembatalan</a>
-                        </li>
+                        </li> --}}
 
                     </ul>
                 </li>
@@ -223,7 +224,7 @@
                         </li>
                         <li class="slide">
                             <a href="{{ route('requestSubscriptions') }}" class="side-menu__item">Permohonan
-                                Baharu</a>
+                                Baru</a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('outstandingSubscriptions') }}" class="side-menu__item">Rekod
@@ -264,6 +265,9 @@
                             <a href="{{ route('showList', ['type' => 'admins']) }}" class="side-menu__item">Senarai
                                 Admin</a>
                         </li>
+                        <li class="slide">
+                            <a href="{{ route('activityLogs') }}" class="side-menu__item">Audit Trail</a>
+                        </li>
 
                         {{-- 
                         <li class="slide">
@@ -275,7 +279,7 @@
 
 
                 <!-- Start::slide -->
-                <li class="slide has-sub">
+                {{-- <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <i class="ri-arrow-down-s-line side-menu__angle"></i>
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 side-menu__icon" fill="none"
@@ -290,10 +294,10 @@
                             <a href="javascript:void(0)">Audit Trail</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('activityLogs') }}" class="side-menu__item">Activity Logs</a>
+                            <a href="{{ route('activityLogs') }}" class="side-menu__item">Audit Trail</a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
                 <!-- End::slide -->
 
 

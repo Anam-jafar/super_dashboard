@@ -34,6 +34,7 @@ class EntityController extends Controller
             'city' => 'city',
             'type' => 'type',
             'cate' => 'cate',
+            'district' => 'district',
         ],
         'admins' => [
             'status' => 'status',
@@ -329,6 +330,99 @@ class EntityController extends Controller
         } while ($exists); 
 
         return $newUid;
+    }
+        public function outstandingSubscriptions(Request $request)
+    {
+        $per_page = $request->per_page ?? 10;
+
+        // Query builder for subscriptions with joinSub
+        $query = DB::table('client as y')
+            ->joinSub(
+                DB::table('type')
+                    ->select('prm', 'etc')
+                    ->where('grp', 'type_CLIENT'),
+                'x',
+                'x.prm',
+                '=',
+                'y.cate'
+            )
+            ->where('y.subscription_status', 2);
+
+        // Apply search filter (searching by name)
+        if ($request->filled('search')) {
+            $query->where('y.name', 'like', '%' . $request->search . '%');
+        }
+
+        // Apply institute type filter
+        if ($request->filled('institute_type')) {
+            $query->where('x.etc', $request->institute_type);
+        }
+
+        // Apply area filter
+        if ($request->filled('area')) {
+            $query->where('y.cate1', $request->area);
+        }
+
+        // Select necessary columns
+        // $query->select('y.*', 'x.prm', 'x.etc');
+
+        // Paginate results
+        $subscriptions = $query->paginate($per_page)->withQueryString();
+
+        $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
+                // Fetch dropdown data
+        
+        $daerah = DB::table('type')
+            ->where('grp', 'clientcate1')
+            ->distinct()
+            ->pluck('prm')
+            ->mapWithKeys(fn ($prm) => [$prm => $prm])
+            ->toArray();
+
+        // $instituteType = DB::table('type')
+        //     ->where('grp', 'type_CLIENT')
+        //     ->pluck('prm')
+        //     ->mapWithKeys(fn ($prm) => [$prm => $prm])
+        //     ->toArray();
+        $instituteType = DB::table('type')
+            ->where('grp', 'type_CLIENT')
+            ->groupBy('etc')
+            ->pluck('etc')
+            ->mapWithKeys(fn ($etc) => [$etc => $etc])
+            ->toArray();
+
+        
+        return view('subscription.outstanding_list', compact(['subscriptions', 'statuses', 'daerah', 'instituteType']));
+    }
+
+    public function instituteActivateRequestList(Request $request)
+    {
+        $per_page = $request->per_page ?? 10;
+
+        $query = DB::table('client')
+            ->where('is_activated', 1);
+        
+        // Apply search filter (searching by name)
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Apply institute type filter
+        if ($request->filled('institute_type')) {
+            $query->where('type', $request->institute_type);
+        }
+
+        // Apply area filter
+        if ($request->filled('institute_category')) {
+            $query->where('cate', $request->area);
+        }
+        $requests = $query->paginate($per_page)->withQueryString();
+                $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
+                // Fetch dropdown data
+
+        return view('institutes.detail_list', compact(['requests', 'statuses']));
+
+            
     }
 
 }

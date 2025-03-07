@@ -174,5 +174,10 @@ class SubscriptionController extends Controller
         return response()->json(['success' => true, 'message' => 'Subscription fee added successfully']);
     }
 
+    public function underMaintainance()
+    {
+        return view('subscription.under_maintainance');
+    }
+
 
 }

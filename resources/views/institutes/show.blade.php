@@ -38,16 +38,16 @@
 
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6 !mb-4">
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Institute Category" id="inst_category" name="type" type="select"
-                                placeholder="-- Category --" value="{{ $entity->type }}" :valueList="$institute_types" />
+                            <x-input-field level="Institute Category" id="inst_category" name="cate1" type="select"
+                                placeholder="-- Category --" value="{{ $entity->cate1 }}" :valueList="$institute_types" />
                             <x-input-field level="Institute Type" id="inst_type" name="cate" type="select"
                                 placeholder="-- Type --" value="{{ $entity->cate }}" :valueList="$institute_categories" />
                         </div>
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="District" id="inst_district" name="district" type="select"
-                                placeholder="-- District --" value="{{ $entity->district }}" :valueList="$districts" />
-                            <x-input-field level="Sub District" id="inst_sub_district" name="city" type="select"
-                                placeholder="-- Sub District --" value="{{ $entity->city }}" :valueList="$sub_districts" />
+                            <x-input-field level="District" id="inst_district" name="rem8" type="select"
+                                placeholder="-- District --" value="{{ $entity->rem8 }}" :valueList="$districts" />
+                            <x-input-field level="Sub District" id="inst_sub_district" name="rem9" type="select"
+                                placeholder="-- Sub District --" value="{{ $entity->rem9 }}" :valueList="$sub_districts" />
                         </div>
                     </div>
                 </div>
@@ -63,22 +63,22 @@
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <x-input-field level="Alamat (Baris 1)" id="address1" name="addr" type="text" placeholder=""
-                            value="{{ $entity->addr ?? '' }}" disabled="true" />
+                            value="{{ $entity->addr ?? '' }}" />
                         <x-input-field level="Alamat (Baris 2)" id="address2" name="addr1" type="text" placeholder=""
-                            value="{{ $entity->addr1 ?? '' }}" disabled="true" />
+                            value="{{ $entity->addr1 ?? '' }}" />
 
 
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="grid grid-cols-3 gap-4">
                             <x-input-field level="Poskod" id="poskod" name="pcode" type="text" placeholder=""
-                                value="{{ $entity->pcode ?? '' }}" disabled="true" />
+                                value="{{ $entity->pcode ?? '' }}" />
 
                             <x-input-field level="Bandar" id="city" name="city" type="text" placeholder=""
-                                value="{{ $entity->city ?? '' }}" disabled="true" />
+                                value="{{ $entity->city ?? '' }}" />
 
                             <x-input-field level="Negeri" id="negeri" name="state" type="text" placeholder=""
-                                value="{{ $entity->state ?? '' }}" disabled="true" />
+                                value="{{ $entity->state ?? '' }}" />
                         </div>
                     </div>
 
@@ -86,9 +86,9 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <div class="grid grid-cols-2 gap-6">
                                 <x-input-field level="No. Telefon" id="tel" name="hp" type="text"
-                                    placeholder="" value="{{ $entity->hp ?? '' }}" disabled="true" />
+                                    placeholder="" value="{{ $entity->hp ?? '' }}" />
                                 <x-input-field level="No. Fax" id="fax" name="fax" type="text"
-                                    placeholder="" value="{{ $entity->fax ?? '' }}" disabled="true" />
+                                    placeholder="" value="{{ $entity->fax ?? '' }}" />
                             </div>
                             <x-input-field level="Emel" id="emel" name="mel" type="email" placeholder=""
                                 value="{{ $entity->mel ?? '' }}" />
@@ -96,52 +96,52 @@
 
                         <div class="grid grid-cols-2 gap-6">
                             <x-input-field level="Website" id="web" name="web" type="text" placeholder=""
-                                value="{{ $entity->web ?? '' }}" disabled="true" />
-                            <x-input-field level="Media Social" id="social" name="rem1" type="text"
-                                placeholder="" value="{{ $entity->rem1 ?? '' }}" disabled="true" />
+                                value="{{ $entity->web ?? '' }}" />
+                            <x-input-field level="Media Social" id="social" name="rem10" type="text"
+                                placeholder="" value="{{ $entity->rem10 ?? '' }}" />
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Keluasan Institusi" id="area" name="rem2" type="text"
-                                placeholder="" value="{{ $entity->rem2 ?? '' }}" disabled="true" />
-                            <x-input-field level="Kapasiti Institusi Jemaah" id="capacity" name="rem3"
-                                type="text" placeholder="" value="{{ $entity->rem3 ?? '' }}" disabled="true" />
+                            <x-input-field level="Keluasan Institusi" id="area" name="rem13" type="text"
+                                placeholder="" value="{{ $entity->rem13 ?? '' }}" />
+                            <x-input-field level="Kapasiti Institusi Jemaah" id="capacity" name="rem14"
+                                type="text" placeholder="" value="{{ $entity->rem14 ?? '' }}" />
                         </div>
 
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Dun" id="dun" name="rem4" type="text" placeholder=""
-                                value="{{ $entity->rem4 ?? '' }}" disabled="true" />
+                            <x-input-field level="Dun" id="dun" name="rem11" type="text" placeholder=""
+                                value="{{ $entity->rem11 ?? '' }}" />
 
-                            <x-input-field level="Parliament" id="parliament" name="rem5" type="text"
-                                placeholder="" value="{{ $entity->rem5 ?? '' }}" disabled="true" />
+                            <x-input-field level="Parliament" id="parliament" name="rem12" type="text"
+                                placeholder="" value="{{ $entity->rem12 ?? '' }}" />
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                        <x-input-field level="Tarikh Kelulusan Jawatankuasa (JATUMS)" id="jatums" name="rem7"
-                            type="text" placeholder="" value="{{ $entity->rem7 ?? '' }}" disabled="true" />
+                        <x-input-field level="Tarikh Kelulusan Jawatankuasa (JATUMS)" id="jatums" name="rem15"
+                            type="text" placeholder="" value="{{ $entity->rem15 ?? '' }}" />
 
-                        <x-input-field level="Koordinat Institusi" id="coordinates" name="rem8" type="text"
-                            placeholder="" value="{{ $entity->rem8 ?? '' }}" disabled="true" />
+                        <x-input-field level="Koordinat Institusi" id="coordinates" name="location" type="text"
+                            placeholder="" value="{{ $entity->location ?? '' }}" />
                     </div>
 
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="grid grid-cols-2 gap-6">
                             <x-input-field level="Nama Pegawai/Wakil Institusi" id="incharge" name="con1"
-                                type="text" placeholder="" value="{{ $entity->con1 ?? '' }}" disabled="true" />
+                                type="text" placeholder="" value="{{ $entity->con1 ?? '' }}" />
                             <x-input-field level="No. Kod Pengenalam" id="nric" name="ic" type="text"
-                                placeholder="" value="{{ $entity->ic ?? '' }}" disabled="true" />
+                                placeholder="" value="{{ $entity->ic ?? '' }}" />
                         </div>
 
                         <div class="grid grid-cols-2 gap-6">
                             <x-input-field level="Jawatan" id="pos" name="pos1" type="text" placeholder=""
-                                value="{{ $entity->pos1 ?? '' }}" disabled="true" />
+                                value="{{ $entity->pos1 ?? '' }}" />
                             <x-input-field level="No. H/P" id="hp" name="tel1" type="text" placeholder=""
-                                value="{{ $entity->tel1 ?? '' }}" disabled="true" />
+                                value="{{ $entity->tel1 ?? '' }}" />
                         </div>
                     </div>
 

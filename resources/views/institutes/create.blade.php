@@ -23,7 +23,7 @@
                         <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text" placeholder=""
                             :required="true" />
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Institusi" id="inst_category" name="type" type="select" placeholder=""
+                            <x-input-field level="Institusi" id="inst_category" name="cate1" type="select" placeholder=""
                                 :valueList="$institute_types" :required="true" />
                             <x-input-field level="Jenis Institusi" id="inst_type" name="cate" type="select"
                                 placeholder="" :valueList="$institute_categories" :required="true" />
@@ -32,9 +32,9 @@
 
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Daerah" id="inst_district" name="district" type="select" placeholder=""
+                            <x-input-field level="Daerah" id="inst_district" name="rem8" type="select" placeholder=""
                                 :valueList="$districts" :required="true" />
-                            <x-input-field level="Mukim" id="inst_sub_district" name="city" type="select"
+                            <x-input-field level="Mukim" id="inst_sub_district" name="rem9" type="select"
                                 placeholder="" :valueList="$sub_districts" :required="true" />
                         </div>
                     </div>
@@ -79,33 +79,33 @@
 
                         <div class="grid grid-cols-2 gap-6">
                             <x-input-field level="Website" id="web" name="web" type="text" placeholder="" />
-                            <x-input-field level="Media Social" id="social" name="rem1" type="text"
+                            <x-input-field level="Media Social" id="social" name="rem10" type="text"
                                 placeholder="" />
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Keluasan Institusi" id="area" name="rem2" type="text"
+                            <x-input-field level="Keluasan Institusi" id="area" name="rem13" type="text"
                                 placeholder="" />
-                            <x-input-field level="Kapasiti Institusi Jemaah" id="capacity" name="rem3"
+                            <x-input-field level="Kapasiti Institusi Jemaah" id="capacity" name="rem14"
                                 type="text" placeholder="" />
                         </div>
 
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Dun" id="dun" name="rem4" type="text"
+                            <x-input-field level="Dun" id="dun" name="rem11" type="text"
                                 placeholder="" />
 
-                            <x-input-field level="Parliament" id="parliament" name="rem5" type="text"
+                            <x-input-field level="Parliament" id="parliament" name="rem12" type="text"
                                 placeholder="" />
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <x-input-field level="Tarikh Kelulusan Jawatankuasa (JATUMS)" id="jatums" name="rem7"
+                        <x-input-field level="Tarikh Kelulusan Jawatankuasa (JATUMS)" id="jatums" name="rem15"
                             type="text" placeholder="" />
 
-                        <x-input-field level="Koordinat Institusi" id="coordinates" name="rem8" type="text"
+                        <x-input-field level="Koordinat Institusi" id="coordinates" name="location" type="text"
                             placeholder="" />
                     </div>
 

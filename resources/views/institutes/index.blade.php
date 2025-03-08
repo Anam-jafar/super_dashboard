@@ -30,7 +30,7 @@
                     ['name' => 'search', 'label' => '', 'type' => 'text', 'placeholder' => 'Carian...'],
                 ]" :route="route('showList', ['type' => 'mosques'])" button-label="Daftar Baru" :button-route="route('create', ['type' => 'mosques'])" />
 
-                <x-table :headers="['Institusi', 'Jenis Institusi', 'Nama Institusi', 'Daerah', 'Mukim', 'Status']" :columns="['type', 'cate', 'name', 'district', 'city', 'sta']" :rows="$entities" :statuses="$statuses" :id="'id'"
+                <x-table :headers="['Institusi', 'Jenis Institusi', 'Nama Institusi', 'Daerah', 'Mukim', 'Status']" :columns="['cate1', 'cate', 'name', 'rem8', 'rem9', 'sta']" :rows="$entities" :statuses="$statuses" :id="'id'"
                     route="edit" routeType="mosques" />
                 <x-pagination :items="$entities" label="mosques" />
 

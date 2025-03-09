@@ -16,20 +16,20 @@
          <body class="min-h-screen">
              <div class="flex min-h-screen">
                  <!-- Left side - hidden on mobile -->
-                 <div
-                     class="hidden md:flex md:w-8/12 bg-gradient-custom text-white flex-col items-center justify-center relative p-8">
-                     <div class="max-w-2xl mx-auto text-center space-y-8">
-                         <h2 class="text-2xl mb-4">Selamat Datang</h2>
-                         <h1 class="text-4xl font-bold leading-tight">
-                             Smart<br />
-                             Masjid Management<br />
-                             (MAIS)
+                 <div class="hidden md:flex md:w-8/12 bg-gradient-custom text-white flex-col items-center justify-center relative p-8"
+                     style="background-image: url('{{ asset('assets/icons/background.png') }}'); background-size: cover; background-position: center;">
+
+                     <div class="max-w-2xl mx-auto text-center space-y-4">
+                         <h2 class="text-2xl mb-4 text-[#202947]">Selamat Datang</h2>
+                         <h1 class="text-4xl font-bold leading-tight text-[#202947]">
+                             Smart Masjid <br />
+                             Management (MAIS)<br />
                          </h1>
 
-                         <img src="{{ asset('assets/icons/fin_bars.svg') }}" alt="Financial Graph"
-                             class="w-[20rem] mx-auto my-8" />
+                         <img src="{{ asset('assets/icons/fin_logo.svg') }}" alt="Financial Graph"
+                             class="w-[12rem] mx-auto my-8" />
 
-                         <p class="text-xl">Pantau Laporan Kewangan Institusi Dengan Mudah</p>
+                         <p class="text-xl text-[#202947]">Pantau Laporan Kewangan Institusi Dengan Mudah</p>
 
                      </div>
                  </div>

@@ -126,6 +126,8 @@
                         </div>
                     </div>
 
+                    <input type="hidden" name="sta" value=1 />
+
 
 
                     <div class="flex justify-between mt-8">

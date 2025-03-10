@@ -49,6 +49,7 @@ Route::prefix('mais')->group(function () {
             Route::put('/update/{id}', 'update')->name('update');
             Route::get('/detail-list', 'detailList')->name('detailList');
             Route::get('/detail/{id}', 'detail')->name('detail');
+            Route::post('/approve/{id}', 'approve')->name('approve');
 
         });
         Route::get('/mosques/activation-request-list', [EntityController::class, 'instituteActivateRequestList'])->name('instituteActivateRequestList');

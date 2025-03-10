@@ -30,7 +30,7 @@
                     ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
                 ]" :route="route('detailList', ['type' => 'mosques'])" />
 
-                <x-table :headers="['Institusi', 'Jenis Institusi', 'Nama Institusi', 'Nama Permohon', 'Daerah']" :columns="['type', 'cate', 'name', 'con1', 'district']" :rows="$requests" :statuses="$statuses" :id="'id'"
+                <x-table :headers="['Tarikh Permohonan', 'Institusi', 'Jenis Institusi', 'Nama Institusi', 'Nama Permohon', 'Daerah']" :columns="['registration_request_date', 'cate1', 'cate', 'name', 'con1', 'rem8']" :rows="$requests" :statuses="$statuses" :id="'id'"
                     route="detail" routeType="mosques" />
                 <x-pagination :items="$requests" label="mosques" />
 

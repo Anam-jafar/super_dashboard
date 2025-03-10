@@ -400,7 +400,9 @@ class EntityController extends Controller
         $per_page = $request->per_page ?? 10;
 
         $query = DB::table('client')
-            ->where('is_activated', 1);
+            ->where('sta', 1)
+            ->where('registration_request_date', '!=', null)
+            ->orderBy('id', 'desc');
         
         // Apply search filter (searching by name)
         if ($request->filled('search')) {
@@ -421,8 +423,29 @@ class EntityController extends Controller
                 // Fetch dropdown data
 
         return view('institutes.detail_list', compact(['requests', 'statuses']));
-
             
+    }
+
+    public function approve(Request $request, string $entityType, $id)
+    {
+        // $validationRules = self::ENTITY_TYPES[$entityType]['validation'] ?? [];
+
+        $updated= DB::table('client')
+            ->where('id', $id)
+            ->update(['sta' => 0, 'mel' => $request->mel]);
+
+
+        // $route = self::ENTITY_TYPES[$entityType]['view'].'.index';
+
+        if ($updated) {
+            $this->logActivity('Approve '.$entityType, $entityType.' Approve attempt successful');
+        } else {
+            $this->logActivity('Approve '.$entityType, $entityType.' Approve attempt failed');
+        }
+
+        return $updated
+            ? redirect()->route('instituteActivateRequestList')->with('success', ucfirst($entityType).' Approved successfully.')
+            : redirect()->back()->with('error', 'Failed to update '.$entityType);
     }
 
 }

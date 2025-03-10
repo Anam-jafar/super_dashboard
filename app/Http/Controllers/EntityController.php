@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Mail\RegistrationApproveConfirmation;
+use Illuminate\Support\Facades\Mail;
 
 class EntityController extends Controller
 {
@@ -402,6 +404,7 @@ class EntityController extends Controller
         $query = DB::table('client')
             ->where('sta', 1)
             ->where('registration_request_date', '!=', null)
+            ->where('regdt', null)
             ->orderBy('id', 'desc');
         
         // Apply search filter (searching by name)
@@ -432,13 +435,18 @@ class EntityController extends Controller
 
         $updated= DB::table('client')
             ->where('id', $id)
-            ->update(['sta' => 0, 'mel' => $request->mel]);
+            ->update(['sta' => 0, 
+                      'mel' => $request->mel,
+                      'regdt' => now()->toDateString(),
+                    ]);
 
 
         // $route = self::ENTITY_TYPES[$entityType]['view'].'.index';
 
         if ($updated) {
             $this->logActivity('Approve '.$entityType, $entityType.' Approve attempt successful');
+                Mail::to($request->mel)->send(new RegistrationApproveConfirmation($request->mel));
+
         } else {
             $this->logActivity('Approve '.$entityType, $entityType.' Approve attempt failed');
         }

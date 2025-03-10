@@ -127,6 +127,8 @@
                     </div>
 
                     <input type="hidden" name="sta" value=1 />
+                    <input type="hidden" name="state" value="Selangor" />
+                    <input type="hidden" name="country" value="Malaysia" />
 
 
 

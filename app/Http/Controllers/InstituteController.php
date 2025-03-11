@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use App\Mail\RegistrationApproveConfirmation;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Parameter;
 use App\Models\Institute;
 
 class InstituteController extends Controller
 {
-    //
     private array $defaultInstituteValues = [
         'firebase_id' => '',
         'imgProfile' => '',
@@ -33,7 +34,7 @@ class InstituteController extends Controller
             'state' => 'required|string|max:50',
             'hp' => 'nullable|string|max:50',
             'fax' => 'nullable|string|max:50',
-            'mel' => 'nullable|email|max:255',
+            'mel' => 'nullable|string|max:255',
             'web' => 'nullable|string|max:255',
             'rem10' => 'nullable|string|max:50',
             'rem11' => 'nullable|string|max:50',
@@ -47,7 +48,7 @@ class InstituteController extends Controller
             'pos1' => 'nullable|string|max:50',
             'tel1' => 'nullable|string|max:50',
             'sta' => 'nullable|string|max:50',
-            'country' => 'required|string|max:50',
+            'country' => 'nullable|string|max:50',
         ];
 
         return Validator::make($request->all(), $rules)->validate();
@@ -125,50 +126,87 @@ class InstituteController extends Controller
 
             Institute::create($dataToInsert);
 
-            return redirect()->back();
+            return redirect()->route('instituteList');
         }
         return view('Institute.create', ['parameters' => $this->getCommon()]);
     }
 
     public function edit(Request $request, $id)
     {
-        if ($request->isMethod('post')) {
-            $institute = Parameter::find($id);
-            $institute->update($request->all());
-            return redirect()->route('institute.list');
-        }
 
         $institute = Institute::with('type', 'category', 'City', 'subdistrict', 'district')->find($id);
+
+        if ($request->isMethod('post')) {
+            
+            $validatedData = $this->validateInstitute($request);
+            $institute->update($validatedData);
+            // $institute->update($request->except('_token'));
+
+            return redirect()->route('instituteList');
+        }
+
 
         return view('Institute.edit', ['institute' => $institute, 'parameters' => $this->getCommon()]);        
     }
 
     public function registrationRequests(Request $request)
     {
-        $per_page = $request->per_page ?? 10;
+        $perPage = $request->input('per_page', 10);
 
-        $query = Parameter::where('grp', 'type_CLIENT')
-            ->where('etc', 1);
+        $query = Institute::where('sta', 1)
+            ->whereNotNull('registration_request_date')
+            ->whereNull('regdt');
 
-        if ($request->filled('search')) {
-            $query->where('prm', 'like', '%' . $request->search . '%');
-        }
+        $query = $this->applyFilters($query, $request);
 
-        $institutes = $query->paginate($per_page);
+        $institutes = $query->with('type', 'category', 'City', 'subdistrict', 'district')
+            ->orderBy('id', 'desc')
+            ->paginate($perPage)->withQueryString();
 
-        return view('Institute.registration_requests', compact('institutes'));
+        
+            $institutes->getCollection()->transform(function ($institute) {
+            $institute->TYPE = $institute->Type->prm ?? null;
+            $institute->CATEGORY = $institute->Category->prm ?? null;
+            $institute->CITY = $institute->City->prm ?? null;
+            $institute->SUBDISTRICT = $institute->Subdistrict->prm ?? null;
+            $institute->DISTRICT = $institute->District->prm ?? null;
+            return $institute;
+        });
+
+        return view('Institute.registration_requests', [
+            'parameters' => $this->getCommon(),
+            'institutes' => $institutes
+        ]);
     }
 
     public function registrationRequestDetail($id)
     {
-        return view('Institute.registration_request_detail', ['institute' => Parameter::find($id)]);
+        $institute = Institute::with('type', 'category', 'City', 'subdistrict', 'district')->find($id);
+
+        return view('Institute.registration_request_detail', ['institute' => $institute]);
     }
+
 
     public function approveRegistrationRequest(Request $request, $id)
     {
-        $institute = Parameter::find($id);
-        $institute->update(['etc' => 2]);
+        $institute = Institute::find($id);
 
-        return redirect()->route('institute.registrationRequests');
+        if (!$institute) {
+            return redirect()->back()->with('error', 'Institute not found.');
+        }
+
+        $updated = $institute->update([
+            'sta' => 0,
+            'mel' => $request->mel,
+            'regdt' => now()->toDateString(),
+        ]);
+
+        if ($updated) {
+            Mail::to($request->mel)->send(new RegistrationApproveConfirmation($request->mel));
+            return redirect()->route('registrationRequests')->with('success', 'Registration request approved successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Failed to approve the registration request.');
+        }
     }
+
 }

@@ -47,6 +47,7 @@ class Institute extends Model
         'isustaz',
         'iskariah',
         'sid',
+        'regdt'
     ];
 
     public function Type()
@@ -76,5 +77,9 @@ class Institute extends Model
     public function Country()
     {
         return $this->belongsTo(Parameter::class, 'country', 'code');
+    }
+    public function UserPosition()
+    {
+        return $this->belongsTo(Parameter::class, 'pos1', 'code');
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Mail\RegistrationApproveConfirmation;
 use Illuminate\Support\Facades\Mail;
-
+use App\Models\Parameter;
 class EntityController extends Controller
 {
 
@@ -148,6 +148,9 @@ class EntityController extends Controller
                 ->distinct()
                 ->pluck('prm')
                 ->mapWithKeys(fn ($prm) => [$prm => $prm])
+                ->toArray(),
+            'types' => Parameter::where('grp', 'type_CLIENT')
+                ->pluck('prm', 'code')
                 ->toArray(),
         ];
     }

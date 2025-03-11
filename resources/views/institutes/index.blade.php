@@ -17,7 +17,7 @@
                         'name' => 'cate',
                         'label' => 'Semua Jenis Institusi',
                         'type' => 'select',
-                        'options' => $institute_categories,
+                        'options' => $types,
                     ],
                 
                     ['name' => 'district', 'label' => 'Semua Daerah', 'type' => 'select', 'options' => $districts],

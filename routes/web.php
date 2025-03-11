@@ -6,6 +6,7 @@ use App\Http\Controllers\MetrixController;
 use App\Http\Controllers\EntityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\InstituteController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -87,6 +88,13 @@ Route::prefix('mais')->group(function () {
 
         });
         Route::get('/under-maintainance', [SubscriptionController::class, 'underMaintainance'])->name('underMaintainance');
+
+        Route::get('/institute/list', [InstituteController::class, 'list'])->name('instituteList');
+        Route::match(['get', 'post'], '/institute/create', [InstituteController::class, 'create'])->name('instituteCreate');
+        Route::match(['get', 'post'], '/institute/edit/{id}', [InstituteController::class, 'edit'])->name('instituteEdit');
+        Route::get('/institute/registration-requests', [InstituteController::class, 'registrationRequests'])->name('registrationRequests');
+        Route::get('/institute/registration-requests/{id}', [InstituteController::class, 'registrationRequestDetail'])->name('registrationRequestDetail');
+        Route::post('/institute/registration-requests/{id}', [InstituteController::class, 'approveRegistrationRequest'])->name('approveRegistrationRequest');
         
 
     });

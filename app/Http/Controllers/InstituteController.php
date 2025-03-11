@@ -126,7 +126,7 @@ class InstituteController extends Controller
 
             Institute::create($dataToInsert);
 
-            return redirect()->route('instituteList');
+            return redirect()->route('instituteList')->with('success', 'Institusi telah berjaya didaftarkan!');
         }
         return view('Institute.create', ['parameters' => $this->getCommon()]);
     }
@@ -142,7 +142,7 @@ class InstituteController extends Controller
             $institute->update($validatedData);
             // $institute->update($request->except('_token'));
 
-            return redirect()->route('instituteList');
+            return redirect()->route('instituteList')->with('success', 'Institusi tidak berjaya dikemaskini!');
         }
 
 
@@ -192,7 +192,7 @@ class InstituteController extends Controller
         $institute = Institute::find($id);
 
         if (!$institute) {
-            return redirect()->back()->with('error', 'Institute not found.');
+            return redirect()->back()->with('error', 'Tiada rekod ditemui!');
         }
 
         $updated = $institute->update([
@@ -203,9 +203,9 @@ class InstituteController extends Controller
 
         if ($updated) {
             Mail::to($request->mel)->send(new RegistrationApproveConfirmation($request->mel));
-            return redirect()->route('registrationRequests')->with('success', 'Registration request approved successfully.');
+            return redirect()->route('registrationRequests')->with('success', 'Pendaftaran Institusi diluluskan dan email pengesahan telah berjaya dihantar!');
         } else {
-            return redirect()->back()->with('error', 'Failed to approve the registration request.');
+            return redirect()->back()->with('error', 'Pengesahan pendaftaran institusi tidak berjaya, sila cuba sebetar lagi!');
         }
     }
 

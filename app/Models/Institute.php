@@ -47,7 +47,8 @@ class Institute extends Model
         'isustaz',
         'iskariah',
         'sid',
-        'regdt'
+        'regdt',
+        'app',
     ];
 
     public function Type()

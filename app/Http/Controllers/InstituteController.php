@@ -18,6 +18,7 @@ class InstituteController extends Controller
         'isustaz' => '',
         'iskariah' => '',
         'sid' => 1,
+        'app' => 'CLIENT',
     ];
     private function validateInstitute(Request $request): array
     {

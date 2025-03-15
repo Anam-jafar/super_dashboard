@@ -31,7 +31,7 @@
                     <!-- Dynamic Data Columns -->
                     @foreach ($columns as $column)
                         <td class="px-2 py-2 whitespace-nowrap text-xs text-black break-words">
-                            @if (in_array($column, ['sta', 'status', 'subscription_status', 'is_activated']))
+                            @if (in_array($column, ['sta', 'status', 'subscription_status', 'is_activated', 'FINSUBMISSIONSTATUS']))
                                 <x-status-badge :column="$column" :value="$row->$column" />
                             @elseif($column == 'amount')
                                 RM 9000

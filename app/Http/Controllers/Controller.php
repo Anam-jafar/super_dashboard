@@ -135,6 +135,17 @@ class Controller extends BaseController
             'user_statuses' => Parameter::where('grp', 'clientstatus')
                 ->pluck('prm', 'val')
                 ->toArray(),
+            'statements' => Parameter::where('grp', 'statement')
+                ->pluck('prm', 'code')
+                ->toArray(),
+            'audit_types' => Parameter::where('grp', 'audit_type')
+                ->pluck('prm', 'code')
+                ->toArray(),
+            'financial_statement_statuses' => Parameter::where('grp', 'splkstatus')
+                ->whereNotIn('val', [0, 1])
+                ->pluck('prm', 'val')
+                ->toArray(),
+
 
         ];
     }

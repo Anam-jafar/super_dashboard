@@ -30,7 +30,7 @@ class InstituteController extends Controller
             'rem9' => 'required|string|max:50',
             'addr' => 'nullable|string|max:500',
             'addr1' => 'nullable|string|max:500',
-            'pcode' => 'nullable|string|max:50',
+            'pcode' => 'nullable|string|max:8',
             'city' => 'nullable|string|max:50',
             'state' => 'nullable|string|max:50',
             'hp' => 'nullable|string|max:50',

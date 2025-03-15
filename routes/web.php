@@ -7,6 +7,9 @@ use App\Http\Controllers\EntityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\InstituteController;
+use App\Http\Controllers\FinancialStatementController;
+use Illuminate\Support\Facades\Response;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -95,6 +98,22 @@ Route::prefix('mais')->group(function () {
         Route::get('/institute/registration-requests', [InstituteController::class, 'registrationRequests'])->name('registrationRequests');
         Route::get('/institute/registration-requests/{id}', [InstituteController::class, 'registrationRequestDetail'])->name('registrationRequestDetail');
         Route::post('/institute/registration-requests/{id}', [InstituteController::class, 'approveRegistrationRequest'])->name('approveRegistrationRequest');
+
+
+        Route::get('/financial-statement/list', [FinancialStatementController::class, 'list'])->name('statementList');
+        Route::get('/financial-statement/reviewed-list', [FinancialStatementController::class, 'reviewedList'])->name('reviwedStatementList');
+        Route::match(['get', 'post'], '/financial-statement/view/{id}', [FinancialStatementController::class, 'view'])->name('viewStatement');
+        Route::match(['get', 'post'], '/financial-statement/review/{id}', [FinancialStatementController::class, 'review'])->name('reviewStatement');
+        Route::get('/download/attachment/{filename}', function ($filename) {
+    $filePath = base_path("../static_files/fin_statement_attachments/{$filename}");
+
+    if (file_exists($filePath)) {
+        return Response::download($filePath);
+    }
+
+    return redirect()->back()->with('error', 'File not found');
+})->name('download.attachment');
+
         
 
     });

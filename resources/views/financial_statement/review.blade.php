@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.base')
 
 @section('styles')
 @endsection
@@ -9,15 +9,15 @@
 
             <x-page-header :title="'Penghantaran Laporan Kewangan'" :breadcrumbs="[['label' => 'Laporan Kewangan', 'url' => 'javascript:void(0);'], ['label' => 'Penyata Baharu']]" />
             <x-alert />
-            <div class="bg-white text-xs p-6 rounded-lg shadow mt-8">
-                <div class="p-2 grid grid-cols-1 gap-x-16 gap-y-2 max-w-3xl">
+            <div class="mt-8 sm:p-4">
+                <div class="grid grid-cols-1 gap-x-16 gap-y-2 max-w-3xl">
 
                     <x-show-key-value :key="'No Rujukan'" :value="$financialStatement->submission_refno" />
                     <x-show-key-value :key="'Tarikh Penghantaran'" :value="$financialStatement->submission_date" />
 
 
                 </div>
-                <div class="p-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                     <div class="grid grid-cols-1 gap-x-16 gap-y-2 max-w-3xl mt-8">
                         <x-show-key-value :key="'Institusi'" :value="$financialStatement->Institute->Type->prm" />
@@ -35,7 +35,8 @@
                         <x-show-key-value :key="'No. H/P'" :value="$financialStatement->Institute->tel1" />
                     </div>
                 </div>
-                <div class="">
+                <div class="bg-white text-xs md:p-4">
+                    <x-alert />
 
                     @if ($instituteType == 2)
                         <div>
@@ -44,8 +45,7 @@
                                     type="text" placeholder="Year" value="{{ $financialStatement->fin_year }}" />
 
                                 <x-input-field level="Kategori Penyata" id="statment" name="fin_category" type="text"
-                                    disabled="true" placeholder="Pilih"
-                                    value="{{ $financialStatement->finCategory->parameter }}" />
+                                    disabled="true" placeholder="Pilih" value="{{ $financialStatement->Category->prm }}" />
 
                                 <x-input-field level="Peratus Kemajuan Pembinaan Terkini (%)" id="p1"
                                     name="latest_construction_progress" type="text" placeholder="00"
@@ -122,7 +122,7 @@
 
                                 <x-input-field level="Kategori Penyata" id="statment" name="fin_category"
                                     type="text" disabled="true" placeholder="Pilih"
-                                    value="{{ $financialStatement->finCategory->parameter }}" />
+                                    value="{{ $financialStatement->Category->prm }}" />
                             </div>
                             <p class="text-gray-800 font-medium mt-4">Butiran Penyata :</p>
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -157,11 +157,12 @@
                                 :
                             </p>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 mb-4">
-                                {{-- <x-pdf-download title="Penyata Kewangan Dan Nota Kewangan"
-                                    pdfFile="{{ $attachment->fin_statement ?? '' }}" />
-                                <x-pdf-download title="Penyata Bank" pdfFile="{{ $attachment->bank_statement ?? '' }}" />
+                                <x-pdf-download title="Penyata Kewangan Dan Nota Kewangan"
+                                    pdfFile="{{ $financialStatement->attachment1 ?? '' }}" />
+                                <x-pdf-download title="Penyata Bank"
+                                    pdfFile="{{ $financialStatement->attachment2 ?? '' }}" />
                                 <x-pdf-download title="Penyata Penyesuaian Bank"
-                                    pdfFile="{{ $attachment->bank_reconciliation ?? '' }}" /> --}}
+                                    pdfFile="{{ $financialStatement->attachment3 ?? '' }}" />
 
                             </div>
                         </div>
@@ -169,7 +170,7 @@
                     <div class="mt-4 mb-4">
 
                         <p class="font-semibold text-gray-800 mt-4 mb-4">Status Semakan Audit Dalam MAIS</p>
-                        <form action="" method="POST" enctype="multipart/form-data">
+                        <form action="" method="POST">
 
                             @csrf
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -180,10 +181,10 @@
 
                             <div id="cancellation_fields" style="display: none;">
                                 <div class="gap-6 mt-4 mb-4">
-                                    <label class="text-gray-800 font-medium col-span-3" for="cancel_reason_byadmin">
+                                    <label class="text-gray-800 font-medium col-span-3" for="cancel_reason_adm">
                                         Alasan Pembatalan <span class="text-red-500">*</span>
                                     </label>
-                                    <textarea name="cancel_reason_byuser" id="cancellation_reason" cols="30" rows="4"
+                                    <textarea name="cancel_reason_adm" id="cancellation_reason" cols="30" rows="4"
                                         class="block w-full border !border-[#6E829F] focus:shadow-sm dark:focus:shadow-white/10 
                                         rounded-sm text-sm focus:z-10 focus:outline-0 focus:border-[#6E829F] 
                                         dark:focus:border-white/10 text-black resize-none col-span-3 mt-2"></textarea>
@@ -192,12 +193,14 @@
                                     <label class="text-gray-800 font-medium col-span-3" for="correction_proposal_byadmin">
                                         Cadangan Pembetulan <span class="text-red-500">*</span>
                                     </label>
-                                    <textarea name="correction_proposal_byuser" id="correction_proposal" cols="30" rows="4"
+                                    <textarea name="suggestion_adm" id="correction_proposal" cols="30" rows="4"
                                         class="block w-full border !border-[#6E829F] focus:shadow-sm dark:focus:shadow-white/10 
                                         rounded-sm text-sm focus:z-10 focus:outline-0 focus:border-[#6E829F] 
                                         dark:focus:border-white/10 text-black resize-none col-span-3 mt-2"></textarea>
                                 </div>
                             </div>
+
+
 
                             <div class="flex justify-between mt-8">
                                 <button

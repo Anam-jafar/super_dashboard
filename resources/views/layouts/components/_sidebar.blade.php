@@ -168,11 +168,11 @@
                             <a href="javascript:void(0)">Laporan Kewangan</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('underMaintainance') }}" class="side-menu__item">Penghantaran
+                            <a href="{{ route('statementList') }}" class="side-menu__item">Penghantaran
                                 Baru</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('underMaintainance') }}" class="side-menu__item">
+                            <a href="{{ route('reviwedStatementList') }}" class="side-menu__item">
                                 Rekod Penghantaran</a>
                         </li>
                         {{-- <li class="slide">

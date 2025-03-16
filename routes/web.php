@@ -116,7 +116,6 @@ Route::prefix('mais')->group(function () {
         
 
     });
-});
 
     Route::get('/download/attachment/{filename}', function ($filename) {
         $path = '/var/www/static_files/fin_statement_attachments/' . $filename;
@@ -125,6 +124,9 @@ Route::prefix('mais')->group(function () {
         }
             return redirect()->back()->with('error', 'File not found');
     })->name('download.attachment');
+});
+
+
 
 
 

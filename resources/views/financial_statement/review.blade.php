@@ -25,13 +25,13 @@
                         <x-show-key-value :key="'Nama Institusi'" :value="$financialStatement->Institute->name" />
                         <x-show-key-value :key="'Daerah'" :value="$financialStatement->Institute->District->prm" />
                         <x-show-key-value :key="'Mukim'" :value="$financialStatement->Institute->Subdistrict->prm" />
-                        <x-show-key-value :key="'Bandar'" :value="$financialStatement->Institute->City" />
+                        <x-show-key-value :key="'Bandar'" :value="$financialStatement->Institute->City->prm" />
                         <x-show-key-value :key="'No. Telefon'" :value="$financialStatement->Institute->hp" />
                         <x-show-key-value :key="'Emel'" :value="$financialStatement->Institute->mel" />
                     </div>
                     <div class=" max-w-3xl mt-8 space-y-2">
                         <x-show-key-value :key="'Nama Pengawai / Waki Institusi'" :value="$financialStatement->Institute->con1" />
-                        <x-show-key-value :key="'Jawatan'" :value="$financialStatement->Institute->UserPosition" />
+                        <x-show-key-value :key="'Jawatan'" :value="$financialStatement->Institute->UserPosition->prm" />
                         <x-show-key-value :key="'No. H/P'" :value="$financialStatement->Institute->tel1" />
                     </div>
                 </div>

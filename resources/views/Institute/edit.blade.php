@@ -108,8 +108,8 @@
                         <div class="grid grid-cols-2 gap-6">
                             <x-input-field level="District" id="inst_district" name="rem8" type="select"
                                 placeholder="Pilih" value="{{ $institute->rem8 }}" :valueList="$parameters['districts']" />
-                            <x-input-field level="Negeri" id="negeri" name="state" type="text" placeholder=""
-                                value="{{ $institute->state ?? '' }}" />
+                            <x-input-field level="Negeri" id="negeri" name="state" type="select" placeholder=""
+                                value="{{ $institute->state ?? '' }}" :valueList="$parameters['states']" />
                         </div>
 
                     </div>

@@ -49,6 +49,7 @@ class InstituteController extends Controller
             'pos1' => 'nullable|string|max:50',
             'tel1' => 'nullable|string|max:50',
             'sta' => 'nullable|string|max:50',
+            'state' => 'nullable|string|max:50',
             'country' => 'nullable|string|max:50',
         ];
 

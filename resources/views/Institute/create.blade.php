@@ -60,7 +60,8 @@
                             <x-input-field level="Bandar" id="city" name="city" type="select" placeholder=""
                                 :valueList="$parameters['cities']" />
 
-                            <x-input-field level="Negeri" id="negeri" name="state" type="text" placeholder="" />
+                            <x-input-field level="Negeri" id="negeri" name="state" type="select" placeholder=""
+                                :valueList="$parameters['states']" />
                         </div>
                     </div>
 
@@ -125,8 +126,8 @@
                     </div>
 
                     <input type="hidden" name="sta" value=1 />
-                    <input type="hidden" name="state" value="Selangor" />
-                    <input type="hidden" name="country" value="Malaysia" />
+                    <input type="hidden" name="state" value="SEL" />
+                    <input type="hidden" name="country" value="MYS" />
 
 
 

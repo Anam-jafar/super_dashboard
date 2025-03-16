@@ -84,6 +84,13 @@ class Controller extends BaseController
             'statuses' => Parameter::where('grp', 'clientstatus')
                 ->pluck('prm', 'val')
                 ->toArray(),
+            'states' => Parameter::where('grp', 'state')
+                ->pluck('prm', 'code')
+                ->toArray(),
+            
+            'countries' => Parameter::where('grp', 'country')
+                ->pluck('prm', 'code')
+                ->toArray(),
 
 
         ];

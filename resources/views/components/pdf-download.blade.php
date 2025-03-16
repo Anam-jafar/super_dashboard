@@ -1,6 +1,6 @@
 @php
     // Define the absolute file path
-    $storageFilePath = $pdfFile ? base_path('../static_files/fin_statement_attachments/' . basename($pdfFile)) : '';
+    $storageFilePath = $pdfFile ? '/var/www/static_files/fin_statement_attachments/' . basename($pdfFile) : '';
 
     // Check if the file exists
     $fileExists = $storageFilePath && file_exists($storageFilePath);
@@ -17,14 +17,15 @@
         <div class="flex items-center justify-between rounded-lg p-3 border border-[#6E829F] bg-[#EBEBEB]">
             <div class="flex items-center space-x-3">
                 <div class="flex-shrink-0">
-                    <img src="{{ asset('assets/icons/fin_pdf.svg') }}" alt="PDF" class="w-18 h-18" />
+                    <img src="{{ asset('subscription/assets/icons/fin_pdf.svg') }}" alt="PDF" class="w-18 h-18" />
                 </div>
                 <div class="flex flex-col">
                     <span class="text-sm text-gray-600">{{ $fileSize }}</span>
                 </div>
             </div>
             <a href="{{ $downloadUrl }}" class="text-gray-500 hover:text-gray-700">
-                <img src="{{ asset('assets/icons/fin_pdf_download.svg') }}" alt="download" class="w-12 h-12" />
+                <img src="{{ asset('subscription/assets/icons/fin_pdf_download.svg') }}" alt="download"
+                    class="w-12 h-12" />
             </a>
         </div>
     @else

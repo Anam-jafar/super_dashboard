@@ -113,32 +113,18 @@ Route::prefix('mais')->group(function () {
         Route::match(['get', 'post'], '/financial-statement/review/{id}', [FinancialStatementController::class, 'review'])->name('reviewStatement');
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-        Route::get('/download/attachment/{filename}', function ($filename) {
-            $filePath = base_path("../static_files/fin_statement_attachments/{$filename}");
-
-            if (file_exists($filePath)) {
-                return Response::download($filePath);
-            }
-
-            return redirect()->back()->with('error', 'File not found');
-        })->name('download.attachment');
-
         
 
     });
 });
+
+    Route::get('/download/attachment/{filename}', function ($filename) {
+        $path = '/var/www/static_files/fin_statement_attachments/' . $filename;
+        if (file_exists($path)) {
+            return response()->file($path);
+        }
+            return redirect()->back()->with('error', 'File not found');
+    })->name('download.attachment');
 
 
 

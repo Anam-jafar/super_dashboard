@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\InstituteController;
 use App\Http\Controllers\FinancialStatementController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Response;
 
 /*
@@ -100,19 +101,39 @@ Route::prefix('mais')->group(function () {
         Route::post('/institute/registration-requests/{id}', [InstituteController::class, 'approveRegistrationRequest'])->name('approveRegistrationRequest');
 
 
+        Route::get('/user/list', [UserController::class, 'list'])->name('userList');
+        Route::match(['get', 'post'], '/user/create', [UserController::class, 'create'])->name('userCreate');
+        Route::match(['get', 'post'], '/user/edit/{id}', [UserController::class, 'edit'])->name('userEdit');
+
+
+
         Route::get('/financial-statement/list', [FinancialStatementController::class, 'list'])->name('statementList');
         Route::get('/financial-statement/reviewed-list', [FinancialStatementController::class, 'reviewedList'])->name('reviwedStatementList');
         Route::match(['get', 'post'], '/financial-statement/view/{id}', [FinancialStatementController::class, 'view'])->name('viewStatement');
         Route::match(['get', 'post'], '/financial-statement/review/{id}', [FinancialStatementController::class, 'review'])->name('reviewStatement');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         Route::get('/download/attachment/{filename}', function ($filename) {
-    $filePath = base_path("../static_files/fin_statement_attachments/{$filename}");
+            $filePath = base_path("../static_files/fin_statement_attachments/{$filename}");
 
-    if (file_exists($filePath)) {
-        return Response::download($filePath);
-    }
+            if (file_exists($filePath)) {
+                return Response::download($filePath);
+            }
 
-    return redirect()->back()->with('error', 'File not found');
-})->name('download.attachment');
+            return redirect()->back()->with('error', 'File not found');
+        })->name('download.attachment');
 
         
 

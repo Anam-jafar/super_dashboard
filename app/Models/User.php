@@ -8,12 +8,29 @@ use Illuminate\Auth\Authenticatable;
 
 class User extends Model implements AuthenticatableContract
 {
-    use Authenticatable; // Use the Authenticatable trait
+    use Authenticatable; 
     protected $table = 'usr';
-    public $timestamps = false; // This disables the automatic timestamp handling
+    public $timestamps = false; 
 
 
-
-    protected $fillable = ['ic', 'pass', 'name', 'mel'];
+    protected $fillable = ['ic', 'pass', 'name', 'mel', 'uid', 'hp', 'jobdiv', 'job', 'joblvl', 'syslevel', 'status', 'imgProfile', 'sch_id', 'login_sta', 'login_ts', 'login_period', 'resettokenexpiration', 'mailaddr', 'mailaddr2', 'mailaddr3'];
     protected $hidden = ['pass'];
+
+    public function Department()
+    {
+        return $this->belongsTo(Parameter::class, 'jobdiv', 'code');
+    }
+    public function Position()
+    {
+        return $this->belongsTo(Parameter::class, 'job', 'code');
+    }
+    public function DistrictAcceess()
+    {
+        return $this->belongsTo(Parameter::class, 'joblvl', 'code');
+    }
+    public function UserGroup()
+    {
+        return $this->belongsTo(Parameter::class, 'syslevel', 'code');
+    }
+    
 }

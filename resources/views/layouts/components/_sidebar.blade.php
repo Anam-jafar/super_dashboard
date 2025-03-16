@@ -296,7 +296,7 @@
                             <a href="javascript:void(0)">Pengurusan Pengguna</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('showList', ['type' => 'admins']) }}" class="side-menu__item">Senarai
+                            <a href="{{ route('userList') }}" class="side-menu__item">Senarai
                                 Admin</a>
                         </li>
                         <li class="slide">

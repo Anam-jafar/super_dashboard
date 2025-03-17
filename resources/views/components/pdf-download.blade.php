@@ -10,27 +10,28 @@
     $downloadUrl = $fileExists ? route('download.attachment', ['filename' => basename($pdfFile)]) : '#';
 @endphp
 
-<div class="bg-gray-50 rounded-lg">
-    <p class="text-gray-800 font-medium mb-4">{{ $title }}</p>
+<div class="rounded-lg mt-2">
+    <p class="text-gray-900 mb-4">{{ $title }}</p>
 
     @if ($fileExists)
-        <div class="flex items-center justify-between rounded-lg p-3 border border-[#6E829F] bg-[#EBEBEB]">
+        <div class="flex items-center justify-between rounded-md p-3 border !border-[#6E829F] bg-gray-100 h-14">
             <div class="flex items-center space-x-3">
                 <div class="flex-shrink-0">
-                    <img src="{{ asset('subscription/assets/icons/fin_pdf.svg') }}" alt="PDF" class="w-18 h-18" />
+                    <img src="{{ asset('subscription/assets/icons/fin_pdf.svg') }}" alt="PDF" class="w-8 h-8" />
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-sm text-gray-600">{{ $fileSize }}</span>
+                    <span class="text-sm text-gray-800">{{ $fileSize }}</span>
                 </div>
             </div>
-            <a href="{{ $downloadUrl }}" class="text-gray-500 hover:text-gray-700">
+            <a href="{{ $downloadUrl }}" target="_blank" rel="noopener noreferrer"
+                class="text-gray-700 hover:text-gray-900">
                 <img src="{{ asset('subscription/assets/icons/fin_pdf_download.svg') }}" alt="download"
-                    class="w-12 h-12" />
+                    class="w-10 h-10" />
             </a>
         </div>
     @else
-        <div class="flex items-center justify-center rounded-lg p-3 border border-[#6E829F] bg-[#EBEBEB] h-20">
-            <span class="text-gray-600">No PDF Available</span>
+        <div class="flex items-center justify-center rounded-md p-3 border !border-[#6E829F] bg-gray-100 h-14">
+            <span class="text-gray-800">No PDF Available</span>
         </div>
     @endif
 </div>

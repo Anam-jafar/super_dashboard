@@ -1,5 +1,5 @@
-<div class="flex">
-    <div class="text-black font-medium sm:w-32 md:w-64 block text-start">{{ $key }}</div>
-    <div class="text-black font-medium mr-10 block">:</div>
-    <div class="text-black font-medium block">{{ $value }}</div>
+<div style="display: flex; margin-bottom: 12px; align-items: baseline;">
+    <div style="font-weight: 500; width: 150px; text-align: left; color: black;">{{ $key }}</div>
+    <div style="font-weight: 500; margin: 0 25px; color: black;">:</div>
+    <div style="font-weight: 500; color: black;">{{ $value }}</div>
 </div>

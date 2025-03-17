@@ -14,17 +14,22 @@
 
                 <x-filter-card :filters="[
                     [
-                        'name' => 'institute_type',
+                        'name' => 'cate1',
                         'label' => 'Semua Institusi',
                         'type' => 'select',
-                        'options' => $instituteType,
+                        'options' => $parameters['types'],
                     ],
-                    ['name' => 'area', 'label' => 'Semua Daerah', 'type' => 'select', 'options' => $daerah],
+                    [
+                        'name' => 'rem8',
+                        'label' => 'Semua Daerah',
+                        'type' => 'select',
+                        'options' => $parameters['districts'],
+                    ],
                 
                     ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
                 ]" :route="route('requestSubscriptions')" />
 
-                <x-table :headers="['Tarikh Mohon', 'Institusi', 'Nama Institusi', 'Daerah', 'Status']" :columns="['rem6', 'etc', 'name', 'cate1', 'subscription_status']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
+                <x-table :headers="['Tarikh Mohon', 'Institusi', 'Nama Institusi', 'Daerah', 'Status']" :columns="['rem6', 'TYPE', 'name', 'DISTRICT', 'subscription_status']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
                     popupTriggerButton="'true'" />
 
                 <!-- For each subscription, you'll need just two modals instead of three -->

@@ -18,17 +18,12 @@
                 <div class="space-y-2 py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs">
                     <h3 class="font-semibold text-lg mb-2">Maklumat Institusi</h3>
                     <hr class="mb-4">
-                    <div class="grid grid-col-2 md:grid-cols-4 gap-6">
-                        <div class="col-span-2">
+                    <div class="grid grid-col-1 md:grid-cols-2 gap-6">
+                        <x-input-field level="ID Masjid" id="inst_refno" name="uid" type="text"
+                            placeholder="Enter Institute Ref No" value="{{ $institute->uid }}" readonly="true" />
 
-                            <x-input-field level="ID Masjid" id="inst_refno" name="uid" type="text"
-                                placeholder="Enter Institute Ref No" value="{{ $institute->uid }}" readonly="true" />
-
-                        </div>
-                        <div class="col-span-2">
-                            <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text"
-                                placeholder="Enter Institute Name" value="{{ $institute->name }}" />
-                        </div>
+                        <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text"
+                            placeholder="Enter Institute Name" value="{{ $institute->name }}" />
                     </div>
 
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
@@ -57,10 +52,11 @@
                                 value="{{ $institute->web ?? '' }}" />
                         </div>
                     </div>
-                    <div class="grid grid-col-1 md:grid-cols-4 gap-6 ">
-
-                        <x-input-field level="Status" id="inst_type" name="sta" type="select" placeholder="-- Type --"
-                            value="{{ $institute->sta }}" :valueList="$parameters['user_statuses']" />
+                    <div class="grid grid-col-1 md:grid-cols-2 gap-6 ">
+                        <div class="grid grid-col-1 md:grid-cols-2 gap-6 ">
+                            <x-input-field level="Status" id="inst_type" name="sta" type="select" placeholder="-- Type --"
+                                value="{{ $institute->sta }}" :valueList="$parameters['user_statuses']" />
+                        </div>
                     </div>
                 </div>
 
@@ -141,14 +137,15 @@
                                 placeholder="" value="{{ $institute->tel1 ?? '' }}" />
                         </div>
                     </div>
+                    <br><br>
                     <div class="flex justify-between !mt-8">
-                        <button
-                            class="bg-[#6E829F] ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg">
+                        <a href="{{ route('instituteList') }}"
+                            class="bg-gray-500 hover:bg-gray-600 text-white font-medium ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg inline-flex items-center justify-center">
                             Kembali
-                        </button>
+                        </a>
 
                         <button
-                            class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
+                            class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
                             type="submit">
                             Kemaskini
                         </button>

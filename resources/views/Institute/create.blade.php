@@ -108,40 +108,47 @@
                             placeholder="" />
                     </div>
 
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Nama Pegawai/Wakil Institusi" id="incharge" name="con1"
-                                type="text" placeholder="" />
-                            <x-input-field level="No. Kod Pengenalan" id="nric" name="ic" type="text"
-                                placeholder="" />
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Jawatan" id="pos" name="pos1" type="select" placeholder=""
-                                :valueList="$parameters['user_positions']" />
-                            <x-input-field level="No. H/P" id="hp" name="tel1" type="text"
-                                placeholder="" />
-                        </div>
-                    </div>
-
                     <input type="hidden" name="sta" value=1 />
                     <input type="hidden" name="state" value="SEL" />
                     <input type="hidden" name="country" value="MYS" />
 
 
 
+
+                </div>
+
+                <div class="space-y-2 py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs mt-4">
+                    <h3 class="font-semibold text-lg mb-2">Pegawai/Wakil Institusi</h3>
+                    <hr class="mb-4">
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Nama Pegawai/Wakil Institusi" id="incharge" name="con1"
+                                type="text" placeholder="" />
+                            <x-input-field level="No. Kad Pengenalan" id="nric" name="ic" type="text"
+                                placeholder=""  />
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-6">
+                            <x-input-field level="Jawatan" id="pos" name="pos1" type="select" placeholder=""
+                                    :valueList="$parameters['user_positions']" />
+                            <x-input-field level="Nombor Telefon" id="hp" name="tel1" type="text"
+                                placeholder="" />
+                        </div>
+                    </div>
+                    <br><br>
                     <div class="flex justify-between !mt-8">
-                        <button
-                            class="bg-[#6E829F] ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg">
+                        <a href="{{ route('instituteList') }}"
+                            class="bg-gray-500 hover:bg-gray-600 text-white font-medium ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg inline-flex items-center justify-center">
                             Kembali
-                        </button>
+                        </a>
 
                         <button
-                            class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
+                            class="bg-indigo-500 hover:bg-indigo-600 text-white font-semibold ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
                             type="submit">
                             Simpan
                         </button>
+
                     </div>
                 </div>
             </form>

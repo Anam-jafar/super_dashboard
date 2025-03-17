@@ -23,14 +23,16 @@
             @endforeach
         </select>
     @else
-        <!-- Render input field -->
         <input type="{{ $type }}" id="{{ $id }}" name="{{ $name }}"
-            class="p-2 border !border-[#6E829F] rounded-lg !text-gray-800 h-[3rem]
-                {{ $disabled || $readonly ? 'bg-[#EBEBEB]' : '' }} 
-                {{ $rightAlign && $rightAlign === true ? 'text-right' : 'text-left' }}"
-            placeholder="{{ $placeholder }}" value="{{ $value }}" {{ $readonly ? 'readonly' : '' }}
-            {{ $disabled ? 'disabled' : '' }} {{ $required && $required === true ? 'required' : '' }}>
-        <!-- Conditionally required -->
+            class="p-2 border !border-[#6E829F] rounded-lg text-gray-800 h-[3rem]
+                {{ $disabled || $readonly ? 'bg-gray-100 cursor-not-allowed text-gray-500' : 'bg-white' }}
+                {{ $rightAlign && $rightAlign === true ? 'text-right' : 'text-left' }}
+                hover:!bg-gray-300"
+            placeholder="{{ $placeholder }}" value="{{ $value }}"
+            {{ $readonly ? 'readonly' : '' }}
+            {{ $disabled ? 'disabled' : '' }}
+            {{ $required && $required === true ? 'required' : '' }}>
+
 
     @endif
 </div>

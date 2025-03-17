@@ -20,18 +20,14 @@
                     <h3 class="font-semibold text-lg mb-2">Maklumat Institusi</h3>
                     <hr class="mb-4">
 
-                    <div class="grid grid-col-2 md:grid-cols-4 gap-6">
+                    <div class="grid grid-col-1 md:grid-cols-2 gap-6">
 
-                        <div class="col-span-2">
-
-                            <x-input-field level="Tarikh Mohon" id="tarikh_mohon" name="" type="text"
+                        <x-input-field level="Tarikh Mohon" id="tarikh_mohon" name="" type="text"
                                 placeholder="Tarik Mohon" value="{{ $institute->registration_request_date ?? '' }}"
                                 disabled="true" />
-                        </div>
-                        <div class="col-span-2">
-                            <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text"
-                                placeholder="" value="{{ $institute->name }}" disabled='true' />
-                        </div>
+                        <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text"
+                            placeholder="" value="{{ $institute->name }}" disabled='true' />
+
                     </div>
 
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
@@ -42,7 +38,7 @@
                                 placeholder="" value="{{ $institute->Category->prm }}" disabled='true' />
                         </div>
                         <x-input-field level="Emel (Rasmi)" id="emel" name="mel" type="email" placeholder=""
-                            value="{{ $institute->mel ?? '' }}" />
+                            value="{{ $institute->mel ?? '' }}" :required="true" />
 
                     </div>
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6 ">
@@ -140,12 +136,12 @@
                                 placeholder="" value="{{ $institute->tel1 ?? '' }}" disabled='true' />
                         </div>
                     </div>
-                    <div class="flex justify-between !mt-8">
-                        <button
-                            class="bg-[#6E829F] ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg">
+                    <br><br>
+                    <div class="flex justify-between mt-8">
+                        <a href="{{ route('instituteList') }}"
+                            class="bg-gray-500 hover:bg-gray-600 text-white font-medium ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg inline-flex items-center justify-center">
                             Kembali
-                        </button>
-
+                        </a>
                         <button
                             class="bg-green-600 ti-btn ti-btn-success btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
                             type="submit">

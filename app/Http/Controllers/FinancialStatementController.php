@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\FinancialStatement;
 use App\Models\Institute;
@@ -156,6 +158,9 @@ class FinancialStatementController extends Controller
                 'cancel_reason_adm' => 'nullable',
                 'suggestion_adm' => 'nullable',
             ]);
+
+            $validatedData['verified_by'] = Auth::user()->uid;
+            $validatedData['verified_at'] = now();
             if (!$financialStatement) {
                 return redirect()->route('statementList')->with('error', 'Financial Statement not found');
             }
@@ -207,7 +212,7 @@ class FinancialStatementController extends Controller
 
     public function view(Request $request, $id)
     {
-        $financialStatement = FinancialStatement::find($id);
+        $financialStatement = FinancialStatement::with('VerifiedBy')->find($id);
 
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
         $instituteType = $institute->Category->lvl;

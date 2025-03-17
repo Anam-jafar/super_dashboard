@@ -34,6 +34,10 @@ class FinancialStatement extends Model
     {
         return $this->belongsTo(Parameter::class, 'attachment1_info', 'code');
     }
+    public function VerifiedBy()
+    {
+        return $this->belongsTo(User::class, 'verified_by', 'uid');
+    }
 
     
 

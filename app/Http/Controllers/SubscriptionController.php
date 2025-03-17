@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Institute;
 
 class SubscriptionController extends Controller
 {
@@ -23,7 +23,7 @@ class SubscriptionController extends Controller
         return view('subscription.active_subscription', compact(['subscriptions', 'statuses']));
     }
 
-    public function requestSubscriptions(Request $request)
+    public function requestSubscriptions_(Request $request)
     {
         $per_page = $request->per_page ?? 10;
 
@@ -84,6 +84,58 @@ class SubscriptionController extends Controller
             ->toArray();
 
         return view('subscription.new_subscription_application', compact(['subscriptions', 'statuses', 'daerah', 'instituteType', 'packages']));
+    }
+
+        public function requestSubscriptions(Request $request)
+    {
+        $per_page = $request->per_page ?? 10;
+
+        $query = Institute::query()
+            ->where('subscription_status', 1)
+            ->orderBy('id', 'desc');
+
+        // Apply search filter (searching by name)
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // // Apply institute type filter
+        // if ($request->filled('institute_type')) {
+        //     $query->where('x.etc', $request->institute_type);
+        // }
+
+        // // Apply area filter
+        // if ($request->filled('area')) {
+        //     $query->where('y.cate1', $request->area);
+        // }
+
+        
+
+        // Select necessary columns
+        // $query->select('y.*', 'x.prm', 'x.etc');
+
+        // Paginate results
+
+
+
+        $subscriptions = $query->paginate($per_page)->withQueryString();
+
+        $subscriptions->getCollection()->transform(function ($subscription) {
+            $subscription->TYPE = $subscription->Type->prm ?? null;
+            $subscription->DISTRICT = $subscription->District->prm ?? null;
+            return $subscription;
+        });
+
+        // Fetch dropdown data
+        $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
+
+        $packages = DB::table('fin_coa_item')
+            ->where('type', 'sales')
+            ->pluck('val', 'id') // Swap id and val correctly
+            ->toArray();
+        $parameters = $this->getCommon();
+
+        return view('subscription.new_subscription_application', compact(['subscriptions', 'parameters', 'statuses', 'packages']));
     }
 
 

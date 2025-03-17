@@ -60,19 +60,27 @@ class FinancialStatementController extends Controller
 
     private function applyFilters($query, Request $request)
     {
+        $query->join('client', 'splk_submission.inst_refno', '=', 'client.uid')
+            ->select('splk_submission.*', 'client.name', 'client.rem8');
+
         foreach ($request->all() as $field => $value) {
-            if (!empty($value) && \Schema::hasColumn('splk_submission', $field)) {
-                $query->where($field, $value);
+            if (!empty($value)) {
+                if (\Schema::hasColumn('splk_submission', $field)) {
+                    $query->where("splk_submission.$field", $value);
+                } elseif (\Schema::hasColumn('client', $field)) {
+                    $query->where("client.$field", $value);
+                }
             }
         }
 
         if ($request->filled('search')) {
             $searchTerm = $request->input('search');
-            $query->where('name', 'like', "%{$searchTerm}%");
+            $query->where('client.name', 'like', "%{$searchTerm}%");
         }
 
         return $query;
     }
+
 
 
     public function create(Request $request, $inst_refno)
@@ -183,6 +191,7 @@ class FinancialStatementController extends Controller
             $financialStatement->INSTITUTE = $financialStatement->Institute->name ?? null;
             $financialStatement->OFFICER = $financialStatement->Institute->con1 ?? null;
             $financialStatement->FINSUBMISSIONSTATUS = $financialStatement->status ?? null;
+            $financialStatement->DISTRICT = $financialStatement->Institute->District->prm ?? null;
             return $financialStatement;
         });
 

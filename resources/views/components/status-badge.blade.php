@@ -40,6 +40,13 @@
             3 => ['text' => 'Dibatalkan', 'class' => 'bg-red-100 text-red-700 border-red-500'],
             'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
         ],
+        'FIN_STATUS' => [
+            0 => ['text' => 'Draft', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
+            2 => ['text' => 'Diterima', 'class' => 'bg-green-100 text-green-700 border-green-500'],
+            1 => ['text' => 'Disemak', 'class' => 'bg-yellow-100 text-yellow-700 border-yellow-500'],
+            3 => ['text' => 'Dibatalkan', 'class' => 'bg-red-100 text-red-700 border-red-500'],
+            'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
+        ],
         'default' => [
             'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
         ],

@@ -1,5 +1,5 @@
 <div class="flex flex-col mt-4">
-    <label for="{{ $id }}" class="text-gray-800 font-normal mb-2">
+    <label for="{{ $id }}" class="text-gray-800 font-normal mb-4">
         {{ $level }}
         @if ($required && $required === true)
             <span class="text-red-500">*</span> <!-- Red asterisk for required field -->
@@ -28,11 +28,10 @@
                 {{ $disabled || $readonly ? 'bg-gray-100 cursor-not-allowed text-gray-500' : 'bg-white' }}
                 {{ $rightAlign && $rightAlign === true ? 'text-right' : 'text-left' }}
                 hover:!bg-gray-300"
-            placeholder="{{ $placeholder }}" value="{{ $value }}"
-            {{ $readonly ? 'readonly' : '' }}
-            {{ $disabled ? 'disabled' : '' }}
-            {{ $required && $required === true ? 'required' : '' }}>
-
-
+            placeholder="{{ $placeholder }}" value="{{ $value }}" {{ $readonly ? 'readonly' : '' }}
+            {{ $disabled ? 'disabled' : '' }} {{ $required && $required === true ? 'required' : '' }}>
+    @endif
+    @if (!empty($spanText))
+        <span class="text-gray-500 font-normal mb-4">({{ $spanText }})</span>
     @endif
 </div>

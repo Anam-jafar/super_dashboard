@@ -7,12 +7,18 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Penghantaran Laporan Kewangan'" :breadcrumbs="[['label' => 'Laporan Kewangan', 'url' => 'javascript:void(0);'], ['label' => 'Penyata Baharu']]" />
+            <x-page-header :title="'Semakan Penghantaran Laporan Kewangan'" :breadcrumbs="[
+                ['label' => 'Laporan Kewangan', 'url' => 'javascript:void(0);'],
+                [
+                    'label' => 'Penghantaran Baru
+                                                                                                                                    ',
+                ],
+            ]" />
             <x-alert />
             <div class="mt-8 sm:p-4">
                 <div class="grid grid-cols-1 gap-x-16 gap-y-2 max-w-3xl">
                     <x-show-key-value :key="'No Rujukan'" :value="$financialStatement->submission_refno" />
-                    <x-show-key-value :key="'Tarikh Penghantaran'" :value="$financialStatement->submission_date" />
+                    <x-show-key-value :key="'Tarikh Penghantaran'" :value="$financialStatement->SUBMISSION_DATE" />
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -23,13 +29,13 @@
                         <x-show-key-value :key="'Daerah'" :value="$financialStatement->Institute->District->prm" />
                         <x-show-key-value :key="'Mukim'" :value="$financialStatement->Institute->Subdistrict->prm" />
                         <x-show-key-value :key="'Bandar'" :value="$financialStatement->Institute->City->prm" />
-                        <x-show-key-value :key="'No. Telefon'" :value="$financialStatement->Institute->hp" />
-                        <x-show-key-value :key="'Emel'" :value="$financialStatement->Institute->mel" />
+                        <x-show-key-value :key="'Nombor Telefon (Rasmi)'" :value="$financialStatement->Institute->hp" />
+                        <x-show-key-value :key="'Emel (Rasmi)'" :value="$financialStatement->Institute->mel" />
                     </div>
                     <div class=" max-w-3xl mt-8 space-y-2">
                         <x-show-key-value :key="'Nama Pengawai / Waki Institusi'" :value="$financialStatement->Institute->con1" />
                         <x-show-key-value :key="'Jawatan'" :value="$financialStatement->Institute->UserPosition->prm" />
-                        <x-show-key-value :key="'No. H/P'" :value="$financialStatement->Institute->tel1" />
+                        <x-show-key-value :key="'Nombor Telefon'" :value="$financialStatement->Institute->tel1" />
                     </div>
                 </div>
                 <div class="bg-white text-xs p-4 md:p-4">
@@ -115,8 +121,7 @@
                                 </div>
 
                             </div>
-                            <p class="text-gray-800 font-medium mt-4 mb-2">Sila Lampirkan Salinan Dokumen Seperti Di
-                                Bawah :</p>
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <x-pdf-download title="Penyata Kewangan"
@@ -147,10 +152,12 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <x-input-field level="(a) Baki Bawa Ke Hadapan (RM)" id="i1"
+                                        spanText="Baki bawa ke hadapan tahun sebelumnya bank dan tunai"
                                         name="balance_forward" type="text" placeholder="00.00" :rightAlign="true"
                                         disabled="true" value="{{ $financialStatement->balance_forward }}" />
                                     <x-input-field level="(b) Jumlah Kutipan (RM)" id="i2" name="total_collection"
                                         type="text" placeholder="00.00" :rightAlign="true" disabled="true"
+                                        spanText="Jumlah Kutipan Tahun Semasa"
                                         value="{{ $financialStatement->total_collection }}" />
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -179,11 +186,15 @@
                                 </div>
 
                             </div>
-
-                            <p class="text-gray-800 font-medium mt-4 mb-2">Sila Lampirkan Salinan Dokumen Seperti Di Bawah
-                                :
-                            </p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                    <x-input-field level="Jenis Pengauditan " id="i4" name=""
+                                        type="text" placeholder="" value="{{ $financialStatement->AuditType->prm }}"
+                                        disabled="true" />
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                                     <x-pdf-download title="Penyata Kewangan Dan Nota Kewangan"
@@ -202,7 +213,10 @@
                     @endif
                     <div class="mt-4 mb-4">
 
-                        <p class="font-semibold text-gray-800 mt-4 mb-4">Status Semakan Audit Dalam MAIS</p>
+                        <br><br>
+                        <div class="">
+                            <h5 class="text-start">Status Penghantaran / Status Semakan Audit </h5>
+                        </div>
                         <form action="" method="POST">
 
                             @csrf
@@ -251,9 +265,6 @@
                             </div>
                         </form>
                     </div>
-
-
-
                 </div>
             </div>
         </div>

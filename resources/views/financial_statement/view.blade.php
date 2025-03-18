@@ -13,7 +13,7 @@
                 <div class="grid grid-cols-1 gap-x-16 gap-y-2 max-w-3xl">
 
                     <x-show-key-value :key="'No Rujukan'" :value="$financialStatement->submission_refno" />
-                    <x-show-key-value :key="'Tarikh Penghantaran'" :value="$financialStatement->submission_date" />
+                    <x-show-key-value :key="'Tarikh Penghantaran'" :value="$financialStatement->SUBMISSION_DATE" />
 
 
                 </div>
@@ -165,10 +165,12 @@
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                                     <x-input-field level="(a) Baki Bawa Ke Hadapan (RM)" id="i1"
+                                        spanText="Baki bawa ke hadapan tahun sebelumnya bank dan tunai"
                                         name="balance_forward" type="text" placeholder="00.00" :rightAlign="true"
                                         disabled="true" value="{{ $financialStatement->balance_forward }}" />
                                     <x-input-field level="(b) Jumlah Kutipan (RM)" id="i2" name="total_collection"
                                         type="text" placeholder="00.00" :rightAlign="true" disabled="true"
+                                        spanText="Jumlah Kutipan Tahun Semasa"
                                         value="{{ $financialStatement->total_collection }}" />
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -217,7 +219,7 @@
                     <div class="mt-4 mb-4">
                         <br><br>
                         <div class="">
-                            <h5 class="text-start">Status Penghantaran </h5>
+                            <h5 class="text-start">Status Penghantaran / Status Semakan Audit </h5>
                         </div>
                         <div class="grid grid-cols-1 gap-x-16 gap-y-2 max-w-3xl mt-4">
                             <div style="display: flex; margin-bottom: 12px; align-items: baseline;">

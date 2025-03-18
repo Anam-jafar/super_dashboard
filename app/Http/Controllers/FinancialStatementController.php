@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\FinancialStatement;
 use App\Models\Institute;
+use App\Models\Parameter;
 
 class FinancialStatementController extends Controller
 {
@@ -151,6 +152,7 @@ class FinancialStatementController extends Controller
     {
         $financialStatement = FinancialStatement::find($id);
 
+
         if ($request->isMethod('post')) {
 
             $validatedData = $request->validate([
@@ -169,6 +171,7 @@ class FinancialStatementController extends Controller
 
             return redirect()->route('statementList')->with('success', 'Financial Statement updated successfully');
         }
+        $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
         $instituteType = $institute->Category->lvl;
         $currentYear = date('Y');
@@ -180,31 +183,72 @@ class FinancialStatementController extends Controller
 
     public function list(Request $request)
     {
+
+        $districtAccess = DB::table('usr')
+            ->where('mel', Auth::user()->mel)
+            ->value('joblvl');
+
         $perPage = $request->input('per_page', 10);
 
-        $query = FinancialStatement::where('status', 1);
+        $query = FinancialStatement::with('Institute')->where('status', 1);
 
+        if (!is_null($districtAccess)) {
+            $query->whereHas('institute', function ($q) use ($districtAccess) {
+                $q->where('rem8', $districtAccess);
+            });
+        }
         $query = $this->applyFilters($query, $request);
 
         $financialStatements = $query
             ->orderBy('id', 'desc')
             ->paginate($perPage)->withQueryString();
-
         
-            $financialStatements->getCollection()->transform(function ($financialStatement) {
-            $financialStatement->CATEGORY = $financialStatement->Category->prm ?? null;
-            $financialStatement->INSTITUTE = $financialStatement->Institute->name ?? null;
-            $financialStatement->OFFICER = $financialStatement->Institute->con1 ?? null;
-            $financialStatement->FINSUBMISSIONSTATUS = $financialStatement->status ?? null;
-            $financialStatement->DISTRICT = $financialStatement->Institute->District->prm ?? null;
+        $financialStatements->getCollection()->transform(function ($financialStatement) {
+            $financialStatement->CATEGORY = isset($financialStatement->Category->prm) ? strtoupper($financialStatement->Category->prm) : null;
+            $financialStatement->INSTITUTE = isset($financialStatement->Institute->name) ? strtoupper($financialStatement->Institute->name) : null;
+            $financialStatement->OFFICER = isset($financialStatement->Institute->con1) ? strtoupper($financialStatement->Institute->con1) : null;
+            $financialStatement->FINSUBMISSIONSTATUS = isset($financialStatement->status) ? strtoupper($financialStatement->status) : null;
+            $financialStatement->DISTRICT = isset($financialStatement->Institute->District->prm) ? strtoupper($financialStatement->Institute->District->prm) : null;
+            $financialStatement->SUBDISTRICT = isset($financialStatement->Institute->Subdistrict->prm) ? strtoupper($financialStatement->Institute->Subdistrict->prm) : null;
+            $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
+            $financialStatement->FIN_STATUS = Parameter::where('grp', 'splkstatus')
+                ->where('val', $financialStatement->status)
+                ->pluck('prm', 'val')
+                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->first();
             return $financialStatement;
         });
 
         $currentYear = date('Y');
         $years = array_combine(range($currentYear - 3, $currentYear + 3), range($currentYear - 3, $currentYear + 3));
 
+        $parameters = $this->getCommon();
+        if($districtAccess != null){
+            $parameters['districts'] = Parameter::where('grp', 'district')
+                ->where('code', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
+
+        if ($request->filled('cate1')) {
+            $parameters['categories'] = Parameter::where('grp', 'type_CLIENT')
+                ->where('etc', $request->cate1)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
+
+        if ($request->filled('rem8')) {
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $request->rem8)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
         return view('financial_statement.list', [
-            'parameters' => $this->getCommon(),
+            'parameters' => $parameters,
             'financialStatements' => $financialStatements,
             'years' => $years,
         ]);
@@ -213,7 +257,7 @@ class FinancialStatementController extends Controller
     public function view(Request $request, $id)
     {
         $financialStatement = FinancialStatement::with('VerifiedBy')->find($id);
-
+        $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
         $instituteType = $institute->Category->lvl;
         $currentYear = date('Y');
@@ -225,9 +269,20 @@ class FinancialStatementController extends Controller
 
     public function reviewedList(Request $request)
     {
+
+        $districtAccess = DB::table('usr')
+            ->where('mel', Auth::user()->mel)
+            ->value('joblvl');
+
         $perPage = $request->input('per_page', 10);
 
-        $query = FinancialStatement::whereNotIn('status', [0, 1]);
+        $query = FinancialStatement::with('Institute')->whereNotIn('status', [0, 1]);
+
+        if (!is_null($districtAccess)) {
+            $query->whereHas('institute', function ($q) use ($districtAccess) {
+                $q->where('rem8', $districtAccess);
+            });
+        }
 
         $query = $this->applyFilters($query, $request);
 
@@ -237,18 +292,50 @@ class FinancialStatementController extends Controller
 
         
             $financialStatements->getCollection()->transform(function ($financialStatement) {
-            $financialStatement->CATEGORY = $financialStatement->Category->prm ?? null;
-            $financialStatement->INSTITUTE = $financialStatement->Institute->name ?? null;
-            $financialStatement->OFFICER = $financialStatement->Institute->con1 ?? null;
-            $financialStatement->FINSUBMISSIONSTATUS = $financialStatement->status ?? null;
+            $financialStatement->CATEGORY = isset($financialStatement->Category->prm) ? strtoupper($financialStatement->Category->prm) : null;
+            $financialStatement->INSTITUTE = isset($financialStatement->Institute->name) ? strtoupper($financialStatement->Institute->name) : null;
+            $financialStatement->OFFICER = isset($financialStatement->Institute->con1) ? strtoupper($financialStatement->Institute->con1) : null;
+            $financialStatement->FINSUBMISSIONSTATUS = isset($financialStatement->status) ? strtoupper($financialStatement->status) : null;
+            $financialStatement->DISTRICT = isset($financialStatement->Institute->District->prm) ? strtoupper($financialStatement->Institute->District->prm) : null;
+            $financialStatement->SUBDISTRICT = isset($financialStatement->Institute->Subdistrict->prm) ? strtoupper($financialStatement->Institute->Subdistrict->prm) : null;
+            $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
+            $financialStatement->FIN_STATUS = Parameter::where('grp', 'splkstatus')
+                ->where('val', $financialStatement->status)
+                ->pluck('prm', 'val')
+                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->first();
             return $financialStatement;
         });
 
         $currentYear = date('Y');
         $years = array_combine(range($currentYear - 3, $currentYear + 3), range($currentYear - 3, $currentYear + 3));
+        $parameters = $this->getCommon();
+        if($districtAccess != null){
+            $parameters['districts'] = Parameter::where('grp', 'district')
+                ->where('code', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
 
+        if ($request->filled('cate1')) {
+            $parameters['categories'] = Parameter::where('grp', 'type_CLIENT')
+                ->where('etc', $request->cate1)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
+
+        if ($request->filled('rem8')) {
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $request->rem8)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
         return view('financial_statement.reviewed_statement_list', [
-            'parameters' => $this->getCommon(),
+            'parameters' => $parameters,
             'financialStatements' => $financialStatements,
             'years' => $years,
         ]);

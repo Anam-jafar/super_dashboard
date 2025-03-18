@@ -4,9 +4,9 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senarai Rekod Institusi'" :breadcrumbs="[
-                ['label' => 'Rekod Institusi', 'url' => 'javascript:void(0);'],
-                ['label' => 'Senarai Institusi'],
+            <x-page-header :title="'Senarai Rekod Penghantaran Laporan Kewangan'" :breadcrumbs="[
+                ['label' => 'Laporan Kewangan', 'url' => 'javascript:void(0);'],
+                ['label' => 'Penghantaran Baru'],
             ]" />
             <x-alert />
             <div class="py-8 px-4 rounded-lg shadow bg-white">
@@ -19,7 +19,19 @@
                         'type' => 'select',
                         'options' => $parameters['statements'],
                     ],
-                    ['name' => 'search', 'label' => '', 'type' => 'text', 'placeholder' => 'Carian...'],
+                    [
+                        'name' => 'rem8',
+                        'label' => 'Semua Daerah',
+                        'type' => 'select',
+                        'options' => $parameters['districts'],
+                    ],
+                    [
+                        'name' => 'rem9',
+                        'label' => 'Semua Mukim',
+                        'type' => 'select',
+                        'options' => $parameters['subdistricts'],
+                    ],
+                    ['name' => 'search', 'label' => '', 'type' => 'text', 'placeholder' => 'Carian nama...'],
                 ]" :route="route('statementList')" />
 
                 <x-table :headers="[
@@ -29,9 +41,9 @@
                     'Nama Institusi',
                     'Wakil Institusi',
                     'Status',
-                ]" :columns="['submission_date', 'fin_year', 'CATEGORY', 'INSTITUTE', 'OFFICER', 'FINSUBMISSIONSTATUS']" :rows="$financialStatements" :id="'id'" route="viewStatement"
+                ]" :columns="['SUBMISSION_DATE', 'fin_year', 'CATEGORY', 'INSTITUTE', 'OFFICER', 'FIN_STATUS']" :rows="$financialStatements" :id="'id'" route="viewStatement"
                     docIcon="true" />
-                <x-pagination :items="$financialStatements" label="mosques" />
+                <x-pagination :items="$financialStatements" label="jumlah rekod" />
 
             </div>
         </div>

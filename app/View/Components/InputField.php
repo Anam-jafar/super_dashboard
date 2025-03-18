@@ -2,36 +2,37 @@
 
 namespace App\View\Components;
 
-use Closure;
-use Illuminate\Contracts\View\View;
+use Illuminate\View\View;
 use Illuminate\View\Component;
 
 class InputField extends Component
 {
-    public $level;
-    public $id;
-    public $type;
-    public $placeholder;
-    public $name;
-    public $value;
-    public $valueList; 
-    public $readonly;
-    public $disabled;
-    public $rightAlign;
-    public $required;
+    public string $level;
+    public string $id;
+    public string $type;
+    public string $placeholder;
+    public string $name;
+    public mixed $value;
+    public array $valueList;
+    public bool $readonly;
+    public bool $disabled;
+    public bool $rightAlign;
+    public bool $required;
+    public string $spanText;
 
     public function __construct(
-        $level,
-        $id,
-        $type,
-        $placeholder = '',
-        $name,
-        $value = null, 
-        $valueList = [],
-        $readonly = false,
-        $disabled = false, 
-        $rightAlign = false,
-        $required = false,
+        string $level,
+        string $id,
+        string $type,
+        string $name,
+        string $placeholder = '',
+        mixed $value = null, 
+        array $valueList = [],
+        bool $readonly = false,
+        bool $disabled = false, 
+        bool $rightAlign = false,
+        bool $required = false,
+        string $spanText = ''
     ) {
         $this->level = $level;
         $this->id = $id;
@@ -44,12 +45,13 @@ class InputField extends Component
         $this->disabled = $disabled;
         $this->rightAlign = $rightAlign;
         $this->required = $required;
+        $this->spanText = $spanText;
     }
 
     /**
      * Get the view / contents that represent the component.
      */
-    public function render(): View|Closure|string
+    public function render(): View|string
     {
         return view('components.input-field');
     }

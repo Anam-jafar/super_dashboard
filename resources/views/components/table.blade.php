@@ -35,6 +35,8 @@
                                 <x-status-badge :column="$column" :value="$row->$column" />
                             @elseif ($column == 'STATUS' && is_array($row->STATUS))
                                 <x-status-badge :column="$column" :value="$row->STATUS['val'] ?? ''" :text="$row->STATUS['prm'] ?? 'Unknown'" />
+                            @elseif ($column == 'FIN_STATUS' && is_array($row->FIN_STATUS))
+                                <x-status-badge :column="$column" :value="$row->FIN_STATUS['val'] ?? ''" :text="$row->FIN_STATUS['prm'] ?? 'Unknown'" />
                             @elseif ($column == 'amount')
                                 RM 9000
                             @else

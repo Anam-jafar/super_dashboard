@@ -54,6 +54,7 @@ class Controller extends BaseController
                 ->pluck('prm', 'code')
                 ->toArray(),
             'cities' => Parameter::where('grp', 'city')
+                ->orderBy('prm')
                 ->pluck('prm', 'code')
                 ->toArray(),
             'user_positions' => Parameter::where('grp', 'user_position')

@@ -30,12 +30,12 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'ic' => 'required|string',
+            'mel' => 'required|string',
             'pass' => 'required|string',
         ]);
-
+        
         $user = DB::table('usr')
-            ->where('ic', $request->ic)
+            ->where('mel', $request->mel)
             ->where('pass', md5($request->pass))
             ->first();
 

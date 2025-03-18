@@ -4,9 +4,9 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senarai Rekod Institusi'" :breadcrumbs="[
+            <x-page-header :title="'Senarai Permohonan Pendaftaran Baru'" :breadcrumbs="[
                 ['label' => 'Rekod Institusi', 'url' => 'javascript:void(0);'],
-                ['label' => 'Senarai Institusi'],
+                ['label' => 'Permohonan Baru Institusi'],
             ]" />
             <x-alert />
             <div class="py-8 px-4 rounded-lg shadow bg-white">
@@ -38,18 +38,12 @@
                         'type' => 'select',
                         'options' => $parameters['subdistricts'],
                     ],
-                    [
-                        'name' => 'sta',
-                        'label' => 'Semua Status',
-                        'type' => 'select',
-                        'options' => $parameters['user_statuses'],
-                    ],
-                    ['name' => 'search', 'label' => '', 'type' => 'text', 'placeholder' => 'Carian...'],
+                    ['name' => 'search', 'label' => '', 'type' => 'text', 'placeholder' => 'Carian nama...'],
                 ]" :route="route('registrationRequests')" />
 
-                <x-table :headers="['Institusi', 'Jenis Institusi', 'Nama Institusi', 'Daerah', 'Mukim']" :columns="['TYPE', 'CATEGORY', 'name', 'DISTRICT', 'SUBDISTRICT']" :rows="$institutes" :id="'id'"
+                <x-table :headers="['Institusi', 'Jenis Institusi', 'Nama Institusi', 'Daerah', 'Mukim']" :columns="['TYPE', 'CATEGORY', 'NAME', 'DISTRICT', 'SUBDISTRICT']" :rows="$institutes" :id="'id'"
                     route="registrationRequestDetail" routeType="" />
-                <x-pagination :items="$institutes" label="mosques" />
+                <x-pagination :items="$institutes" label="jumlah institusi" />
 
             </div>
         </div>

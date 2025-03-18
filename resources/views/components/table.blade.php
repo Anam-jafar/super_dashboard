@@ -33,14 +33,15 @@
                         <td class="px-2 py-2 whitespace-nowrap text-xs text-black break-words">
                             @if (in_array($column, ['sta', 'status', 'subscription_status', 'is_activated', 'FINSUBMISSIONSTATUS']))
                                 <x-status-badge :column="$column" :value="$row->$column" />
-                            @elseif($column == 'amount')
+                            @elseif ($column == 'STATUS' && is_array($row->STATUS))
+                                <x-status-badge :column="$column" :value="$row->STATUS['val'] ?? ''" :text="$row->STATUS['prm'] ?? 'Unknown'" />
+                            @elseif ($column == 'amount')
                                 RM 9000
                             @else
                                 {{ $row->$column ?? '-' }}
                             @endif
                         </td>
                     @endforeach
-
                     <!-- Actions Column -->
 
                     <x-action-buttons :route="$route" :extraRoute="$extraRoute" :routeType="$routeType" :id="$row->$id"
@@ -51,7 +52,7 @@
                 <tr>
                     <td colspan="{{ count($headers) + 2 }}"
                         class="px-6 py-4 whitespace-nowrap text-xs text-gray-500 text-center">
-                        No records found.
+                        Tiada Rekod Ditemui.
                     </td>
                 </tr>
             @endforelse

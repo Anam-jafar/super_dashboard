@@ -26,19 +26,26 @@
                         <x-show-key-value :key="'Daerah'" :value="$financialStatement->Institute->District->prm" />
                         <x-show-key-value :key="'Mukim'" :value="$financialStatement->Institute->Subdistrict->prm" />
                         <x-show-key-value :key="'Bandar'" :value="$financialStatement->Institute->City->prm" />
-                        <x-show-key-value :key="'No. Telefon'" :value="$financialStatement->Institute->hp" />
-                        <x-show-key-value :key="'Emel'" :value="$financialStatement->Institute->mel" />
+                        <x-show-key-value :key="'Nombor Telefon (Rasmi)'" :value="$financialStatement->Institute->hp" />
+                        <x-show-key-value :key="'Emel (Rasmi)'" :value="$financialStatement->Institute->mel" />
                     </div>
                     <div class=" max-w-3xl mt-8 space-y-2">
                         <x-show-key-value :key="'Nama Pengawai / Waki Institusi'" :value="$financialStatement->Institute->con1" />
                         <x-show-key-value :key="'Jawatan'" :value="$financialStatement->Institute->UserPosition->prm" />
-                        <x-show-key-value :key="'No. H/P'" :value="$financialStatement->Institute->tel1" />
+                        <x-show-key-value :key="'Nombor Telefon '" :value="$financialStatement->Institute->tel1" />
+                        <div style="display: flex; margin-bottom: 12px; align-items: baseline;">
+                            <div style="font-weight: 500; width: 250px; text-align: left; color: black;">
+                                Status Penghantaran </div>
+                            <div style="font-weight: 500; margin: 0 25px; color: black;">:</div>
+                            <div style="font-weight: 500; color: black;"><x-status-badge :column="'FINSUBMISSIONSTATUS'"
+                                    :value="$financialStatement->status" /></div>
+                        </div>
                     </div>
                 </div>
                 <div class="bg-white rounded-lg text-xs p-4 md:p-4">
                     <x-alert />
 
-                    @if ($instituteType == 1)
+                    @if ($instituteType == 2)
                         <div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -191,11 +198,7 @@
                                 </div>
                             </div>
 
-                            <p class="text-gray-800 font-medium mt-4 mb-2">Sila Lampirkan Salinan Dokumen Seperti Di
-                                Bawah
-                                :
-                            </p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                                     <x-pdf-download title="Penyata Kewangan Dan Nota Kewangan"
@@ -212,15 +215,13 @@
                         </div>
                     @endif
                     <div class="mt-4 mb-4">
-
-                        <p class="font-semibold text-gray-800 mt-4 mb-4">Status Semakan Audit Dalam MAIS</p>
-
+                        <br><br>
                         <div class="">
                             <h5 class="text-start">Status Penghantaran </h5>
                         </div>
                         <div class="grid grid-cols-1 gap-x-16 gap-y-2 max-w-3xl mt-4">
                             <div style="display: flex; margin-bottom: 12px; align-items: baseline;">
-                                <div style="font-weight: 500; width: 150px; text-align: left; color: black;">
+                                <div style="font-weight: 500; width: 250px; text-align: left; color: black;">
                                     Status </div>
                                 <div style="font-weight: 500; margin: 0 25px; color: black;">:</div>
                                 <div style="font-weight: 500; color: black;"><x-status-badge :column="'FINSUBMISSIONSTATUS'"
@@ -235,7 +236,7 @@
                                 @endif
                             @endif
                             <x-show-key-value :key="'Disahkan Oleh'" :value="$financialStatement->VerifiedBy->name" />
-                            <x-show-key-value :key="'Disahkan Di'" :value="$financialStatement->verified_at" />
+                            <x-show-key-value :key="'Disahkan Pada'" :value="$financialStatement->verified_at" />
                         </div>
 
 

@@ -123,6 +123,7 @@ class SubscriptionController extends Controller
         $subscriptions->getCollection()->transform(function ($subscription) {
             $subscription->TYPE = $subscription->Type->prm ?? null;
             $subscription->DISTRICT = $subscription->District->prm ?? null;
+            $subscription->SUBSCRIPTION_DATE = date('d-m-Y',$subscription->subscription_request_date);
             return $subscription;
         });
 

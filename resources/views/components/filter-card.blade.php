@@ -22,16 +22,19 @@
                 <div class="w-full lg:max-w-[14rem]">
                     <select id="{{ $filter['name'] }}" name="{{ $filter['name'] }}"
                         class="ti-form-select rounded-sm py-2 px-3 w-full" onchange="this.form.submit()">
-                        <option value="" {{ request($filter['name']) == '' ? 'selected' : '' }}>
+
+                        <option value="" {{ request()->has($filter['name']) ? '' : 'selected' }}>
                             {{ $filter['label'] }}
                         </option>
+
                         @foreach ($filter['options'] as $key => $value)
                             <option value="{{ $key }}"
-                                {{ request($filter['name']) == $key ? 'selected' : '' }}>
+                                {{ request($filter['name']) !== null && request($filter['name']) == $key ? 'selected' : '' }}>
                                 {{ is_object($value) ? $value->name ?? 'Unknown' : $value }}
                             </option>
                         @endforeach
                     </select>
+
                 </div>
             @elseif ($filter['type'] === 'checkbox')
                 <!-- Checkbox Input -->

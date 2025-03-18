@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Mail\RegistrationApproveConfirmation;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Parameter;
@@ -12,6 +13,15 @@ use App\Models\Institute;
 
 class InstituteController extends Controller
 {
+
+    protected $districtAccess;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->districtAccess = DB::table('usr')->where('id', Auth::id())->value('joblvl');
+    }
+
     private array $defaultInstituteValues = [
         'firebase_id' => '',
         'imgProfile' => '',
@@ -75,7 +85,8 @@ class InstituteController extends Controller
     private function applyFilters($query, Request $request)
     {
         foreach ($request->all() as $field => $value) {
-            if (!empty($value) && \Schema::hasColumn('client', $field)) {
+            // Use isset() instead of !empty() to allow filtering when value is 0
+            if (isset($value) && \Schema::hasColumn('client', $field)) {
                 $query->where($field, $value);
             }
         }
@@ -88,31 +99,73 @@ class InstituteController extends Controller
         return $query;
     }
 
+
     public function list(Request $request)
     {
+        $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
+
         $perPage = $request->input('per_page', 10);
 
-        $query = $this->applyFilters(Institute::query(), $request);
+        $query = Institute::query();
 
-        $institutes = $query->with('type', 'category', 'City', 'subdistrict', 'district')
+        if ($districtAccess != null) {
+            $query->where('rem8', $districtAccess);
+        }
+
+        $query = $this->applyFilters($query, $request);
+
+        $institutes = $query->with(['Type', 'Category', 'City', 'Subdistrict', 'District'])
             ->orderBy('id', 'desc')
-            ->paginate($perPage)->withQueryString();
+            ->paginate($perPage)
+            ->withQueryString();
 
-        
-            $institutes->getCollection()->transform(function ($institute) {
-            $institute->TYPE = $institute->Type->prm ?? null;
-            $institute->CATEGORY = $institute->Category->prm ?? null;
-            $institute->CITY = $institute->City->prm ?? null;
-            $institute->SUBDISTRICT = $institute->Subdistrict->prm ?? null;
-            $institute->DISTRICT = $institute->District->prm ?? null;
+        $institutes->getCollection()->transform(function ($institute) {
+            $institute->TYPE = isset($institute->Type->prm) ? strtoupper($institute->Type->prm) : null;
+            $institute->CATEGORY = isset($institute->Category->prm) ? strtoupper($institute->Category->prm) : null;
+            $institute->SUBDISTRICT = isset($institute->Subdistrict->prm) ? strtoupper($institute->Subdistrict->prm) : null;
+            $institute->DISTRICT = isset($institute->District->prm) ? strtoupper($institute->District->prm) : null;
+            $institute->NAME = strtoupper($institute->name ?? '');
+            $institute->STATUS = Parameter::where('grp', 'clientstatus')
+                ->where('val', $institute->sta)
+                ->pluck('prm', 'val')
+                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->first();
             return $institute;
         });
 
+        $parameters = $this->getCommon();
+        if($districtAccess != null){
+            $parameters['districts'] = Parameter::where('grp', 'district')
+                ->where('code', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
+
+
+        if ($request->filled('cate1')) {
+            $parameters['categories'] = Parameter::where('grp', 'type_CLIENT')
+                ->where('etc', $request->cate1)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
+
+        if ($request->filled('rem8')) {
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $request->rem8)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
+
         return view('Institute.list', [
-            'parameters' => $this->getCommon(),
+            'parameters' => $parameters,
             'institutes' => $institutes
         ]);
     }
+
 
 
 
@@ -153,11 +206,23 @@ class InstituteController extends Controller
 
     public function registrationRequests(Request $request)
     {
+        $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
+
         $perPage = $request->input('per_page', 10);
 
-        $query = Institute::where('sta', 1)
+        $query = Institute::query();
+
+        if ($districtAccess != null) {
+            $query->where('rem8', $districtAccess);
+        }
+
+        $query = $query->where('sta', 1)
             ->whereNotNull('registration_request_date')
-            ->whereNull('regdt');
+            ->where(function ($q) {
+                $q->whereNull('regdt') 
+                ->orWhere('regdt', '0000-00-00'); 
+            });
+
 
         $query = $this->applyFilters($query, $request);
 
@@ -167,16 +232,43 @@ class InstituteController extends Controller
 
         
             $institutes->getCollection()->transform(function ($institute) {
-            $institute->TYPE = $institute->Type->prm ?? null;
-            $institute->CATEGORY = $institute->Category->prm ?? null;
-            $institute->CITY = $institute->City->prm ?? null;
-            $institute->SUBDISTRICT = $institute->Subdistrict->prm ?? null;
-            $institute->DISTRICT = $institute->District->prm ?? null;
+            $institute->TYPE = isset($institute->Type->prm) ? strtoupper($institute->Type->prm) : null;
+            $institute->CATEGORY = isset($institute->Category->prm) ? strtoupper($institute->Category->prm) : null;
+            $institute->SUBDISTRICT = isset($institute->Subdistrict->prm) ? strtoupper($institute->Subdistrict->prm) : null;
+            $institute->DISTRICT = isset($institute->District->prm) ? strtoupper($institute->District->prm) : null;
+            $institute->NAME = strtoupper($institute->name ?? '');
+
             return $institute;
         });
 
+        $parameters = $this->getCommon();
+        if($districtAccess != null){
+            $parameters['districts'] = Parameter::where('grp', 'district')
+                ->where('code', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
+
+        if ($request->filled('cate1')) {
+            $parameters['categories'] = Parameter::where('grp', 'type_CLIENT')
+                ->where('etc', $request->cate1)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
+
+        if ($request->filled('rem8')) {
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $request->rem8)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
+
         return view('Institute.registration_requests', [
-            'parameters' => $this->getCommon(),
+            'parameters' => $parameters,
             'institutes' => $institutes
         ]);
     }
@@ -211,4 +303,35 @@ class InstituteController extends Controller
         }
     }
 
+    public function getInstitutionCategories(Request $request)
+    {
+        $categoryId = $request->input('category_id');
+
+        if (!$categoryId) {
+            return response()->json([]);
+        }
+
+        $institutionTypes = Parameter::where('grp', 'type_CLIENT')
+            ->where('etc', $categoryId)
+            ->pluck('prm', 'code') 
+            ->toArray();
+
+        return response()->json($institutionTypes);
+    }
+
+    public function getSubDistricts(Request $request)
+    {
+        $districtId = $request->input('district_id');
+
+        if (!$districtId) {
+            return response()->json([]);
+        }
+
+        $subDistricts = Parameter::where('grp', 'subdistrict')
+            ->where('etc', $districtId) 
+            ->pluck('prm', 'code') 
+            ->toArray();
+
+        return response()->json($subDistricts);
+    }
 }

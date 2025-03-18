@@ -22,8 +22,8 @@
                      <div class="max-w-2xl mx-auto text-center space-y-4">
                          <h2 class="text-2xl mb-4 text-[#202947]">Selamat Datang</h2>
                          <h1 class="text-4xl font-bold leading-tight text-[#202947]">
-                             Smart Masjid <br />
-                             Management (MAIS)<br />
+                             Sistem Pengurusan Masjid<br />
+                             (MAIS)<br />
                          </h1>
 
                          <img src="{{ asset('assets/icons/fin_logo.svg') }}" alt="Financial Graph"
@@ -63,7 +63,7 @@
                              <x-alert />
                              <form class="space-y-4" action="{{ route('submit.login') }}" method="POST">
                                  @csrf
-                                 <input type="text" placeholder="Masukkan IC" name='ic'
+                                 <input type="text" placeholder="Masukkan Email" name='mel'
                                      class="w-full h-[3rem] px-4 py-2 border !border-[#6E829F] rounded-lg !text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" />
                                  <input type="password" placeholder="Masukkan Kata Laluan" name='pass'
                                      class="w-full h-[3rem] px-4 py-2 border !border-[#6E829F] rounded-lg !text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" />
@@ -86,11 +86,7 @@
 
                          </div>
                      </div>
-                     <div class="mt-8 text-center">
-                         <a href="{{ route('login') }}" class="text-[#5C67F7] flex items-center justify-center gap-2">
-                             {{-- <img src="{{ asset('assets/icons/fin_eos_admin.svg') }}" alt="Admin" class="w-18 h-18" /> --}}
-                             Log masuk sebagai pengguna </a>
-                     </div>
+
 
                      <div class="mt-2 text-center text-sm text-gray-600 flex items-center justify-center gap-2">
                          <img src="{{ asset('assets/icons/fin_logo_tiny.svg') }}" alt="Admin" class="w-18 h-18" />

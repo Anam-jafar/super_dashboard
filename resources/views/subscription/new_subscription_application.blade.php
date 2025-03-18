@@ -29,7 +29,7 @@
                     ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
                 ]" :route="route('requestSubscriptions')" />
 
-                <x-table :headers="['Tarikh Mohon', 'Institusi', 'Nama Institusi', 'Daerah', 'Status']" :columns="['rem6', 'TYPE', 'name', 'DISTRICT', 'subscription_status']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
+                <x-table :headers="['Tarikh Mohon', 'Institusi', 'Nama Institusi', 'Daerah', 'Status']" :columns="['SUBSCRIPTION_DATE', 'TYPE', 'name', 'DISTRICT', 'subscription_status']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
                     popupTriggerButton="'true'" />
 
                 <!-- For each subscription, you'll need just two modals instead of three -->

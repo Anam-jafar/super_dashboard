@@ -7,10 +7,7 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Profile Institusi'" :breadcrumbs="[
-                ['label' => 'Rekod Institusi', 'url' => 'javascript:void(0);'],
-                ['label' => 'Profil Institusi'],
-            ]" />
+            <x-page-header :title="'Semakan Permohonan Pendaftaran Baru'" :breadcrumbs="[['label' => 'Rekod Institusi', 'url' => 'javascript:void(0);'], ['label' => 'Permohonan Baru']]" />
 
             <form method="POST" action="{{ route('approveRegistrationRequest', ['id' => $institute->id]) }}" class="">
                 @csrf
@@ -23,10 +20,10 @@
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
 
                         <x-input-field level="Tarikh Mohon" id="tarikh_mohon" name="" type="text"
-                                placeholder="Tarik Mohon" value="{{ $institute->registration_request_date ?? '' }}"
-                                disabled="true" />
-                        <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text"
-                            placeholder="" value="{{ $institute->name }}" disabled='true' />
+                            placeholder="Tarik Mohon" value="{{ $institute->registration_request_date ?? '' }}"
+                            disabled="true" />
+                        <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text" placeholder=""
+                            value="{{ $institute->name }}" disabled='true' />
 
                     </div>
 
@@ -95,16 +92,16 @@
                     </div>
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6 !mb-4">
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Bandar" id="city" name="city" type="text" placeholder=""
-                                value="{{ $institute->City->prm ?? '' }}" disabled='true' />
+                            <x-input-field level="Daerah" id="inst_district" name="rem8" type="text"
+                                placeholder="Pilih" value="{{ $institute->District->prm }}" disabled='true' />
                             <x-input-field level="Mukim" id="inst_sub_district" name="rem9" type="text"
                                 placeholder="Pilih" value="{{ $institute->Subdistrict->prm }}" disabled='true' />
                         </div>
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Daerah" id="inst_district" name="rem8" type="text"
-                                placeholder="Pilih" value="{{ $institute->District->prm }}" disabled='true' />
+                            <x-input-field level="Bandar" id="city" name="city" type="text" placeholder=""
+                                value="{{ $institute->City->prm ?? '' }}" disabled='true' />
                             <x-input-field level="Negeri" id="negeri" name="state" type="text" placeholder=""
-                                value="{{ $institute->state ?? '' }}" disabled='true' />
+                                value="{{ $institute->State->prm ?? '' }}" disabled='true' />
                         </div>
 
                     </div>

@@ -44,12 +44,12 @@
                         'type' => 'select',
                         'options' => $parameters['user_statuses'],
                     ],
-                    ['name' => 'search', 'label' => '', 'type' => 'text', 'placeholder' => 'Carian...'],
+                    ['name' => 'search', 'label' => '', 'type' => 'text', 'placeholder' => 'Carian nama...'],
                 ]" :route="route('instituteList')" button-label="Daftar Baru" :button-route="route('instituteCreate')" />
 
-                <x-table :headers="['Institusi', 'Jenis Institusi', 'Nama Institusi', 'Daerah', 'Mukim', 'Status']" :columns="['TYPE', 'CATEGORY', 'name', 'DISTRICT', 'SUBDISTRICT', 'sta']" :rows="$institutes" :id="'id'" route="instituteEdit"
+                <x-table :headers="['Institusi', 'Jenis Institusi', 'Nama Institusi', 'Daerah', 'Mukim', 'Status']" :columns="['TYPE', 'CATEGORY', 'NAME', 'DISTRICT', 'SUBDISTRICT', 'STATUS']" :rows="$institutes" :id="'id'" route="instituteEdit"
                     routeType="" />
-                <x-pagination :items="$institutes" label="mosques" />
+                <x-pagination :items="$institutes" label="jumlah institusi" />
 
             </div>
         </div>

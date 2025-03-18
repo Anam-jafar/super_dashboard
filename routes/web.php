@@ -100,6 +100,10 @@ Route::prefix('mais')->group(function () {
         Route::get('/institute/registration-requests/{id}', [InstituteController::class, 'registrationRequestDetail'])->name('registrationRequestDetail');
         Route::post('/institute/registration-requests/{id}', [InstituteController::class, 'approveRegistrationRequest'])->name('approveRegistrationRequest');
 
+        Route::get('/get-institution-categories', [InstituteController::class, 'getInstitutionCategories'])->name('getInstitutionCategories');
+        Route::get('/get-subdistricts', [InstituteController::class, 'getSubDistricts'])->name('getSubDistricts');
+
+
 
         Route::get('/user/list', [UserController::class, 'list'])->name('userList');
         Route::match(['get', 'post'], '/user/create', [UserController::class, 'create'])->name('userCreate');

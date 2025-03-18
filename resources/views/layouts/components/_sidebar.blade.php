@@ -250,11 +250,11 @@
                         </svg>
 
 
-                        <span class="side-menu__label">Langganan SPM </span>
+                        <span class="side-menu__label">Langganan </span>
                     </a>
                     <ul class="slide-menu child1">
                         <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">Langganan SPM</a>
+                            <a href="javascript:void(0)">Langganan</a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('requestSubscriptions') }}" class="side-menu__item">Permohonan

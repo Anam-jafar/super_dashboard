@@ -4,25 +4,71 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senarai Rekod Tunggakan'" :breadcrumbs="[['label' => 'Langganan SPM', 'url' => 'javascript:void(0);'], ['label' => 'Rekod Tunggakan']]" /> <x-alert />
+            <x-page-header :title="'Senarai Langganan Aktif Institusi'" :breadcrumbs="[['label' => 'Langganan', 'url' => 'javascript:void(0);'], ['label' => 'Rekod Aktif']]" />
+            @if (session('success'))
+                <div class="bg-green-100 text-green-800 p-3 rounded-lg mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="py-8 px-4 rounded-lg shadow bg-white">
 
                 <x-filter-card :filters="[
                     [
-                        'name' => 'institute_type',
-                        'label' => 'Institusi',
+                        'name' => 'cate1',
+                        'label' => 'Semua Institusi',
                         'type' => 'select',
-                        'options' => $instituteType,
+                        'options' => $parameters['types'],
                     ],
-                    ['name' => 'area', 'label' => 'Daerah', 'type' => 'select', 'options' => $daerah],
+                    [
+                        'name' => 'cate',
+                        'label' => 'Semua Jenis Institusi',
+                        'type' => 'select',
+                        'options' => $parameters['categories'],
+                    ],
                 
-                    ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
+                    [
+                        'name' => 'rem8',
+                        'label' => 'Semua Daerah',
+                        'type' => 'select',
+                        'options' => $parameters['districts'],
+                    ],
+                
+                    [
+                        'name' => 'rem9',
+                        'label' => 'Semua Mukim',
+                        'type' => 'select',
+                        'options' => $parameters['subdistricts'],
+                    ],
+                
+                    [
+                        'name' => 'search',
+                        'label' => 'Search by Name',
+                        'type' => 'text',
+                        'placeholder' => 'Carian nama...',
+                    ],
                 ]" :route="route('outstandingSubscriptions')" />
 
-                <x-table :headers="['Institusi', 'Nama Institusi', 'Daerah', 'Jumlah (RM)', 'Status']" :columns="['etc', 'name', 'cate1', 'amount', 'subscription_status']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
-                    route="edit" routeType="subscriptions" />
+                <x-table :headers="[
+                    'Institusi',
+                    'Jenis Institusi',
+                    'Nama Institusi',
+                    'Daerah',
+                    'Mukim',
+                    'Jumlah Invois',
+                    'Jumlah pembayaran',
+                    'Baki Tertunggak',
+                ]" :columns="[
+                    'TYPE',
+                    'CATEGORY',
+                    'NAME',
+                    'DISTRICT',
+                    'SUBDISTRICT',
+                    'TOTAL_INVOICE',
+                    'TOTAL_RECEIVED',
+                    'TOTAL_OUTSTANDING',
+                ]" :rows="$subscriptions" />
 
-                <x-pagination :items="$subscriptions" label="Admin" />
+                <x-pagination :items="$subscriptions" label="jumlah rekod" />
 
             </div>
         </div>

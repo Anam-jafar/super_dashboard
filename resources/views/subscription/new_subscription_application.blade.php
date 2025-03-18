@@ -4,7 +4,7 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senarai Permohonan Langganan Baru'" :breadcrumbs="[['label' => 'Langganan SPM', 'url' => 'javascript:void(0);'], ['label' => 'Permohonan Baru']]" />
+            <x-page-header :title="'Senarai Permohonan Langganan Baru'" :breadcrumbs="[['label' => 'Langganan', 'url' => 'javascript:void(0);'], ['label' => 'Permohonan Baru']]" />
             @if (session('success'))
                 <div class="bg-green-100 text-green-800 p-3 rounded-lg mb-4">
                     {{ session('success') }}
@@ -20,16 +20,51 @@
                         'options' => $parameters['types'],
                     ],
                     [
+                        'name' => 'cate',
+                        'label' => 'Semua Jenis Institusi',
+                        'type' => 'select',
+                        'options' => $parameters['categories'],
+                    ],
+                
+                    [
                         'name' => 'rem8',
                         'label' => 'Semua Daerah',
                         'type' => 'select',
                         'options' => $parameters['districts'],
                     ],
                 
-                    ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
+                    [
+                        'name' => 'rem9',
+                        'label' => 'Semua Mukim',
+                        'type' => 'select',
+                        'options' => $parameters['subdistricts'],
+                    ],
+                
+                    [
+                        'name' => 'search',
+                        'label' => 'Search by Name',
+                        'type' => 'text',
+                        'placeholder' => 'Carian nama...',
+                    ],
                 ]" :route="route('requestSubscriptions')" />
 
-                <x-table :headers="['Tarikh Mohon', 'Institusi', 'Nama Institusi', 'Daerah', 'Status']" :columns="['SUBSCRIPTION_DATE', 'TYPE', 'name', 'DISTRICT', 'subscription_status']" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
+                <x-table :headers="[
+                    'Tarikh Mohon',
+                    'Institusi',
+                    'Jenis Institusi',
+                    'Nama Institusi',
+                    'Daerah',
+                    'Mukim',
+                    'Status',
+                ]" :columns="[
+                    'SUBSCRIPTION_DATE',
+                    'TYPE',
+                    'CATEGORY',
+                    'NAME',
+                    'DISTRICT',
+                    'SUBDISTRICT',
+                    'subscription_status',
+                ]" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
                     popupTriggerButton="'true'" />
 
                 <!-- For each subscription, you'll need just two modals instead of three -->
@@ -49,27 +84,41 @@
 
                                 <!-- Content -->
                                 <div class="text-center mt-4 mb-6">
-                                    <h4 class="font-bold text-lg">{{ $subscription->name }}</h4>
-                                    <p class="font-bold">{{ $subscription->cate1 }}</p>
+                                    <h4 class="font-bold text-xl">{{ $subscription->name }}</h4>
+                                    <p class="font-bold text-normal">{{ $subscription->Category->prm }}</p>
 
                                     <div class="mt-4">
-                                        {{-- <p>Penyata Pendapatan {{ $subscription->rem6 }}:</p> --}}
-                                        <p class="text-lg">Penyata Pendapatan 2024 :</p>
+                                        <p class="text-lg">
+                                            Penyata Pendapatan
+                                            {{ $subscription->COLLECTION['FIN_YEAR'] ?? '' }}
+                                        </p>
 
                                         <p class="text-blue-600 font-bold text-xl">
-                                            {{-- RM{{ number_format($subscription->rem3, 2) }}</p> --}}
-                                            RM 80,765.90</p>
-
+                                            @if (!empty($subscription->COLLECTION['TOTAL_COLLECTION']))
+                                                RM{{ number_format($subscription->COLLECTION['TOTAL_COLLECTION'], 2) }}
+                                            @else
+                                                Tiada rekod
+                                            @endif
+                                        </p>
                                     </div>
 
                                     <div class="mt-4 text-left">
                                         <p>Kos Langganan:</p>
                                         <div class="mt-2">
+                                            @php
+                                                // Get the first package (ID and Amount)
+                                                $firstPackage = reset($packages);
+                                                $firstPackageId = key($packages);
+                                                $firstPackageAmount = number_format((float) $firstPackage, 2);
+                                            @endphp
+
                                             <!-- Dropdown display -->
                                             <div id="dropdown-display-{{ $subscription->id }}"
                                                 class="flex items-center border rounded-md p-2 cursor-pointer mb-2 h-[3rem]">
-                                                <span id="selected-price-{{ $subscription->id }}" data-package-id="7">RM
-                                                    1,200.00</span>
+                                                <span id="selected-price-{{ $subscription->id }}"
+                                                    data-package-id="{{ $firstPackageId }}">
+                                                    RM {{ $firstPackageAmount }}
+                                                </span>
                                                 <svg class="w-4 h-4 ml-auto" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -90,6 +139,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
 
                                 <!-- Footer -->
@@ -143,7 +193,7 @@
                     </div>
                 @endforeach
 
-                <x-pagination :items="$subscriptions" label="Admin" />
+                <x-pagination :items="$subscriptions" label="jumlah rekod" />
 
             </div>
         </div>

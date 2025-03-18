@@ -45,9 +45,11 @@
                         </td>
                     @endforeach
                     <!-- Actions Column -->
+                    @if ($route || $extraRoute || $popupTriggerButton)
+                        <x-action-buttons :route="$route" :extraRoute="$extraRoute" :routeType="$routeType" :id="$row->$id"
+                            :key="$key" :popupTriggerButton="$popupTriggerButton" :popupTriggerButtonIcon="$popupTriggerButtonIcon" />
+                    @endif
 
-                    <x-action-buttons :route="$route" :extraRoute="$extraRoute" :routeType="$routeType" :id="$row->$id"
-                        :key="$key" :popupTriggerButton="$popupTriggerButton" :popupTriggerButtonIcon="$popupTriggerButtonIcon" />
 
                 </tr>
             @empty

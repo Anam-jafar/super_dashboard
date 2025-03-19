@@ -13,7 +13,7 @@ class User extends Model implements AuthenticatableContract
     public $timestamps = false; 
 
 
-    protected $fillable = ['ic', 'pass', 'name', 'mel', 'uid', 'hp', 'jobdiv', 'job', 'joblvl', 'syslevel', 'status', 'imgProfile', 'sch_id', 'login_sta', 'login_ts', 'login_period', 'resettokenexpiration', 'mailaddr', 'mailaddr2', 'mailaddr3'];
+    protected $fillable = ['ic', 'pass', 'name', 'mel', 'uid', 'hp', 'jobdiv', 'job', 'joblvl', 'syslevel', 'status', 'imgProfile', 'sch_id', 'login_sta', 'login_ts', 'login_period', 'resettokenexpiration', 'mailaddr', 'mailaddr2', 'mailaddr3', 'password_set', 'cdate', 'll'];
     protected $hidden = ['pass'];
 
     public function Department()

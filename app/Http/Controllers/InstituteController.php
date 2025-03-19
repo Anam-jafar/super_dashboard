@@ -237,6 +237,7 @@ class InstituteController extends Controller
             $institute->SUBDISTRICT = isset($institute->Subdistrict->prm) ? strtoupper($institute->Subdistrict->prm) : null;
             $institute->DISTRICT = isset($institute->District->prm) ? strtoupper($institute->District->prm) : null;
             $institute->NAME = strtoupper($institute->name ?? '');
+            $institute->REGISTRATION_DATE = date('d-m-Y', strtotime($institute->registration_request_date));
 
             return $institute;
         });

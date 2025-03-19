@@ -55,17 +55,11 @@ class SubscriptionController extends Controller
             $subscription->SUBDISTRICT = isset($subscription->Subdistrict->prm) ? strtoupper($subscription->Subdistrict->prm) : null;
             $subscription->CATEGORY = isset($subscription->Category->prm) ? strtoupper($subscription->Category->prm) : null;
             $subscription->SUBSCRIPTION_DATE = date('d-m-Y',$subscription->subscription_request_date);
-            $latestSubmission = DB::table('splk_submission')
-                ->where('inst_refno', $subscription->uid)
-                ->where('fin_category', 'STM02')
-                ->orderByDesc('fin_year')
-                ->limit(1)
-                ->first(['total_collection', 'fin_year']);
-
-            $subscription->COLLECTION = [
-                'TOTAL_COLLECTION' => $latestSubmission->total_collection ?? null,
-                'FIN_YEAR' => $latestSubmission->fin_year ?? null,
-            ];
+            $subscription->SUBSCRIPTION_STATUS = Parameter::where('grp', 'subscriptionstatus')
+                ->where('val', $subscription->subscription_status)
+                ->pluck('prm', 'val')
+                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->first();
 
             return $subscription;
         });
@@ -161,17 +155,21 @@ class SubscriptionController extends Controller
             $subscription->SUBDISTRICT = isset($subscription->Subdistrict->prm) ? strtoupper($subscription->Subdistrict->prm) : null;
             $subscription->CATEGORY = isset($subscription->Category->prm) ? strtoupper($subscription->Category->prm) : null;
             $subscription->SUBSCRIPTION_DATE = date('d-m-Y',$subscription->subscription_request_date);
-            // Fetch latest total_collection and fin_year
+            $subscription->SUBSCRIPTION_STATUS = Parameter::where('grp', 'subscriptionstatus')
+                ->where('val', $subscription->subscription_status)
+                ->pluck('prm', 'val')
+                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->first();
+
             $latestSubmission = DB::table('splk_submission')
                 ->where('inst_refno', $subscription->uid)
                 ->where('fin_category', 'STM02')
                 ->orderByDesc('fin_year')
                 ->limit(1)
-                ->first(['total_collection', 'fin_year']);
+                ->first(['total_income', 'fin_year']);
 
-            // Store inside COLLECTION
             $subscription->COLLECTION = [
-                'TOTAL_COLLECTION' => $latestSubmission->total_collection ?? null,
+                'TOTAL_COLLECTION' => $latestSubmission->total_income ?? null,
                 'FIN_YEAR' => $latestSubmission->fin_year ?? null,
             ];
 

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\RegistrationApproveConfirmation;
 use App\Models\Parameter;
+use App\Mail\SendUserOtp;
 
 class UserController extends Controller
 {
@@ -30,7 +31,9 @@ class UserController extends Controller
             'resettokenexpiration' => $this->defaultTime,
             'mailaddr' => '',
             'mailaddr2' => '',
-            'mailaddr3' => ''
+            'mailaddr3' => '',
+            'cdate' => $this->defaultTime,
+            'll' => $this->defaultTime,
         ];
     }
 
@@ -95,17 +98,26 @@ class UserController extends Controller
             ->paginate($perPage)->withQueryString();
 
         
-            $users->getCollection()->transform(function ($user) {
-                $user->DEPARTMENT = $user->Department->prm ?? null;
-                $user->POSITION = $user->Position->prm ?? null;
-                if ($user->joblvl == null){
-                    $user->DISTRICT_ACCESS = null;
-                }else{
-                    $user->DISTRICT_ACCESS = $user->DistrictAcceess->prm ?? null;
-                }
-                $user->USER_GROUP = $user->UserGroup->prm ?? null;
+        $users->getCollection()->transform(function ($user) {
+            $user->DEPARTMENT = isset($user->Department->prm) ? strtoupper($user->Department->prm) : null;
+            $user->POSITION = isset($user->Position->prm) ? strtoupper($user->Position->prm) : null;
+
+            if ($user->joblvl == null) {
+                $user->DISTRICT_ACCESS = "SEMUA";
+            } else {
+                $user->DISTRICT_ACCESS = isset($user->DistrictAcceess->prm) ? strtoupper($user->DistrictAcceess->prm) : null;
+            }
+
+            $user->USER_GROUP = isset($user->UserGroup->prm) ? strtoupper($user->UserGroup->prm) : null;
+            $user->STATUS = Parameter::where('grp', 'clientstatus')
+                ->where('val', $user->status)
+                ->pluck('prm', 'val')
+                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->first();
+
             return $user;
         });
+
 
         return view('user.list', [
             'parameters' => $this->getCommon(),
@@ -113,25 +125,55 @@ class UserController extends Controller
         ]);
     }
 
+        public function login(Request $request)
+    {
+        $request->validate([
+            'mel' => 'required|string',
+            'pass' => 'required|string',
+        ]);
+        
+        $user = DB::table('usr')
+            ->where('mel', $request->mel)
+            ->where('pass', md5($request->pass))
+            ->first();
+
+        if ($user) {
+            Auth::guard()->loginUsingId($user->id);
+            $this->logActivity('Login', 'log in attempt successful');
+
+
+            return redirect()->route('index');
+        }
+        $this->logActivity('Login', 'log in attempt failed');
+        return back()->with('error', 'Invalid credentials.');
+    }
+
     public function create(Request $request)
     {
         if ($request->isMethod('post')) {
             $validatedData = $this->validateInput($request);
 
-
             $validatedData['uid'] = $this->generateUniqueUid();
 
-            $dataToInsert = array_merge($this->defaultUserValues, $validatedData);
-            
+            $password = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+            $validatedData['pass'] = md5($password);
+            $validatedData['password_set'] = 0;
 
-            User::create($dataToInsert);
+            $dataToInsert = array_merge($this->defaultUserValues, $validatedData);
+
+            $user = User::create($dataToInsert);
+
+            Mail::to($user->mel)->send(new SendUserOtp($user->mel, $password));
 
             return redirect()->route('userList')->with('success', 'Pengguna telah berjaya didaftarkan!');
         }
+
         $parameters = $this->getCommon();
-        $parameters['districts'] = ['' => 'Semua'] + $parameters['districts']; 
+        $parameters['districts'] = ['' => 'Semua'] + $parameters['districts'];
+
         return view('user.create', ['parameters' => $parameters]);
     }
+
 
     public function edit(Request $request, $id)
     {
@@ -146,6 +188,6 @@ class UserController extends Controller
         }
         $parameters = $this->getCommon();
         $parameters['districts'] = ['' => 'Semua'] + $parameters['districts']; 
-        return view('user.edit', ['user' => $user, 'parameters' => $this->getCommon()]);        
+        return view('user.edit', ['user' => $user, 'parameters' => $parameters]);        
     }
 }

@@ -2,7 +2,7 @@
 
     <!-- Start::main-sidebar-header -->
     <div class="main-sidebar-header">
-        <a href="{{ url('index') }}" class="header-logo">
+        <a href="{{ route('index') }}" class="header-logo">
             <img src="{{ asset('assets/icons/sd_logo.png') }}" alt="logo" class="desktop-logo">
             <img src="{{ asset('assets/icons/sd_logo_half.svg') }}" alt="logo" class="toggle-dark">
 
@@ -297,7 +297,7 @@
                         </li>
                         <li class="slide">
                             <a href="{{ route('userList') }}" class="side-menu__item">Senarai
-                                Admin</a>
+                                Pengguna</a>
                         </li>
                         <li class="slide">
                             <a href="{{ route('activityLogs') }}" class="side-menu__item">Audit Trail</a>

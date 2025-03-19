@@ -4,7 +4,7 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senarai Rekod Tunggakan'" :breadcrumbs="[['label' => 'Langganan', 'url' => 'javascript:void(0);'], ['label' => 'Rekod Tunggakan']]" />
+            <x-page-header :title="'Senarai Langganan Aktif Institusi'" :breadcrumbs="[['label' => 'Langganan', 'url' => 'javascript:void(0);'], ['label' => 'Rekod Aktif']]" />
             @if (session('success'))
                 <div class="bg-green-100 text-green-800 p-3 rounded-lg mb-4">
                     {{ session('success') }}
@@ -46,9 +46,9 @@
                         'type' => 'text',
                         'placeholder' => 'Carian nama...',
                     ],
-                ]" :route="route('outstandingSubscriptions')" />
+                ]" :route="route('activeSubscriptions')" />
 
-                <x-table :headers="['Institusi', 'Jenis Institusi', 'Nama Institusi', 'Daerah', 'Mukim']" :columns="['TYPE', 'CATEGORY', 'NAME', 'DISTRICT', 'SUBDISTRICT']" :rows="$subscriptions" />
+                <x-table :headers="['Institusi', 'Jenis Institusi', 'Nama Institusi', 'Emel', 'Daerah', 'Mukim', 'Status']" :columns="['TYPE', 'CATEGORY', 'NAME', 'mel', 'DISTRICT', 'SUBDISTRICT', 'SUBSCRIPTION_STATUS']" :rows="$subscriptions" />
 
                 <x-pagination :items="$subscriptions" label="jumlah rekod" />
 

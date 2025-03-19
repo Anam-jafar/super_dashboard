@@ -63,7 +63,7 @@
                     'NAME',
                     'DISTRICT',
                     'SUBDISTRICT',
-                    'subscription_status',
+                    'SUBSCRIPTION_STATUS',
                 ]" :id="'id'" :rows="$subscriptions" :statuses="$statuses"
                     popupTriggerButton="'true'" />
 

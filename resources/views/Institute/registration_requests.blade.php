@@ -41,7 +41,7 @@
                     ['name' => 'search', 'label' => '', 'type' => 'text', 'placeholder' => 'Carian nama...'],
                 ]" :route="route('registrationRequests')" />
 
-                <x-table :headers="['Institusi', 'Jenis Institusi', 'Nama Institusi', 'Daerah', 'Mukim']" :columns="['TYPE', 'CATEGORY', 'NAME', 'DISTRICT', 'SUBDISTRICT']" :rows="$institutes" :id="'id'"
+                <x-table :headers="['Tarikh Mohon', 'Institusi', 'Jenis Institusi', 'Nama Institusi', 'Daerah', 'Mukim']" :columns="['REGISTRATION_DATE', 'TYPE', 'CATEGORY', 'NAME', 'DISTRICT', 'SUBDISTRICT']" :rows="$institutes" :id="'id'"
                     route="registrationRequestDetail" routeType="" />
                 <x-pagination :items="$institutes" label="jumlah institusi" />
 

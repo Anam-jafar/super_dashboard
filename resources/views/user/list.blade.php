@@ -4,7 +4,7 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senarai Pengguna'" :breadcrumbs="[
+            <x-page-header :title="'Senarai Rekod Pengguna'" :breadcrumbs="[
                 ['label' => 'Pengurusan Pengguna', 'url' => 'javascript:void(0);'],
                 ['label' => 'Senarai Pengguna'],
             ]" />
@@ -14,22 +14,30 @@
                 <x-filter-card :filters="[
                     [
                         'name' => 'syslevel',
-                        'label' => 'Semau Pengguna',
+                        'label' => 'Semua Pengguna',
                         'type' => 'select',
                         'options' => $parameters['admin_groups'],
                     ],
                     [
                         'name' => 'joblvl',
-                        'label' => 'Semau Daerah',
+                        'label' => 'Semua Akses',
                         'type' => 'select',
                         'options' => $parameters['districts'],
                     ],
                     ['name' => 'search', 'label' => 'Search by Name', 'type' => 'text', 'placeholder' => 'Carian...'],
-                ]" :route="route('userList')" button-label="Tambah Pentadbir" :button-route="route('userCreate')" />
+                ]" :route="route('userList')" button-label="Daftar Baru" :button-route="route('userCreate')" />
 
-                <x-table :headers="['Nama', 'Emel', 'No KP', 'HP', 'Peringkat Pengguna', 'Akses Daerah', 'Status']" :columns="['name', 'ic', 'hp', 'mel', 'USER_GROUP', 'DISTRICT_ACCESS', 'status']" :id="'id'" :rows="$users" route="userEdit" />
+                <x-table :headers="[
+                    'Nama',
+                    'Emel',
+                    'No Kad Pengenalan',
+                    'No Telefon',
+                    'Peringkat Pengguna',
+                    'Akses Daerah',
+                    'Status',
+                ]" :columns="['name', 'mel', 'ic', 'hp', 'USER_GROUP', 'DISTRICT_ACCESS', 'STATUS']" :id="'id'" :rows="$users" route="userEdit" />
 
-                <x-pagination :items="$users" label="Admin" />
+                <x-pagination :items="$users" label="jumlah rekod" />
 
             </div>
         </div>

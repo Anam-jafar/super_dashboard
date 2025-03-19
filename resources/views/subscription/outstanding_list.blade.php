@@ -4,7 +4,7 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Senarai Langganan Aktif Institusi'" :breadcrumbs="[['label' => 'Langganan', 'url' => 'javascript:void(0);'], ['label' => 'Rekod Aktif']]" />
+            <x-page-header :title="'Senarai Rekod Tunggakan'" :breadcrumbs="[['label' => 'Langganan', 'url' => 'javascript:void(0);'], ['label' => 'Rekod Tunggakan']]" />
             @if (session('success'))
                 <div class="bg-green-100 text-green-800 p-3 rounded-lg mb-4">
                     {{ session('success') }}
@@ -55,7 +55,7 @@
                     'Daerah',
                     'Mukim',
                     'Jumlah Invois',
-                    'Jumlah pembayaran',
+                    'Jumlah Pembayaran',
                     'Baki Tertunggak',
                 ]" :columns="[
                     'TYPE',

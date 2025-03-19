@@ -21,10 +21,18 @@
             1 => ['text' => 'Tidak Aktif', 'class' => 'bg-yellow-100 text-yellow-700 border-yellow-500'],
             'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
         ],
+        'SUBSCRIPTION_STATUS' => [
+            0 => ['text' => 'Tidak Melanggan', 'class' => 'bg-red-100 text-red-700 border-red-500 rounded-sm'],
+            1 => ['text' => 'Baru', 'class' => 'bg-blue-100 text-blue-700 border-blue-500 rounded-sm'],
+            2 => ['text' => 'Tertunggak', 'class' => 'bg-yellow-100 text-yellow-700 border-yellow-500 rounded-sm'],
+            3 => ['text' => '', 'class' => 'bg-green-100 text-green-700 border-green-500 rounded-sm'],
+            'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
+        ],
         'subscription_status' => [
             0 => ['text' => 'Tidak Melanggan', 'class' => 'bg-red-100 text-red-700 border-red-500 rounded-sm'],
             1 => ['text' => 'Baru', 'class' => 'bg-blue-100 text-blue-700 border-blue-500 rounded-sm'],
             2 => ['text' => 'Tertunggak', 'class' => 'bg-yellow-100 text-yellow-700 border-yellow-500 rounded-sm'],
+            3 => ['text' => '', 'class' => 'bg-green-100 text-green-700 border-green-500 rounded-sm'],
             'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
         ],
         'is_activated' => [
@@ -60,6 +68,6 @@
     $displayText = $text ?? $statusData['text'];
 @endphp
 
-<span class="inline-block w-24 px-2 py-1 text-xs font-semibold text-center border rounded-sm {{ $statusData['class'] }}">
+<span class="inline-block w-32 px-2 py-1 text-xs font-semibold text-center border rounded-sm {{ $statusData['class'] }}">
     {{ $displayText }}
 </span>

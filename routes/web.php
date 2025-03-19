@@ -27,6 +27,7 @@ Route::prefix('mais')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('submit.login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::match(['get', 'post'],'/reset-password/{id}', [AuthController::class, 'resetPassword'])->name('resetPassword');
 
     // Routes requiring authentication
     Route::middleware(['auth'])->group(function () {

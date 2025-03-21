@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use MongoDB\Client as MongoClient;
 use Illuminate\Support\Facades\DB;
+use App\Models\Institute;
+use App\Models\FinancialStatement;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Parameter;
 
 class DashboardController extends Controller
 {
@@ -37,7 +40,7 @@ class DashboardController extends Controller
     {
         $constraints = self::CLIENT_BASE_QUERY;
         if ($city) {
-            $constraints['city'] = $city;
+            $constraints['rem8'] = $city;
         }
         return $constraints;
     }
@@ -98,7 +101,7 @@ class DashboardController extends Controller
     private function _getTotalMosquePerCategory()
     {
         return DB::table('client as a')
-            ->rightJoin('type as b', 'a.cate', '=', 'b.prm')
+            ->rightJoin('type as b', 'a.cate', '=', 'b.code')
             ->where('b.grp', '=', 'type_CLIENT')
             ->select('b.prm', DB::raw('count(a.id) as total'))
             ->groupBy('b.prm')
@@ -155,25 +158,24 @@ class DashboardController extends Controller
 
     private function _getDistrictTable()
     {
-        $categories = ['MASJID UTAMA', 'SURAU', 'MASJID DAERAH', 'MASJID KARIAH', 
-                      'SURAU JUMAAT', 'MASJID JAMEK', 'MASJID PENGURUSAN', 'MASJID'];
+        $categories = Parameter::where('grp', 'type_CLIENT')->pluck('code');
         
-        $selects = ['c.city'];
+        $selects = ['c.rem8'];
         
         foreach ($categories as $category) {
-            $selects[] = DB::raw("(SELECT COUNT(*) FROM client WHERE cate = '$category' AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS " . str_replace(' ', '_', $category));
+            $selects[] = DB::raw("(SELECT COUNT(*) FROM client WHERE cate = '$category' AND rem8 = c.rem8 AND app = 'CLIENT' AND isdel = 0) AS " . str_replace(' ', '_', $category));
         }
         
         $selects = array_merge($selects, [
-            DB::raw("(SELECT COUNT(*) FROM client WHERE sta = 1 AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS Total_Active"),
-            DB::raw("(SELECT COUNT(*) FROM client WHERE sta = 0 AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS Total_Inactive"),
-            DB::raw("(SELECT COUNT(*) FROM client WHERE cate IN (SELECT prm FROM `type` WHERE grp='type_CLIENT') AND city = c.city AND app = 'CLIENT' AND isdel = 0) AS Total")
+            DB::raw("(SELECT COUNT(*) FROM client WHERE sta = 0 AND rem8 = c.rem8 AND app = 'CLIENT' AND isdel = 0) AS Total_Active"),
+            DB::raw("(SELECT COUNT(*) FROM client WHERE sta = 1 AND rem8 = c.rem8 AND app = 'CLIENT' AND isdel = 0) AS Total_Inactive"),
+            DB::raw("(SELECT COUNT(*) FROM client WHERE cate IN (SELECT code FROM `type` WHERE grp='type_CLIENT') AND rem8 = c.rem8 AND app = 'CLIENT' AND isdel = 0) AS Total")
         ]);
 
         return DB::table('client AS c')
             ->select($selects)
             ->where(self::CLIENT_BASE_QUERY)
-            ->groupBy('c.city')
+            ->groupBy('c.rem8')
             ->get();
     }
 
@@ -211,7 +213,10 @@ class DashboardController extends Controller
             'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn($item) => [$item->prm => $item->total]),
             'mosqueActiveInactive' => $this->_getMosqueActiveInactive($city),
             'city' => $city,
-            'kariahPerMosqueType' => $this->_getKariahPerMosquesType($city)
+            'kariahPerMosqueType' => $this->_getKariahPerMosquesType($city),
+            'categories' => Parameter::where('grp', 'type_CLIENT')->pluck('prm','code')->toArray(),
+            'districts' => Parameter::where('grp', 'district')->pluck('prm','code')->toArray()
+
         ];
 
         return view('base.mosques_in_city_details', $data);
@@ -221,12 +226,12 @@ class DashboardController extends Controller
     {
         $result = DB::table('client AS c')
             ->select(
-                DB::raw("SUM(CASE WHEN c.sta = 1 THEN 1 ELSE 0 END) AS Total_Active"),
-                DB::raw("SUM(CASE WHEN c.sta = 0 THEN 1 ELSE 0 END) AS Total_Inactive")
+                DB::raw("SUM(CASE WHEN c.sta = 0 THEN 1 ELSE 0 END) AS Total_Active"),
+                DB::raw("SUM(CASE WHEN c.sta = 1 THEN 1 ELSE 0 END) AS Total_Inactive")
             )
             ->where('c.app', 'CLIENT')
             ->where('c.isdel', 0)
-            ->where('c.city', $city)
+            ->where('c.rem8', $city)
             ->first();
 
         return [
@@ -278,10 +283,33 @@ class DashboardController extends Controller
             'kariahPerAgeRange' => $this->_getKariahPerAgeRange(),
             'kariahNationality' => $this->_getKariahNationality(),
             'districtTable' => $this->_getDistrictTable(),
-            'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn($item) => [$item->prm => $item->total])
+            'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn($item) => [$item->prm => $item->total]),
+            'categories' => Parameter::where('grp', 'type_CLIENT')->pluck('prm','code')->toArray(),
+            'districts' => Parameter::where('grp', 'district')->pluck('prm','code')->toArray()
+
+
         ];
+        // $categories = Parameter::where('grp', 'type_CLIENT')->pluck('prm', 'code');
+        // dd($categories);
 
         return view('base.index', $data);
+    }
+
+    public function getFinancialReport(Request $request)
+    {
+        $year = $request->input('year', date('Y')); // Default to current year if not provided
+
+        $totalClients = DB::table('client')->where('sta', 0)->count();
+        $totalEntries = DB::table('splk_submission')
+            ->where('fin_year', $year)
+            ->where('fin_category', 'STM02')
+            ->where('status', 3)
+            ->count();
+
+        return response()->json([
+            'totalClients' => $totalClients,
+            'totalEntries' => $totalEntries,
+        ]);
     }
         // Controller methods for web routes
     public function index()
@@ -299,7 +327,167 @@ class DashboardController extends Controller
         //     'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn($item) => [$item->prm => $item->total])
         // ];
 
-        return view('base.dashboard');
+        $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
+
+        $total_institute = Institute::where('sta', 0)
+            ->when($districtAccess !== null, function ($query) use ($districtAccess) {
+                return $query->where('rem8', $districtAccess);
+            })
+            ->count() ?: null;
+
+        $total_institute_registration = Institute::where('sta', 1)
+            ->when($districtAccess !== null, function ($query) use ($districtAccess) {
+                return $query->where('rem8', $districtAccess);
+            })
+            ->whereNotNull('registration_request_date')
+            ->where(function ($q) {
+                $q->whereNull('regdt')
+                ->orWhere('regdt', '0000-00-00');
+            })
+            ->count() ?: null;
+
+        $total_statement_to_review = FinancialStatement::where('status', 1)
+            ->when($districtAccess !== null, function ($query) use ($districtAccess) {
+                return $query->whereHas('Institute', function ($q) use ($districtAccess) {
+                    $q->where('rem8', $districtAccess);
+                });
+            })
+            ->count() ?: null;
+
+        $total_statement_cancelled = FinancialStatement::where('status', 3)
+            ->when($districtAccess !== null, function ($query) use ($districtAccess) {
+                return $query->whereHas('Institute', function ($q) use ($districtAccess) {
+                    $q->where('rem8', $districtAccess);
+                });
+            })
+            ->count() ?: null;
+
+        $institute_registration_list = Institute::with('Type', 'Category')->where('sta', 1)
+            ->when($districtAccess !== null, function ($query) use ($districtAccess) {
+                return $query->where('rem8', $districtAccess);
+            })
+            ->whereNotNull('registration_request_date')
+            ->where(function ($q) {
+                $q->whereNull('regdt')
+                ->orWhere('regdt', '0000-00-00');
+            })
+            ->limit(5) 
+            ->get();
+
+
+        $financial_statements_list = FinancialStatement::with('Institute')
+            ->where('status', 1)
+            ->when(!is_null($districtAccess), function ($query) use ($districtAccess) {
+                return $query->whereHas('Institute', function ($q) use ($districtAccess) {
+                    $q->where('rem8', $districtAccess);
+                });
+            })
+            ->orderBy('id', 'desc')  // Order by latest ID
+            ->limit(5) // Limit to 5 records
+            ->get()
+            ->transform(function ($financialStatement) {
+                $financialStatement->CATEGORY = isset($financialStatement->Category->prm) 
+                    ? strtoupper($financialStatement->Category->prm) 
+                    : null;
+                $financialStatement->INSTITUTE = isset($financialStatement->Institute->name) 
+                    ? strtoupper($financialStatement->Institute->name) 
+                    : null;
+                $financialStatement->DISTRICT = isset($financialStatement->Institute->District->prm) 
+                    ? strtoupper($financialStatement->Institute->District->prm) 
+                    : null;
+                $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
+
+                return $financialStatement;
+            });
+
+        $institute_by_district = Institute::select('rem8', DB::raw('count(*) as total'))
+            ->when($districtAccess !== null, function ($query) use ($districtAccess) {
+                return $query->where('rem8', $districtAccess);
+            })
+            ->groupBy('rem8')
+            ->get()
+            ->transform(function ($institute) {
+                $institute->DISTRICT = isset($institute->District->prm) 
+                    ? strtoupper($institute->District->prm) 
+                    : null;
+                return $institute;
+            });
+
+        $maxCount = $institute_by_district->max('total');
+
+        $query = DB::table('client as c');
+
+        if ($districtAccess != null) {
+            $query->where('c.rem8', $districtAccess);
+        }
+
+        $subscriptions = $query->joinSub(
+            DB::table('fin_ledger as inv')
+                ->select(
+                    'inv.vid',
+                    DB::raw('SUM(inv.val) AS total_invoice'),
+                    DB::raw('COALESCE(SUM(rec.val), 0) AS total_received'),
+                    DB::raw('SUM(inv.val) - COALESCE(SUM(rec.val), 0) AS outstanding')
+                )
+                ->leftJoin('fin_ledger as rec', function ($join) {
+                    $join->on('inv.vid', '=', 'rec.vid')
+                        ->on('inv.tid', '=', 'rec.ref')
+                        ->where('rec.src', 'REC');
+                })
+                ->where('inv.src', 'INV')
+                ->groupBy('inv.vid')
+                ->having(DB::raw('SUM(inv.val) - COALESCE(SUM(rec.val), 0)'), '>', 0), // Ensure outstanding > 0
+            'subquery',
+            'c.uid',
+            '=',
+            'subquery.vid'
+        )
+        ->select(
+            'c.name as name',
+            'c.con1 as con1',
+            'c.mel as mel',
+            'c.hp as hp',
+            'c.subscription_status as subscription_status',
+            'subquery.outstanding'
+        )
+        ->limit(8)
+        ->get(); // Fix: Fetch the results as a collection
+
+        $subscriptions->transform(function ($subscription) {
+            $subscription->NAME = isset($subscription->name) ? strtoupper($subscription->name) : null;
+            $subscription->OFFICER = isset($subscription->con1) ? strtoupper($subscription->con1) : null;
+            $subscription->EMAIL = $subscription->mel ?? null;
+            $subscription->PHONE = $subscription->hp ?? null;
+            $subscription->TOTAL_OUTSTANDING = $subscription->outstanding ?? 0;
+            $subscription->STATUS = $subscription->subscription_status 
+                ? Parameter::where('grp', 'subscriptionstatus')
+                        ->where('val', $subscription->subscription_status)
+                        ->value('prm')
+                : null;            
+            return $subscription;
+        });
+
+        $latest_fin_year = DB::table('splk_submission')->max('fin_year');
+        $totalClients = DB::table('client')->where('sta', 0)->count();
+        $totalEntries = DB::table('splk_submission')
+            ->where('fin_year', $latest_fin_year)
+            ->where('fin_category', 'STM02')
+            ->where('status', 3)
+            ->count();
+
+        $years = range(date('Y'), date('Y') - 4);
+
+
+
+
+
+
+        
+
+
+        return view('base.dashboard', compact('total_institute', 'total_institute_registration', 'total_statement_to_review', 'total_statement_cancelled',
+                                                'institute_registration_list', 'financial_statements_list', 'institute_by_district', 'maxCount', 'subscriptions'
+                                                ,'latest_fin_year', 'totalClients', 'totalEntries', 'years'));
     }
 
 

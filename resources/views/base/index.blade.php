@@ -127,7 +127,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="w-full mt-8">
                         <div class="bg-white shadow-lg rounded-lg p-4 sm:p-6 overflow-x-auto">
                             <h3 class="text-xl font-semibold text-gray-700 mb-4">Statistik Masjid Mengikut Daerah</h3>
@@ -137,13 +136,14 @@
                                         <tr class="bg-gray-200">
                                             <th width='3%' rowspan='2'
                                                 class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                #</th>
+                                                #
+                                            </th>
                                             <th width='17%' rowspan='2'
                                                 class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">
                                                 Daerah</th>
-                                            <th colspan='8'
+                                            <th colspan="{{ count($categories) }}"
                                                 class="px-4 py-3 text-center text-xs font-medium text-gray-600 uppercase tracking-wider border-b-2 border-gray-400">
-                                                Kategori Masjid</th>
+                                                Jenis Institusi</th>
                                             <th rowspan='2'
                                                 class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
                                                 Aktif</th>
@@ -152,33 +152,14 @@
                                                 Tidak Aktif</th>
                                             <th rowspan='2'
                                                 class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Jumlah Masjid</th>
+                                                Jumlah Institusi</th>
                                         </tr>
                                         <tr class="bg-gray-200">
-                                            <th width='6%'
-                                                class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Masjid Utama</th>
-                                            <th width='6%'
-                                                class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Surau</th>
-                                            <th width='6%'
-                                                class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Masjid Daerah</th>
-                                            <th width='6%'
-                                                class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Masjid Kariah</th>
-                                            <th width='6%'
-                                                class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Surau Jumaat</th>
-                                            <th width='6%'
-                                                class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Masjid Jamek</th>
-                                            <th width='6%'
-                                                class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Masjid Pengurusan</th>
-                                            <th width='6%'
-                                                class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
-                                                Masjid</th>
+                                            @foreach ($categories as $code => $category)
+                                                <th width='6%'
+                                                    class="px-4 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">
+                                                    {{ $category }}</th>
+                                            @endforeach
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200">
@@ -187,79 +168,51 @@
                                                 <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
                                                     {{ $index + 1 }}</td>
                                                 <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
-                                                    <a href="{{ route('mosquesInCityDetails', ['city' => $district->city]) }}"
+                                                    <a href="{{ route('mosquesInCityDetails', ['city' => $district->rem8]) }}"
                                                         class="text-blue-500 hover:underline">
-                                                        {{ $district->city }}
+                                                        {{ $districts[$district->rem8] ?? 'Unknown' }}
                                                     </a>
                                                 </td>
-                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
-                                                    {{ $district->MASJID_UTAMA }}</td>
-                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
-                                                    {{ $district->SURAU }}</td>
-                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
-                                                    {{ $district->MASJID_DAERAH }}</td>
-                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
-                                                    {{ $district->MASJID_KARIAH }}</td>
-                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
-                                                    {{ $district->MASJID_JUMAAT ?? 0 }}</td>
-                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
-                                                    {{ $district->MASJID_JAMEK ?? 0 }}</td>
-                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
-                                                    {{ $district->MASJID_PENGURUSAN ?? 0 }}</td>
-                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
-                                                    {{ $district->MASJID }}</td>
+                                                @foreach ($categories as $code => $category)
+                                                    <td
+                                                        class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
+                                                        {{ $district->$code ?? 0 }}
+                                                    </td>
+                                                @endforeach
                                                 <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
                                                     {{ $district->Total_Active }}</td>
                                                 <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
                                                     {{ $district->Total_Inactive }}</td>
                                                 <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-500 text-right">
-                                                    {{ $district->MASJID_UTAMA + $district->SURAU + $district->MASJID_DAERAH + $district->MASJID_KARIAH + $district->MASJID_PENGURUSAN + $district->MASJID }}
+                                                    {{ $district->Total_Active + $district->Total_Inactive }}
                                                 </td>
+
                                             </tr>
                                         @endforeach
+                                        <!-- Jumlahan (Total Row) -->
                                         <tr class="bg-yellow-500 text-white font-semibold">
                                             <td class="px-4 py-2 whitespace-nowrap text-sm" colspan="2">Jumlah</td>
+                                            @foreach ($categories as $code => $category)
+                                                <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
+                                                    {{ collect($districtTable)->sum(fn($district) => $district->$code ?? 0) }}
+                                                </td>
+                                            @endforeach
                                             <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                                {{ $districtTable->sum('MASJID_UTAMA') }}
-                                            </td>
+                                                {{ $districtTable->sum('Total_Active') }}</td>
                                             <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                                {{ $districtTable->sum('SURAU') }}
-                                            </td>
+                                                {{ $districtTable->sum('Total_Inactive') }}</td>
                                             <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                                {{ $districtTable->sum('MASJID_DAERAH') }}
-                                            </td>
-                                            <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                                {{ $districtTable->sum('MASJID_KARIAH') }}
-                                            </td>
-                                            <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                                {{ $districtTable->sum('MASJID_JUMAAT') ?? 0 }}
-                                            </td>
-                                            <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                                {{ $districtTable->sum('MASJID_JAMEK') ?? 0 }}
-                                            </td>
-                                            <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                                {{ $districtTable->sum('MASJID_PENGURUSAN') ?? 0 }}
-                                            </td>
-                                            <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                                {{ $districtTable->sum('MASJID') }}
-                                            </td>
-                                            <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                                {{ $districtTable->sum('Total_Active') }}
-                                            </td>
-                                            <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                                {{ $districtTable->sum('Total_Inactive') }}
-                                            </td>
-                                            <td class="px-4 py-2 whitespace-nowrap text-sm text-right">
-                                                {{ $districtTable->sum('MASJID') + $districtTable->sum('MASJID_KARIAH') + $districtTable->sum('MASJID_PENGURUSAN') + $districtTable->sum('SURAU') }}
+                                                {{ $districtTable->sum('Total_Active') + $districtTable->sum('Total_Inactive') }}
                                             </td>
                                         </tr>
+
                                     </tbody>
-
                                 </table>
-
                             </div>
                         </div>
                     </div>
+
+
 
                     <!-- New Three Column Section -->
                     <div class="w-full mt-8">
@@ -294,6 +247,19 @@
                             </div>
 
 
+                            @php
+                                $totalMembers =
+                                    $totalKariah_MaleFemale['total_male'] + $totalKariah_MaleFemale['total_female'];
+                                $malePercentage =
+                                    $totalMembers > 0
+                                        ? round(($totalKariah_MaleFemale['total_male'] / $totalMembers) * 100, 2)
+                                        : 0;
+                                $femalePercentage =
+                                    $totalMembers > 0
+                                        ? round(($totalKariah_MaleFemale['total_female'] / $totalMembers) * 100, 2)
+                                        : 0;
+                            @endphp
+
                             <!-- Gender Distribution Cards -->
                             <div class="space-y-6 flex flex-col h-full">
                                 {{-- Male Card --}}
@@ -308,7 +274,7 @@
                                         </svg>
                                     </div>
                                     <div class="text-4xl font-bold mb-2">{{ $totalKariah_MaleFemale['total_male'] }}</div>
-                                    <div class="text-lg opacity-90">40% Jumlah Ahli</div>
+                                    <div class="text-lg opacity-90">{{ $malePercentage }}% Jumlah Ahli</div>
                                 </div>
 
                                 {{-- Female Card --}}
@@ -324,9 +290,10 @@
                                     </div>
                                     <div class="text-4xl font-bold mb-2">{{ $totalKariah_MaleFemale['total_female'] }}
                                     </div>
-                                    <div class="text-lg opacity-90">60% Jumlah Ahli</div>
+                                    <div class="text-lg opacity-90">{{ $femalePercentage }}% Jumlah Ahli</div>
                                 </div>
                             </div>
+
 
 
                             <!-- Age Distribution Chart -->

@@ -70,7 +70,7 @@ class Controller extends BaseController
                 ->pluck('prm', 'code')
                 ->toArray(),
             'financial_statement_statuses' => Parameter::where('grp', 'splkstatus')
-                ->whereNotIn('val', [0, 1])
+                ->whereNotIn('val', [0, 1, 4])
                 ->pluck('prm', 'val')
                 ->toArray(),
             'admin_departments' => Parameter::where('grp', 'jobdiv')
@@ -92,6 +92,11 @@ class Controller extends BaseController
             'countries' => Parameter::where('grp', 'country')
                 ->pluck('prm', 'code')
                 ->toArray(),
+            'financial_statement_statuses_report' => Parameter::where('grp', 'splkstatus')
+                ->whereNotIn('val', [0, 4])
+                ->pluck('prm', 'val')
+                ->toArray(),
+            
 
 
         ];

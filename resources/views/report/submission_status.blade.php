@@ -25,7 +25,7 @@
                         'name' => 'status',
                         'label' => 'Semua Status',
                         'type' => 'select',
-                        'options' => $parameters['financial_statement_statuses'],
+                        'options' => $parameters['financial_statement_statuses_report'],
                     ],
                 
                     ['name' => 'fin_year', 'label' => 'Tahun Penyata', 'type' => 'select', 'options' => $years],

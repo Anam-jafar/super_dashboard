@@ -23,11 +23,11 @@
                 Sebelum
             </a>
 
-            <!-- Pagination Numbers -->
-            <div class="flex items-center gap-x-1">
+            <!-- Pagination Numbers (Hidden on Small Screens) -->
+            <div class="hidden sm:flex items-center gap-x-1">
                 @php
-                    $startPage = max(1, $items->currentPage() - 2); // Show 2 pages before current
-                    $endPage = min($items->lastPage(), $items->currentPage() + 2); // Show 2 pages after current
+                    $startPage = max(1, $items->currentPage() - 2);
+                    $endPage = min($items->lastPage(), $items->currentPage() + 2);
                 @endphp
 
                 @if ($startPage > 1)
@@ -54,6 +54,7 @@
                         class="text-gray-800 hover:bg-gray-100 py-1 px-2.5 text-sm rounded-md">{{ $items->lastPage() }}</a>
                 @endif
             </div>
+
 
             <!-- Next Button -->
             <a href="{{ $items->appends(request()->query())->nextPageUrl() }}"

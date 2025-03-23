@@ -18,16 +18,17 @@
                     <x-input-field level="Nama Penuh" id="fullname" name="name" type="text"
                         placeholder="Enter Full Name" />
                     <div class="grid grid-cols-2 gap-6">
-                        <x-input-field level="No. Kod Pengenadan" id="nric_number" name="ic" type="text"
+                        <x-input-field level="No. Kad Pengenadan" id="nric_number" name="ic" type="text"
                             placeholder="" />
-                        <x-input-field level="No. H/P" id="mobile_number" name="hp" type="text" placeholder="" />
+                        <x-input-field level="Nombor Telefon" id="mobile_number" name="hp" type="text"
+                            placeholder="" />
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="grid grid-cols-2 gap-6">
 
-                        <x-input-field level="Email" id="email" name="mel" type="email" placeholder="" />
+                        <x-input-field level="Emel" id="email" name="mel" type="email" placeholder="" />
                         <x-input-field level="Jabatan" id="department" name="jobdiv" type="select" placeholder="Pilih"
                             :valueList="$parameters['admin_departments']" />
                     </div>

@@ -4,14 +4,14 @@
     <div class="main-content app-content">
         <div class="container-fluid">
 
-            <x-page-header :title="'Jumlah Penghantaran'" :breadcrumbs="[['label' => 'Pelaporan', 'url' => 'javascript:void(0);'], ['label' => 'Jumlah Penghantaran']]" />
+            <x-page-header :title="'Carian Penghantaran Laporan Kewangan'" :breadcrumbs="[['label' => 'Pelaporan', 'url' => 'javascript:void(0);'], ['label' => 'Carian Laporan']]" />
             <x-alert />
 
             <form method="POST" action="{{ route('searchStatementReport') }}" class="">
                 @csrf
                 <div class="space-y-2 py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs mt-4">
                     <div>
-                        <x-required-warning-text />
+                        <span class="text-md  text-red-500 fe fe-info"> Ruangan bertanda (*) adalah wajib dipilih</span>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">

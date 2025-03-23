@@ -12,6 +12,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Response;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,6 +30,8 @@ Route::prefix('mais')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('submit.login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::match(['get', 'post'],'/reset-password/{id}', [AuthController::class, 'resetPassword'])->name('resetPassword');
+    Route::post('/check-email-send-otp', [AuthController::class, 'checkEmailAndSendOtp']);
+
 
     // Routes requiring authentication
     Route::middleware(['auth'])->group(function () {

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+
 
 
 
@@ -168,8 +170,88 @@ public function activityLogs()
         ->orderBy('s.tm', 'desc')
         ->paginate($perPage);
 
+
     return view('auth.activity_logs', ['logs' => $logs, 'perPage' => $perPage]);
 }
+
+
+    public function checkEmailAndSendOtp(Request $request)
+    {
+        $request->validate([
+            'mel' => 'required|email',
+        ]);
+
+        // Check if user exists
+        $user = DB::table('usr')
+            ->where('mel', $request->mel)
+            ->first();
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengguna tidak dijumpai.'
+            ]);
+        }
+
+        try {
+            // Step 1: Get the Encrypted Key
+            $keyResponse = Http::post('https://devapi01.awfatech.com/api/v2/auth/appcode', [
+                'appcode' => 'MAISADMINEBOSS'
+            ]);
+
+            if (!$keyResponse->successful()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal mendapatkan kunci enkripsi.'
+                ]);
+            }
+
+            $encryptedKey = $keyResponse->json('data.encrypted_key');
+            if (!$encryptedKey) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Respons kunci enkripsi tidak sah.'
+                ]);
+            }
+
+            // Step 2: Send OTP Request
+            $otpResponse = Http::withHeaders([
+                'x-encrypted-key' => $encryptedKey
+            ])->post('https://devapi01.awfatech.com/api/v2/auth/eboss/client/otp/send?via=email', [
+                'input' => $request->mel,
+                'role' => 'general'
+            ]);
+
+            if ($otpResponse->successful()) {
+                $responseData = $otpResponse->json();
+                
+                if ($responseData['success']) {
+                    // Return success with user ID and OTP for verification
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'OTP telah dihantar ke emel anda.',
+                        'user_id' => $user->id,
+                        'otp' => $responseData['data']['otp'] // This would typically be sent directly to the user's email
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Gagal menghantar OTP: ' . ($responseData['message'] ?? 'Ralat tidak diketahui')
+                    ]);
+                }
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal menghantar OTP. Sila cuba lagi.'
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ralat sistem: ' . $e->getMessage()
+            ]);
+        }
+    }
 
 
 

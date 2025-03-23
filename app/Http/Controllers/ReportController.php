@@ -162,7 +162,7 @@ public function submissionStatus(Request $request)
             s.fin_year AS Tahun_Laporan, s.submission_date AS Tarikh_Hantar, 
             s.fin_category AS Kategori_laporan, t1.prm AS Daerah, 
             s.total_collection AS Jumlah_kutipan, s.total_expenses AS Jumlah_Belanja, 
-            s.bank_cash_balance AS Jumlah_Baki_Bank, s.status, t2.prm AS Status")
+            s.bank_cash_balance AS Jumlah_Baki_Bank, s.status, t2.prm AS Status")->whereNotIn('s.status', [0, 4])
         ->join('client as c', 'c.uid', '=', 's.inst_refno')
         ->join('type as t', function ($join) {
             $join->on('c.cate', '=', 't.code')
@@ -253,7 +253,7 @@ public function collectionAndExpense(Request $request)
             s.fin_year AS Tahun_Laporan, s.fin_category AS Kategori_laporan, 
             t1.prm AS Daerah, s.total_collection AS Jumlah_kutipan, 
             s.total_expenses AS Jumlah_Belanja, s.total_income AS Jumlah_Pendapatan, 
-            s.bank_cash_balance AS Jumlah_Baki_Diisytihar")
+            s.bank_cash_balance AS Jumlah_Baki_Diisytihar")->whereNotIn('s.status', [0, 4])
         ->join('client as c', 'c.uid', '=', 's.inst_refno')
         ->join('type as t', function ($join) {
             $join->on('c.cate', '=', 't.code')
@@ -317,7 +317,7 @@ public function submissionDetailed(Request $request)
         ->selectRaw("t.prm AS Jenis_Institusi, c.name AS Nama_institusi, 
             s.submission_date AS Tarikh_Hantar, s.fin_year AS Tahun_Laporan, 
             s.fin_category AS Kategori_laporan, s.id AS id, s.status as status,
-            t1.prm AS Daerah, t2.prm AS Status")
+            t1.prm AS Daerah, t2.prm AS Status")->whereNotIn('s.status', [0, 4])
         ->join('client as c', 'c.uid', '=', 's.inst_refno')
         ->join('type as t', function ($join) {
             $join->on('c.cate', '=', 't.code')
@@ -397,7 +397,7 @@ public function searchStatement(Request $request)
             ->selectRaw("t.prm AS Jenis_Institusi, c.name AS Nama_institusi, 
                 s.submission_date AS Tarikh_Hantar, s.fin_year AS Tahun_Laporan, 
                 s.fin_category AS Kategori_laporan, s.id AS id, s.status as status,
-                t1.prm AS Daerah, t2.prm AS Status")
+                t1.prm AS Daerah, t2.prm AS Status")->whereNotIn('s.status', [0, 4])
             ->join('client as c', 'c.uid', '=', 's.inst_refno')
             ->join('type as t', function ($join) {
                 $join->on('c.cate', '=', 't.code')
@@ -497,8 +497,24 @@ public function searchStatement(Request $request)
     $currentYear = date('Y');
     $years = array_combine(range($currentYear, $currentYear - 4, -1), range($currentYear, $currentYear - 4, -1));
     $months = [];
+    $malayMonths = [
+        '01' => 'Januari',
+        '02' => 'Februari',
+        '03' => 'Mac',
+        '04' => 'April',
+        '05' => 'Mei',
+        '06' => 'Jun',
+        '07' => 'Julai',
+        '08' => 'Ogos',
+        '09' => 'September',
+        '10' => 'Oktober',
+        '11' => 'November',
+        '12' => 'Disember',
+    ];
+
     foreach (range(1, 12) as $month) {
-        $months[str_pad($month, 2, '0', STR_PAD_LEFT)] = date('F', mktime(0, 0, 0, $month, 1));
+        $monthKey = str_pad($month, 2, '0', STR_PAD_LEFT);
+        $months[$monthKey] = $malayMonths[$monthKey];
     }
 
 

@@ -2,61 +2,28 @@
 
 @php
     $statusStyles = [
-        'sta' => [
-            0 => ['text' => 'Aktif', 'class' => 'bg-green-100 text-green-700 border-green-500 rounded-sm'],
-            1 => ['text' => 'Tidak Aktif', 'class' => 'bg-yellow-100 text-yellow-700 border-yellow-500 rounded-sm'],
-            2 => ['text' => 'Ditamatkan', 'class' => 'bg-red-100 text-red-700 border-red-500 rounded-sm'],
-            3 => ['text' => 'Terpelihara', 'class' => 'bg-gray-100 text-gray-700 border-gray-500 rounded-sm'],
-            'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500 rounded-sm'],
-        ],
         'STATUS' => [
-            0 => ['text' => 'Aktif', 'class' => 'bg-green-100 text-green-700 border-green-500 rounded-sm'],
-            1 => ['text' => 'Tidak Aktif', 'class' => 'bg-yellow-100 text-yellow-700 border-yellow-500 rounded-sm'],
-            2 => ['text' => 'Ditamatkan', 'class' => 'bg-red-100 text-red-700 border-red-500 rounded-sm'],
-            3 => ['text' => 'Terpelihara', 'class' => 'bg-gray-100 text-gray-700 border-gray-500 rounded-sm'],
-            'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500 rounded-sm'],
-        ],
-        'status' => [
-            0 => ['text' => 'Aktif', 'class' => 'bg-green-100 text-green-700 border-green-500 rounded-sm'],
-            1 => ['text' => 'Tidak Aktif', 'class' => 'bg-yellow-100 text-yellow-700 border-yellow-500'],
-            'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
+            0 => ['text' => 'Aktif', 'bg' => '#d1fae5', 'textColor' => '#047857', 'border' => '#a7f3d0'],
+            1 => ['text' => 'Tidak Aktif', 'bg' => '#fef3c7', 'textColor' => '#b45309', 'border' => '#fde68a'],
+            'default' => ['text' => 'Unknown', 'bg' => '#e5e7eb', 'textColor' => '#374151', 'border' => '#d1d5db'],
         ],
         'SUBSCRIPTION_STATUS' => [
-            0 => ['text' => 'Tidak Melanggan', 'class' => 'bg-red-100 text-red-700 border-red-500 rounded-sm'],
-            1 => ['text' => 'Baru', 'class' => 'bg-blue-100 text-blue-700 border-blue-500 rounded-sm'],
-            2 => ['text' => 'Tertunggak', 'class' => 'bg-yellow-100 text-yellow-700 border-yellow-500 rounded-sm'],
-            3 => ['text' => '', 'class' => 'bg-green-100 text-green-700 border-green-500 rounded-sm'],
-            'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
-        ],
-        'subscription_status' => [
-            0 => ['text' => 'Tidak Melanggan', 'class' => 'bg-red-100 text-red-700 border-red-500 rounded-sm'],
-            1 => ['text' => 'Baru', 'class' => 'bg-blue-100 text-blue-700 border-blue-500 rounded-sm'],
-            2 => ['text' => 'Tertunggak', 'class' => 'bg-yellow-100 text-yellow-700 border-yellow-500 rounded-sm'],
-            3 => ['text' => '', 'class' => 'bg-green-100 text-green-700 border-green-500 rounded-sm'],
-            'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
-        ],
-        'is_activated' => [
-            0 => ['text' => 'Tidak Melanggan', 'class' => 'bg-red-100 text-red-700 border-red-500 rounded-sm'],
-            1 => ['text' => 'Baru', 'class' => 'bg-blue-100 text-blue-700 border-blue-500 rounded-sm'],
-            2 => ['text' => 'Aktif', 'class' => 'bg-green-100 text-green-700 border-green-500 rounded-sm'],
-            'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
-        ],
-        'FINSUBMISSIONSTATUS' => [
-            0 => ['text' => 'Draft', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
-            2 => ['text' => 'Diterima', 'class' => 'bg-green-100 text-green-700 border-green-500'],
-            1 => ['text' => 'Disemak', 'class' => 'bg-yellow-100 text-yellow-700 border-yellow-500'],
-            3 => ['text' => 'Dibatalkan', 'class' => 'bg-red-100 text-red-700 border-red-500'],
-            'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
+            0 => ['text' => 'Tidak Melanggan', 'bg' => '#fee2e2', 'textColor' => '#b91c1c', 'border' => '#fecaca'],
+            1 => ['text' => 'Baru', 'bg' => '#dbeafe', 'textColor' => '#1e40af', 'border' => '#bfdbfe'],
+            2 => ['text' => 'Tertunggak', 'bg' => '#fef3c7', 'textColor' => '#b45309', 'border' => '#fde68a'],
+            3 => ['text' => '', 'bg' => '#d1fae5', 'textColor' => '#047857', 'border' => '#a7f3d0'],
+            'default' => ['text' => 'Unknown', 'bg' => '#e5e7eb', 'textColor' => '#374151', 'border' => '#d1d5db'],
         ],
         'FIN_STATUS' => [
-            0 => ['text' => 'Draft', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
-            2 => ['text' => 'Diterima', 'class' => 'bg-green-100 text-green-700 border-green-500'],
-            1 => ['text' => 'Disemak', 'class' => 'bg-yellow-100 text-yellow-700 border-yellow-500'],
-            3 => ['text' => 'Dibatalkan', 'class' => 'bg-red-100 text-red-700 border-red-500'],
-            'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
+            0 => ['text' => 'Draft', 'bg' => '#e5e7eb', 'textColor' => '#374151', 'border' => '#d1d5db'],
+            1 => ['text' => 'Disemak', 'bg' => '#fef3c7', 'textColor' => '#b45309', 'border' => '#fde68a'],
+            2 => ['text' => 'Diterima', 'bg' => '#d1fae5', 'textColor' => '#047857', 'border' => '#a7f3d0'],
+            3 => ['text' => 'Dibatalkan', 'bg' => '#fee2e2', 'textColor' => '#b91c1c', 'border' => '#fecaca'],
+            4 => ['text' => 'Mohon Kemaskini', 'bg' => '#fce7f3', 'textColor' => '#be185d', 'border' => '#fbcfe8'],
+            'default' => ['text' => 'Unknown', 'bg' => '#e5e7eb', 'textColor' => '#374151', 'border' => '#d1d5db'],
         ],
         'default' => [
-            'default' => ['text' => 'Unknown', 'class' => 'bg-gray-100 text-gray-700 border-gray-500'],
+            'default' => ['text' => 'Unknown', 'bg' => '#e5e7eb', 'textColor' => '#374151', 'border' => '#d1d5db'],
         ],
     ];
 
@@ -68,6 +35,18 @@
     $displayText = $text ?? $statusData['text'];
 @endphp
 
-<span class="inline-block w-32 px-2 py-1 text-xs font-semibold text-center border rounded-sm {{ $statusData['class'] }}">
+<span
+    style="
+        display: inline-block;
+        width: 8rem;
+        padding: 4px 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-align: center;
+        border-radius: 4px;
+        border: 1px solid {{ $statusData['border'] }};
+        background-color: {{ $statusData['bg'] }};
+        color: {{ $statusData['textColor'] }};
+    ">
     {{ $displayText }}
 </span>

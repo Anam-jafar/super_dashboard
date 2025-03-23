@@ -232,6 +232,49 @@
                 </li> --}}
                 <!-- End::slide -->
 
+                <!-- Start::slide -->
+                <li class="slide has-sub">
+                    <a href="javascript:void(0);" class="side-menu__item">
+                        <i class="ri-arrow-down-s-line side-menu__angle"></i>
+
+                        <svg class="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg" stroke-width=".5" stroke="currentColor">
+                            <path
+                                d="M16.125 0H5.625C5.1279 0.000595447 4.65133 0.198331 4.29983 0.549832C3.94833 0.901334 3.7506 1.3779 3.75 1.875V5.25H0V15.75C0 16.9905 1.0095 18 2.25 18H15.75C16.9905 18 18 16.9905 18 15.75V1.875C18 0.8415 17.1585 0 16.125 0ZM3.75 15.75C3.75 16.5772 3.07725 17.25 2.25 17.25C1.42275 17.25 0.75 16.5772 0.75 15.75V6H3.75V15.75ZM17.25 15.75C17.25 16.5772 16.5772 17.25 15.75 17.25H3.9255C4.29583 16.8382 4.50049 16.3038 4.5 15.75V1.875C4.5 1.25475 5.00475 0.75 5.625 0.75H16.125C16.7453 0.75 17.25 1.25475 17.25 1.875V15.75ZM11.25 5.25H15.75V6H11.25V5.25ZM6 8.25H15.75V9H6V8.25ZM6 11.25H15.75V12H6V11.25ZM6 14.25H15.75V15H6V14.25ZM9.75 2.25H6V6H9.75V2.25ZM9 5.25H6.75V3H9V5.25Z"
+                                fill="white" />
+                        </svg>
+
+
+                        <span class="side-menu__label">Pelaporan Kewangan</span>
+                    </a>
+                    <ul class="slide-menu child1">
+                        <li class="slide side-menu__label1">
+                            <a href="javascript:void(0)">Pelaporan Kewangan</a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('submissionCountReport') }}" class="side-menu__item">Jumlah Penghataran
+                            </a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('submissionStatusReport') }}" class="side-menu__item">Status
+                                Penghantaran</a>
+                        </li>
+
+                        <li class="slide">
+                            <a href="{{ route('collectionAndExpenseReport') }}" class="side-menu__item">Kutipan &
+                                Perbelanjaan</a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('submissionDetailedReport') }}" class="side-menu__item">Perincian
+                                Penghantaran</a>
+                        </li>
+                        <li class="slide">
+                            <a href="{{ route('searchStatementReport') }}" class="side-menu__item">Carian Laporan</a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- End::slide -->
+
 
 
                 <!-- Start::slide -->
@@ -312,27 +355,6 @@
                 <!-- End::slide -->
 
 
-                <!-- Start::slide -->
-                {{-- <li class="slide has-sub">
-                    <a href="javascript:void(0);" class="side-menu__item">
-                        <i class="ri-arrow-down-s-line side-menu__angle"></i>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 side-menu__icon" fill="none"
-                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
-                        </svg>
-                        <span class="side-menu__label">Audit Trail</span>
-                    </a>
-                    <ul class="slide-menu child1">
-                        <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">Audit Trail</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('activityLogs') }}" class="side-menu__item">Audit Trail</a>
-                        </li>
-                    </ul>
-                </li> --}}
-                <!-- End::slide -->
 
 
 

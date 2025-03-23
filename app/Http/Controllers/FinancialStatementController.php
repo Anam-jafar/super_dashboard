@@ -107,7 +107,7 @@ class FinancialStatementController extends Controller
 
         }
         $institute = Institute::where('uid', $inst_refno)->first();
-        $instituteType = $institute->Category->lvl;
+        $instituteType = isset($institute->Category->lvl) ? intval($institute->Category->lvl) : null;
         $currentYear = date('Y');
         $years = array_combine(range($currentYear - 3, $currentYear + 1), range($currentYear - 3, $currentYear + 1));
 
@@ -140,7 +140,7 @@ class FinancialStatementController extends Controller
 
         $financialStatement = FinancialStatement::find($id);
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
-        $instituteType = $institute->Category->lvl;
+        $instituteType = isset($institute->Category->lvl) ? intval($institute->Category->lvl) : null;
         $currentYear = date('Y');
         $years = array_combine(range($currentYear - 3, $currentYear + 1), range($currentYear - 3, $currentYear + 1));
 
@@ -172,8 +172,13 @@ class FinancialStatementController extends Controller
             return redirect()->route('statementList')->with('success', 'Financial Statement updated successfully');
         }
         $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
+        $financialStatement->FIN_STATUS = Parameter::where('grp', 'splkstatus')
+                ->where('val', $financialStatement->status)
+                ->pluck('prm', 'val')
+                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->first();
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
-        $instituteType = $institute->Category->lvl;
+        $instituteType = isset($institute->Category->lvl) ? intval($institute->Category->lvl) : null;
         $currentYear = date('Y');
         $years = array_combine(range($currentYear - 3, $currentYear + 1), range($currentYear - 3, $currentYear + 1));
 
@@ -190,7 +195,7 @@ class FinancialStatementController extends Controller
 
         $perPage = $request->input('per_page', 10);
 
-        $query = FinancialStatement::with('Institute')->where('status', 1);
+        $query = FinancialStatement::with('Institute')->whereIn('status', [1, 4]);
 
         if (!is_null($districtAccess)) {
             $query->whereHas('institute', function ($q) use ($districtAccess) {
@@ -258,8 +263,13 @@ class FinancialStatementController extends Controller
     {
         $financialStatement = FinancialStatement::with('VerifiedBy')->find($id);
         $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
+        $financialStatement->FIN_STATUS = Parameter::where('grp', 'splkstatus')
+                ->where('val', $financialStatement->status)
+                ->pluck('prm', 'val')
+                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->first();
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
-        $instituteType = $institute->Category->lvl;
+        $instituteType = isset($institute->Category->lvl) ? intval($institute->Category->lvl) : null;
         $currentYear = date('Y');
         $years = array_combine(range($currentYear - 3, $currentYear + 1), range($currentYear - 3, $currentYear + 1));
 
@@ -276,7 +286,7 @@ class FinancialStatementController extends Controller
 
         $perPage = $request->input('per_page', 10);
 
-        $query = FinancialStatement::with('Institute')->whereNotIn('status', [0, 1]);
+        $query = FinancialStatement::with('Institute')->whereNotIn('status', [0, 1, 4]);
 
         if (!is_null($districtAccess)) {
             $query->whereHas('institute', function ($q) use ($districtAccess) {
@@ -339,5 +349,23 @@ class FinancialStatementController extends Controller
             'financialStatements' => $financialStatements,
             'years' => $years,
         ]);
+    }
+
+    public function approveEditRequest(Request $request, $id)
+    {
+        $financialStatement = FinancialStatement::find($id);
+
+        if (!$financialStatement) {
+            return redirect()->route('statementList')->with('error', 'Financial Statement not found');
+        }
+
+        $financialStatement->update(['status' => 0,
+            'submission_date' => null,
+            'verified_by' => null,
+            'verified_at' => null,
+            'request_edit_date' => null,
+            'request_edit_reason' => null]);
+
+        return redirect()->route('statementList')->with('success', 'Permintaan suntingan Penyata Kewangan diluluskan.');
     }
 }

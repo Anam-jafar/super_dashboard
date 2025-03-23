@@ -37,8 +37,9 @@
                             <div style="font-weight: 500; width: 250px; text-align: left; color: black;">
                                 Status Penghantaran </div>
                             <div style="font-weight: 500; margin: 0 25px; color: black;">:</div>
-                            <div style="font-weight: 500; color: black;"><x-status-badge :column="'FINSUBMISSIONSTATUS'"
-                                    :value="$financialStatement->status" /></div>
+                            <div style="font-weight: 500; color: black;">
+                                <x-status-badge :column="'FIN_STATUS'" :value="$financialStatement->FIN_STATUS['val'] ?? ''" :text="$financialStatement->FIN_STATUS['prm'] ?? 'Unknown'" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -226,8 +227,9 @@
                                 <div style="font-weight: 500; width: 250px; text-align: left; color: black;">
                                     Status </div>
                                 <div style="font-weight: 500; margin: 0 25px; color: black;">:</div>
-                                <div style="font-weight: 500; color: black;"><x-status-badge :column="'FINSUBMISSIONSTATUS'"
-                                        :value="$financialStatement->status" /></div>
+                                <div style="font-weight: 500; color: black;">
+                                    <x-status-badge :column="'FIN_STATUS'" :value="$financialStatement->FIN_STATUS['val'] ?? ''" :text="$financialStatement->FIN_STATUS['prm'] ?? 'Unknown'" />
+                                </div>
                             </div>
                             @if ($financialStatement->status == 3)
                                 @if ($financialStatement->cancel_reason_adm != null)
@@ -237,8 +239,9 @@
                                     <x-show-key-value :key="'Sebab Pembatalan'" :value="$financialStatement->suggestion_adm" />
                                 @endif
                             @endif
-                            <x-show-key-value :key="'Disahkan Oleh'" :value="$financialStatement->VerifiedBy->name" />
-                            <x-show-key-value :key="'Disahkan Pada'" :value="$financialStatement->verified_at" />
+                            <x-show-key-value :key="'Disahkan Oleh'" :value="optional($financialStatement->VerifiedBy)->name ?? null" />
+                            <x-show-key-value :key="'Disahkan Pada'" :value="$financialStatement->verified_at ?? null" />
+
                         </div>
 
 

@@ -14,7 +14,7 @@
                 @method('POST')
 
                 <div class="space-y-2 py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs">
-                    <h3 class="font-semibold text-lg mb-2">Maklumat Institusi</h3>
+                    <h3 class="font-semibold text-lg mb-2">Maklumat Institusi <x-required-warning-text /></h3>
                     <hr class="mb-4">
 
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">

@@ -311,6 +311,7 @@ class DashboardController extends Controller
             'totalEntries' => $totalEntries,
         ]);
     }
+
         // Controller methods for web routes
     public function index()
     {

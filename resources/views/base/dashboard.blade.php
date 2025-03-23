@@ -232,7 +232,6 @@
 
                             </div>
                         </div>
-
                         <div class="xxl:col-span-8 xl:col-span-8 col-span-12">
                             <div class="box overflow-hidden">
                                 <div class="box-header justify-between">
@@ -371,390 +370,6 @@
             </div>
             <!-- End::Row-1 -->
 
-            {{-- <!-- Start::Row-2 -->
-            <div class="grid grid-cols-12 gap-x-6">
-                <div class="xxl:col-span-3 xl:col-span-6 col-span-12">
-                    <div class="box overflow-hidden">
-                        <div class="box-header justify-between">
-                            <div class="box-title">
-                                Latest Transactions
-                            </div>
-                            <a href="javascript:void(0);"
-                                class="ti-btn ti-btn-light btn-wave text-textmuted dark:text-textmuted/50 ti-btn-sm">View
-                                All<i class="ti ti-arrow-narrow-right"></i></a>
-                        </div>
-                        <div class="box-body p-0">
-                            <div class="table-responsive">
-                                <table class="ti-custom-table text-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Price</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="leading-none">
-                                                        <span class="avatar avatar-sm">
-                                                            <img src="{{ asset('build/assets/images/ecommerce/jpg/4.jpg') }}"
-                                                                alt="">
-                                                        </span>
-                                                    </div>
-                                                    <div class="font-medium">SwiftBuds</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="font-medium">$39.99</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-primary">Success</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="leading-none">
-                                                        <span class="avatar avatar-sm">
-                                                            <img src="{{ asset('build/assets/images/ecommerce/jpg/6.jpg') }}"
-                                                                alt="">
-                                                        </span>
-                                                    </div>
-                                                    <div class="font-medium">CozyCloud Pillow</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="font-medium">$19.95</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-primarytint1color">Pending</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="leading-none">
-                                                        <span class="avatar avatar-sm">
-                                                            <img src="{{ asset('build/assets/images/ecommerce/jpg/3.jpg') }}"
-                                                                alt="">
-                                                        </span>
-                                                    </div>
-                                                    <div class="font-medium">AquaGrip Bottle</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="font-medium">$9.99</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-primarytint2color">Failed</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="leading-none">
-                                                        <span class="avatar avatar-sm">
-                                                            <img src="{{ asset('build/assets/images/ecommerce/jpg/1.jpg') }}"
-                                                                alt="">
-                                                        </span>
-                                                    </div>
-                                                    <div class="font-medium">GlowLite Lamp</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="font-medium">$24.99</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-primarytint3color">Success</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="flex items-center gap-2">
-                                                    <div class="leading-none">
-                                                        <span class="avatar avatar-sm">
-                                                            <img src="{{ asset('build/assets/images/ecommerce/jpg/2.jpg') }}"
-                                                                alt="">
-                                                        </span>
-                                                    </div>
-                                                    <div class="font-medium">Bitvitamin</div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="font-medium">$26.45</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-secondary">Success</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border-b-0">
-                                                <div class="flex items-center gap-2">
-                                                    <div class="leading-none">
-                                                        <span class="avatar avatar-sm">
-                                                            <img src="{{ asset('build/assets/images/ecommerce/jpg/5.jpg') }}"
-                                                                alt="">
-                                                        </span>
-                                                    </div>
-                                                    <div class="font-medium">FitTrack</div>
-                                                </div>
-                                            </td>
-                                            <td class="border-b-0">
-                                                <span class="font-medium">$49.95</span>
-                                            </td>
-                                            <td class="border-b-0">
-                                                <span class="badge bg-warning ">Success</span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="xxl:col-span-3 xl:col-span-6 col-span-12">
-                    <div class="box">
-                        <div class="box-header justify-between">
-                            <div class="box-title">
-                                Recent Activity
-                            </div>
-                            <a href="javascript:void(0);"
-                                class="ti-ti-btn ti-btn-light btn-wave   text-textmuted dark:text-textmuted/50 waves-effect waves-light px-2 py-[0.26rem]">View
-                                All</a>
-                        </div>
-                        <div class="box-body">
-                            <ul class="list-none recent-activity-list">
-                                <li>
-                                    <div>
-                                        <div>
-                                            <div class="font-medium text-[14px]">John Doe</div>
-                                            <span class="text-xs activity-time">
-                                                12 Hrs
-                                            </span>
-                                        </div>
-                                        <span class="block text-textmuted dark:text-textmuted/50">
-                                            Updated the product description for <span
-                                                class="text-primary font-medium">Widget X</span>.
-                                        </span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <div>
-                                            <div class="font-medium text-[14px]">Jane Smith</div>
-                                            <span class="text-xs activity-time">
-                                                4:32pm
-                                            </span>
-                                        </div>
-                                        <span class="block text-textmuted dark:text-textmuted/50">
-                                            added a <span class="font-medium text-dark">new user</span> with username <span
-                                                class="font-medium text-primarytint1color">janesmith89.</span>
-                                        </span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <div>
-                                            <div class="font-medium text-[14px]">Michael Brown</div>
-                                            <span class="text-xs activity-time">
-                                                11:45am
-                                            </span>
-                                        </div>
-                                        <span class="block text-textmuted dark:text-textmuted/50">
-                                            Changed the status of order <a href="javascript:void(0);"
-                                                class="font-medium text-dark decoration-solid">#12345</a> to <span
-                                                class="font-medium text-primarytint2color">Shipped.</span>
-                                        </span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <div>
-                                            <div class="font-medium text-[14px]">David Wilson</div>
-                                            <span class="text-xs activity-time">
-                                                9:27am
-                                            </span>
-                                        </div>
-                                        <span class="block text-textmuted dark:text-textmuted/50">
-                                            added <span class="font-medium text-primarytint3color">John Smith</span> to
-                                            academy group this day.
-                                        </span>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <div>
-                                            <div class="font-medium text-[14px]">Robert Jackson</div>
-                                            <span class="text-xs activity-time">
-                                                8:56pm
-                                            </span>
-                                        </div>
-                                        <span class="block text-textmuted dark:text-textmuted/50">
-                                            added a comment to the task <span class="font-medium text-secondary">Update
-                                                website layout.</span>
-                                        </span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="xxl:col-span-3 xl:col-span-6 col-span-12">
-                    <div class="box">
-                        <div class="box-header justify-between">
-                            <div class="box-title">
-                                Sales Statistics
-                            </div>
-                            <div class="ti-dropdown hs-dropdown">
-                                <a href="javascript:void(0);"
-                                    class="ti-ti-btn ti-btn-light text-textmuted dark:text-textmuted/50 ti-dropdown-toggle gap-0 hs-dropdown-toggle px-2 py-[0.26rem]"
-                                    data-bs-toggle="dropdown" aria-expanded="true"> Sort By <i
-                                        class="ri-arrow-down-s-line align-middle ms-1 inline-block"></i></a>
-                                <ul class="ti-dropdown-menu hs-dropdown-menu hidden" role="menu"
-                                    data-popper-placement="bottom-end">
-                                    <li><a class="ti-dropdown-item" href="javascript:void(0);">This Week</a></li>
-                                    <li><a class="ti-dropdown-item" href="javascript:void(0);">Last Week</a></li>
-                                    <li><a class="ti-dropdown-item" href="javascript:void(0);">This Month</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="box-body">
-                            <div class="flex flex-wrap gap-2 justify-between flex-auto pb-3">
-                                <div
-                                    class="py-4 px-6 rounded-sm border border-defaultborder dark:border-defaultborder/10 border-dashed bg-light">
-                                    <span>Total Sales</span>
-                                    <p class="font-medium text-[14px] mb-0">$3.478B</p>
-                                </div>
-                                <div
-                                    class="py-4 px-6 rounded-sm border border-defaultborder dark:border-defaultborder/10 border-dashed bg-light">
-                                    <span>This Year</span>
-                                    <p class="text-success font-medium text-[14px] mb-0">4,25,349</p>
-                                </div>
-                                <div
-                                    class="py-4 px-6 rounded-sm border border-defaultborder dark:border-defaultborder/10 border-dashed bg-light">
-                                    <span>Last Year</span>
-                                    <p class="text-danger font-medium text-[14px] mb-0">3,41,622</p>
-                                </div>
-                            </div>
-                            <div id="sales-statistics"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="xxl:col-span-3 xl:col-span-6 col-span-12">
-                    <div class="box overflow-hidden">
-                        <div class="box-header pb-0 justify-between">
-                            <div class="box-title">
-                                Overall Statistics
-                            </div>
-                            <a href="javascript:void(0);"
-                                class="ti-ti-btn ti-btn-light btn-wave text-textmuted dark:text-textmuted/50 waves-effect waves-light gap-0 px-2 py-[0.26rem]">View
-                                All</a>
-                        </div>
-                        <div class="box-body">
-                            <ul class="ti-list-group activity-feed">
-                                <li class="ti-list-group-item !m-0">
-                                    <div class="flex items-center justify-between">
-                                        <div class="leading-none">
-                                            <p class="mb-2 text-[13px] text-textmuted dark:text-textmuted/50">Total
-                                                Expenses</p>
-                                            <h6 class="font-medium mb-0">$134,032<span
-                                                    class="text-xs text-success ms-2 font-normal inline-block">0.45%<i
-                                                        class="ti ti-trending-up mx-1"></i></span></h6>
-                                        </div>
-                                        <div class="text-end">
-                                            <div id="line-graph1"></div>
-                                            <a href="javascript:void(0);" class="text-xs">
-                                                <span>See more</span>
-                                                <span class="table-icon"><i
-                                                        class="ms-1 inline-block ri-arrow-right-line"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="ti-list-group-item !m-0">
-                                    <div class="flex items-center justify-between">
-                                        <div class="leading-none">
-                                            <p class="mb-2 text-[13px] text-textmuted dark:text-textmuted/50">General Leads
-                                            </p>
-                                            <h6 class="font-medium mb-0">74,354<span
-                                                    class="text-xs text-danger ms-2 font-normal inline-block">3.84%<i
-                                                        class="ti ti-trending-down mx-1"></i></span></h6>
-                                        </div>
-                                        <div class="text-end">
-                                            <div id="line-graph2"></div>
-                                            <a href="javascript:void(0);" class="text-xs">
-                                                <span>See more</span>
-                                                <span class="table-icon"><i
-                                                        class="ms-1 inline-block ri-arrow-right-line"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="ti-list-group-item !m-0">
-                                    <div class="flex items-center justify-between">
-                                        <div class="leading-none">
-                                            <p class="mb-2 text-[13px] text-textmuted dark:text-textmuted/50">Churn Rate
-                                            </p>
-                                            <h6 class="font-medium mb-0">6.02%<span
-                                                    class="text-xs text-success ms-2 font-normal inline-block">0.72%<i
-                                                        class="ti ti-trending-up mx-1"></i></span></h6>
-                                        </div>
-                                        <div class="text-end">
-                                            <div id="line-graph3"></div>
-                                            <a href="javascript:void(0);" class="text-xs">
-                                                <span>See more</span>
-                                                <span class="table-icon"><i
-                                                        class="ms-1 inline-block ri-arrow-right-line"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="ti-list-group-item !m-0">
-                                    <div class="flex items-center justify-between">
-                                        <div class="leading-none">
-                                            <p class="mb-2 text-[13px] text-textmuted dark:text-textmuted/50">New Users</p>
-                                            <h6 class="font-medium mb-0">7,893<span
-                                                    class="text-xs text-success ms-2 font-normal inline-block">11.05%<i
-                                                        class="ti ti-trending-up mx-1"></i></span></h6>
-                                        </div>
-                                        <div class="text-end">
-                                            <div id="line-graph4"></div>
-                                            <a href="javascript:void(0);" class="text-xs">
-                                                <span>See more</span>
-                                                <span class="table-icon"><i
-                                                        class="ms-1 inline-block ri-arrow-right-line"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="ti-list-group-item !m-0">
-                                    <div class="flex items-center justify-between">
-                                        <div class="leading-none">
-                                            <p class="mb-2 text-[13px] text-textmuted dark:text-textmuted/50">Returning
-                                                Users</p>
-                                            <h6 class="font-medium mb-0">3,258<span
-                                                    class="text-xs text-success ms-2 font-normal inline-block">1.69%<i
-                                                        class="ti ti-trending-up mx-1"></i></span></h6>
-                                        </div>
-                                        <div class="text-end">
-                                            <div id="line-graph5"></div>
-                                            <a href="javascript:void(0);" class="text-xs">
-                                                <span>See more</span>
-                                                <span class="table-icon"><i
-                                                        class="ms-1 inline-block ri-arrow-right-line"></i></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- End::Row-2 --> --}}
-
             <!-- Start::Row-3 -->
             <div class="grid grid-cols-12 gap-x-6">
                 <div class="xl:col-span-9 col-span-12">
@@ -874,91 +489,126 @@
     <script src="{{ asset('build/assets/libs/apexcharts/apexcharts.min.js') }}"></script>
 
     <script>
-        /* Order Statistics */
-        var options = {
-            series: [{{ $totalEntries }}, {{ $totalClients - $totalEntries }}], // Dynamic Data
-            labels: ["Diserahkan", "Dibatalkan"],
-            chart: {
-                height: 175,
-                type: 'donut',
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            legend: {
-                show: true,
-                position: 'bottom',
-                horizontalAlign: 'center',
-                height: 52,
-                markers: {
-                    width: 8,
-                    height: 8,
-                    radius: 2,
-                    shape: "circle",
-                    size: 4,
-                    strokeWidth: 0
-                },
-                offsetY: 10,
-            },
-            stroke: {
-                show: true,
-                curve: 'smooth',
-                lineCap: 'round',
-                colors: "#fff",
-                width: 0,
-                dashArray: 0,
-            },
-            plotOptions: {
-                pie: {
-                    startAngle: -90,
-                    endAngle: 90,
-                    offsetY: 10,
-                    expandOnClick: false,
-                    donut: {
-                        size: '80%',
-                        background: 'transparent',
-                        labels: {
-                            show: true,
-                            name: {
-                                show: true,
-                                fontSize: '20px',
-                                color: '#495057',
-                                offsetY: -25
-                            },
-                            value: {
-                                show: true,
-                                fontSize: '15px',
-                                offsetY: -20,
-                                formatter: function(val) {
-                                    return val + "%";
+        document.addEventListener("DOMContentLoaded", function() {
+            const yearSelect = document.getElementById("yearSelect");
+            const totalEntriesEl = document.getElementById("totalEntries");
+            const totalClientsEl = document.getElementById("totalClients");
+
+            let chart;
+
+            function fetchFinancialReport(year) {
+                fetch(`{{ route('getFinancialReport') }}?year=${year}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        totalEntriesEl.textContent = data.totalEntries;
+                        totalClientsEl.textContent = data.totalClients;
+
+                        updateChart(data.totalEntries, data.totalClients);
+                    })
+                    .catch(error => console.error("Error fetching data:", error));
+            }
+
+            function updateChart(totalEntries, totalClients) {
+                const remainingClients = totalClients - totalEntries;
+
+                const options = {
+                    series: [totalEntries, remainingClients],
+                    labels: ["Diserahkan", "Dibatalkan"],
+                    chart: {
+                        height: 175,
+                        type: 'donut',
+                    },
+                    dataLabels: {
+                        enabled: false,
+                    },
+                    legend: {
+                        show: true,
+                        position: 'bottom',
+                        horizontalAlign: 'center',
+                        height: 52,
+                        markers: {
+                            width: 8,
+                            height: 8,
+                            radius: 2,
+                            shape: "circle",
+                            size: 4,
+                            strokeWidth: 0
+                        },
+                        offsetY: 10,
+                    },
+                    stroke: {
+                        show: true,
+                        curve: 'smooth',
+                        lineCap: 'round',
+                        colors: "#fff",
+                        width: 0,
+                        dashArray: 0,
+                    },
+                    plotOptions: {
+                        pie: {
+                            startAngle: -90,
+                            endAngle: 90,
+                            offsetY: 10,
+                            expandOnClick: false,
+                            donut: {
+                                size: '80%',
+                                background: 'transparent',
+                                labels: {
+                                    show: true,
+                                    name: {
+                                        show: true,
+                                        fontSize: '20px',
+                                        color: '#495057',
+                                        offsetY: -25
+                                    },
+                                    value: {
+                                        show: true,
+                                        fontSize: '15px',
+                                        offsetY: -20,
+                                        formatter: function(val) {
+                                            return val + "%";
+                                        }
+                                    },
+                                    total: {
+                                        show: true,
+                                        showAlways: true,
+                                        label: 'Total',
+                                        fontSize: '22px',
+                                        fontWeight: 600,
+                                        color: '#495057',
+                                    }
                                 }
-                            },
-                            total: {
-                                show: true,
-                                showAlways: true,
-                                label: 'Total',
-                                fontSize: '22px',
-                                fontWeight: 600,
-                                color: '#495057',
                             }
                         }
-                    }
-                }
-            },
-            grid: {
-                padding: {
-                    bottom: -100
-                }
-            },
-            colors: [
-                "rgba(var(--primary-rgb))",
-                "rgba(227, 84, 212, 1)",
-                "rgba(255, 93, 159, 1)",
-                "rgba(255, 142, 111, 1)"
-            ],
-        };
+                    },
+                    grid: {
+                        padding: {
+                            bottom: -100
+                        }
+                    },
+                    colors: [
+                        "rgba(var(--primary-rgb))",
+                        "rgba(227, 84, 212, 1)",
+                        "rgba(255, 93, 159, 1)",
+                        "rgba(255, 142, 111, 1)"
+                    ],
+                };
 
-        var chart = new ApexCharts(document.querySelector("#orders"), options);
-        chart.render();
+                if (chart) {
+                    chart.updateOptions(options);
+                } else {
+                    chart = new ApexCharts(document.querySelector("#orders"), options);
+                    chart.render();
+                }
+            }
+
+            // Initial Load
+            fetchFinancialReport(yearSelect.value);
+
+            // Event Listener for Year Change
+            yearSelect.addEventListener("change", function() {
+                fetchFinancialReport(this.value);
+            });
+        });
     </script>
 @endsection

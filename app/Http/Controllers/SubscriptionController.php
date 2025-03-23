@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Institute;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Parameter;
+use Illuminate\Support\Facades\Http;
+
 
 class SubscriptionController extends Controller
 {
@@ -435,22 +437,51 @@ public function outstandingSubscriptions(Request $request)
     return view('subscription.outstanding_list', compact(['subscriptions', 'parameters']));
 }
 
-
-
-    public function subscriptionFeeAdd(Request $request)
-    {
+public function subscriptionFeeAdd(Request $request)
+{
+    try {
         $subscriptionId = $request->input('subscriptionId');
         $packageId = $request->input('packageId');
 
-        DB::table('client')
-            ->where('id', $subscriptionId)
-            ->update(['subscription_status' => 2]);
+        // Get user_id from the client table
+        $user_id = DB::table('client')->where('id', $subscriptionId)->value('uid');
 
-        // Process the subscription fee addition here
-        // You might want to update the subscription record or create a new record for the fee
+        if (!$user_id) {
+            return response()->json(['success' => false, 'message' => 'User not found'], 404);
+        }
 
-        return response()->json(['success' => true, 'message' => 'Subscription fee added successfully']);
+        // Call the external API
+        $url = "https://maisdev.awfatech.com/main/app/finance/invoice_gen.php?sysapp=maisadmineboss&cli={$user_id}&item={$packageId}";
+        $response = Http::get($url);
+
+        // Decode JSON response
+        $responseData = $response->json();
+
+        // Check if response is successful and 'status' is 'Success'
+        if ($response->successful() && isset($responseData['status']) && $responseData['status'] === 'Success') {
+            // Update subscription status in the database
+            DB::table('client')
+                ->where('id', $subscriptionId)
+                ->update(['subscription_status' => 2]);
+
+            return response()->json(['success' => true, 'message' => 'Subscription fee added successfully']);
+        } else {
+            return response()->json([
+                'success' => false, 
+                'message' => 'Failed to process subscription fee', 
+                'api_response' => $responseData // To debug any API response issues
+            ]);
+        }
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Something went wrong',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
+
+
 
     public function underMaintainance()
     {

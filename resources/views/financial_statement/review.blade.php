@@ -11,7 +11,7 @@
                 ['label' => 'Laporan Kewangan', 'url' => 'javascript:void(0);'],
                 [
                     'label' => 'Penghantaran Baru
-                                                                                                                                    ',
+                                                                                                                                                                                                                                                            ',
                 ],
             ]" />
             <x-alert />
@@ -217,38 +217,67 @@
                         <div class="">
                             <h5 class="text-start">Status Penghantaran / Status Semakan Audit </h5>
                         </div>
-                        <form action="" method="POST">
+                        @if ($financialStatement->status == 1)
+                            <form action="" method="POST">
 
-                            @csrf
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                @csrf
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <x-input-field level="Status" id="audit" name="status" type="select"
-                                        placeholder="Pilih" :valueList="$parameters['financial_statement_statuses']"
-                                        onchange="toggleCancellationFields(this.value)" />
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <x-input-field level="Status" id="audit" name="status" type="select"
+                                            placeholder="Pilih" :valueList="$parameters['financial_statement_statuses']"
+                                            onchange="toggleCancellationFields(this.value)" />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div id="cancellation_fields" style="display: none;">
-                                <div class="gap-6 mt-4 mb-4">
-                                    <label class="text-gray-800 font-medium col-span-3" for="cancel_reason_adm">
-                                        Alasan Pembatalan <span class="text-red-500">*</span>
-                                    </label>
-                                    <textarea name="cancel_reason_adm" id="cancellation_reason" cols="30" rows="4"
-                                        class="block w-full border !border-[#6E829F] focus:shadow-sm dark:focus:shadow-white/10 
+                                <div id="cancellation_fields" style="display: none;">
+                                    <div class="gap-6 mt-4 mb-4">
+                                        <label class="text-gray-800 font-medium col-span-3" for="cancel_reason_adm">
+                                            Alasan Pembatalan <span class="text-red-500">*</span>
+                                        </label>
+                                        <textarea name="cancel_reason_adm" id="cancellation_reason" cols="30" rows="4"
+                                            class="block w-full border !border-[#6E829F] focus:shadow-sm dark:focus:shadow-white/10 
                                         rounded-sm text-sm focus:z-10 focus:outline-0 focus:border-[#6E829F] 
                                         dark:focus:border-white/10 text-black resize-none col-span-3 mt-2"></textarea>
-                                </div>
-                                <div class="gap-6 mt-4 mb-4">
-                                    <label class="text-gray-800 font-medium col-span-3" for="correction_proposal_byadmin">
-                                        Cadangan Pembetulan <span class="text-red-500">*</span>
-                                    </label>
-                                    <textarea name="suggestion_adm" id="correction_proposal" cols="30" rows="4"
-                                        class="block w-full border !border-[#6E829F] focus:shadow-sm dark:focus:shadow-white/10 
+                                    </div>
+                                    <div class="gap-6 mt-4 mb-4">
+                                        <label class="text-gray-800 font-medium col-span-3"
+                                            for="correction_proposal_byadmin">
+                                            Cadangan Pembetulan <span class="text-red-500">*</span>
+                                        </label>
+                                        <textarea name="suggestion_adm" id="correction_proposal" cols="30" rows="4"
+                                            class="block w-full border !border-[#6E829F] focus:shadow-sm dark:focus:shadow-white/10 
                                         rounded-sm text-sm focus:z-10 focus:outline-0 focus:border-[#6E829F] 
                                         dark:focus:border-white/10 text-black resize-none col-span-3 mt-2"></textarea>
+                                    </div>
                                 </div>
-                            </div>
 
+
+
+                                <div class="flex justify-between mt-8">
+                                    <a href="{{ route('statementList') }}"
+                                        class="bg-gray-500 hover:bg-gray-600 text-white font-medium ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg inline-flex items-center justify-center">
+                                        Kembali
+                                    </a>
+
+                                    <button
+                                        class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
+                                        type="submit">
+                                        Simpan
+                                    </button>
+                                </div>
+                            </form>
+                        @elseif($financialStatement->status == 4)
+                            <div class="grid grid-cols-1 gap-x-16 gap-y-2 max-w-3xl mt-8">
+                                <div style="display: flex; margin-bottom: 12px; align-items: baseline;">
+                                    <div style="font-weight: 500; width: 250px; text-align: left; color: black;">
+                                        Status </div>
+                                    <div style="font-weight: 500; margin: 0 25px; color: black;">:</div>
+                                    <div style="font-weight: 500; color: black;"> <x-status-badge :column="'FIN_STATUS'"
+                                            :value="$financialStatement->FIN_STATUS['val'] ?? ''" :text="$financialStatement->FIN_STATUS['prm'] ?? 'Unknown'" /></div>
+                                </div>
+                                <x-show-key-value :key="'Tarikh Permohonan Kemaskini'" :value="$financialStatement->request_edit_date" />
+                                <x-show-key-value :key="'Alasan untuk Kemaskini'" :value="$financialStatement->request_edit_reason" />
+                            </div>
 
 
                             <div class="flex justify-between mt-8">
@@ -256,14 +285,18 @@
                                     class="bg-gray-500 hover:bg-gray-600 text-white font-medium ti-btn ti-btn-dark btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg inline-flex items-center justify-center">
                                     Kembali
                                 </a>
+                                <form action="{{ route('approveEditRequest', ['id' => $financialStatement->id]) }}"
+                                    method="POST">
+                                    @csrf
+                                    <button
+                                        class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
+                                        type="submit">
+                                        Simpan
+                                    </button>
+                                </form>
 
-                                <button
-                                    class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
-                                    type="submit">
-                                    Simpan
-                                </button>
                             </div>
-                        </form>
+                        @endif
                     </div>
                 </div>
             </div>

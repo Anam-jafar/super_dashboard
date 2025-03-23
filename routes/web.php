@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\InstituteController;
 use App\Http\Controllers\FinancialStatementController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Response;
 
@@ -118,6 +119,15 @@ Route::prefix('mais')->group(function () {
         Route::get('/financial-statement/reviewed-list', [FinancialStatementController::class, 'reviewedList'])->name('reviwedStatementList');
         Route::match(['get', 'post'], '/financial-statement/view/{id}', [FinancialStatementController::class, 'view'])->name('viewStatement');
         Route::match(['get', 'post'], '/financial-statement/review/{id}', [FinancialStatementController::class, 'review'])->name('reviewStatement');
+        Route::post('/financial-statement/edit-request/approve/{id}', [FinancialStatementController::class, 'approveEditRequest'])->name('approveEditRequest');
+
+        Route::get('/report/submission-count-list', [ReportController::class, 'submissionCount'])->name('submissionCountReport');
+        Route::get('/report/submission-status-list', [ReportController::class, 'submissionStatus'])->name('submissionStatusReport');
+        Route::get('/report/collection-expense', [ReportController::class, 'collectionAndExpense'])->name('collectionAndExpenseReport');
+        Route::get('/report/statement-submission', [ReportController::class, 'submissionDetailed'])->name('submissionDetailedReport');
+        Route::match(['get', 'post'], '/report/search-statement', [ReportController::class, 'searchStatement'])->name('searchStatementReport');
+
+
 
 
         
@@ -131,6 +141,10 @@ Route::prefix('mais')->group(function () {
         }
             return redirect()->back()->with('error', 'File not found');
     })->name('download.attachment');
+
+    Route::get('/tutorial', function () {
+        return view('tutorial');
+    });
 });
 
 

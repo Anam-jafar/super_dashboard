@@ -295,22 +295,38 @@ class DashboardController extends Controller
         return view('base.index', $data);
     }
 
-    public function getFinancialReport(Request $request)
-    {
-        $year = $request->input('year', date('Y')); // Default to current year if not provided
+public function getFinancialReport(Request $request)
+{
+    $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
 
-        $totalClients = DB::table('client')->where('sta', 0)->count();
-        $totalEntries = DB::table('splk_submission')
-            ->where('fin_year', $year)
-            ->where('fin_category', 'STM02')
-            ->where('status', 3)
-            ->count();
+    $year = $request->input('year', date('Y')); 
 
-        return response()->json([
-            'totalClients' => $totalClients,
-            'totalEntries' => $totalEntries,
-        ]);
+    $totalClientsQuery = DB::table('client')->where('sta', 0);
+
+    if ($districtAccess !== null) {
+        $totalClientsQuery->where('rem8', $districtAccess);
     }
+
+    $totalClients = $totalClientsQuery->count();
+
+    $totalEntriesQuery = DB::table('splk_submission as s')
+        ->join('client as c', 'c.uid', '=', 's.inst_refno')
+        ->where('s.fin_year', $year)
+        ->where('s.fin_category', 'STM02')
+        ->whereIn('s.status', [2,3]);
+
+    if ($districtAccess !== null) {
+        $totalEntriesQuery->where('c.rem8', $districtAccess);
+    }
+
+    $totalEntries = $totalEntriesQuery->count();
+
+    return response()->json([
+        'totalClients' => $totalClients,
+        'totalEntries' => $totalEntries,
+    ]);
+}
+
 
         // Controller methods for web routes
     public function index()

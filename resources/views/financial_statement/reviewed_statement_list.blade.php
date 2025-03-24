@@ -25,14 +25,21 @@
                         'type' => 'select',
                         'options' => $parameters['districts'],
                     ],
+                
                     [
                         'name' => 'rem9',
                         'label' => 'Semua Mukim',
                         'type' => 'select',
                         'options' => $parameters['subdistricts'],
                     ],
+                    [
+                        'name' => 'status',
+                        'label' => 'Semua Status',
+                        'type' => 'select',
+                        'options' => $parameters['financial_statement_statuses_report'],
+                    ],
                     ['name' => 'search', 'label' => '', 'type' => 'text', 'placeholder' => 'Carian nama...'],
-                ]" :route="route('statementList')" />
+                ]" :route="route('reviwedStatementList')" />
 
                 <x-table :headers="[
                     'Tarikh Hantar',

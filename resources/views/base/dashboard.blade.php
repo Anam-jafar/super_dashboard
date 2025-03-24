@@ -16,30 +16,11 @@
                             <a href="javascript:void(0);">
                                 Utama </a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page"> Papan Pemuka
+                        <li class="breadcrumb-item active" aria-current="page"> Laman Utama
                         </li>
                     </ol>
-                    <h1 class="page-title font-medium text-lg mb-0"> Papan Pemuka
+                    <h1 class="page-title font-medium text-lg mb-0"> Laman Utama
                     </h1>
-                </div>
-                <div class="flex gap-2 flex-wrap">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-text bg-white dark:bg-bodybg border"> <i class="ri-calendar-line"></i>
-                            </div>
-                            <input type="text" class="form-control breadcrumb-input" id="daterange"
-                                placeholder="Search By Date Range">
-                        </div>
-                    </div>
-                    <div class="ti-btn-list">
-                        <button
-                            class="ti-btn bg-white dark:bg-bodybg border border-defaultborder dark:border-defaultborder/10 btn-wave !my-0 !m-0 !me-[0.35rem]">
-                            <i class="ri-filter-3-line align-middle leading-none"></i> Filter
-                        </button>
-                        <button class="ti-btn ti-btn-primary btn-wave !border-0 me-0 !m-0">
-                            <i class="ri-share-forward-line"></i> Share
-                        </button>
-                    </div>
                 </div>
             </div>
             <!-- End::page-header -->
@@ -55,7 +36,7 @@
                                         <div>
                                             <span class="text-textmuted dark:text-textmuted/50 block mb-1">Jumlah Institusi
                                                 Berdaftar</span>
-                                            <h4 class="font-medium mb-0">{{ $total_institute }}</h4>
+                                            <h4 class="font-medium mb-0">{{ $total_institute ?? 0 }}</h4>
                                         </div>
                                         <div class="leading-none">
 
@@ -76,7 +57,7 @@
                                             <span class="block text-textmuted dark:text-textmuted/50 mb-1">Pendaftaran
                                                 Masjid Baru
                                             </span>
-                                            <h4 class="font-medium mb-0">{{ $total_institute_registration }}</h4>
+                                            <h4 class="font-medium mb-0">{{ $total_institute_registration ?? 0 }}</h4>
                                         </div>
                                         <div class="leading-none">
                                             <img src="{{ asset('assets/icons/dashboard_icons_2.svg') }}" alt="logo"
@@ -91,9 +72,10 @@
                                 <div class="box-body">
                                     <div class="flex items-start justify-between mb-2">
                                         <div>
-                                            <span class="text-textmuted dark:text-textmuted/50 block mb-1">Laporan Disemak
+                                            <span class="text-textmuted dark:text-textmuted/50 block mb-1">Status Laporan
+                                                Disemak
                                             </span>
-                                            <h4 class="font-medium mb-0">{{ $total_statement_to_review }}</h4>
+                                            <h4 class="font-medium mb-0">{{ $total_statement_to_review ?? 0 }}</h4>
                                         </div>
                                         <div class="leading-none">
                                             <img src="{{ asset('assets/icons/dashboard_icons_3.svg') }}" alt="logo"
@@ -111,7 +93,7 @@
                                             <span class="text-textmuted dark:text-textmuted/50 block mb-1">Status Laporan
                                                 Dibatalkan
                                             </span>
-                                            <h4 class="font-medium mb-0">{{ $total_statement_cancelled }}</h4>
+                                            <h4 class="font-medium mb-0">{{ $total_statement_cancelled ?? 0 }}</h4>
                                         </div>
                                         <div class="leading-none">
                                             <img src="{{ asset('assets/icons/dashboard_icons_4.svg') }}" alt="logo"
@@ -125,13 +107,16 @@
                             <div class="box">
                                 <div class="box-header justify-between">
                                     <div class="box-title">
-                                        Institusi Pendaftaran
+                                        Permohonan Pendaftaran
                                     </div>
                                     <a href="{{ route('registrationRequests') }}"
-                                        class="ti-ti-btn ti-btn-light btn-wave   text-textmuted dark:text-textmuted/50 waves-effect waves-light px-2 py-[0.26rem]">View
-                                        All</a>
+                                        class="ti-ti-btn ti-btn-light btn-wave   text-textmuted dark:text-textmuted/50 waves-effect waves-light px-2 py-[0.26rem]">Lihat
+                                        Semua</a>
                                 </div>
                                 <div class="box-body mt-6 mb-6 flex flex-col justify-start" style="min-height: 350px;">
+                                    @if (!isset($institute_registration_list[0]))
+                                        <div class="text-center text-gray-500">Tiada rekod ditemui</div>
+                                    @endif
                                     <ul class="list-none recent-activity-list">
                                         @if (isset($institute_registration_list[0]))
                                             <li>
@@ -236,11 +221,12 @@
                             <div class="box overflow-hidden">
                                 <div class="box-header justify-between">
                                     <div class="box-title">
-                                        Laporan Kewangan Belum Diproses
+                                        Senarai Laporan Kewangan Disemak
                                     </div>
                                     <a href="{{ route('statementList') }}"
-                                        class="ti-btn ti-btn-light btn-wave text-textmuted dark:text-textmuted/50 ti-btn-sm">View
-                                        All<i class="ti ti-arrow-narrow-right"></i></a>
+                                        class="ti-btn ti-btn-light btn-wave text-textmuted dark:text-textmuted/50 ti-btn-sm">Lihat
+                                        Semua
+                                        <i class="ti ti-arrow-narrow-right"></i></a>
                                 </div>
                                 <div class="box-body mt-6 mb-6 flex flex-col justify-start" style="min-height: 350px;">
                                     <div class="table-responsive">
@@ -290,8 +276,8 @@
                                                     @endforeach
                                                 @else
                                                     <tr>
-                                                        <td colspan="4" class="text-center text-gray-500">Tiada data
-                                                            tersedia</td>
+                                                        <td colspan="4" class="text-center text-gray-500">Tiada rekod
+                                                            Ditemui</td>
                                                     </tr>
                                                 @endif
                                             </tbody>
@@ -369,116 +355,121 @@
                 </div>
             </div>
             <!-- End::Row-1 -->
-
-            <!-- Start::Row-3 -->
-            <div class="grid grid-cols-12 gap-x-6">
-                <div class="xl:col-span-9 col-span-12">
-                    <div class="box overflow-hidden">
-                        <div class="box-header justify-between">
-                            <div class="box-title">
-                                Senarai Pembayaran Langganan Tertunggak
+            @if (!in_array(Auth::user()->syslevel, ['ACL02', 'ACL03']))
+                <!-- Start::Row-3 -->
+                <div class="grid grid-cols-12 gap-x-6">
+                    <div class="xl:col-span-9 col-span-12">
+                        <div class="box overflow-hidden">
+                            <div class="box-header justify-between">
+                                <div class="box-title">
+                                    Senarai Pembayaran Langganan Tertunggak
+                                </div>
+                                <a href="{{ route('outstandingSubscriptions') }}"
+                                    class="ti-btn ti-btn-light btn-wave px-2 py-[0.26rem] text-textmuted dark:text-textmuted/50 waves-effect waves-light">
+                                    Lihat Semua
+                                </a>
                             </div>
-                            <a href="{{ route('outstandingSubscriptions') }}"
-                                class="ti-btn ti-btn-light btn-wave px-2 py-[0.26rem] text-textmuted dark:text-textmuted/50 waves-effect waves-light">
-                                View All
-                            </a>
-                        </div>
-                        <div class="box-body mt-6 mb-6 flex flex-col justify-start" style="min-height: 460px;">
-                            <div class="table-responsive">
-                                <table class="ti-custom-table text-nowrap">
-                                    <thead>
-                                        <tr class="border !border-defaultborder dark:!border-defaultborder/10">
-                                            <th>Nama Institusi</th>
-                                            <th>Nama Wakil</th>
-                                            <th class="!text-center">No. Telefon</th>
-                                            <th class="!text-center">Jumlah Tertunggak</th>
-                                            <th class="!text-center">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($subscriptions as $subscription)
+                            <div class="box-body mt-6 mb-6 flex flex-col justify-start" style="min-height: 460px;">
+                                <div class="table-responsive">
+                                    <table class="ti-custom-table text-nowrap">
+                                        <thead>
                                             <tr class="border !border-defaultborder dark:!border-defaultborder/10">
-                                                <td>
-                                                    <div class="flex items-center gap-4">
-                                                        <div>
-                                                            <span
-                                                                class="block font-medium">{{ $subscription->NAME }}</span>
-                                                            <span
-                                                                class="block text-[11px] text-textmuted dark:text-textmuted/50">
-                                                                {{ $subscription->EMAIL }}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>{{ $subscription->OFFICER }}</td>
-                                                <td class="text-center">{{ $subscription->PHONE }}</td>
-                                                <td class="text-center">
-                                                    ${{ number_format($subscription->TOTAL_OUTSTANDING, 2) }}
-                                                </td>
-                                                <td class="text-center">
-                                                    <span
-                                                        class="badge bg-primarytint1color ">{{ $subscription->STATUS ?? '-' }}</span>
-                                                </td>
+                                                <th>Nama Institusi</th>
+                                                <th>Nama Wakil</th>
+                                                <th class="!text-center">No. Telefon</th>
+                                                <th class="!text-center">Jumlah Tertunggak</th>
+                                                <th class="!text-center">Status</th>
                                             </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($subscriptions as $subscription)
+                                                <tr class="border !border-defaultborder dark:!border-defaultborder/10">
+                                                    <td>
+                                                        <div class="flex items-center gap-4">
+                                                            <div>
+                                                                <span
+                                                                    class="block font-medium">{{ $subscription->NAME }}</span>
+                                                                <span
+                                                                    class="block text-[11px] text-textmuted dark:text-textmuted/50">
+                                                                    {{ $subscription->EMAIL }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ $subscription->OFFICER }}</td>
+                                                    <td class="text-center">{{ $subscription->PHONE }}</td>
+                                                    <td class="text-center">
+                                                        ${{ number_format($subscription->TOTAL_OUTSTANDING, 2) }}
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <span
+                                                            class="badge bg-primarytint1color ">{{ $subscription->STATUS ?? '-' }}</span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                @php
-                    // Define an array of theme colors
-                    $colors = ['bg-primarytint3color', 'bg-primarytint2color', 'bg-primarytint1color', 'bg-primary'];
-                @endphp
+                    @php
+                        // Define an array of theme colors
+                        $colors = [
+                            'bg-primarytint3color',
+                            'bg-primarytint2color',
+                            'bg-primarytint1color',
+                            'bg-primary',
+                        ];
+                    @endphp
 
-                <div class="xl:col-span-3 col-span-12">
-                    <div class="box">
-                        <div class="box-header justify-between">
-                            <div class="box-title">
-                                Jumlah Institusi Mengikut Daerah
+                    <div class="xl:col-span-3 col-span-12">
+                        <div class="box">
+                            <div class="box-header justify-between">
+                                <div class="box-title">
+                                    Jumlah Institusi Mengikut Daerah
+                                </div>
                             </div>
-                        </div>
-                        <div class="box-body mt-6 mb-6 flex flex-col justify-start" style="min-height: 460px;">
-                            <ul class="list-none sales-country-list">
-                                @foreach ($institute_by_district as $district)
-                                    @if (!empty($district->DISTRICT))
-                                        @php
-                                            // Pick a random color from the predefined theme colors
-                                            $randomColor = $colors[array_rand($colors)];
-                                        @endphp
-                                        <li>
-                                            <div class="flex items-start gap-4">
-                                                <div class="flex-auto w-full">
-                                                    <div class="flex items-center justify-between">
-                                                        <span class="block font-medium mb-2 leading-none">
-                                                            {{ $district->DISTRICT }}
-                                                        </span>
-                                                        <span class="text-[14px] font-medium block leading-none">
-                                                            {{ $district->total }}
-                                                        </span>
-                                                    </div>
-                                                    <div class="progress progress-md p-1" role="progressbar"
-                                                        aria-valuenow="{{ $district->total }}" aria-valuemin="0"
-                                                        aria-valuemax="{{ $maxCount }}">
-                                                        <div class="progress-bar {{ $randomColor }} !rounded-s-full"
-                                                            style="width: {{ $maxCount > 0 ? ($district->total / $maxCount) * 100 : 0 }}%;">
+                            <div class="box-body mt-6 mb-6 flex flex-col justify-start" style="min-height: 460px;">
+                                <ul class="list-none sales-country-list">
+                                    @foreach ($institute_by_district as $district)
+                                        @if (!empty($district->DISTRICT))
+                                            @php
+                                                // Pick a random color from the predefined theme colors
+                                                $randomColor = $colors[array_rand($colors)];
+                                            @endphp
+                                            <li>
+                                                <div class="flex items-start gap-4">
+                                                    <div class="flex-auto w-full">
+                                                        <div class="flex items-center justify-between">
+                                                            <span class="block font-medium mb-2 leading-none">
+                                                                {{ $district->DISTRICT }}
+                                                            </span>
+                                                            <span class="text-[14px] font-medium block leading-none">
+                                                                {{ $district->total }}
+                                                            </span>
+                                                        </div>
+                                                        <div class="progress progress-md p-1" role="progressbar"
+                                                            aria-valuenow="{{ $district->total }}" aria-valuemin="0"
+                                                            aria-valuemax="{{ $maxCount }}">
+                                                            <div class="progress-bar {{ $randomColor }} !rounded-s-full"
+                                                                style="width: {{ $maxCount > 0 ? ($district->total / $maxCount) * 100 : 0 }}%;">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    @endif
-                                @endforeach
-                            </ul>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                </ul>
+                            </div>
                         </div>
                     </div>
+
                 </div>
-
-            </div>
-            <!-- End::Row-3 -->
-
+                <!-- End::Row-3 -->
+            @endif
         </div>
     </div>
     <!-- End::app-content -->
@@ -511,9 +502,12 @@
             function updateChart(totalEntries, totalClients) {
                 const remainingClients = totalClients - totalEntries;
 
+                // Avoid division by zero and round to the nearest whole number
+                const percentageSent = totalClients > 0 ? Math.round((totalEntries / totalClients) * 100) : 0;
+
                 const options = {
                     series: [totalEntries, remainingClients],
-                    labels: ["Diserahkan", "Dibatalkan"],
+                    labels: ["Dihantar", "Belum Dihantar"],
                     chart: {
                         height: 175,
                         type: 'donut',
@@ -563,19 +557,25 @@
                                     },
                                     value: {
                                         show: true,
-                                        fontSize: '15px',
+                                        fontSize: '16px',
+                                        fontWeight: 600,
+
                                         offsetY: -20,
-                                        formatter: function(val) {
-                                            return val + "%";
+                                        formatter: function() {
+                                            return percentageSent +
+                                                "%"; // Show percentage without decimal points
                                         }
                                     },
                                     total: {
                                         show: true,
                                         showAlways: true,
-                                        label: 'Total',
-                                        fontSize: '22px',
+                                        label: 'Peratusan',
+                                        fontSize: '16px',
                                         fontWeight: 600,
                                         color: '#495057',
+                                        formatter: function() {
+                                            return percentageSent + "%"; // Show total percentage at center
+                                        }
                                     }
                                 }
                             }
@@ -601,6 +601,7 @@
                     chart.render();
                 }
             }
+
 
             // Initial Load
             fetchFinancialReport(yearSelect.value);

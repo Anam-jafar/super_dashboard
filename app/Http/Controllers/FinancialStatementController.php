@@ -286,7 +286,7 @@ class FinancialStatementController extends Controller
 
         $perPage = $request->input('per_page', 10);
 
-        $query = FinancialStatement::with('Institute')->whereNotIn('status', [0, 1, 4]);
+        $query = FinancialStatement::with('Institute')->whereNotIn('status', [0,  4]);
 
         if (!is_null($districtAccess)) {
             $query->whereHas('institute', function ($q) use ($districtAccess) {

@@ -65,7 +65,6 @@ class AuthController extends Controller
                 'password' => 'required|string',
                 'confirm_password' => 'required|string|same:password',
             ]);
-
             $user->update([
                 'pass' => md5($request->password),
                 'password_set' => 1,
@@ -80,12 +79,16 @@ class AuthController extends Controller
 
     public function logout()
     {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
 
-        $this->logActivity('Logout', 'log out attempt successful');
-
+        $this->logActivity('Logout', 'Log out attempt successful');
+        
         Auth::logout();
         return redirect()->route('login');
     }
+
 
     public function profile()
     {

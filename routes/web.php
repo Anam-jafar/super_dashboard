@@ -33,6 +33,7 @@ Route::prefix('mais')->group(function () {
     Route::post('/check-email-send-otp', [AuthController::class, 'checkEmailAndSendOtp']);
 
 
+
     // Routes requiring authentication
     Route::middleware(['auth'])->group(function () {
 
@@ -109,6 +110,8 @@ Route::prefix('mais')->group(function () {
 
         Route::get('/get-institution-categories', [InstituteController::class, 'getInstitutionCategories'])->name('getInstitutionCategories');
         Route::get('/get-subdistricts', [InstituteController::class, 'getSubDistricts'])->name('getSubDistricts');
+        Route::get('/search-bandar', [InstituteController::class, 'getBandar'])->name('search.bandar');
+
 
 
 

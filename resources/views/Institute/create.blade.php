@@ -65,8 +65,30 @@
                         <div class="grid grid-cols-3 gap-4">
                             <x-input-field level="Poskod" id="poskod" name="pcode" type="text" placeholder="" />
 
-                            <x-input-field level="Bandar" id="city" name="city" type="select" placeholder="Pilih"
-                                :valueList="$parameters['cities']" />
+                            <div class="flex flex-col mt-4">
+                                <label for="citySearch" class="text-gray-800 font-normal mb-2">
+                                    Bandar
+                                </label>
+
+                                <div class="relative">
+                                    <!-- Search Input -->
+                                    <input type="text" id="citySearch" autocomplete="off" placeholder="Cari Bandar..."
+                                        class="p-2 border !border-[#6E829F] rounded-lg !text-gray-800 w-full h-[3rem]">
+
+                                    <!-- Hidden Select (To store actual value for form submission) -->
+                                    <select id="city" name="city" class="hidden">
+                                        <option value="" disabled selected>Pilih</option>
+                                        @foreach ($parameters['cities'] as $key => $displayValue)
+                                            <option value="{{ $key }}">{{ $displayValue }}</option>
+                                        @endforeach
+                                    </select>
+
+                                    <!-- Search Results -->
+                                    <ul id="cityResults"
+                                        class="absolute z-10 bg-white border border-gray-300 rounded-lg w-full mt-1 hidden max-h-48 overflow-auto">
+                                    </ul>
+                                </div>
+                            </div>
 
                             <x-input-field level="Negeri" id="negeri" name="state" type="select" placeholder=""
                                 :valueList="$parameters['states']" value="SEL" />
@@ -86,7 +108,8 @@
                         </div>
 
                         <div class="grid grid-cols-2 gap-6">
-                            <x-input-field level="Website" id="web" name="web" type="text" placeholder="" />
+                            <x-input-field level="Website" id="web" name="web" type="text"
+                                placeholder="" />
                             <x-input-field level="Media Social" id="social" name="rem10" type="text"
                                 placeholder="" />
                         </div>
@@ -240,6 +263,54 @@
                     })
                     .catch(error => console.error('Error fetching sub-districts:', error));
             }
+            const citySearchInput = document.getElementById("citySearch");
+            const cityDropdown = document.getElementById("city");
+            const cityResults = document.getElementById("cityResults");
+
+            function fetchCities(searchValue = "") {
+                fetch(`/mais/search-bandar?query=${searchValue}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        cityResults.innerHTML = "";
+                        Object.keys(data).forEach(key => {
+                            const listItem = document.createElement("li");
+                            listItem.textContent = data[key];
+                            listItem.classList.add("p-2", "cursor-pointer", "hover:bg-gray-200");
+                            listItem.dataset.value = key;
+
+                            listItem.addEventListener("click", function() {
+                                citySearchInput.value = data[key];
+                                cityDropdown.value = key;
+                                cityResults.classList.add("hidden");
+                            });
+
+                            cityResults.appendChild(listItem);
+                        });
+
+                        if (Object.keys(data).length > 0) {
+                            cityResults.classList.remove("hidden");
+                        } else {
+                            cityResults.classList.add("hidden");
+                        }
+                    })
+                    .catch(error => console.error("Error fetching bandar:", error));
+            }
+
+            citySearchInput.addEventListener("focus", function() {
+                fetchCities();
+            });
+
+            citySearchInput.addEventListener("input", function() {
+                const searchValue = this.value.trim();
+                fetchCities(searchValue);
+            });
+
+            document.addEventListener("click", function(event) {
+                if (!citySearchInput.contains(event.target) && !cityResults.contains(event.target)) {
+                    cityResults.classList.add("hidden");
+                }
+            });
+
         });
     </script>
 @endsection

@@ -335,4 +335,16 @@ class InstituteController extends Controller
 
         return response()->json($subDistricts);
     }
+
+    public function getBandar(Request $request)
+    {
+        $search = $request->input('query');
+
+        $cities = Parameter::where('grp', 'city')
+            ->where('prm', 'LIKE', "%{$search}%") // Search for matching cities
+            ->pluck('prm', 'code')
+            ->toArray();
+
+        return response()->json($cities);
+    }
 }

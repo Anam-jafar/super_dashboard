@@ -101,7 +101,7 @@
                         </div>
                         <div class="grid grid-cols-2 gap-6">
                             <div class="flex flex-col mt-4">
-                                <label for="citySearch" class="text-gray-800 font-normal mb-2">
+                                <label for="citySearch" class="text-gray-800 font-normal mb-4">
                                     Bandar
                                 </label>
 

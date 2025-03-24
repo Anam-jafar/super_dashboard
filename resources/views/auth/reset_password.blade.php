@@ -20,34 +20,36 @@
 @section('content')
     <div class="space-y-16 p-6 max-w-screen-lg mx-auto">
         <!-- Logo -->
-        <div class="flex justify-center">
-            <img src="{{ asset('assets/icons/fin_logo.svg') }}" alt="MAIS Logo" class="w-24 h-24" />
+
+        <div class="flex justify-center mb-8">
+            <img src="{{ asset('assets/icons/fin_logo.svg') }}" alt="MAIS Logo" class="h-[7.5rem] w-auto" />
         </div>
+
         <!-- Title -->
-        <h1 class="text-center text-2xl font-semibold text-blue-600 mb-8">TUKAR KATA LALUAN</h1>
+        <h1 class="text-center text-3xl font-semibold text-blue-600 mb-8">TUKAR KATA LALUAN</h1>
         <!-- User Information Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 max-w-3xl mx-auto px-6 py-4 bg-white rounded-lg shadow">
             <!-- Name -->
             <div class="flex items-center">
-                <span class="text-gray-900 font-semibold w-24">Name:</span>
+                <span class="text-gray-900 font-semibold w-24">Nama</span>
                 <span class="text-gray-600">{{ $user->name }}</span>
             </div>
 
             <!-- Position -->
             <div class="flex items-center">
-                <span class="text-gray-900 font-semibold w-24">Jawatan:</span>
+                <span class="text-gray-900 font-semibold w-24">Jawatan</span>
                 <span class="text-gray-600">{{ $user->UserGroup->prm }}</span>
             </div>
 
             <!-- Mobile Number -->
             <div class="flex items-center">
-                <span class="text-gray-900 font-semibold w-24">No H/P:</span>
+                <span class="text-gray-900 font-semibold w-24">No Telefon</span>
                 <span class="text-gray-600">{{ $user->hp }}</span>
             </div>
 
             <!-- Email -->
             <div class="flex items-center">
-                <span class="text-gray-900 font-semibold w-24">Emel:</span>
+                <span class="text-gray-900 font-semibold w-24">Emel</span>
                 <span class="text-gray-600">{{ $user->mel }}</span>
             </div>
         </div>
@@ -60,7 +62,7 @@
             <div class="grid grid-cols-1 gap-6">
                 <!-- New Password -->
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-                    <label class="text-gray-900 font-medium w-full sm:w-48">Katalaluan Baru:</label>
+                    <label class="text-gray-900 font-medium w-full sm:w-48">Katalaluan Baru</label>
                     <div class="password-input-wrapper w-full">
                         <input type="password" class="w-full p-3 border border-gray-300 rounded-lg pr-10" name="password"
                             placeholder="********" />
@@ -73,11 +75,15 @@
                                 d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                     </div>
+
                 </div>
+                @error('password')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
 
                 <!-- Confirm Password -->
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-                    <label class="text-gray-900 font-medium w-full sm:w-48">Masuk Kembali Katalaluan:</label>
+                    <label class="text-gray-900 font-medium w-full sm:w-48">Masuk Kembali Katalaluan</label>
                     <div class="password-input-wrapper w-full">
                         <input type="password" class="w-full p-3 border border-gray-300 rounded-lg pr-10"
                             name="confirm_password" placeholder="********" />
@@ -91,8 +97,21 @@
                         </svg>
                     </div>
                 </div>
+                @error('confirm_password')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
+            <!-- Password Requirements -->
+            <div class="bg-white p-4 rounded-lg text-gray-900">
+                <p class="font-semibold mb-2">Syarat Katalaluan:</p>
+                <ul class="list-decimal list-inside text-sm text-gray-700 space-y-1">
+                    <li>Sekurang-kurangnya 8 karakter (a-z)</li>
+                    <li>Sekurang-kurangnya 1 Huruf Besar (A-Z)</li>
+                    <li>Sekurang-kurangnya 1 Nombor (0-9)</li>
+                    <li>Sekurang-kurangnya 1 Simbol (@!$~#)</li>
+                </ul>
+            </div>
 
             <!-- Buttons -->
             <div class="flex justify-center gap-4 pt-4">

@@ -72,20 +72,35 @@ public function login(Request $request)
     {
         $user = User::with('Department', 'Position', 'DistrictAcceess', 'UserGroup')->find($id);
 
-        if($request->method() == 'POST') {
-            $request->validate([
-                'password' => 'required|string',
-                'confirm_password' => 'required|string|same:password',
-            ]);
-            $user->update([
-                'pass' => md5($request->password),
-                'password_set' => 1,
-            ]);
-            
-            return redirect()->route('login')->with('success', 'Kata Laluan Dikemaskini. Log masuk semula dengan kata laluan baharu.');
+if ($request->isMethod('POST')) {
+$request->validate([
+    'password' => [
+        'required',
+        'string',
+        'min:8',
+        'regex:/[a-z]/',  // At least one lowercase letter
+        'regex:/[A-Z]/',  // At least one uppercase letter
+        'regex:/[0-9]/',  // At least one number
+        'regex:/[@!$~#]/', // At least one special character (@!$~#)
+    ],
+    'confirm_password' => 'required|string|same:password',
+], [
+    'password.required' => 'Kata laluan diperlukan.',
+    'password.string' => 'Kata laluan mestilah dalam format teks.',
+    'password.min' => 'Kata laluan mesti sekurang-kurangnya 8 aksara.',
+    'password.regex' => 'Kata laluan mesti mengandungi sekurang-kurangnya 1 huruf besar, 1 huruf kecil, 1 nombor dan 1 simbol (@!$~#).',
+    'confirm_password.required' => 'Sila sahkan kata laluan anda.',
+    'confirm_password.same' => 'Kata laluan dan pengesahan kata laluan mesti sepadan.',
+]);
 
+    $user->update([
+        'pass' => md5($request->password),
+        'password_set' => 1,
+    ]);
 
-        }
+    return redirect()->route('login')->with('success', 'Kata laluan dikemaskini. Log masuk semula dengan kata laluan baharu.');
+}
+
         return view('auth.reset_password', compact('user'));
     }
 

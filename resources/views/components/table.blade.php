@@ -3,7 +3,7 @@
         style="table-layout: fixed;">
         <thead>
             @php
-                $alignCenter = ['Status']; // Add columns that should be centered
+                $alignCenter = ['Status', 'Telah Hantar Penyata', 'Belum Hantar Penyata']; // Add columns that should be centered
                 $alignRight = ['Jumlah Invois', 'Jumlah Pembayaran', 'Baki Tertunggak']; // Add columns that should be right-aligned
             @endphp
 
@@ -52,6 +52,8 @@
                                 'SUBSCRIPTION_STATUS',
                                 'FIN_STATUS',
                                 'STATUS',
+                                'total_submission',
+                                'unsubmitted',
                             ]; // Add columns that should be centered
                             $alignRight = ['TOTAL_INVOICE', 'TOTAL_RECEIVED', 'TOTAL_OUTSTANDING']; // Add columns that should be right-aligned
                         @endphp

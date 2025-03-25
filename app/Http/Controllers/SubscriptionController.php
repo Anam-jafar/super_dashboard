@@ -218,106 +218,7 @@ class SubscriptionController extends Controller
     }
 
 
-public function outstandingSubscriptions_(Request $request)
-{
-    $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
-    $per_page = $request->per_page ?? 10;
 
-    // Start with a base query for financial data
-    $financialData = DB::table('fin_ledger as inv')
-        ->leftJoin('fin_ledger as rec', function ($join) {
-            $join->on('inv.vid', '=', 'rec.vid')
-                ->on('inv.tid', '=', 'rec.ref')
-                ->where('rec.src', 'REC');
-        })
-        ->where('inv.src', 'INV')
-        ->groupBy('inv.vid')
-        ->selectRaw('inv.vid, SUM(inv.val) AS total_invoice, COALESCE(SUM(rec.val), 0) AS total_received, SUM(inv.val) - COALESCE(SUM(rec.val), 0) AS outstanding');
-
-    // Start with a base query for institutes
-    $query = Institute::query();
-    
-    // Join with the financial data
-    $query->leftJoinSub($financialData, 'finance', function($join) {
-        $join->on('client.uid', '=', 'finance.vid');
-    });
-    
-    // Apply district filter if user has district access restriction
-    if ($districtAccess != null) {
-        $query->where('institutes.rem8', $districtAccess);
-    }
-    
-    // Apply additional filters
-    $query = $this->applyFilters($query, $request);
-    
-    // Select needed fields including the financial data
-    $query->select([
-        'client.*',
-        'finance.total_invoice',
-        'finance.total_received',
-        'finance.outstanding'
-    ]);
-
-    // Paginate results
-    $subscriptions = $query->paginate($per_page)->withQueryString();
-    
-    // Transform the collection to format and uppercase data
-    $subscriptions->getCollection()->transform(function ($subscription) {
-        $subscription->NAME = isset($subscription->name) ? strtoupper($subscription->name) : null;
-        $subscription->TYPE = isset($subscription->Type->prm) ? strtoupper($subscription->Type->prm) : null;
-        $subscription->DISTRICT = isset($subscription->District->prm) ? strtoupper($subscription->District->prm) : null;
-        $subscription->SUBDISTRICT = isset($subscription->Subdistrict->prm) ? strtoupper($subscription->Subdistrict->prm) : null;
-        $subscription->CATEGORY = isset($subscription->Category->prm) ? strtoupper($subscription->Category->prm) : null;
-        $subscription->SUBSCRIPTION_DATE = isset($subscription->subscription_request_date) ? 
-            date('d-m-Y', $subscription->subscription_request_date) : null;
-        
-        // Set financial values with uppercase keys
-        $subscription->TOTAL_INVOICE = $subscription->total_invoice ?? 0;
-        $subscription->TOTAL_RECEIVED = $subscription->total_received ?? 0;
-        $subscription->TOTAL_OUTSTANDING = $subscription->outstanding ?? 0;
-        
-        return $subscription;
-    });
-
-    // Get parameters for filtering
-    $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
-    
-    $packages = DB::table('fin_coa_item')
-        ->where('type', 'sales')
-        ->pluck('val', 'id')
-        ->toArray();
-    
-    $parameters = $this->getCommon();
-    
-    // Adjust parameters based on district access
-    if ($districtAccess != null) {
-        $parameters['districts'] = Parameter::where('grp', 'district')
-            ->where('code', $districtAccess)
-            ->pluck('prm', 'code')
-            ->toArray();
-        $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
-            ->where('etc', $districtAccess)
-            ->pluck('prm', 'code')
-            ->toArray();
-    }
-    
-    // Apply additional parameter filters
-    if ($request->filled('cate1')) {
-        $parameters['categories'] = Parameter::where('grp', 'type_CLIENT')
-            ->where('etc', $request->cate1)
-            ->pluck('prm', 'code')
-            ->toArray();
-    }
-    
-    if ($request->filled('rem8')) {
-        $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
-            ->where('etc', $request->rem8)
-            ->pluck('prm', 'code')
-            ->toArray();
-    }
-    
-    return view('subscription.outstanding_list', compact(['subscriptions', 'parameters', 'statuses', 'packages']));
-}
 
 public function outstandingSubscriptions(Request $request)
 {
@@ -352,22 +253,28 @@ public function outstandingSubscriptions(Request $request)
         $query->where('c.name', 'LIKE', '%' . $request->search . '%');
     }
 
+
     $subscriptions = $query->joinSub(
         DB::table('fin_ledger as inv')
+            ->leftJoinSub(
+                DB::table('fin_ledger')
+                    ->select('vid', DB::raw('SUM(val) AS total_received'))
+                    ->where('src', 'CSL')
+                    ->groupBy('vid'),
+                'payments', // Alias for the subquery
+                'inv.vid',
+                '=',
+                'payments.vid'
+            )
             ->select(
                 'inv.vid',
                 DB::raw('SUM(inv.val) AS total_invoice'),
-                DB::raw('COALESCE(SUM(rec.val), 0) AS total_received'),
-                DB::raw('SUM(inv.val) - COALESCE(SUM(rec.val), 0) AS outstanding')
+                DB::raw('COALESCE(payments.total_received, 0) AS total_received'),
+                DB::raw('SUM(inv.val) - COALESCE(payments.total_received, 0) AS outstanding')
             )
-            ->leftJoin('fin_ledger as rec', function ($join) {
-                $join->on('inv.vid', '=', 'rec.vid')
-                    ->on('inv.tid', '=', 'rec.ref')
-                    ->where('rec.src', 'REC');
-            })
             ->where('inv.src', 'INV')
-            ->groupBy('inv.vid')
-            ->having(DB::raw('SUM(inv.val) - COALESCE(SUM(rec.val), 0)'), '>', 0), // Ensure outstanding > 0
+            ->groupBy('inv.vid', 'payments.total_received')
+            ->havingRaw('SUM(inv.val) - COALESCE(payments.total_received, 0) > 0'), // Ensure outstanding > 0
         'subquery',
         'c.uid',
         '=',
@@ -384,6 +291,7 @@ public function outstandingSubscriptions(Request $request)
         'subquery.outstanding'
     )
     ->paginate($per_page);
+
 
     // Optimize transformations by pre-fetching necessary parameters
     $cate1Codes = $subscriptions->pluck('cate1')->filter()->unique();

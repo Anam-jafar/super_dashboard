@@ -21,25 +21,6 @@
                     </ol>
                     <h1 class="page-title font-medium text-lg mb-0">Maklumat Masjid Selangor</h1>
                 </div>
-                <div class="flex gap-2 flex-wrap">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-text bg-white dark:bg-bodybg border"> <i class="ri-calendar-line"></i>
-                            </div>
-                            <input type="text" class="form-control breadcrumb-input" id="daterange"
-                                placeholder="Search By Date Range">
-                        </div>
-                    </div>
-                    <div class="ti-btn-list">
-                        <button
-                            class="ti-btn bg-white dark:bg-bodybg border border-defaultborder dark:border-defaultborder/10 btn-wave !my-0 !m-0 !me-[0.35rem]">
-                            <i class="ri-filter-3-line align-middle leading-none"></i> Filter
-                        </button>
-                        <button class="ti-btn ti-btn-primary btn-wave !border-0 me-0 !m-0">
-                            <i class="ri-share-forward-line"></i> Share
-                        </button>
-                    </div>
-                </div>
             </div>
             <!-- End::page-header -->
 

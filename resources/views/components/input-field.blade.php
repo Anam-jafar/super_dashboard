@@ -5,6 +5,9 @@
             <span class="text-red-500">*</span> <!-- Red asterisk for required field -->
         @endif
     </label>
+    @if (!empty($spanText))
+        <span class="text-gray-500 font-normal mb-4">({{ $spanText }})</span>
+    @endif
 
     @if ($type === 'select')
         <!-- Render select field -->
@@ -31,7 +34,10 @@
             placeholder="{{ $placeholder }}" value="{{ $value }}" {{ $readonly ? 'readonly' : '' }}
             {{ $disabled ? 'disabled' : '' }} {{ $required && $required === true ? 'required' : '' }}>
     @endif
-    @if (!empty($spanText))
-        <span class="text-gray-500 font-normal mb-4">({{ $spanText }})</span>
+
+    <!-- Show error message if validation fails -->
+    @if ($errors->has($name))
+        <span class="text-red-500 text-sm mt-1">{{ $errors->first($name) }}</span>
     @endif
+
 </div>

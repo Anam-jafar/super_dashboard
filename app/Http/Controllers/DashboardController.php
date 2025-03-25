@@ -156,28 +156,26 @@ class DashboardController extends Controller
         ];
     }
 
-    private function _getDistrictTable()
-    {
-        $categories = Parameter::where('grp', 'type_CLIENT')->pluck('code');
-        
-        $selects = ['c.rem8'];
-        
-        foreach ($categories as $category) {
-            $selects[] = DB::raw("(SELECT COUNT(*) FROM client WHERE cate = '$category' AND rem8 = c.rem8 AND app = 'CLIENT' AND isdel = 0) AS " . str_replace(' ', '_', $category));
-        }
-        
-        $selects = array_merge($selects, [
-            DB::raw("(SELECT COUNT(*) FROM client WHERE sta = 0 AND rem8 = c.rem8 AND app = 'CLIENT' AND isdel = 0) AS Total_Active"),
-            DB::raw("(SELECT COUNT(*) FROM client WHERE sta = 1 AND rem8 = c.rem8 AND app = 'CLIENT' AND isdel = 0) AS Total_Inactive"),
-            DB::raw("(SELECT COUNT(*) FROM client WHERE cate IN (SELECT code FROM `type` WHERE grp='type_CLIENT') AND rem8 = c.rem8 AND app = 'CLIENT' AND isdel = 0) AS Total")
-        ]);
-
-        return DB::table('client AS c')
-            ->select($selects)
-            ->where(self::CLIENT_BASE_QUERY)
-            ->groupBy('c.rem8')
-            ->get();
-    }
+private function _getDistrictTable()
+{
+    $categories = Parameter::where('grp', 'type_CLIENT')->pluck('code');
+    
+    return DB::table('client AS c')
+        ->select([
+            'c.rem8',
+            ...array_map(function($category) {
+                return DB::raw("SUM(CASE WHEN cate = '" . str_replace("'", "''", $category) . "' THEN 1 ELSE 0 END) AS " . str_replace(' ', '_', $category));
+            }, $categories->toArray()),
+            DB::raw("SUM(CASE WHEN sta = 0 THEN 1 ELSE 0 END) AS Total_Active"),
+            DB::raw("SUM(CASE WHEN sta = 1 THEN 1 ELSE 0 END) AS Total_Inactive"),
+            DB::raw("COUNT(*) AS Total")
+        ])
+        ->where(self::CLIENT_BASE_QUERY)
+        ->where('app', 'CLIENT')
+        ->where('isdel', 0)
+        ->groupBy('c.rem8')
+        ->get();
+}
 
     // Generic listing method to handle mosque, branch, and admin listings
     private function getListingData($table, Request $request, $additionalFilters = [])
@@ -467,7 +465,7 @@ public function getFinancialReport(Request $request)
             'c.subscription_status as subscription_status',
             'subquery.outstanding'
         )
-        ->limit(8)
+        ->limit(5)
         ->get(); // Fix: Fetch the results as a collection
 
         $subscriptions->transform(function ($subscription) {
@@ -493,14 +491,6 @@ public function getFinancialReport(Request $request)
             ->count();
 
         $years = range(date('Y'), date('Y') - 4);
-
-
-
-
-
-
-        
-
 
         return view('base.dashboard', compact('total_institute', 'total_institute_registration', 'total_statement_to_review', 'total_statement_cancelled',
                                                 'institute_registration_list', 'financial_statements_list', 'institute_by_district', 'maxCount', 'subscriptions'

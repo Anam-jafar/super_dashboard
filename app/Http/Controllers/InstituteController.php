@@ -45,7 +45,7 @@ class InstituteController extends Controller
             'state' => 'nullable|string|max:50',
             'hp' => 'nullable|string|max:50',
             'fax' => 'nullable|string|max:50',
-            'mel' => 'nullable|string|max:255',
+            'mel' => 'nullable|email|max:255',
             'web' => 'nullable|string|max:255',
             'rem10' => 'nullable|string|max:50',
             'rem11' => 'nullable|string|max:50',

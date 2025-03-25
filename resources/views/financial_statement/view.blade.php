@@ -49,7 +49,7 @@
                     @if ($instituteType == 2)
                         <div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-input-field level="Bagi Tahun" id="ye" disabled="true" name=""
                                         type="text" placeholder="Year" value="{{ $financialStatement->fin_year }}" />
@@ -58,7 +58,7 @@
                                         type="text" disabled="true" placeholder="Pilih"
                                         value="{{ $financialStatement->Category->prm }}" />
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                                     <x-input-field level="Peratus Kemajuan Pembinaan Terkini (%)" id="p1"
                                         name="latest_construction_progress" type="text" placeholder="00"
                                         value="{{ $financialStatement->latest_construction_progress }}" disabled="true" />
@@ -74,7 +74,7 @@
 
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-input-field level="(i) Kos Pembinaan (Asal, RM)" id="i1"
                                         name="ori_construction_cost" type="text" placeholder="00.00" :rightAlign="true"
@@ -86,7 +86,7 @@
                                         :required="true" value="{{ $financialStatement->variation_order }}"
                                         disabled="true" />
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-input-field level="(i) Kutipan Semasa (RM)" id="i3" name="current_collection"
                                         type="text" placeholder="00.00" :rightAlign="true" :required="true"
@@ -102,7 +102,7 @@
 
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-input-field level="(i) Pindahan Kepada PWS (RM)" id="i4" name="transfer_pws"
                                         type="text" placeholder="00.00" :rightAlign="true" :required="true"
@@ -112,7 +112,7 @@
                                         :required="true" value="{{ $financialStatement->construction_expenses }}"
                                         disabled="true" />
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-input-field level="(i) Lebihan Masjid/Surau (RM)" id="i4" name="inst_surplus"
                                         type="text" placeholder="00.00" :rightAlign="true" :required="true"
@@ -123,7 +123,7 @@
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-input-field level="(iii) Belanja Pembinaan PWS (RM)" id="i6"
                                         name="pws_expenses" type="text" placeholder="00.00" :rightAlign="true"
@@ -134,15 +134,15 @@
                             </div>
                             <p class="text-gray-800 font-medium mt-4 mb-2">Sila Lampirkan Salinan Dokumen Seperti Di
                                 Bawah :</p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-pdf-download title="Penyata Kewangan"
                                         pdfFile="{{ $financialStatement->attachment1 ?? '' }}" />
                                     <x-pdf-download title="Penyata Bank"
                                         pdfFile="{{ $financialStatement->attachment2 ?? '' }}" />
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                                     <x-pdf-download title="Certificate Completion & Compliance(CCC)"
                                         pdfFile="{{ $financialStatement->attachment3 ?? '' }}" />
                                 </div>
@@ -151,7 +151,7 @@
                     @else
                         <div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-input-field level="Bagi Tahun" id="ye" disabled="true" name=""
                                         type="text" placeholder="Year" value="{{ $financialStatement->fin_year }}" />
@@ -163,7 +163,7 @@
                             </div>
                             <p class="text-gray-800 font-medium mt-4">Butiran Penyata :</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-input-field level="(a) Baki Bawa Ke Hadapan (RM)" id="i1"
                                         spanText="Baki bawa ke hadapan tahun sebelumnya bank dan tunai"
@@ -174,7 +174,7 @@
                                         spanText="Jumlah Kutipan Tahun Semasa"
                                         value="{{ $financialStatement->total_collection }}" />
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-input-field level="(c) Jumlah Perbelanjaan (RM)" id="i3"
                                         name="total_expenses" type="text" placeholder="00.00" :rightAlign="true"
@@ -183,7 +183,7 @@
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-input-field level="Jumlah Pendapatan (Auto Calculate, RM)" id="i4"
                                         name="total_statement" type="text" placeholder="00.00" :rightAlign="true"
@@ -194,7 +194,7 @@
                                         :required="true" value="{{ $financialStatement->total_surplus }}"
                                         disabled="true" />
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                                     <x-input-field level="Maklumat Baki Bank Dan Tunai (RM)" id="i6"
                                         name="bank_cash_balance" type="text" placeholder="00.00" :rightAlign="true"
                                         value="{{ $financialStatement->bank_cash_balance }}" disabled="true" />
@@ -202,14 +202,14 @@
                             </div>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
 
                                     <x-pdf-download title="Penyata Kewangan Dan Nota Kewangan"
                                         pdfFile="{{ $financialStatement->attachment1 ?? '' }}" />
                                     <x-pdf-download title="Penyata Bank"
                                         pdfFile="{{ $financialStatement->attachment2 ?? '' }}" />
                                 </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                                     <x-pdf-download title="Penyata Penyesuaian Bank"
                                         pdfFile="{{ $financialStatement->attachment3 ?? '' }}" />
                                 </div>

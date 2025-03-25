@@ -26,7 +26,7 @@
 
 
 
-                <x-table :headers="['Institusi', 'Tahun', 'Telah Hantar Penyata', 'Belum Hantar Penyata']" :columns="['CATEGORY', 'fin_year', 'total_submission', 'unsubmitted']" :rows="$entries" :id="'id'" />
+                <x-table :headers="['Institusi', 'Tahun', 'Kategori Penyata', 'Telah Hantar Penyata', 'Belum Hantar Penyata']" :columns="['CATEGORY', 'fin_year', 'FIN_CATEGORY', 'total_submission', 'unsubmitted']" :rows="$entries" :id="'id'" />
                 <x-pagination :items="$entries" label="jumlah rekod" />
 
             </div>

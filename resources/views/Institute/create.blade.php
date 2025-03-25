@@ -23,7 +23,7 @@
                     </div>
                     <hr class="mb-4">
 
-                    <div class="grid grid-col-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-col-1 lg:grid-cols-2 gap-6">
                         <x-input-field level="Nama Institusi" id="inst_name" name="name" type="text" placeholder=""
                             :required="true" />
                         <div class="grid grid-cols-2 gap-6">
@@ -38,7 +38,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-col-1 md:grid-cols-2 gap-6">
+                    <div class="grid grid-col-1 lg:grid-cols-2 gap-6">
                         <div class="grid grid-cols-2 gap-6">
                             <x-input-field level="Daerah" id="inst_district" name="rem8" type="select"
                                 placeholder="Pilih" :valueList="$parameters['districts']" :required="true" />
@@ -96,8 +96,8 @@
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
+                            <div class="grid grid-cols-2 gap-6 items-end">
                                 <x-input-field level="Nombor Telefon (Rasmi)" id="tel" name="hp" type="text"
                                     placeholder="" />
                                 <x-input-field level="Nombor Fax" id="fax" name="fax" type="text"
@@ -107,7 +107,7 @@
                                 placeholder="" />
                         </div>
 
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Website" id="web" name="web" type="text"
                                 placeholder="" />
                             <x-input-field level="Media Social" id="social" name="rem10" type="text"
@@ -116,14 +116,14 @@
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Keluasan Institusi" id="area" name="rem13" type="text"
                                 placeholder="" />
                             <x-input-field level="Kapasiti Institusi Jemaah" id="capacity" name="rem14"
                                 type="text" placeholder="" />
                         </div>
 
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Dun" id="dun" name="rem11" type="text"
                                 placeholder="" />
 
@@ -132,7 +132,7 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
                         <x-input-field level="Tarikh Kelulusan Jawatankuasa (JATUMS)" id="jatums" name="rem15"
                             type="date" placeholder="" />
 
@@ -153,14 +153,14 @@
                     <hr class="mb-4">
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Nama Pegawai/Wakil Institusi" id="incharge" name="con1"
                                 type="text" placeholder="" />
                             <x-input-field level="No. Kad Pengenalan" id="nric" name="ic" type="text"
                                 placeholder="" />
                         </div>
 
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Jawatan" id="pos" name="pos1" type="select"
                                 placeholder="Pilih" :valueList="$parameters['user_positions']" />
                             <x-input-field level="Nombor Telefon" id="hp" name="tel1" type="text"

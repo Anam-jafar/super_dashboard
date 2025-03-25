@@ -9,7 +9,7 @@
                         class="ti-form-input flex-1 rounded-none rounded-s-sm focus:z-10 w-full"
                         placeholder="{{ $filter['placeholder'] }}">
                     <button aria-label="button" type="submit"
-                        class="inline-flex justify-center items-center h-11 w-11 rounded-e-sm rounded-r-md border border-transparent font-semibold bg-primary text-white hover:bg-primary focus:z-10 focus:outline-none focus:ring-0 focus:ring-primary transition-all text-sm">
+                        class="inline-flex justify-center items-center h-11 w-11 rounded-e-sm rounded-r-md border border-transparent font-semibold bg-primary text-white hover:bg-blue-300 focus:z-10 focus:outline-none focus:ring-0 focus:ring-primary transition-all text-sm">
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                             fill="currentColor" viewBox="0 0 16 16">
                             <path
@@ -21,7 +21,7 @@
                 <!-- Select Input -->
                 <div class="w-full lg:max-w-[14rem]">
                     <select id="{{ $filter['name'] }}" name="{{ $filter['name'] }}"
-                        class="ti-form-select rounded-sm py-2 px-3 w-full" onchange="this.form.submit()">
+                        class="ti-form-select rounded-sm py-2 pr-1 text-ellipsis w-full" onchange="this.form.submit()">
 
                         <option value="" {{ request()->has($filter['name']) ? '' : 'selected' }}>
                             {{ $filter['label'] }}

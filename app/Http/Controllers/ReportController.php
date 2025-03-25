@@ -109,52 +109,67 @@ class ReportController extends Controller
         ]);
     }
 
-    public function submissionCount(Request $request)
-    {
-        $districtAccess = DB::table('usr')
-            ->where('mel', Auth::user()->mel)
-            ->value('joblvl');
-        $query = DB::table('splk_submission as s')
-            ->selectRaw("t.prm AS cate_name, s.fin_year, 
-                COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS total_submission, 
-                SUM(CASE WHEN c.sta = 0 AND c.app = 'CLIENT' AND c.isdel = 0 THEN 1 ELSE 0 END) - 
-                COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS unsubmitted")
-            ->join('client as c', 'c.uid', '=', 's.inst_refno')
-            ->join('type as t', function ($join) {
-                $join->on('c.cate1', '=', 't.code')
-                    ->where('t.grp', '=', 'clientcate1');
-            });
-        if (!is_null($districtAccess)) {
-            $query->where('c.rem8', $districtAccess);
-        }
+public function submissionCount(Request $request)
+{
+    $districtAccess = DB::table('usr')
+        ->where('mel', Auth::user()->mel)
+        ->value('joblvl');
 
-        $finYear = $request->filled('fin_year') ? $request->fin_year : date('Y');
-        $finCategory = $request->filled('fin_category') ? $request->fin_category : 'STM01';
-
-        $query->where('s.fin_year', $finYear)
-            ->where('s.fin_category', $finCategory);
-
-        $query->groupBy('t.prm', 'c.cate1', 's.fin_year')
-            ->orderBy('t.prm');
-
-        $perPage = $request->input('per_page', 10);
-        $entries = $query->paginate($perPage)->withQueryString();
-
-        $entries->transform(function ($entry) {
-            $entry->CATEGORY = isset($entry->cate_name) ? strtoupper($entry->cate_name) : null;
-        return $entry;
+    // Define the base query
+    $query = DB::table('splk_submission as s')
+        ->selectRaw("t.prm AS cate_name, s.fin_year, s.fin_category,
+            COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS total_submission, 
+            SUM(CASE WHEN c.sta = 0 AND c.app = 'CLIENT' AND c.isdel = 0 THEN 1 ELSE 0 END) - 
+            COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS unsubmitted")
+        ->join('client as c', 'c.uid', '=', 's.inst_refno')
+        ->join('type as t', function ($join) {
+            $join->on('c.cate1', '=', 't.code')
+                ->where('t.grp', '=', 'clientcate1');
         });
 
-        $currentYear = date('Y');
-        $years = array_combine(range($currentYear-1, $currentYear - 4), range($currentYear-1, $currentYear - 4));
-        $parameters = $this->getCommon();
-
-        return view('report.submission_count_list', [
-            'years' => $years,
-            'entries' => $entries,
-            'parameters' => $parameters,
-        ]);
+    // Apply district access filter if applicable
+    if (!is_null($districtAccess)) {
+        $query->where('c.rem8', $districtAccess);
     }
+
+    // Get filtering parameters from request
+    $finYear = $request->filled('fin_year') ? $request->fin_year : date('Y');
+    $finCategory = $request->filled('fin_category') ? $request->fin_category : 'STM01';
+
+    // Apply filters to the query
+    $query->where('s.fin_year', $finYear)
+        ->where('s.fin_category', $finCategory);
+
+    // Fix for MySQL's ONLY_FULL_GROUP_BY issue
+    $query->groupBy('t.prm', 's.fin_year', 's.fin_category')
+        ->orderBy('t.prm');
+
+    // Paginate results
+    $perPage = $request->input('per_page', 10);
+    $entries = $query->paginate($perPage)->withQueryString();
+
+    // Transform data to include fin_category name
+    $entries->transform(function ($entry) {
+        $entry->CATEGORY = isset($entry->cate_name) ? strtoupper($entry->cate_name) : null;
+        $entry->FIN_CATEGORY = strtoupper(Parameter::where('code', $entry->fin_category)->value('prm') ?? '');
+        return $entry;
+    });
+
+    // Generate year filter options
+    $currentYear = date('Y');
+    $years = array_combine(range($currentYear - 1, $currentYear - 4), range($currentYear - 1, $currentYear - 4));
+
+    // Fetch common parameters
+    $parameters = $this->getCommon();
+
+    // Return view with data
+    return view('report.submission_count_list', [
+        'years' => $years,
+        'entries' => $entries,
+        'parameters' => $parameters,
+    ]);
+}
+
 
 public function submissionStatus(Request $request)
 {

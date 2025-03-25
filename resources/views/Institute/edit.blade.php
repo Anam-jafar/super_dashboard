@@ -34,13 +34,13 @@
                     </div>
 
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Emel (Rasmi)" id="emel" name="mel" type="email" placeholder=""
                                 value="{{ $institute->mel ?? '' }}" :required="true" />
                             <x-input-field level="Nombor Telefon (Rasmi)" id="tel" name="hp" type="text"
                                 placeholder="" value="{{ $institute->hp ?? '' }}" :required="true" />
                         </div>
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
 
                             <x-input-field level="Nombor Fax" id="fax" name="fax" type="text" placeholder=""
                                 value="{{ $institute->fax ?? '' }}" />
@@ -60,7 +60,7 @@
                 <div class="space-y-2 py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs mt-4">
                     <h3 class="font-semibold text-lg mb-2">Maklumat Tambahan</h3>
                     <hr class="mb-4">
-                    <div class="grid grid-cols-2 gap-6">
+                    <div class="grid grid-cols-2 gap-6 items-end">
                         <x-input-field level="Dun" id="dun" name="rem11" type="text" placeholder=""
                             value="{{ $institute->rem11 ?? '' }}" />
 
@@ -68,13 +68,13 @@
                             value="{{ $institute->rem12 ?? '' }}" />
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Keluasan Institusi" id="area" name="rem13" type="text"
                                 placeholder="" value="{{ $institute->rem13 ?? '' }}" />
                             <x-input-field level="Kapasiti Institusi Jemaah" id="capacity" name="rem14" type="text"
                                 placeholder="" value="{{ $institute->rem14 ?? '' }}" />
                         </div>
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Website" id="web" name="web" type="text" placeholder=""
                                 value="{{ $institute->web ?? '' }}" />
                             <x-input-field level="Media Sosial" id="social" name="rem10" type="text"
@@ -86,20 +86,20 @@
                 <div class="space-y-2 py-8 px-4 lg:px-8 rounded-lg shadow bg-white text-xs mt-4">
                     <h3 class="font-semibold text-lg mb-2">Alamat Institusi</h3>
                     <hr class="mb-4">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
                         <x-input-field level="Alamat (Baris 1)" id="address1" name="addr" type="text"
                             placeholder="" value="{{ $institute->addr ?? '' }}" />
                         <x-input-field level="Alamat (Baris 2)" id="address2" name="addr1" type="text"
                             placeholder="" value="{{ $institute->addr1 ?? '' }}" />
                     </div>
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6 !mb-4">
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Daerah" id="inst_district" name="rem8" type="select"
                                 placeholder="Pilih" value="{{ $institute->rem8 }}" :valueList="$parameters['districts']" />
                             <x-input-field level="Mukim" id="inst_sub_district" name="rem9" type="select"
                                 placeholder="Pilih" value="{{ $institute->rem9 }}" :valueList="$parameters['subdistricts']" />
                         </div>
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <div class="flex flex-col mt-4">
                                 <label for="citySearch" class="text-gray-800 font-normal mb-4">
                                     Bandar
@@ -137,7 +137,7 @@
                         </div>
 
                     </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
                         <x-input-field level="Poskod" id="poskod" name="pcode" type="text" placeholder=""
                             value="{{ $institute->pcode ?? '' }}" />
 
@@ -150,15 +150,15 @@
                     <h3 class="font-semibold text-lg mb-2">Pegawai/Wakil Institusi</h3>
                     <hr class="mb-4">
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="grid grid-cols-2 gap-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-end">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Nama Pegawai/Wakil Institusi" id="incharge" name="con1"
                                 type="text" placeholder="" value="{{ $institute->con1 ?? '' }}" />
                             <x-input-field level="No. Kad Pengenalan" id="nric" name="ic" type="text"
                                 placeholder="" value="{{ $institute->ic ?? '' }}" />
                         </div>
 
-                        <div class="grid grid-cols-2 gap-6">
+                        <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Jawatan" id="pos" name="pos1" type="select"
                                 placeholder="Pilih" value="{{ $institute->pos1 ?? '' }}" :valueList="$parameters['user_positions']" />
                             <x-input-field level="Nombor Telefon" id="hp" name="tel1" type="text"

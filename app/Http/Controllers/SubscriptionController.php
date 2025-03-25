@@ -8,6 +8,8 @@ use App\Models\Institute;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Parameter;
 use Illuminate\Support\Facades\Http;
+use App\Mail\SubscriptionApprove;
+use Illuminate\Support\Facades\Mail;
 
 
 class SubscriptionController extends Controller
@@ -463,6 +465,10 @@ public function subscriptionFeeAdd(Request $request)
             DB::table('client')
                 ->where('id', $subscriptionId)
                 ->update(['subscription_status' => 2]);
+            $institute = DB::table('client')->where('id', $subscriptionId)->first();;
+            
+            Mail::to($institute->mel)->send(new SubscriptionApprove($institute->name));
+
 
             return response()->json(['success' => true, 'message' => 'Subscription fee added successfully']);
         } else {

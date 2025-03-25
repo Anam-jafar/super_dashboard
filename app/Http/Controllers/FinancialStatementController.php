@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Mail\EditRequestApprove;
+use Illuminate\Support\Facades\Mail;
 
 use App\Models\FinancialStatement;
 use App\Models\Institute;
@@ -365,6 +367,11 @@ class FinancialStatementController extends Controller
             'verified_at' => null,
             'request_edit_date' => null,
             'request_edit_reason' => null]);
+        $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
+        $fin_category = Parameter::where('code' , $financialStatement->fin_category)->value('prm');
+        
+            Mail::to($institute->mel)->send(new EditRequestApprove($institute->name, $fin_category, $financialStatement->fin_year));
+
 
         return redirect()->route('statementList')->with('success', 'Permintaan suntingan Penyata Kewangan diluluskan.');
     }

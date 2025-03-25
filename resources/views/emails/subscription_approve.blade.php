@@ -31,12 +31,12 @@
             margin-bottom: 20px;
         }
 
+
         .name {
             font-size: 18px;
             font-weight: 400;
             margin-bottom: 10px;
         }
-
 
         .content {
             font-size: 16px;
@@ -47,8 +47,6 @@
         .info-box {
             margin-top: 20px;
             display: inline-block;
-            text-align: left;
-
         }
 
         .info-table {
@@ -83,7 +81,6 @@
 
         <!-- Title -->
         <div class="title">SISTEM PENGURUSAN MASJID</div>
-
         <div class="arabic_text">
             <img src="{{ $message->embed(public_path('assets/icons/arabic_text.png')) }}" alt="Logo" />
         </div>
@@ -91,32 +88,11 @@
 
         <!-- Greeting -->
         <div class="content">
-            <p>Akaun Pengguna Anda Bagi Sistem Pengurusan Masjid Telah Diaktifkan.
-                Sila Gunakan Maklumat Berikut untuk Log Masuk Ke dalam Sistem.
+            <p>Terima Kasih Kerana Membuat Langganan Sistem eMasjid.</p>
+            <p>Sila Log Masuk Ke dalam Sistem Untuk Muat Turun Invois dan Membuat Pembayaran.</p>
+
+            <p>Terima Kasih
             </p>
-
-            <div class="info-box">
-                <table class="info-table">
-                    <tr>
-                        <td class="bold">URL</td>
-                        <td>:</td>
-                        <td class="bold">https://devphp01.awfatech.com/mais/login
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="bold">Katanama</td>
-                        <td>:</td>
-                        <td class="bold">{{ $email }}</td>
-                    </tr>
-                    <tr>
-                        <td class="bold">Kata Laluan</td>
-                        <td>:</td>
-                        <td class="bold">{{ $otp }}</td>
-                    </tr>
-                </table>
-            </div>
-
-            <p>Terima kasih.</p>
         </div>
     </div>
 </body>

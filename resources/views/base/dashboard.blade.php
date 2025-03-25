@@ -90,8 +90,8 @@
                                 <div class="box-body">
                                     <div class="flex items-start justify-between mb-2">
                                         <div>
-                                            <span class="text-textmuted dark:text-textmuted/50 block mb-1">Status Laporan
-                                                Dibatalkan
+                                            <span class="text-textmuted dark:text-textmuted/50 block mb-1">Jumlah Mohon
+                                                Kemaskini
                                             </span>
                                             <h4 class="font-medium mb-0">{{ $total_statement_cancelled ?? 0 }}</h4>
                                         </div>
@@ -429,6 +429,9 @@
                             <div class="box-header justify-between">
                                 <div class="box-title">
                                     Jumlah Institusi Mengikut Daerah
+                                </div>
+                                <div>
+                                    (Jumlah {{ $institute_by_district->sum('total') }})
                                 </div>
                             </div>
                             <div class="box-body mt-6 mb-6 flex flex-col justify-start" style="min-height: 460px;">

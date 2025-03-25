@@ -102,14 +102,14 @@
                 @enderror
             </div>
 
-            <!-- Password Requirements -->
             <div class="bg-white p-4 rounded-lg text-gray-900">
                 <p class="font-semibold mb-2">Syarat Katalaluan:</p>
                 <ul class="list-decimal list-inside text-sm text-gray-700 space-y-1">
-                    <li>Sekurang-kurangnya 8 karakter (a-z)</li>
-                    <li>Sekurang-kurangnya 1 Huruf Besar (A-Z)</li>
-                    <li>Sekurang-kurangnya 1 Nombor (0-9)</li>
-                    <li>Sekurang-kurangnya 1 Simbol (@!$~#)</li>
+                    <li class="req-length text-red-500">Sekurang-kurangnya 8 karakter (a-z)</li>
+                    <li class="req-uppercase text-red-500">Sekurang-kurangnya 1 Huruf Besar (A-Z)</li>
+                    <li class="req-lowercase text-red-500">Sekurang-kurangnya 1 Huruf Kecil (a-z)</li>
+                    <li class="req-number text-red-500">Sekurang-kurangnya 1 Nombor (0-9)</li>
+                    <li class="req-symbol text-red-500">Sekurang-kurangnya 1 Simbol (@!$~#)</li>
                 </ul>
             </div>
 
@@ -159,6 +159,60 @@
                     `;
                 }
             });
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+            const passwordInput = document.querySelector('input[name="password"]');
+            const confirmPasswordInput = document.querySelector('input[name="confirm_password"]');
+            const requirements = [{
+                    regex: /.{8,}/,
+                    element: document.querySelector('.req-length')
+                }, // Minimum 8 characters
+                {
+                    regex: /[A-Z]/,
+                    element: document.querySelector('.req-uppercase')
+                }, // At least one uppercase letter
+                {
+                    regex: /[a-z]/,
+                    element: document.querySelector('.req-lowercase')
+                }, // At least one lowercase letter
+                {
+                    regex: /[0-9]/,
+                    element: document.querySelector('.req-number')
+                }, // At least one number
+                {
+                    regex: /[@!$~#]/,
+                    element: document.querySelector('.req-symbol')
+                } // At least one special character
+            ];
+
+            function validatePassword() {
+                const password = passwordInput.value;
+
+                requirements.forEach(req => {
+                    if (req.regex.test(password)) {
+                        req.element.classList.remove('text-red-500');
+                        req.element.classList.add('text-green-500');
+                    } else {
+                        req.element.classList.remove('text-green-500');
+                        req.element.classList.add('text-red-500');
+                    }
+                });
+
+                validateConfirmPassword(); // Also check confirm password when typing new password
+            }
+
+            function validateConfirmPassword() {
+                if (confirmPasswordInput.value === passwordInput.value && passwordInput.value.length > 0) {
+                    confirmPasswordInput.classList.add('border-green-500');
+                    confirmPasswordInput.classList.remove('border-red-500');
+                } else {
+                    confirmPasswordInput.classList.add('border-red-500');
+                    confirmPasswordInput.classList.remove('border-green-500');
+                }
+            }
+
+            passwordInput.addEventListener('input', validatePassword);
+            confirmPasswordInput.addEventListener('input', validateConfirmPassword);
         });
     </script>
 @endpush

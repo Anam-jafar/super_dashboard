@@ -325,6 +325,10 @@
                         const completeBtn = document.getElementById(`complete-btn-${index}`);
                         const subscriptionId = completeBtn.getAttribute('data-subscription-id');
 
+                        generateInvoiceBtn.disabled = true;
+                        generateInvoiceBtn.innerHTML =
+                            '<span class="spinner-border spinner-border-sm"></span> Processing...';
+
                         // Get the package ID from the selected price element
                         const selectedPriceElement = document.getElementById(
                             `selected-price-${subscriptionId}`);

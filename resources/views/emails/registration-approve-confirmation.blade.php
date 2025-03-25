@@ -31,10 +31,16 @@
             margin-bottom: 20px;
         }
 
+        .name {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
         .content {
             font-size: 16px;
             color: #000;
-            text-align: left;
+            text-align: center;
         }
 
         .info-box {
@@ -73,26 +79,21 @@
         </div>
 
         <!-- Title -->
-        <div class="title">Sistem MAIS</div>
+        <div class="title">SISTEM PENGURUSAN MASJID</div>
+        <div class="arabic_text">
+            <img src="{{ $message->embed(public_path('assets/icons/arabic_text.png')) }}" alt="Logo" />
+        </div>
+        <div class="name">{{ $instituteName }}</div>
 
         <!-- Greeting -->
         <div class="content">
-            <p>Assalamualaikum,</p>
-            <p>Permohonan anda untuk pendaftaran profil institusi telah diluluskan.Sekarang anda akan dapat log masuk
-                dengan e-mel berdaftar.
+            <p>Terima Kasih Kerana Membuat Pendaftaran Institusi Anda
+            </p>
+            <p>Status Pendaftaran Profil Institusi Anda Telah Disemak Dan Diluluskan.
+                Sila Log Masuk Mengguna Emel (Rasmi) Berikut :
             </p>
 
-            <div class="info-box">
-                <table class="info-table">
-                    <tr>
-                        <td class="bold">Katanama</td>
-                        <td>:</td>
-                        <td class="bold">{{ $email }}</td>
-                    </tr>
-                </table>
-            </div>
-
-            <p>Terima kasih.</p>
+            <p class="bold">{{ $email }}</p>
         </div>
     </div>
 </body>

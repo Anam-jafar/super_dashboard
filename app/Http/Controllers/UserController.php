@@ -163,7 +163,7 @@ class UserController extends Controller
 
             $user = User::create($dataToInsert);
 
-            Mail::to($user->mel)->send(new SendUserOtp($user->mel, $password));
+            Mail::to($user->mel)->send(new SendUserOtp($user->mel, $password, $user->name));
 
             return redirect()->route('userList')->with('success', 'Pengguna telah berjaya didaftarkan!');
         }

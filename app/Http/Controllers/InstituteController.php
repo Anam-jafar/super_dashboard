@@ -297,7 +297,7 @@ class InstituteController extends Controller
         ]);
 
         if ($updated) {
-            Mail::to($request->mel)->send(new RegistrationApproveConfirmation($request->mel));
+            Mail::to($request->mel)->send(new RegistrationApproveConfirmation($request->mel, $institute->name));
             return redirect()->route('registrationRequests')->with('success', 'Pendaftaran Institusi diluluskan dan email pengesahan telah berjaya dihantar!');
         } else {
             return redirect()->back()->with('error', 'Pengesahan pendaftaran institusi tidak berjaya, sila cuba sebetar lagi!');

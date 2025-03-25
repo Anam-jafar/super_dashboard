@@ -128,13 +128,11 @@ class ReportController extends Controller
             $query->where('c.rem8', $districtAccess);
         }
 
-        if ($request->filled('fin_year')) {
-            $query->where('s.fin_year', $request->fin_year);
-        }
+        $finYear = $request->filled('fin_year') ? $request->fin_year : date('Y');
+        $finCategory = $request->filled('fin_category') ? $request->fin_category : 'STM01';
 
-        if ($request->filled('fin_category')) {
-            $query->where('s.fin_category', $request->fin_category);
-        }
+        $query->where('s.fin_year', $finYear)
+            ->where('s.fin_category', $finCategory);
 
         $query->groupBy('t.prm', 'c.cate1', 's.fin_year')
             ->orderBy('t.prm');
@@ -148,7 +146,7 @@ class ReportController extends Controller
         });
 
         $currentYear = date('Y');
-        $years = array_combine(range($currentYear, $currentYear - 4), range($currentYear, $currentYear - 4));
+        $years = array_combine(range($currentYear-1, $currentYear - 4), range($currentYear-1, $currentYear - 4));
         $parameters = $this->getCommon();
 
         return view('report.submission_count_list', [
@@ -157,8 +155,6 @@ class ReportController extends Controller
             'parameters' => $parameters,
         ]);
     }
-
-
 
 public function submissionStatus(Request $request)
 {

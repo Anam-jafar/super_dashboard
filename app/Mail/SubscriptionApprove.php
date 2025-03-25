@@ -11,25 +11,19 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
 
 
-class SendUserOtp extends Mailable
+class SubscriptionApprove extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
-    public $otp;
-    public $instituteName;
-
     /**
      * Create a new message instance.
-     *
-     * @param  $user
-     * @param  $otp
-     * @return void
      */
-    public function __construct($email, $otp, $instituteName)
+    public $instituteName;
+    /**
+     * Create a new message instance.
+     */
+    public function __construct($instituteName)
     {
-        $this->email = $email;
-        $this->otp = $otp;
         $this->instituteName = $instituteName;
     }
 
@@ -44,18 +38,17 @@ class SendUserOtp extends Mailable
         );
     }
 
+
     /**
      * Get the message content definition.
      */
     public function content(): Content
     {
         return new Content(
-            view: 'emails.user_otp',
+            view: 'emails.subscription_approve',
             with: [
 
-               'email' => $this->email, 
-                'otp' => $this->otp,  
-                'instituteName' => $this->instituteName,        
+               'instituteName' => $this->instituteName, 
 
             ]
         );
@@ -64,10 +57,10 @@ class SendUserOtp extends Mailable
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, 
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
     public function attachments(): array
     {
-        return [];  
+        return [];
     }
 }

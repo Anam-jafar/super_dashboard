@@ -11,28 +11,22 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
 
 
-class SendUserOtp extends Mailable
+class EditRequestApprove extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
-    public $otp;
     public $instituteName;
-
+    public $fin_year;
+    public $fin_category;
     /**
      * Create a new message instance.
-     *
-     * @param  $user
-     * @param  $otp
-     * @return void
      */
-    public function __construct($email, $otp, $instituteName)
+    public function __construct($instituteName, $fin_category, $fin_year)
     {
-        $this->email = $email;
-        $this->otp = $otp;
         $this->instituteName = $instituteName;
+        $this->fin_category = $fin_category;
+        $this->fin_year = $fin_year;
     }
-
     /**
      * Get the message envelope.
      */
@@ -44,19 +38,19 @@ class SendUserOtp extends Mailable
         );
     }
 
+
     /**
      * Get the message content definition.
      */
     public function content(): Content
     {
         return new Content(
-            view: 'emails.user_otp',
+            view: 'emails.edit_request_approve',
             with: [
 
-               'email' => $this->email, 
-                'otp' => $this->otp,  
-                'instituteName' => $this->instituteName,        
-
+               'instituteName' => $this->instituteName, 
+                'fin_category' => $this->fin_category,    
+                'fin_year' => $this->fin_year,      
             ]
         );
     }
@@ -64,10 +58,10 @@ class SendUserOtp extends Mailable
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, 
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
     public function attachments(): array
     {
-        return [];  
+        return [];
     }
 }

@@ -11,7 +11,7 @@
                 ['label' => 'Laporan Kewangan', 'url' => 'javascript:void(0);'],
                 [
                     'label' => 'Penghantaran Baru
-                                                                                                                                                                                                                                                            ',
+                                                                                                                                                                                                                                                                        ',
                 ],
             ]" />
             <x-alert />
@@ -291,7 +291,7 @@
                                     <button
                                         class="bg-[#5C67F7] ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg"
                                         type="submit">
-                                        Simpan
+                                        Sahkan
                                     </button>
                                 </form>
 

@@ -162,26 +162,28 @@
             <input type="hidden" id="otp_hidden" value="" />
 
             <!-- OTP Input Fields -->
-            <div class="flex justify-center gap-4 mb-8">
-                <input type="text" maxlength="1"
-                    class="w-16 h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
+            <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8">
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*"
+                    class="w-12 h-12 sm:w-16 sm:h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
                     onkeyup="moveToNext(this, event)" />
-                <input type="text" maxlength="1"
-                    class="w-16 h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*"
+                    class="w-12 h-12 sm:w-16 sm:h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
                     onkeyup="moveToNext(this, event)" />
-                <input type="text" maxlength="1"
-                    class="w-16 h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*"
+                    class="w-12 h-12 sm:w-16 sm:h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
                     onkeyup="moveToNext(this, event)" />
-                <input type="text" maxlength="1"
-                    class="w-16 h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*"
+                    class="w-12 h-12 sm:w-16 sm:h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
                     onkeyup="moveToNext(this, event)" />
-                <input type="text" maxlength="1"
-                    class="w-16 h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*"
+                    class="w-12 h-12 sm:w-16 sm:h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
                     onkeyup="moveToNext(this, event)" />
-                <input type="text" maxlength="1"
-                    class="w-16 h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
+                <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*"
+                    class="w-12 h-12 sm:w-16 sm:h-16 text-center text-xl bg-gray-200 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 otp-input"
                     onkeyup="moveToNext(this, event)" />
             </div>
+
+
 
             <!-- Login Button -->
             <div class="flex justify-center">

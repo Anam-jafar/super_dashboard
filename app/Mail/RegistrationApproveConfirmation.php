@@ -8,18 +8,22 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Address;
+
 
 class RegistrationApproveConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $email ;
+    public $instituteName;
     /**
      * Create a new message instance.
      */
-    public function __construct($email)
+    public function __construct($email, $instituteName)
     {
         $this->email = $email;
+        $this->instituteName = $instituteName;
     }
 
     /**
@@ -28,7 +32,8 @@ class RegistrationApproveConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Pengesahan Pendaftaran Institusi',
+            from: new Address('no-reply@mais.com', 'SISTEM PENGURUSAN MASJID'),
+            subject: 'Pengaktifan Akaun',
         );
     }
 
@@ -41,6 +46,7 @@ class RegistrationApproveConfirmation extends Mailable
             view: 'emails.registration-approve-confirmation',
             with: [
                 'email' => $this->email,
+                'instituteName' => $this->instituteName,
             ],
         );
     }

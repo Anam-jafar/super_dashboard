@@ -256,7 +256,8 @@
                             <a href="javascript:void(0)">Pelaporan</a>
                         </li>
                         <li class="slide">
-                            <a href="{{ route('submissionCountReport') }}" class="side-menu__item">Jumlah Penghataran
+                            <a href="{{ route('submissionCountReport') }}" class="side-menu__item">Jumlah
+                                Penghantaran
                             </a>
                         </li>
                         <li class="slide">

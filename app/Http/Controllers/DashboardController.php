@@ -313,7 +313,7 @@ public function getFinancialReport(Request $request)
         ->join('client as c', 'c.uid', '=', 's.inst_refno')
         ->where('s.fin_year', $year)
         ->where('s.fin_category', 'STM02')
-        ->whereIn('s.status', [2,3]);
+        ->whereIn('s.status', [1,2]);
 
     if ($districtAccess !== null) {
         $totalEntriesQuery->where('c.rem8', $districtAccess);
@@ -371,7 +371,7 @@ public function getFinancialReport(Request $request)
             })
             ->count() ?: null;
 
-        $total_statement_cancelled = FinancialStatement::where('status', 3)
+        $total_statement_cancelled = FinancialStatement::where('status', 4)
             ->when($districtAccess !== null, function ($query) use ($districtAccess) {
                 return $query->whereHas('Institute', function ($q) use ($districtAccess) {
                     $q->where('rem8', $districtAccess);

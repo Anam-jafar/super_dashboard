@@ -11,7 +11,7 @@
                 ['label' => 'Laporan Kewangan', 'url' => 'javascript:void(0);'],
                 [
                     'label' => 'Penghantaran Baru
-                                                                                                                                                                                                                                                                                                                                                            ',
+                                                                                                                                                                                                                                                                                                                                                                                    ',
                 ],
             ]" />
             <x-alert />
@@ -54,8 +54,8 @@
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                                     <x-input-field level="Peratus Kemajuan Pembinaan Terkini (%)" id="p1"
-                                        name="latest_construction_progress" type="text" placeholder="00"
-                                        value="{{ $financialStatement->latest_construction_progress }}" disabled="true" />
+                                        name="latest_contruction_progress" type="text" placeholder="00"
+                                        value="{{ $financialStatement->latest_contruction_progress }}" disabled="true" />
                                 </div>
                             </div>
                             <p class="text-gray-800 font-medium mt-4">Butiran Penyata :</p>
@@ -70,8 +70,8 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
                                     <x-input-field level="(i) Kos Pembinaan (Asal, RM)" id="i1"
-                                        name="ori_construction_cost" type="text" placeholder="00.00" :rightAlign="true"
-                                        :required="true" value="{{ $financialStatement->ori_construction_cost }}"
+                                        name="ori_contruction_cost" type="text" placeholder="00.00" :rightAlign="true"
+                                        :required="true" value="{{ $financialStatement->ori_contruction_cost }}"
                                         disabled="true" />
                                     <x-input-field level="(ii) Variation Order (Tambah Kurang, RM)" id="i2"
                                         name="variation_order" type="text" placeholder="00.00" :rightAlign="true"
@@ -99,8 +99,8 @@
                                         type="text" placeholder="00.00" :rightAlign="true" :required="true"
                                         value="{{ $financialStatement->transfer_pws }}" disabled="true" />
                                     <x-input-field level="(ii) Belanja Pembinaan Masjid/Surau (RM)" id="i5"
-                                        name="construction_expenses" type="text" placeholder="00.00" :rightAlign="true"
-                                        :required="true" value="{{ $financialStatement->construction_expenses }}"
+                                        name="contruction_expenses" type="text" placeholder="00.00" :rightAlign="true"
+                                        :required="true" value="{{ $financialStatement->contruction_expenses }}"
                                         disabled="true" />
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">

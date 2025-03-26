@@ -148,46 +148,141 @@ class UserController extends Controller
         return back()->with('error', 'Invalid credentials.');
     }
 
-    public function create(Request $request)
-    {
-        if ($request->isMethod('post')) {
-            $validatedData = $this->validateInput($request);
+public function create(Request $request)
+{
+    if ($request->isMethod('post')) {
+        $validatedData = $request->validate([
+            'name' => [
+                'required', 
+                'string', 
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if (is_numeric($value)) {
+                        $fail('Nama tidak boleh terdiri daripada nombor sahaja.');
+                    }
+                },
+            ],
+            'ic' => 'required|string|size:12|unique:usr,ic', // Must be exactly 12 digits and unique
+            'mel' => 'required|string|email|max:255|unique:usr,mel', // Must be unique and valid email
+            'hp' => 'required|numeric|digits_between:10,11', // Must be numeric and 10-11 digits
+            'jobdiv' => 'required|string|max:50',
+            'job' => 'required|string|max:50',
+            'joblvl' => 'nullable|string|max:50',
+            'syslevel' => 'required|string|max:50',
+            'status' => 'required|string|max:50',
+        ], [
+            'name.required' => 'Nama diperlukan.',
+            'name.string' => 'Nama mesti terdiri daripada huruf.',
+            'name.max' => 'Nama tidak boleh melebihi 255 aksara.',
 
-            $validatedData['uid'] = $this->generateUniqueUid();
+            'ic.required' => 'Nombor IC diperlukan.',
+            'ic.string' => 'Nombor IC mesti dalam format teks.',
+            'ic.size' => 'Nombor IC mesti mengandungi tepat 12 angka.',
+            'ic.unique' => 'Nombor IC ini telah digunakan.',
 
-            $password = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
-            $validatedData['pass'] = md5($password);
-            $validatedData['password_set'] = 0;
+            'mel.required' => 'Alamat e-mel diperlukan.',
+            'mel.string' => 'Alamat e-mel mesti dalam format teks.',
+            'mel.email' => 'Sila masukkan alamat e-mel yang sah.',
+            'mel.max' => 'Alamat e-mel tidak boleh melebihi 255 aksara.',
+            'mel.unique' => 'Alamat e-mel ini telah digunakan.',
 
-            $dataToInsert = array_merge($this->defaultUserValues, $validatedData);
+            'hp.required' => 'Nombor telefon diperlukan.',
+            'hp.numeric' => 'Nombor telefon mesti mengandungi angka sahaja.',
+            'hp.digits_between' => 'Nombor telefon mesti antara 10 hingga 11 digit.',
 
-            $user = User::create($dataToInsert);
+            'jobdiv.required' => 'Bahagian pekerjaan diperlukan.',
+            'job.required' => 'Jawatan diperlukan.',
+            'syslevel.required' => 'Tahap sistem diperlukan.',
+            'status.required' => 'Status diperlukan.',
+        ]);
 
-            Mail::to($user->mel)->send(new SendUserOtp($user->mel, $password, $user->name));
+        // Generate Unique UID
+        $validatedData['uid'] = $this->generateUniqueUid();
 
-            return redirect()->route('userList')->with('success', 'Pengguna telah berjaya didaftarkan!');
-        }
+        // Generate Random 6-Digit Password
+        $password = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+        $validatedData['pass'] = md5($password);
+        $validatedData['password_set'] = 0;
 
-        $parameters = $this->getCommon();
-        $parameters['districts'] = ['' => 'Semua'] + $parameters['districts'];
+        // Merge Default Values
+        $dataToInsert = array_merge($this->defaultUserValues, $validatedData);
 
-        return view('user.create', ['parameters' => $parameters]);
+        // Create User
+        $user = User::create($dataToInsert);
+
+        // Send Email with Password
+        Mail::to($user->mel)->send(new SendUserOtp($user->mel, $password, $user->name));
+
+        return redirect()->route('userList')->with('success', 'Pengguna telah berjaya didaftarkan!');
     }
 
+    $parameters = $this->getCommon();
+    $parameters['districts'] = ['' => 'Semua'] + $parameters['districts'];
 
-    public function edit(Request $request, $id)
-    {
-        $user = User::find($id);
+    return view('user.create', ['parameters' => $parameters]);
+}
 
-        if ($request->isMethod('post')) {
-            $validatedData = $this->validateInput($request);
-            
-            $user->update($validatedData);
 
-            return redirect()->route('userList')->with('success', 'Pengguna telah berjaya dikemas kini!!');
-        }
-        $parameters = $this->getCommon();
-        $parameters['districts'] = ['' => 'Semua'] + $parameters['districts']; 
-        return view('user.edit', ['user' => $user, 'parameters' => $parameters]);        
+
+public function edit(Request $request, $id)
+{
+    $user = User::findOrFail($id);
+
+    if ($request->isMethod('post')) {
+        $validatedData = $request->validate([
+            'name' => [
+                'required', 
+                'string', 
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if (is_numeric($value)) {
+                        $fail('Nama tidak boleh terdiri daripada nombor sahaja.');
+                    }
+                },
+            ],
+            'ic' => 'required|string|size:12|unique:usr,ic,' . $id . ',id', // Exclude current user
+            'mel' => 'required|string|email|max:255|unique:usr,mel,' . $id . ',id', // Exclude current user
+            'hp' => 'required|numeric|digits_between:10,11', // Must be numeric and 10-11 digits
+            'jobdiv' => 'required|string|max:50',
+            'job' => 'required|string|max:50',
+            'joblvl' => 'nullable|string|max:50',
+            'syslevel' => 'required|string|max:50',
+            'status' => 'required|string|max:50',
+        ], [
+            'name.required' => 'Nama diperlukan.',
+            'name.string' => 'Nama mesti terdiri daripada huruf.',
+            'name.max' => 'Nama tidak boleh melebihi 255 aksara.',
+
+            'ic.required' => 'Nombor IC diperlukan.',
+            'ic.string' => 'Nombor IC mesti dalam format teks.',
+            'ic.size' => 'Nombor IC mesti mengandungi tepat 12 angka.',
+            'ic.unique' => 'Nombor IC ini telah digunakan.',
+
+            'mel.required' => 'Alamat e-mel diperlukan.',
+            'mel.string' => 'Alamat e-mel mesti dalam format teks.',
+            'mel.email' => 'Sila masukkan alamat e-mel yang sah.',
+            'mel.max' => 'Alamat e-mel tidak boleh melebihi 255 aksara.',
+            'mel.unique' => 'Alamat e-mel ini telah digunakan.',
+
+            'hp.required' => 'Nombor telefon diperlukan.',
+            'hp.numeric' => 'Nombor telefon mesti mengandungi angka sahaja.',
+            'hp.digits_between' => 'Nombor telefon mesti antara 10 hingga 11 digit.',
+
+            'jobdiv.required' => 'Bahagian pekerjaan diperlukan.',
+            'job.required' => 'Jawatan diperlukan.',
+            'syslevel.required' => 'Tahap sistem diperlukan.',
+            'status.required' => 'Status diperlukan.',
+        ]);
+
+        $user->update($validatedData);
+
+        return redirect()->route('userList')->with('success', 'Pengguna telah berjaya dikemas kini!');
     }
+
+    $parameters = $this->getCommon();
+    $parameters['districts'] = ['' => 'Semua'] + $parameters['districts']; 
+
+    return view('user.edit', ['user' => $user, 'parameters' => $parameters]);        
+}
+
 }

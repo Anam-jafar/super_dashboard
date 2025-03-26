@@ -161,7 +161,6 @@ public function updateProfile(Request $request)
         'new_password.min' => 'Kata laluan baharu mesti sekurang-kurangnya 8 aksara.',
     ]);
 
-    try {
         $user->update($request->only(['name', 'ic', 'hp', 'mel']));
 
         // Update password if provided
@@ -173,17 +172,18 @@ public function updateProfile(Request $request)
             $user->update([
                 'pass' => md5($request->new_password),
             ]);
-            $this->logActivity('Kemaskini Kata Laluan', 'Kata laluan pengguna berjaya dikemaskini');
+
+            $this->logActivity('Kemaskini', 'Kata laluan berjaya dikemaskini');
+
+            // Log out the user and redirect to login with a message
+            Auth::logout();
+            return redirect()->route('login')->with('success', 'Kata laluan anda telah ditukar. Sila log masuk semula untuk meneruskan.');
         }
+
 
         $this->logActivity('Kemaskini Profil', 'Profil pengguna berjaya dikemaskini');
         return redirect()->back()->with('success', 'Profil berjaya dikemaskini!');
 
-    } catch (\Exception $e) {
-        \Log::error('Kemaskini profil gagal: ' . $e->getMessage());
-
-        return redirect()->back()->withErrors(['error' => 'Terdapat masalah semasa mengemaskini profil. Sila cuba lagi nanti.']);
-    }
 }
 
 
@@ -247,7 +247,7 @@ public function activityLogs()
             // Step 2: Send OTP Request
             $otpResponse = Http::withHeaders([
                 'x-encrypted-key' => $encryptedKey
-            ])->post('https://devapi01.awfatech.com/api/v2/auth/eboss/client/otp/send?via=email', [
+            ])->post('https://devapi01.awfatech.com/api/v2/auth/eboss/staff/otp/send?via=email', [
                 'input' => $request->mel,
                 'role' => 'general'
             ]);

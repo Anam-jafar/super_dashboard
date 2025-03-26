@@ -85,7 +85,7 @@
                         </div>
                     </li>
                     <li><a class="ti-dropdown-item flex items-center" href="{{ route('profile') }}"><i
-                                class="fe fe-user p-1 rounded-full bg-primary/10 text-primary me-2 text-[1rem]"></i>Profile</a>
+                                class="fe fe-user p-1 rounded-full bg-primary/10 text-primary me-2 text-[1rem]"></i>Profil</a>
                     </li>
                     <li>
                         <form action="{{ route('logout') }}" method="POST" class="inline">
@@ -93,7 +93,7 @@
                             <button type="submit" class="ti-dropdown-item flex items-center w-full text-left">
                                 <i
                                     class="fe fe-lock p-1 rounded-full bg-primary/10 text-primary ut me-2 text-[1rem]"></i>
-                                Log Out
+                                Log Keluar
                             </button>
                         </form>
                     </li>

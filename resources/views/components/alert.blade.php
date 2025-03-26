@@ -1,7 +1,7 @@
 <div>
     @if (session('success'))
         <div class="alert alert-success"
-            style="background-color: #16A34A; color: white; border-radius: 8px; padding: 16px; margin-bottom: 16px; animation: fadeOut 4s ease-in-out;">
+            style="background-color: #16A34A; color: white; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
             <div style="display: flex; align-items: center;">
                 <svg style="height: 24px; width: 24px; margin-right: 8px;" xmlns="http://www.w3.org/2000/svg"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -15,7 +15,7 @@
 
     @if (session('error'))
         <div class="alert alert-danger"
-            style="background-color: #DC2626; color: white; border-radius: 8px; padding: 16px; margin-bottom: 16px; animation: fadeOut 4s ease-in-out;">
+            style="background-color: #DC2626; color: white; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
             <div style="display: flex; align-items: center;">
                 <svg style="height: 24px; width: 24px; margin-right: 8px;" xmlns="http://www.w3.org/2000/svg"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -30,7 +30,7 @@
 
     @if (session('warning'))
         <div class="alert alert-warning"
-            style="background-color: #F97316; color: white; border-radius: 8px; padding: 16px; margin-bottom: 16px; animation: fadeOut 4s ease-in-out;">
+            style="background-color: #F97316; color: white; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
             <div style="display: flex; align-items: center;">
                 <svg style="height: 24px; width: 24px; margin-right: 8px;" xmlns="http://www.w3.org/2000/svg"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,7 +46,7 @@
     <!-- Display Validation Errors Only if No Session Error Exists -->
     @if ($errors->any() && !session('error'))
         <div class="alert alert-danger"
-            style="background-color: #DC2626; color: white; border-radius: 8px; padding: 16px; margin-bottom: 16px; animation: fadeOut 4s ease-in-out;">
+            style="background-color: #DC2626; color: white; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
             <div style="display: flex; align-items: center;">
                 <svg style="height: 24px; width: 24px; margin-right: 8px;" xmlns="http://www.w3.org/2000/svg"
                     fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -64,13 +64,10 @@
     @endif
 
     <style>
-        .animate-fade-out {
-            animation: fadeOut 4s ease-in-out;
-            opacity: 1;
-        }
-
         @keyframes fadeOut {
-            0% {
+
+            0%,
+            70% {
                 opacity: 1;
             }
 
@@ -82,13 +79,15 @@
 
     <script>
         document.querySelectorAll('.alert').forEach(alert => {
+            // Set animation after a short delay to ensure it's applied
             setTimeout(() => {
-                if (alert) {
-                    alert.style.transition = "opacity 0.5s ease-out";
-                    alert.style.opacity = "0";
-                    setTimeout(() => alert.remove(), 500); // Remove after fade-out
-                }
-            }, 4000);
+                alert.style.animation = "fadeOut 4s ease-in-out 7s forwards";
+            }, 100);
+
+            // Remove the alert completely after the full animation
+            setTimeout(() => {
+                alert.remove();
+            }, 11000); // 7s visibility + 4s fade out
         });
     </script>
 </div>

@@ -125,9 +125,14 @@
                     Simpan
                 </button>
             </div>
+            <div class="text-center !mt-4 !mb-4">
+                <a href="{{ route('login') }}" class="text-base text-blue-600 hover:underline">Kembali ke Paparan Log
+                    Masuk</a>
+            </div>
 
         </form>
     </div>
+
     <!-- Copyright -->
     <div class="flex justify-center items-center gap-2 text-sm text-gray-900">
         <img src="{{ asset('assets/icons/fin_logo_tiny.svg') }}" alt="Admin" class="w-18 h-18" />

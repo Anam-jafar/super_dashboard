@@ -14,14 +14,16 @@
             <form method="POST" aaction="{{ route('userEdit', ['id' => $user->id]) }}"
                 class="bg-white sm:p-6 text-xs rounded-lg shadow">
                 @csrf
+                <x-required-warning-text />
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <x-input-field level="Nama Penuh" id="fullname" name="name" type="text" placeholder="Enter Full Name"
-                        value="{{ $user->name }}" />
+                        value="{{ $user->name }}" :required="true" />
                     <div class="grid grid-cols-2 gap-6">
-                        <x-input-field level="No. Kad Pengenadan" id="nric_number" name="ic" type="text"
-                            placeholder="" value="{{ $user->ic }}" />
-                        <x-input-field level="Nombor Telefon" id="mobile_number" name="hp" type="text"
-                            placeholder="" value="{{ $user->hp }}" />
+                        <x-input-field level="No. Kad Pengenadan" id="nric_number" name="ic" type="number"
+                            placeholder="" value="{{ $user->ic }}" :required="true" />
+                        <x-input-field level="Nombor Telefon" id="mobile_number" name="hp" type="number"
+                            placeholder="" value="{{ $user->hp }}" :required="true" />
                     </div>
                 </div>
 
@@ -29,15 +31,15 @@
                     <div class="grid grid-cols-2 gap-6">
 
                         <x-input-field level="Emel" id="email" name="mel" type="email" placeholder=""
-                            value="{{ $user->mel }}" />
+                            value="{{ $user->mel }}" :required="true" />
                         <x-input-field level="Jabatan" id="department" name="jobdiv" type="select" placeholder="Pilih"
-                            :valueList="$parameters['admin_departments']" value="{{ $user->jobdiv }}" />
+                            :valueList="$parameters['admin_departments']" value="{{ $user->jobdiv }}" :required="true" />
                     </div>
                     <div class="grid grid-cols-2 gap-6">
                         <x-input-field level="Jawatan" id="position" name="job" type="select" placeholder="Pilih"
-                            :valueList="$parameters['admin_positions']" value="{{ $user->job }}" />
+                            :valueList="$parameters['admin_positions']" value="{{ $user->job }}" :required="true" />
                         <x-input-field level="Akses Daerah" id="district_access" name="joblvl" type="select"
-                            placeholder="Pilih" :valueList="$parameters['districts']" value="{{ $user->joblvl }}" />
+                            placeholder="Pilih" :valueList="$parameters['districts']" value="{{ $user->joblvl }}" :required="true" />
                     </div>
                 </div>
 
@@ -45,9 +47,9 @@
                     <p class="text-sm font-bold text-[#2624D0]">Tindakan</p>
                     <div class="grid grid-cols-2 gap-6">
                         <x-input-field level="Peringkat Pengguna" id="user_group" name="syslevel" type="select"
-                            placeholder="Pilih" :valueList="$parameters['admin_groups']" value="{{ $user->syslevel }}" />
+                            placeholder="Pilih" :valueList="$parameters['admin_groups']" value="{{ $user->syslevel }}" :required="true" />
                         <x-input-field level="Status" id="status" name="status" type="select" placeholder="Pilih"
-                            :valueList="$parameters['statuses']" value="{{ $user->status }}" />
+                            :valueList="$parameters['statuses']" value="{{ $user->status }}" :required="true" />
 
                     </div>
                 </div>

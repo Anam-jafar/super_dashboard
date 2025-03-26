@@ -30,41 +30,61 @@ class InstituteController extends Controller
         'sid' => 1,
         'app' => 'CLIENT',
     ];
-    private function validateInstitute(Request $request): array
-    {
-        $rules = [
-            'name' => 'required|string|max:255',
-            'cate1' => 'required|string|max:50',
-            'cate' => 'required|string|max:50',
-            'rem8' => 'required|string|max:50',
-            'rem9' => 'required|string|max:50',
-            'addr' => 'nullable|string|max:500',
-            'addr1' => 'nullable|string|max:500',
-            'pcode' => 'nullable|string|max:8',
-            'city' => 'nullable|string|max:50',
-            'state' => 'nullable|string|max:50',
-            'hp' => 'nullable|string|max:50',
-            'fax' => 'nullable|string|max:50',
-            'mel' => 'nullable|email|max:255',
-            'web' => 'nullable|string|max:255',
-            'rem10' => 'nullable|string|max:50',
-            'rem11' => 'nullable|string|max:50',
-            'rem12' => 'nullable|string|max:50',
-            'rem13' => 'nullable|string|max:50',
-            'rem14' => 'nullable|string|max:50',
-            'rem15' => 'nullable|string|max:50',
-            'location' => 'nullable|string|max:255',
-            'con1' => 'nullable|string|max:50',
-            'ic' => 'nullable|string|max:50',
-            'pos1' => 'nullable|string|max:50',
-            'tel1' => 'nullable|string|max:50',
-            'sta' => 'nullable|string|max:50',
-            'state' => 'nullable|string|max:50',
-            'country' => 'nullable|string|max:50',
-        ];
+private function validateInstitute(Request $request, $id = null): array
+{
+    $rules = [
+        'name' => 'required|string|max:255',
+        'cate1' => 'required|string|max:50',
+        'cate' => 'required|string|max:50',
+        'rem8' => 'required|string|max:50',
+        'rem9' => 'required|string|max:50',
+        'addr' => 'nullable|string|max:500',
+        'addr1' => 'nullable|string|max:500',
+        'pcode' => 'nullable|string|max:8',
+        'city' => 'nullable|string|max:50',
+        'state' => 'nullable|string|max:50',
+        'hp' => 'nullable|string|max:50',
+        'fax' => 'nullable|string|max:50',
+        'mel' => 'nullable|email|max:255',
+        'web' => 'nullable|string|max:255',
+        'rem10' => 'nullable|string|max:50',
+        'rem11' => 'nullable|string|max:50',
+        'rem12' => 'nullable|string|max:50',
+        'rem13' => 'nullable|string|max:50',
+        'rem14' => 'nullable|string|max:50',
+        'rem15' => 'nullable|string|max:50',
+        'location' => 'nullable|string|max:255',
+        'con1' => 'nullable|string|max:50',
+        'ic' => 'nullable|string|max:50',
+        'pos1' => 'nullable|string|max:50',
+        'tel1' => 'nullable|string|max:50',
+        'sta' => 'nullable|string|max:50',
+        'state' => 'nullable|string|max:50',
+        'country' => 'nullable|string|max:50',
+    ];
 
-        return Validator::make($request->all(), $rules)->validate();
+    // Extra validation if 'sta' == 0
+    if ($request->sta == '0') {
+        $rules['hp'] = 'required|string|max:50|unique:client,hp,' . $id;
+        $rules['mel'] = 'required|email|max:255|unique:client,mel,' . $id;
+        $rules['con1'] = 'required|string|max:50';
+        $rules['ic'] = 'required|string|max:50';
+        $rules['pos1'] = 'required|string|max:50';
+        $rules['tel1'] = 'required|string|max:50';
     }
+
+    return Validator::make($request->all(), $rules, [
+        'hp.required' => 'Nombor telefon diperlukan kerana institusi belum disahkan.',
+        'hp.string' => 'Nombor telefon mesti dalam format teks.',
+        'hp.max' => 'Nombor telefon tidak boleh melebihi 50 aksara.',
+        'hp.unique' => 'Nombor telefon ini telah digunakan.',
+
+        'mel.required' => 'E-mel diperlukan kerana institusi belum disahkan.',
+        'mel.email' => 'Sila masukkan alamat e-mel yang sah.',
+        'mel.max' => 'Alamat e-mel tidak boleh melebihi 255 aksara.',
+        'mel.unique' => 'E-mel ini telah digunakan.',
+    ])->validate();
+}
     
     private function generateUniqueUid()
     {
@@ -186,23 +206,19 @@ class InstituteController extends Controller
         return view('Institute.create', ['parameters' => $this->getCommon()]);
     }
 
-    public function edit(Request $request, $id)
-    {
+ public function edit(Request $request, $id)
+{
+    $institute = Institute::with('type', 'category', 'City', 'subdistrict', 'district')->findOrFail($id);
 
-        $institute = Institute::with('type', 'category', 'City', 'subdistrict', 'district')->find($id);
+    if ($request->isMethod('post')) {
+        $validatedData = $this->validateInstitute($request, $id);
+        $institute->update($validatedData);
 
-        if ($request->isMethod('post')) {
-            
-            $validatedData = $this->validateInstitute($request);
-            $institute->update($validatedData);
-            // $institute->update($request->except('_token'));
-
-            return redirect()->route('instituteList')->with('success', 'Institusi tidak berjaya dikemaskini!');
-        }
-
-
-        return view('Institute.edit', ['institute' => $institute, 'parameters' => $this->getCommon()]);        
+        return redirect()->route('instituteList')->with('success', 'Institusi berjaya dikemaskini!');
     }
+
+    return view('Institute.edit', ['institute' => $institute, 'parameters' => $this->getCommon()]);
+}
 
     public function registrationRequests(Request $request)
     {
@@ -217,11 +233,15 @@ class InstituteController extends Controller
         }
 
         $query = $query->where('sta', 1)
-            ->whereNotNull('registration_request_date')
+            ->where(function ($q) {
+                $q->whereNotNull('registration_request_date')
+                ->where('registration_request_date', '!=', '0000-00-00');
+            })
             ->where(function ($q) {
                 $q->whereNull('regdt') 
                 ->orWhere('regdt', '0000-00-00'); 
             });
+
 
 
         $query = $this->applyFilters($query, $request);
@@ -282,27 +302,38 @@ class InstituteController extends Controller
     }
 
 
-    public function approveRegistrationRequest(Request $request, $id)
-    {
-        $institute = Institute::find($id);
+public function approveRegistrationRequest(Request $request, $id)
+{
+    $institute = Institute::find($id);
 
-        if (!$institute) {
-            return redirect()->back()->with('error', 'Tiada rekod ditemui!');
-        }
-
-        $updated = $institute->update([
-            'sta' => 0,
-            'mel' => $request->mel,
-            'regdt' => now()->toDateString(),
-        ]);
-
-        if ($updated) {
-            Mail::to($request->mel)->send(new RegistrationApproveConfirmation($request->mel, $institute->name));
-            return redirect()->route('registrationRequests')->with('success', 'Pendaftaran Institusi diluluskan dan email pengesahan telah berjaya dihantar!');
-        } else {
-            return redirect()->back()->with('error', 'Pengesahan pendaftaran institusi tidak berjaya, sila cuba sebetar lagi!');
-        }
+    if (!$institute) {
+        return redirect()->back()->with('error', 'Tiada rekod ditemui!');
     }
+
+    // Validate email uniqueness
+    $request->validate([
+        'mel' => 'required|email|max:255|unique:client,mel,' . $id,
+    ], [
+        'mel.required' => 'E-mel diperlukan.',
+        'mel.email' => 'Sila masukkan alamat e-mel yang sah.',
+        'mel.max' => 'Alamat e-mel tidak boleh melebihi 255 aksara.',
+        'mel.unique' => 'E-mel ini telah digunakan. Sila gunakan e-mel lain.',
+    ]);
+
+    $updated = $institute->update([
+        'sta' => 0,
+        'mel' => $request->mel,
+        'regdt' => now()->toDateString(),
+    ]);
+
+    if ($updated) {
+        Mail::to($request->mel)->send(new RegistrationApproveConfirmation($request->mel, $institute->name));
+        return redirect()->route('registrationRequests')->with('success', 'Pendaftaran Institusi diluluskan dan e-mel pengesahan telah berjaya dihantar!');
+    } else {
+        return redirect()->back()->with('error', 'Pengesahan pendaftaran institusi tidak berjaya, sila cuba sebentar lagi!');
+    }
+}
+
 
     public function getInstitutionCategories(Request $request)
     {

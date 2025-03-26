@@ -36,9 +36,9 @@
                     <div class="grid grid-col-1 md:grid-cols-2 gap-6">
                         <div class="grid grid-cols-2 gap-6 items-end">
                             <x-input-field level="Emel (Rasmi)" id="emel" name="mel" type="email" placeholder=""
-                                value="{{ $institute->mel ?? '' }}" :required="true" />
+                                value="{{ $institute->mel ?? '' }}" />
                             <x-input-field level="Nombor Telefon (Rasmi)" id="tel" name="hp" type="text"
-                                placeholder="" value="{{ $institute->hp ?? '' }}" :required="true" />
+                                placeholder="" value="{{ $institute->hp ?? '' }}" />
                         </div>
                         <div class="grid grid-cols-2 gap-6 items-end">
 

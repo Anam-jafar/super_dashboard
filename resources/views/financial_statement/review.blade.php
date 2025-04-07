@@ -11,7 +11,7 @@
                 ['label' => 'Laporan Kewangan', 'url' => 'javascript:void(0);'],
                 [
                     'label' => 'Penghantaran Baru
-                                                                                                                                                                                                                                                                                                                                                                                    ',
+                                                                                                                                                                                                                                                                                                                                                                                                ',
                 ],
             ]" />
             <x-alert />
@@ -28,7 +28,9 @@
                         <x-show-key-value :key="'Nama Institusi'" :value="$financialStatement->Institute->name" />
                         <x-show-key-value :key="'Daerah'" :value="$financialStatement->Institute->District->prm" />
                         <x-show-key-value :key="'Mukim'" :value="$financialStatement->Institute->Subdistrict->prm" />
-                        <x-show-key-value :key="'Bandar'" :value="$financialStatement->Institute->City->prm" />
+                        <x-show-key-value :key="'Bandar'" :value="$financialStatement->Institute->city
+                            ? $financialStatement->Institute->City->prm
+                            : ''" />
                         <x-show-key-value :key="'Nombor Telefon (Rasmi)'" :value="$financialStatement->Institute->hp" />
                         <x-show-key-value :key="'Emel (Rasmi)'" :value="$financialStatement->Institute->mel" />
                     </div>

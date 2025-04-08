@@ -55,7 +55,6 @@ Route::prefix('mais')->group(function () {
             Route::get('/request-subscriptions', 'requestSubscriptions')->name('requestSubscriptions');
             Route::get('/outstanding-subscriptions', 'outstandingSubscriptions')->name('outstandingSubscriptions');
             Route::post('/subscription-fee-add', 'subscriptionFeeAdd')->name('subscriptionFeeAdd');
-
         });
         Route::get('/under-maintainance', [SubscriptionController::class, 'underMaintainance'])->name('underMaintainance');
 
@@ -69,9 +68,6 @@ Route::prefix('mais')->group(function () {
         Route::get('/get-institution-categories', [InstituteController::class, 'getInstitutionCategories'])->name('getInstitutionCategories');
         Route::get('/get-subdistricts', [InstituteController::class, 'getSubDistricts'])->name('getSubDistricts');
         Route::get('/search-bandar', [InstituteController::class, 'getBandar'])->name('search.bandar');
-
-
-
 
         Route::get('/user/list', [UserController::class, 'list'])->name('userList');
         Route::match(['get', 'post'], '/user/create', [UserController::class, 'create'])->name('userCreate');

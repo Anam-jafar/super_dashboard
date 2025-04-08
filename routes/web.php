@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\MetrixController;
-use App\Http\Controllers\EntityController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\InstituteController;
@@ -11,7 +9,6 @@ use App\Http\Controllers\FinancialStatementController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Response;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +26,7 @@ Route::prefix('mais')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('submit.login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::match(['get', 'post'],'/reset-password/{id}', [AuthController::class, 'resetPassword'])->name('resetPassword');
+    Route::match(['get', 'post'], '/reset-password/{id}', [AuthController::class, 'resetPassword'])->name('resetPassword');
     Route::post('/check-email-send-otp', [AuthController::class, 'checkEmailAndSendOtp']);
 
 
@@ -51,45 +48,6 @@ Route::prefix('mais')->group(function () {
             Route::put('/profile/password', 'updatePassword')->name('updatePassword');
             Route::get('/activity-logs', 'activityLogs')->name('activityLogs');
 
-        });
-
-        // Entity Management Routes
-        Route::controller(EntityController::class)->prefix('/{type}')->whereIn('type', ['mosques', 'branches', 'admins'])->group(function () {
-            Route::get('/', 'index')->name('showList');
-            Route::get('/create', 'create')->name('create');
-            Route::post('/store', 'store')->name('store');
-            Route::get('/show/{id}', 'show')->name('edit');
-            Route::put('/update/{id}', 'update')->name('update');
-            Route::get('/detail-list', 'detailList')->name('detailList');
-            Route::get('/detail/{id}', 'detail')->name('detail');
-            Route::post('/approve/{id}', 'approve')->name('approve');
-
-        });
-        Route::get('/mosques/activation-request-list', [EntityController::class, 'instituteActivateRequestList'])->name('instituteActivateRequestList');
-
-        Route::prefix('metrix')->name('metrix.')->group(function () {
-            $registerCategoryRoutes = function ($prefix, $type) {
-                Route::controller(MetrixController::class)->group(function () use ($prefix, $type) {
-                    Route::group([
-                        'prefix' => $prefix,
-                        'as' => $prefix . '.',
-                        'where' => ['type' => $type]
-                    ], function () {
-                        Route::get('/{type}', 'index')->name('list');
-                        Route::get('/{type}/create', 'create')->name('create');
-                        Route::post('/{type}', 'store')->name('store');
-                        Route::get('/{type}/{id}/edit', 'edit')->name('edit');
-                        Route::put('/{type}/{id}', 'update')->name('update');
-                        Route::put('/{type}/{id}/active', 'markAsActive')->name('mark-active');
-                        Route::put('/{type}/{id}/update-and-activate', 'update')
-                            ->name('update-and-activate')
-                            ->defaults('markAsActive', true);
-                    });
-                });
-            };
-
-            $registerCategoryRoutes('compensation', 'kaffarah');
-            $registerCategoryRoutes('settings', 'fidyah');
         });
 
         Route::controller(SubscriptionController::class)->group(function () {
@@ -136,7 +94,7 @@ Route::prefix('mais')->group(function () {
 
 
 
-        
+
 
     });
 
@@ -145,15 +103,10 @@ Route::prefix('mais')->group(function () {
         if (file_exists($path)) {
             return response()->file($path);
         }
-            return redirect()->back()->with('error', 'File not found');
+        return redirect()->back()->with('error', 'File not found');
     })->name('download.attachment');
 
     Route::get('/tutorial', function () {
         return view('tutorial');
     });
 });
-
-
-
-
-

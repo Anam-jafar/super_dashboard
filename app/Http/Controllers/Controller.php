@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Parameter;
 
-
 class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests;
+    use AuthorizesRequests;
+    use ValidatesRequests;
 
     public function logActivity(string $action, string $description): void
     {
@@ -88,7 +88,7 @@ class Controller extends BaseController
             'states' => Parameter::where('grp', 'state')
                 ->pluck('prm', 'code')
                 ->toArray(),
-            
+
             'countries' => Parameter::where('grp', 'country')
                 ->pluck('prm', 'code')
                 ->toArray(),
@@ -96,7 +96,7 @@ class Controller extends BaseController
                 ->whereNotIn('val', [0, 4])
                 ->pluck('prm', 'val')
                 ->toArray(),
-            
+
 
 
         ];

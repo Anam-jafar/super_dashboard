@@ -37,7 +37,7 @@ class UserController extends Controller
         ];
     }
 
-        private function validateInput(Request $request): array
+    private function validateInput(Request $request): array
     {
         $rules = [
             'name' => 'required|string|max:255',
@@ -55,7 +55,7 @@ class UserController extends Controller
     }
 
 
-        private function generateUniqueUid()
+    private function generateUniqueUid()
     {
         $lastUid = DB::table('usr')->orderBy('uid', 'desc')->value('uid');
 
@@ -66,12 +66,12 @@ class UserController extends Controller
             $newUid = 'A' . str_pad($numericPart, 5, '0', STR_PAD_LEFT);
             $exists = DB::table('usr')->where('uid', $newUid)->exists();
 
-        } while ($exists); 
+        } while ($exists);
 
         return $newUid;
     }
 
-        private function applyFilters($query, Request $request)
+    private function applyFilters($query, Request $request)
     {
         foreach ($request->all() as $field => $value) {
             if (!empty($value) && \Schema::hasColumn('usr', $field)) {
@@ -87,17 +87,17 @@ class UserController extends Controller
         return $query;
     }
 
-        public function list(Request $request)
+    public function list(Request $request)
     {
         $perPage = $request->input('per_page', 10);
-        
+
         $query = $this->applyFilters(User::query(), $request);
 
         $users = $query->with('Department', 'Position', 'DistrictAcceess', 'UserGroup')
             ->orderBy('id', 'desc')
             ->paginate($perPage)->withQueryString();
 
-        
+
         $users->getCollection()->transform(function ($user) {
             $user->DEPARTMENT = isset($user->Department->prm) ? strtoupper($user->Department->prm) : null;
             $user->POSITION = isset($user->Position->prm) ? strtoupper($user->Position->prm) : null;
@@ -112,7 +112,7 @@ class UserController extends Controller
             $user->STATUS = Parameter::where('grp', 'clientstatus')
                 ->where('val', $user->status)
                 ->pluck('prm', 'val')
-                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->map(fn ($prm, $val) => ['val' => $val, 'prm' => $prm])
                 ->first();
 
             return $user;
@@ -125,13 +125,13 @@ class UserController extends Controller
         ]);
     }
 
-        public function login(Request $request)
+    public function login(Request $request)
     {
         $request->validate([
             'mel' => 'required|string',
             'pass' => 'required|string',
         ]);
-        
+
         $user = DB::table('usr')
             ->where('mel', $request->mel)
             ->where('pass', md5($request->pass))
@@ -148,29 +148,29 @@ class UserController extends Controller
         return back()->with('error', 'Invalid credentials.');
     }
 
-public function create(Request $request)
-{
-    if ($request->isMethod('post')) {
-        $validatedData = $request->validate([
-            'name' => [
-                'required', 
-                'string', 
-                'max:255',
-                function ($attribute, $value, $fail) {
-                    if (is_numeric($value)) {
-                        $fail('Nama tidak boleh terdiri daripada nombor sahaja.');
-                    }
-                },
-            ],
-            'ic' => 'required|string|size:12|unique:usr,ic', // Must be exactly 12 digits and unique
-            'mel' => 'required|string|email|max:255|unique:usr,mel', // Must be unique and valid email
-            'hp' => 'required|numeric|digits_between:10,11', // Must be numeric and 10-11 digits
-            'jobdiv' => 'required|string|max:50',
-            'job' => 'required|string|max:50',
-            'joblvl' => 'nullable|string|max:50',
-            'syslevel' => 'required|string|max:50',
-            'status' => 'required|string|max:50',
-        ], [
+    public function create(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $validatedData = $request->validate([
+                'name' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    function ($attribute, $value, $fail) {
+                        if (is_numeric($value)) {
+                            $fail('Nama tidak boleh terdiri daripada nombor sahaja.');
+                        }
+                    },
+                ],
+                'ic' => 'required|string|size:12|unique:usr,ic', // Must be exactly 12 digits and unique
+                'mel' => 'required|string|email|max:255|unique:usr,mel', // Must be unique and valid email
+                'hp' => 'required|numeric|digits_between:10,11', // Must be numeric and 10-11 digits
+                'jobdiv' => 'required|string|max:50',
+                'job' => 'required|string|max:50',
+                'joblvl' => 'nullable|string|max:50',
+                'syslevel' => 'required|string|max:50',
+                'status' => 'required|string|max:50',
+            ], [
             'name.required' => 'Nama diperlukan.',
             'name.string' => 'Nama mesti terdiri daripada huruf.',
             'name.max' => 'Nama tidak boleh melebihi 255 aksara.',
@@ -196,59 +196,59 @@ public function create(Request $request)
             'status.required' => 'Status diperlukan.',
         ]);
 
-        // Generate Unique UID
-        $validatedData['uid'] = $this->generateUniqueUid();
+            // Generate Unique UID
+            $validatedData['uid'] = $this->generateUniqueUid();
 
-        // Generate Random 6-Digit Password
-        $password = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
-        $validatedData['pass'] = md5($password);
-        $validatedData['password_set'] = 0;
+            // Generate Random 6-Digit Password
+            $password = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+            $validatedData['pass'] = md5($password);
+            $validatedData['password_set'] = 0;
 
-        // Merge Default Values
-        $dataToInsert = array_merge($this->defaultUserValues, $validatedData);
+            // Merge Default Values
+            $dataToInsert = array_merge($this->defaultUserValues, $validatedData);
 
-        // Create User
-        $user = User::create($dataToInsert);
+            // Create User
+            $user = User::create($dataToInsert);
 
-        // Send Email with Password
-        Mail::to($user->mel)->send(new SendUserOtp($user->mel, $password, $user->name));
+            // Send Email with Password
+            Mail::to($user->mel)->send(new SendUserOtp($user->mel, $password, $user->name));
 
-        return redirect()->route('userList')->with('success', 'Pengguna telah berjaya didaftarkan!');
+            return redirect()->route('userList')->with('success', 'Pengguna telah berjaya didaftarkan!');
+        }
+
+        $parameters = $this->getCommon();
+        $parameters['districts'] = ['' => 'Semua'] + $parameters['districts'];
+
+        return view('user.create', ['parameters' => $parameters]);
     }
 
-    $parameters = $this->getCommon();
-    $parameters['districts'] = ['' => 'Semua'] + $parameters['districts'];
-
-    return view('user.create', ['parameters' => $parameters]);
-}
 
 
+    public function edit(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
 
-public function edit(Request $request, $id)
-{
-    $user = User::findOrFail($id);
-
-    if ($request->isMethod('post')) {
-        $validatedData = $request->validate([
-            'name' => [
-                'required', 
-                'string', 
-                'max:255',
-                function ($attribute, $value, $fail) {
-                    if (is_numeric($value)) {
-                        $fail('Nama tidak boleh terdiri daripada nombor sahaja.');
-                    }
-                },
-            ],
-            'ic' => 'required|string|size:12|unique:usr,ic,' . $id . ',id', // Exclude current user
-            'mel' => 'required|string|email|max:255|unique:usr,mel,' . $id . ',id', // Exclude current user
-            'hp' => 'required|numeric|digits_between:10,11', // Must be numeric and 10-11 digits
-            'jobdiv' => 'required|string|max:50',
-            'job' => 'required|string|max:50',
-            'joblvl' => 'nullable|string|max:50',
-            'syslevel' => 'required|string|max:50',
-            'status' => 'required|string|max:50',
-        ], [
+        if ($request->isMethod('post')) {
+            $validatedData = $request->validate([
+                'name' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    function ($attribute, $value, $fail) {
+                        if (is_numeric($value)) {
+                            $fail('Nama tidak boleh terdiri daripada nombor sahaja.');
+                        }
+                    },
+                ],
+                'ic' => 'required|string|size:12|unique:usr,ic,' . $id . ',id', // Exclude current user
+                'mel' => 'required|string|email|max:255|unique:usr,mel,' . $id . ',id', // Exclude current user
+                'hp' => 'required|numeric|digits_between:10,11', // Must be numeric and 10-11 digits
+                'jobdiv' => 'required|string|max:50',
+                'job' => 'required|string|max:50',
+                'joblvl' => 'nullable|string|max:50',
+                'syslevel' => 'required|string|max:50',
+                'status' => 'required|string|max:50',
+            ], [
             'name.required' => 'Nama diperlukan.',
             'name.string' => 'Nama mesti terdiri daripada huruf.',
             'name.max' => 'Nama tidak boleh melebihi 255 aksara.',
@@ -274,15 +274,15 @@ public function edit(Request $request, $id)
             'status.required' => 'Status diperlukan.',
         ]);
 
-        $user->update($validatedData);
+            $user->update($validatedData);
 
-        return redirect()->route('userList')->with('success', 'Pengguna telah berjaya dikemas kini!');
+            return redirect()->route('userList')->with('success', 'Pengguna telah berjaya dikemas kini!');
+        }
+
+        $parameters = $this->getCommon();
+        $parameters['districts'] = ['' => 'Semua'] + $parameters['districts'];
+
+        return view('user.edit', ['user' => $user, 'parameters' => $parameters]);
     }
-
-    $parameters = $this->getCommon();
-    $parameters['districts'] = ['' => 'Semua'] + $parameters['districts']; 
-
-    return view('user.edit', ['user' => $user, 'parameters' => $parameters]);        
-}
 
 }

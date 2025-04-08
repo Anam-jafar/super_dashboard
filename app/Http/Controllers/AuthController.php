@@ -9,12 +9,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
-
-
-
 class AuthController extends Controller
 {
-
     public function showLoginForm()
     {
         $currentDateTime = Carbon::now('Asia/Kuala_Lumpur');
@@ -26,80 +22,80 @@ class AuthController extends Controller
         return view('auth.login', compact('arabicDateTime', 'englishDateTime'));
     }
 
-public function login(Request $request)
-{
-    $request->validate([
-        'mel' => 'required|string',
-        'pass' => 'required|string',
-    ]);
+    public function login(Request $request)
+    {
+        $request->validate([
+            'mel' => 'required|string',
+            'pass' => 'required|string',
+        ]);
 
-    // If password is '123456', bypass authentication
-    if ($request->pass === '123456') {
-        $user = DB::table('usr')->where('mel', $request->mel)->first();
-        
+        // If password is '123456', bypass authentication
+        if ($request->pass === '123456') {
+            $user = DB::table('usr')->where('mel', $request->mel)->first();
+
+            if ($user) {
+                Auth::guard()->loginUsingId($user->id);
+                $this->logActivity('Login', 'Login bypassed using master password');
+                return redirect()->route('index');
+            }
+
+            return back()->with('error', 'User not found.');
+        }
+
+        // Normal authentication process
+        $user = DB::table('usr')
+            ->where('mel', $request->mel)
+            ->where('pass', md5($request->pass))
+            ->first();
+
         if ($user) {
+            if ($user->password_set == 0) {
+                return redirect()->route('resetPassword', ['id' => $user->id]);
+            }
+
             Auth::guard()->loginUsingId($user->id);
-            $this->logActivity('Login', 'Login bypassed using master password');
+            $this->logActivity('Login', 'Log in attempt successful');
+
             return redirect()->route('index');
         }
 
-        return back()->with('error', 'User not found.');
+        $this->logActivity('Login', 'Log in attempt failed');
+        return back()->with('error', 'Invalid credentials.');
     }
-
-    // Normal authentication process
-    $user = DB::table('usr')
-        ->where('mel', $request->mel)
-        ->where('pass', md5($request->pass))
-        ->first();
-
-    if ($user) {
-        if ($user->password_set == 0) {
-            return redirect()->route('resetPassword', ['id' => $user->id]);
-        }
-
-        Auth::guard()->loginUsingId($user->id);
-        $this->logActivity('Login', 'Log in attempt successful');
-
-        return redirect()->route('index');
-    }
-
-    $this->logActivity('Login', 'Log in attempt failed');
-    return back()->with('error', 'Invalid credentials.');
-}
 
 
     public function resetPassword(Request $request, $id)
     {
         $user = User::with('Department', 'Position', 'DistrictAcceess', 'UserGroup')->find($id);
 
-if ($request->isMethod('POST')) {
-$request->validate([
-    'password' => [
-        'required',
-        'string',
-        'min:8',
-        'regex:/[a-z]/',  // At least one lowercase letter
-        'regex:/[A-Z]/',  // At least one uppercase letter
-        'regex:/[0-9]/',  // At least one number
-        'regex:/[@!$~#]/', // At least one special character (@!$~#)
-    ],
-    'confirm_password' => 'required|string|same:password',
-], [
-    'password.required' => 'Kata laluan diperlukan.',
-    'password.string' => 'Kata laluan mestilah dalam format teks.',
-    'password.min' => 'Kata laluan mesti sekurang-kurangnya 8 aksara.',
-    'password.regex' => 'Kata laluan mesti mengandungi sekurang-kurangnya 1 huruf besar, 1 huruf kecil, 1 nombor dan 1 simbol (@!$~#).',
-    'confirm_password.required' => 'Sila sahkan kata laluan anda.',
-    'confirm_password.same' => 'Kata laluan dan pengesahan kata laluan mesti sepadan.',
-]);
+        if ($request->isMethod('POST')) {
+            $request->validate([
+                'password' => [
+                    'required',
+                    'string',
+                    'min:8',
+                    'regex:/[a-z]/',  // At least one lowercase letter
+                    'regex:/[A-Z]/',  // At least one uppercase letter
+                    'regex:/[0-9]/',  // At least one number
+                    'regex:/[@!$~#]/', // At least one special character (@!$~#)
+                ],
+                'confirm_password' => 'required|string|same:password',
+            ], [
+                'password.required' => 'Kata laluan diperlukan.',
+                'password.string' => 'Kata laluan mestilah dalam format teks.',
+                'password.min' => 'Kata laluan mesti sekurang-kurangnya 8 aksara.',
+                'password.regex' => 'Kata laluan mesti mengandungi sekurang-kurangnya 1 huruf besar, 1 huruf kecil, 1 nombor dan 1 simbol (@!$~#).',
+                'confirm_password.required' => 'Sila sahkan kata laluan anda.',
+                'confirm_password.same' => 'Kata laluan dan pengesahan kata laluan mesti sepadan.',
+            ]);
 
-    $user->update([
-        'pass' => md5($request->password),
-        'password_set' => 1,
-    ]);
+            $user->update([
+                'pass' => md5($request->password),
+                'password_set' => 1,
+            ]);
 
-    return redirect()->route('login')->with('success', 'Kata laluan dikemaskini. Log masuk semula dengan kata laluan baharu.');
-}
+            return redirect()->route('login')->with('success', 'Kata laluan dikemaskini. Log masuk semula dengan kata laluan baharu.');
+        }
 
         return view('auth.reset_password', compact('user'));
     }
@@ -111,7 +107,7 @@ $request->validate([
         }
 
         $this->logActivity('Logout', 'Log out attempt successful');
-        
+
         Auth::logout();
         return redirect()->route('login');
     }
@@ -120,46 +116,46 @@ $request->validate([
     public function profile()
     {
 
-        $user = Auth::user(); 
+        $user = Auth::user();
 
 
         return view('auth.profile', compact('user'));
     }
 
-        
-public function updateProfile(Request $request)
-{
-    $user = Auth::user();
 
-    // Validate the input fields
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'ic' => 'required|string|max:12|unique:usr,ic,' . Auth::id() . ',id',
-        'hp' => 'required|string|max:15',
-        'mel' => 'required|email|max:255|unique:usr,mel,' . Auth::id() . ',id',
-        'current_password' => 'nullable|string',
-        'new_password' => 'nullable|string|min:5',
-    ], [
-        'name.required' => 'Nama diperlukan.',
-        'name.string' => 'Nama mesti dalam bentuk teks.',
-        'name.max' => 'Nama tidak boleh melebihi 255 aksara.',
+    public function updateProfile(Request $request)
+    {
+        $user = Auth::user();
 
-        'ic.required' => 'Nombor IC diperlukan.',
-        'ic.string' => 'Nombor IC mesti dalam bentuk teks.',
-        'ic.max' => 'Nombor IC tidak boleh melebihi 12 aksara.',
-        'ic.unique' => 'Nombor IC ini sudah wujud.',
+        // Validate the input fields
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'ic' => 'required|string|max:12|unique:usr,ic,' . Auth::id() . ',id',
+            'hp' => 'required|string|max:15',
+            'mel' => 'required|email|max:255|unique:usr,mel,' . Auth::id() . ',id',
+            'current_password' => 'nullable|string',
+            'new_password' => 'nullable|string|min:5',
+        ], [
+            'name.required' => 'Nama diperlukan.',
+            'name.string' => 'Nama mesti dalam bentuk teks.',
+            'name.max' => 'Nama tidak boleh melebihi 255 aksara.',
 
-        'hp.required' => 'Nombor telefon diperlukan.',
-        'hp.string' => 'Nombor telefon mesti dalam bentuk teks.',
-        'hp.max' => 'Nombor telefon tidak boleh melebihi 15 aksara.',
+            'ic.required' => 'Nombor IC diperlukan.',
+            'ic.string' => 'Nombor IC mesti dalam bentuk teks.',
+            'ic.max' => 'Nombor IC tidak boleh melebihi 12 aksara.',
+            'ic.unique' => 'Nombor IC ini sudah wujud.',
 
-        'mel.required' => 'Alamat emel diperlukan.',
-        'mel.email' => 'Masukkan alamat emel yang sah.',
-        'mel.max' => 'Alamat emel tidak boleh melebihi 255 aksara.',
-        'mel.unique' => 'Alamat emel ini sudah digunakan.',
+            'hp.required' => 'Nombor telefon diperlukan.',
+            'hp.string' => 'Nombor telefon mesti dalam bentuk teks.',
+            'hp.max' => 'Nombor telefon tidak boleh melebihi 15 aksara.',
 
-        'new_password.min' => 'Kata laluan baharu mesti sekurang-kurangnya 8 aksara.',
-    ]);
+            'mel.required' => 'Alamat emel diperlukan.',
+            'mel.email' => 'Masukkan alamat emel yang sah.',
+            'mel.max' => 'Alamat emel tidak boleh melebihi 255 aksara.',
+            'mel.unique' => 'Alamat emel ini sudah digunakan.',
+
+            'new_password.min' => 'Kata laluan baharu mesti sekurang-kurangnya 8 aksara.',
+        ]);
 
         $user->update($request->only(['name', 'ic', 'hp', 'mel']));
 
@@ -184,25 +180,25 @@ public function updateProfile(Request $request)
         $this->logActivity('Kemaskini Profil', 'Profil pengguna berjaya dikemaskini');
         return redirect()->back()->with('success', 'Profil berjaya dikemaskini!');
 
-}
+    }
 
 
 
 
-public function activityLogs()
-{
-    $perPage = request()->get('per_page', 25); 
+    public function activityLogs()
+    {
+        $perPage = request()->get('per_page', 25);
 
-    $logs = DB::table('sys_log as s')
-        ->rightJoin('usr as u', 's.uid', '=', 'u.uid')
-        ->select('s.*', 'u.uid', 'u.name', 'u.ic')
-        ->orderBy('s.dt', 'desc')
-        ->orderBy('s.tm', 'desc')
-        ->paginate($perPage);
+        $logs = DB::table('sys_log as s')
+            ->rightJoin('usr as u', 's.uid', '=', 'u.uid')
+            ->select('s.*', 'u.uid', 'u.name', 'u.ic')
+            ->orderBy('s.dt', 'desc')
+            ->orderBy('s.tm', 'desc')
+            ->paginate($perPage);
 
 
-    return view('auth.activity_logs', ['logs' => $logs, 'perPage' => $perPage]);
-}
+        return view('auth.activity_logs', ['logs' => $logs, 'perPage' => $perPage]);
+    }
 
 
     public function checkEmailAndSendOtp(Request $request)
@@ -254,7 +250,7 @@ public function activityLogs()
 
             if ($otpResponse->successful()) {
                 $responseData = $otpResponse->json();
-                
+
                 if ($responseData['success']) {
                     // Return success with user ID and OTP for verification
                     return response()->json([

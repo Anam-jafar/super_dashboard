@@ -20,19 +20,19 @@ class DashboardController extends Controller
     private function executeQuery($table, $constraints = [], $aggregation = null, $groupBy = null)
     {
         $query = DB::table($table);
-        
+
         foreach ($constraints as $field => $value) {
             $query->where($field, $value);
         }
-        
+
         if ($aggregation) {
             $query->select(DB::raw($aggregation));
         }
-        
+
         if ($groupBy) {
             $query->groupBy($groupBy);
         }
-        
+
         return $query;
     }
 
@@ -69,7 +69,7 @@ class DashboardController extends Controller
 
     private function getDemographicData($table, $columns, $city = null)
     {
-        $baseQuery = $city 
+        $baseQuery = $city
             ? DB::table($table . ' AS k')
                 ->rightJoin(DB::raw('(SELECT uid, city FROM report_masjid) AS m'), 'k.uid', '=', 'm.uid')
                 ->where('m.city', $city)
@@ -82,7 +82,7 @@ class DashboardController extends Controller
     {
         $columns = 'SUM(kariah_male) AS total_male, SUM(kariah_female) AS total_female';
         $result = $this->getDemographicData('report_kariah', $columns, $city);
-        
+
         return [
             'total_male' => $result->total_male ?? 0,
             'total_female' => $result->total_female ?? 0,
@@ -147,7 +147,7 @@ class DashboardController extends Controller
             SUM(kariah_race_oth) AS others
         ';
         $result = $this->getDemographicData('report_kariah', $columns, $city);
-        
+
         return [
             'Malay' => $result->Malay ?? 0,
             'Indo' => $result->Indo ?? 0,
@@ -156,49 +156,49 @@ class DashboardController extends Controller
         ];
     }
 
-private function _getDistrictTable()
-{
-    $categories = Parameter::where('grp', 'type_CLIENT')->pluck('code');
-    
-    return DB::table('client AS c')
-        ->select([
-            'c.rem8',
-            ...array_map(function($category) {
-                return DB::raw("SUM(CASE WHEN cate = '" . str_replace("'", "''", $category) . "' THEN 1 ELSE 0 END) AS " . str_replace(' ', '_', $category));
-            }, $categories->toArray()),
-            DB::raw("SUM(CASE WHEN sta = 0 THEN 1 ELSE 0 END) AS Total_Active"),
-            DB::raw("SUM(CASE WHEN sta = 1 THEN 1 ELSE 0 END) AS Total_Inactive"),
-            DB::raw("COUNT(*) AS Total")
-        ])
-        ->where(self::CLIENT_BASE_QUERY)
-        ->where('app', 'CLIENT')
-        ->where('isdel', 0)
-        ->groupBy('c.rem8')
-        ->get();
-}
+    private function _getDistrictTable()
+    {
+        $categories = Parameter::where('grp', 'type_CLIENT')->pluck('code');
+
+        return DB::table('client AS c')
+            ->select([
+                'c.rem8',
+                ...array_map(function ($category) {
+                    return DB::raw("SUM(CASE WHEN cate = '" . str_replace("'", "''", $category) . "' THEN 1 ELSE 0 END) AS " . str_replace(' ', '_', $category));
+                }, $categories->toArray()),
+                DB::raw("SUM(CASE WHEN sta = 0 THEN 1 ELSE 0 END) AS Total_Active"),
+                DB::raw("SUM(CASE WHEN sta = 1 THEN 1 ELSE 0 END) AS Total_Inactive"),
+                DB::raw("COUNT(*) AS Total")
+            ])
+            ->where(self::CLIENT_BASE_QUERY)
+            ->where('app', 'CLIENT')
+            ->where('isdel', 0)
+            ->groupBy('c.rem8')
+            ->get();
+    }
 
     // Generic listing method to handle mosque, branch, and admin listings
     private function getListingData($table, Request $request, $additionalFilters = [])
     {
         $query = DB::table($table);
-        
+
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->input('search') . '%');
         }
-        
+
         foreach ($additionalFilters as $filter => $field) {
             if ($request->filled($filter)) {
                 $query->where($field, $request->input($filter));
             }
         }
-        
+
         return $query->paginate($request->get('recordsPerPage', 25));
     }
 
     public function mosquesInCityDetails(Request $request)
     {
         $city = $request['city'];
-        
+
         $data = [
             'totalMosques' => $this->_getTotalMosques($city),
             'totalKariah' => $this->_getTotalKariah($city),
@@ -208,12 +208,12 @@ private function _getDistrictTable()
             'kariahPerType' => $this->_getKariahPerType($city),
             'kariahPerAgeRange' => $this->_getKariahPerAgeRange($city),
             'kariahNationality' => $this->_getKariahNationality(),
-            'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn($item) => [$item->prm => $item->total]),
+            'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn ($item) => [$item->prm => $item->total]),
             'mosqueActiveInactive' => $this->_getMosqueActiveInactive($city),
             'city' => $city,
             'kariahPerMosqueType' => $this->_getKariahPerMosquesType($city),
-            'categories' => Parameter::where('grp', 'type_CLIENT')->pluck('prm','code')->toArray(),
-            'districts' => Parameter::where('grp', 'district')->pluck('prm','code')->toArray()
+            'categories' => Parameter::where('grp', 'type_CLIENT')->pluck('prm', 'code')->toArray(),
+            'districts' => Parameter::where('grp', 'district')->pluck('prm', 'code')->toArray()
 
         ];
 
@@ -255,7 +255,7 @@ private function _getDistrictTable()
             ->where('c.city', $city)
             ->groupBy('c.city')
             ->first();
-                
+
         return [
             'Masjid Utama' => $result->MASJID_UTAMA ?? 0,
             'Surau' => $result->SURAU ?? 0,
@@ -281,9 +281,9 @@ private function _getDistrictTable()
             'kariahPerAgeRange' => $this->_getKariahPerAgeRange(),
             'kariahNationality' => $this->_getKariahNationality(),
             'districtTable' => $this->_getDistrictTable(),
-            'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn($item) => [$item->prm => $item->total]),
-            'categories' => Parameter::where('grp', 'type_CLIENT')->pluck('prm','code')->toArray(),
-            'districts' => Parameter::where('grp', 'district')->pluck('prm','code')->toArray()
+            'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn ($item) => [$item->prm => $item->total]),
+            'categories' => Parameter::where('grp', 'type_CLIENT')->pluck('prm', 'code')->toArray(),
+            'districts' => Parameter::where('grp', 'district')->pluck('prm', 'code')->toArray()
 
 
         ];
@@ -293,40 +293,40 @@ private function _getDistrictTable()
         return view('base.index', $data);
     }
 
-public function getFinancialReport(Request $request)
-{
-    $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
+    public function getFinancialReport(Request $request)
+    {
+        $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
 
-    $year = $request->input('year', date('Y')); 
+        $year = $request->input('year', date('Y'));
 
-    $totalClientsQuery = DB::table('client')->where('sta', 0);
+        $totalClientsQuery = DB::table('client')->where('sta', 0);
 
-    if ($districtAccess !== null) {
-        $totalClientsQuery->where('rem8', $districtAccess);
+        if ($districtAccess !== null) {
+            $totalClientsQuery->where('rem8', $districtAccess);
+        }
+
+        $totalClients = $totalClientsQuery->count();
+
+        $totalEntriesQuery = DB::table('splk_submission as s')
+            ->join('client as c', 'c.uid', '=', 's.inst_refno')
+            ->where('s.fin_year', $year)
+            ->where('s.fin_category', 'STM02')
+            ->whereIn('s.status', [1,2]);
+
+        if ($districtAccess !== null) {
+            $totalEntriesQuery->where('c.rem8', $districtAccess);
+        }
+
+        $totalEntries = $totalEntriesQuery->count();
+
+        return response()->json([
+            'totalClients' => $totalClients,
+            'totalEntries' => $totalEntries,
+        ]);
     }
 
-    $totalClients = $totalClientsQuery->count();
 
-    $totalEntriesQuery = DB::table('splk_submission as s')
-        ->join('client as c', 'c.uid', '=', 's.inst_refno')
-        ->where('s.fin_year', $year)
-        ->where('s.fin_category', 'STM02')
-        ->whereIn('s.status', [1,2]);
-
-    if ($districtAccess !== null) {
-        $totalEntriesQuery->where('c.rem8', $districtAccess);
-    }
-
-    $totalEntries = $totalEntriesQuery->count();
-
-    return response()->json([
-        'totalClients' => $totalClients,
-        'totalEntries' => $totalEntries,
-    ]);
-}
-
-
-        // Controller methods for web routes
+    // Controller methods for web routes
     public function index()
     {
         // $data = [
@@ -386,7 +386,7 @@ public function getFinancialReport(Request $request)
                 $q->whereNull('regdt')
                 ->orWhere('regdt', '0000-00-00');
             })
-            ->limit(5) 
+            ->limit(5)
             ->get();
 
 
@@ -401,14 +401,14 @@ public function getFinancialReport(Request $request)
             ->limit(5) // Limit to 5 records
             ->get()
             ->transform(function ($financialStatement) {
-                $financialStatement->CATEGORY = isset($financialStatement->Category->prm) 
-                    ? strtoupper($financialStatement->Category->prm) 
+                $financialStatement->CATEGORY = isset($financialStatement->Category->prm)
+                    ? strtoupper($financialStatement->Category->prm)
                     : null;
-                $financialStatement->INSTITUTE = isset($financialStatement->Institute->name) 
-                    ? strtoupper($financialStatement->Institute->name) 
+                $financialStatement->INSTITUTE = isset($financialStatement->Institute->name)
+                    ? strtoupper($financialStatement->Institute->name)
                     : null;
-                $financialStatement->DISTRICT = isset($financialStatement->Institute->District->prm) 
-                    ? strtoupper($financialStatement->Institute->District->prm) 
+                $financialStatement->DISTRICT = isset($financialStatement->Institute->District->prm)
+                    ? strtoupper($financialStatement->Institute->District->prm)
                     : null;
                 $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
 
@@ -422,8 +422,8 @@ public function getFinancialReport(Request $request)
             ->groupBy('rem8')
             ->get()
             ->transform(function ($institute) {
-                $institute->DISTRICT = isset($institute->District->prm) 
-                    ? strtoupper($institute->District->prm) 
+                $institute->DISTRICT = isset($institute->District->prm)
+                    ? strtoupper($institute->District->prm)
                     : null;
                 return $institute;
             });
@@ -474,11 +474,11 @@ public function getFinancialReport(Request $request)
             $subscription->EMAIL = $subscription->mel ?? null;
             $subscription->PHONE = $subscription->hp ?? null;
             $subscription->TOTAL_OUTSTANDING = $subscription->outstanding ?? 0;
-            $subscription->STATUS = $subscription->subscription_status 
+            $subscription->STATUS = $subscription->subscription_status
                 ? Parameter::where('grp', 'subscriptionstatus')
                         ->where('val', $subscription->subscription_status)
                         ->value('prm')
-                : null;            
+                : null;
             return $subscription;
         });
 
@@ -492,9 +492,21 @@ public function getFinancialReport(Request $request)
 
         $years = range(date('Y'), date('Y') - 4);
 
-        return view('base.dashboard', compact('total_institute', 'total_institute_registration', 'total_statement_to_review', 'total_statement_cancelled',
-                                                'institute_registration_list', 'financial_statements_list', 'institute_by_district', 'maxCount', 'subscriptions'
-                                                ,'latest_fin_year', 'totalClients', 'totalEntries', 'years'));
+        return view('base.dashboard', compact(
+            'total_institute',
+            'total_institute_registration',
+            'total_statement_to_review',
+            'total_statement_cancelled',
+            'institute_registration_list',
+            'financial_statements_list',
+            'institute_by_district',
+            'maxCount',
+            'subscriptions',
+            'latest_fin_year',
+            'totalClients',
+            'totalEntries',
+            'years'
+        ));
     }
 
 

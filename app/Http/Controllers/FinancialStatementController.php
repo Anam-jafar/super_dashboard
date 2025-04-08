@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\EditRequestApprove;
 use Illuminate\Support\Facades\Mail;
-
 use App\Models\FinancialStatement;
 use App\Models\Institute;
 use App\Models\Parameter;
@@ -42,7 +41,7 @@ class FinancialStatementController extends Controller
             'attachment2' => 'required|file|mimes:pdf|max:2048',
             'attachment3' => 'required|file|mimes:pdf|max:2048',
     ];
-    
+
 
         return Validator::make($request->all(), $rules)->validate();
     }
@@ -58,7 +57,7 @@ class FinancialStatementController extends Controller
             $newUid = 'C' . str_pad($numericPart, 5, '0', STR_PAD_LEFT);
             $exists = DB::table('client')->where('uid', $newUid)->exists();
 
-        } while ($exists); 
+        } while ($exists);
 
         return $newUid;
     }
@@ -90,19 +89,19 @@ class FinancialStatementController extends Controller
 
     public function create(Request $request, $inst_refno)
     {
-        if($request->isMethod('post')){
+        if ($request->isMethod('post')) {
             $validatedData = $this->validateFinancialStatement($request);
 
-            if($request['draft'] == "true"){
+            if ($request['draft'] == "true") {
                 $validatedData['status'] = 0;
-            
-            }else{
+
+            } else {
                 $validatedData['status'] = 1;
                 $validatedData['submission_date'] = date('Y-m-d H:i:s');
             }
             $financialStatement = FinancialStatement::create($validatedData);
 
-            if($financialStatement){
+            if ($financialStatement) {
                 return redirect()->route('statementList')->with('success', 'Financial Statement created successfully');
             }
 
@@ -177,7 +176,7 @@ class FinancialStatementController extends Controller
         $financialStatement->FIN_STATUS = Parameter::where('grp', 'splkstatus')
                 ->where('val', $financialStatement->status)
                 ->pluck('prm', 'val')
-                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->map(fn ($prm, $val) => ['val' => $val, 'prm' => $prm])
                 ->first();
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
         $instituteType = isset($institute->Category->lvl) ? intval($institute->Category->lvl) : null;
@@ -209,7 +208,7 @@ class FinancialStatementController extends Controller
         $financialStatements = $query
             ->orderBy('id', 'desc')
             ->paginate($perPage)->withQueryString();
-        
+
         $financialStatements->getCollection()->transform(function ($financialStatement) {
             $financialStatement->CATEGORY = isset($financialStatement->Category->prm) ? strtoupper($financialStatement->Category->prm) : null;
             $financialStatement->INSTITUTE = isset($financialStatement->Institute->name) ? strtoupper($financialStatement->Institute->name) : null;
@@ -221,7 +220,7 @@ class FinancialStatementController extends Controller
             $financialStatement->FIN_STATUS = Parameter::where('grp', 'splkstatus')
                 ->where('val', $financialStatement->status)
                 ->pluck('prm', 'val')
-                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->map(fn ($prm, $val) => ['val' => $val, 'prm' => $prm])
                 ->first();
             return $financialStatement;
         });
@@ -230,7 +229,7 @@ class FinancialStatementController extends Controller
         $years = array_combine(range($currentYear - 3, $currentYear + 3), range($currentYear - 3, $currentYear + 3));
 
         $parameters = $this->getCommon();
-        if($districtAccess != null){
+        if ($districtAccess != null) {
             $parameters['districts'] = Parameter::where('grp', 'district')
                 ->where('code', $districtAccess)
                 ->pluck('prm', 'code')
@@ -268,7 +267,7 @@ class FinancialStatementController extends Controller
         $financialStatement->FIN_STATUS = Parameter::where('grp', 'splkstatus')
                 ->where('val', $financialStatement->status)
                 ->pluck('prm', 'val')
-                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->map(fn ($prm, $val) => ['val' => $val, 'prm' => $prm])
                 ->first();
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
         $instituteType = isset($institute->Category->lvl) ? intval($institute->Category->lvl) : null;
@@ -302,8 +301,8 @@ class FinancialStatementController extends Controller
             ->orderBy('id', 'desc')
             ->paginate($perPage)->withQueryString();
 
-        
-            $financialStatements->getCollection()->transform(function ($financialStatement) {
+
+        $financialStatements->getCollection()->transform(function ($financialStatement) {
             $financialStatement->CATEGORY = isset($financialStatement->Category->prm) ? strtoupper($financialStatement->Category->prm) : null;
             $financialStatement->INSTITUTE = isset($financialStatement->Institute->name) ? strtoupper($financialStatement->Institute->name) : null;
             $financialStatement->OFFICER = isset($financialStatement->Institute->con1) ? strtoupper($financialStatement->Institute->con1) : null;
@@ -314,7 +313,7 @@ class FinancialStatementController extends Controller
             $financialStatement->FIN_STATUS = Parameter::where('grp', 'splkstatus')
                 ->where('val', $financialStatement->status)
                 ->pluck('prm', 'val')
-                ->map(fn($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->map(fn ($prm, $val) => ['val' => $val, 'prm' => $prm])
                 ->first();
             return $financialStatement;
         });
@@ -322,7 +321,7 @@ class FinancialStatementController extends Controller
         $currentYear = date('Y');
         $years = array_combine(range($currentYear - 3, $currentYear + 3), range($currentYear - 3, $currentYear + 3));
         $parameters = $this->getCommon();
-        if($districtAccess != null){
+        if ($districtAccess != null) {
             $parameters['districts'] = Parameter::where('grp', 'district')
                 ->where('code', $districtAccess)
                 ->pluck('prm', 'code')
@@ -368,9 +367,9 @@ class FinancialStatementController extends Controller
             'request_edit_date' => null,
             'request_edit_reason' => null]);
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
-        $fin_category = Parameter::where('code' , $financialStatement->fin_category)->value('prm');
-        
-            Mail::to($institute->mel)->send(new EditRequestApprove($institute->name, $fin_category, $financialStatement->fin_year));
+        $fin_category = Parameter::where('code', $financialStatement->fin_category)->value('prm');
+
+        Mail::to($institute->mel)->send(new EditRequestApprove($institute->name, $fin_category, $financialStatement->fin_year));
 
 
         return redirect()->route('statementList')->with('success', 'Permintaan suntingan Penyata Kewangan diluluskan.');

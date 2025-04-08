@@ -127,10 +127,10 @@ class MetrixController extends Controller
 
         $payment_metrix = collect($payment_metrix)
             ->sortByDesc('is_active')
-            ->values(); 
+            ->values();
 
         $perPage = 25;
-        $currentPage = $request->input('page', 1); 
+        $currentPage = $request->input('page', 1);
         $payment_metrix = new \Illuminate\Pagination\LengthAwarePaginator(
             $payment_metrix->forPage($currentPage, $perPage),
             $payment_metrix->count(),

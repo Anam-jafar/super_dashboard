@@ -4,7 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\URL;
-
+use App\Services\InstituteService;
+use App\Services\DistrictAccessService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+
+        // $this->app->singleton(InstituteService::class, function ($app) {
+        //     return new InstituteService();
+        // });
+
+        // $this->app->singleton(DistrictAccessService::class, function ($app) {
+        //     return new DistrictAccessService();
+        // });
+
+
     }
 
     /**

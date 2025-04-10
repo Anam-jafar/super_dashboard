@@ -6,7 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Parameter;
@@ -25,7 +25,7 @@ class Controller extends BaseController
                 'sid' => $user->sch_id ?? null,
                 'uid' => $user->uid ?? null,
                 'lvl' => $user->syslevel ?? null,
-                'ip' => Request::ip(),
+                'ip' => \Illuminate\Support\Facades\Request::ip(),
                 'app' => 'emasjid_dashboard',
                 'act' => $action,
                 'des' => $description,
@@ -101,4 +101,22 @@ class Controller extends BaseController
 
         ];
     }
+
+    protected function fetchParameterOptions(Request $request, array $mappings): array
+    {
+        // Fetch parameters only when the request key is filled and map the result in one step
+        return array_reduce(array_keys($mappings), function ($results, $key) use ($request, $mappings) {
+            if ($request->filled($key)) {
+                [$group, $resultKey] = $mappings[$key];
+                $results[$resultKey] = Parameter::where('grp', $group)
+                    ->where('etc', $request->$key)
+                    ->pluck('prm', 'code')
+                    ->toArray();
+            }
+            return $results;
+        }, []);
+    }
+
+
+
 }

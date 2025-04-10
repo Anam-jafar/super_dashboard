@@ -164,6 +164,9 @@ class InstituteService
         $institute->DISTRICT = $this->getParameter($institute->District);
         $institute->NAME = strtoupper($institute->name ?? '');
         $institute->STATUS = $this->getClientStatus($institute->sta);
+        $institute->REGISTRATION_DATE = $institute->registration_request_date
+            ? date('d/m/Y', strtotime($institute->registration_request_date))
+            : null;
         return $institute;
     }
 

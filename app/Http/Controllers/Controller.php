@@ -97,8 +97,6 @@ class Controller extends BaseController
                 ->pluck('prm', 'val')
                 ->toArray(),
 
-
-
         ];
     }
 

@@ -1,73 +1,66 @@
 <aside class="app-sidebar" id="sidebar">
 
-    <!-- Start::main-sidebar-header -->
-    <div class="main-sidebar-header">
-        <a href="{{ route('index') }}" class="header-logo">
-            <img src="{{ asset('assets/icons/sd_logo.png') }}" alt="logo" class="desktop-logo">
-            <img src="{{ asset('assets/icons/sd_logo_half.svg') }}" alt="logo" class="toggle-dark">
+  <!-- Start::main-sidebar-header -->
+  <div class="main-sidebar-header">
+    <a href="{{ route('index') }}" class="header-logo">
+      <img src="{{ asset('assets/icons/sd_logo.png') }}" alt="logo" class="desktop-logo">
+      <img src="{{ asset('assets/icons/sd_logo_half.svg') }}" alt="logo" class="toggle-dark">
 
-            <img src="{{ asset('assets/icons/sd_logo_full.svg') }}" alt="logo" class="desktop-dark"
-                style="height: 70px; width: 140px;">
+      <img src="{{ asset('assets/icons/sd_logo_full.svg') }}" alt="logo" class="desktop-dark"
+        style="height: 70px; width: 140px;">
 
-            <img src="{{ asset('assets/icons/sd_logo_half.svg') }}" alt="logo" class="toggle-logo">
-            <img src="{{ asset('assets/icons/sd_logo_half.svg') }}" alt="logo" class="toggle-white">
-            <img src="{{ asset('build/assets/images/brand-logos/desktop-white.png') }}" alt="logo"
-                class="desktop-white">
-        </a>
-    </div>
-    <!-- End::main-sidebar-header -->
+      <img src="{{ asset('assets/icons/sd_logo_half.svg') }}" alt="logo" class="toggle-logo">
+      <img src="{{ asset('assets/icons/sd_logo_half.svg') }}" alt="logo" class="toggle-white">
+      <img src="{{ asset('build/assets/images/brand-logos/desktop-white.png') }}" alt="logo" class="desktop-white">
+    </a>
+  </div>
+  <!-- End::main-sidebar-header -->
 
-    <!-- Start::main-sidebar -->
-    <div class="main-sidebar" id="sidebar-scroll">
+  <!-- Start::main-sidebar -->
+  <div class="main-sidebar" id="sidebar-scroll">
 
-        <!-- Start::nav -->
-        <nav class="main-menu-container nav nav-pills flex-col sub-open">
-            <div class="slide-left" id="slide-left">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24"
-                    viewBox="0 0 24 24">
-                    <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
-                </svg>
-            </div>
-            <ul class="main-menu">
+    <!-- Start::nav -->
+    <nav class="main-menu-container nav nav-pills sub-open flex-col">
+      <div class="slide-left" id="slide-left">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191" width="24" height="24" viewBox="0 0 24 24">
+          <path d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"></path>
+        </svg>
+      </div>
+      <ul class="main-menu">
 
-                <!-- Start::slide__category -->
-                <li class="slide__category"><span class="category-name">Utama</span></li>
-                <!-- End::slide__category -->
+        <!-- Start::slide__category -->
+        <li class="slide__category"><span class="category-name">Utama</span></li>
+        <!-- End::slide__category -->
 
-                <li class="slide">
-                    <a href="{{ route('index') }}" class="side-menu__item">
+        <li class="slide">
+          <a href="{{ route('index') }}" class="side-menu__item">
 
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 side-menu__icon" fill="none"
-                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                        </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
 
-                        <span class="side-menu__label">Utama</span>
-                    </a>
-                </li>
+            <span class="side-menu__label">Utama</span>
+          </a>
+        </li>
 
-                <li class="slide">
-                    <a href="{{ route('dashboard') }}" class="side-menu__item">
+        <li class="slide">
+          <a href="{{ route('dashboard') }}" class="side-menu__item">
 
-                        <svg fill="none" class="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24"
-                            stroke-width="0.2" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M6.93745 6.00005H1.31245C0.588727 6.00005 0 5.41132 0 4.68745V1.31245C0 0.588727 0.588727 0 1.31245 0H6.93745C7.66132 0 8.25005 0.588727 8.25005 1.31245V4.68745C8.25005 5.41132 7.66132 6.00005 6.93745 6.00005ZM1.31245 1.125C1.26275 1.12504 1.21509 1.1448 1.17994 1.17994C1.1448 1.21509 1.12504 1.26275 1.125 1.31245V4.68745C1.12501 4.73718 1.14476 4.78487 1.17991 4.82004C1.21505 4.85522 1.26273 4.875 1.31245 4.87505H6.93745C6.9872 4.87503 7.0349 4.85526 7.07008 4.82008C7.10526 4.7849 7.12503 4.7372 7.12505 4.68745V1.31245C7.125 1.26273 7.10522 1.21505 7.07004 1.17991C7.03487 1.14476 6.98718 1.12501 6.93745 1.125H1.31245ZM6.93745 18H1.31245C0.588727 18 0 17.4113 0 16.6875V8.81255C0 8.08868 0.588727 7.49995 1.31245 7.49995H6.93745C7.66132 7.49995 8.25005 8.08868 8.25005 8.81255V16.6875C8.25005 17.4113 7.66132 18 6.93745 18ZM1.31245 8.62495C1.26273 8.625 1.21505 8.64478 1.17991 8.67996C1.14476 8.71513 1.12501 8.76282 1.125 8.81255V16.6875C1.12504 16.7373 1.1448 16.7849 1.17994 16.8201C1.21509 16.8552 1.26275 16.875 1.31245 16.875H6.93745C6.98718 16.875 7.03487 16.8552 7.07004 16.8201C7.10522 16.7849 7.125 16.7373 7.12505 16.6875V8.81255C7.12503 8.7628 7.10526 8.7151 7.07008 8.67992C7.0349 8.64474 6.9872 8.62497 6.93745 8.62495H1.31245ZM16.6875 18H11.0625C10.3387 18 9.74995 17.4113 9.74995 16.6875V13.3125C9.74995 12.5887 10.3387 12 11.0625 12H16.6875C17.4113 12 18 12.5887 18 13.3125V16.6875C18 17.4113 17.4113 18 16.6875 18ZM11.0625 13.125C11.0128 13.125 10.9651 13.1447 10.9299 13.1799C10.8947 13.2151 10.875 13.2628 10.875 13.3125V16.6875C10.875 16.7373 10.8948 16.7849 10.93 16.8201C10.9651 16.8552 11.0128 16.875 11.0625 16.875H16.6875C16.7373 16.875 16.7849 16.8552 16.8201 16.8201C16.8552 16.7849 16.875 16.7373 16.875 16.6875V13.3125C16.875 13.2628 16.8552 13.2151 16.8201 13.18C16.7849 13.1448 16.7373 13.125 16.6875 13.125H11.0625ZM16.6875 10.5H11.0625C10.3387 10.5 9.74995 9.91132 9.74995 9.18745V1.31245C9.74995 0.588727 10.3387 0 11.0625 0H16.6875C17.4113 0 18 0.588727 18 1.31245V9.18745C18 9.91132 17.4113 10.5 16.6875 10.5ZM11.0625 1.125C11.0128 1.12501 10.9651 1.14476 10.93 1.17991C10.8948 1.21505 10.875 1.26273 10.875 1.31245V9.18745C10.875 9.2372 10.8947 9.2849 10.9299 9.32008C10.9651 9.35526 11.0128 9.37503 11.0625 9.37505H16.6875C16.7373 9.375 16.7849 9.35522 16.8201 9.32004C16.8552 9.28487 16.875 9.23718 16.875 9.18745V1.31245C16.875 1.26275 16.8552 1.21509 16.8201 1.17994C16.7849 1.1448 16.7373 1.12504 16.6875 1.125H11.0625Z"
-                                fill="white" />
-                        </svg>
+            <svg fill="none" class="side-menu__icon h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="0.2"
+              stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M6.93745 6.00005H1.31245C0.588727 6.00005 0 5.41132 0 4.68745V1.31245C0 0.588727 0.588727 0 1.31245 0H6.93745C7.66132 0 8.25005 0.588727 8.25005 1.31245V4.68745C8.25005 5.41132 7.66132 6.00005 6.93745 6.00005ZM1.31245 1.125C1.26275 1.12504 1.21509 1.1448 1.17994 1.17994C1.1448 1.21509 1.12504 1.26275 1.125 1.31245V4.68745C1.12501 4.73718 1.14476 4.78487 1.17991 4.82004C1.21505 4.85522 1.26273 4.875 1.31245 4.87505H6.93745C6.9872 4.87503 7.0349 4.85526 7.07008 4.82008C7.10526 4.7849 7.12503 4.7372 7.12505 4.68745V1.31245C7.125 1.26273 7.10522 1.21505 7.07004 1.17991C7.03487 1.14476 6.98718 1.12501 6.93745 1.125H1.31245ZM6.93745 18H1.31245C0.588727 18 0 17.4113 0 16.6875V8.81255C0 8.08868 0.588727 7.49995 1.31245 7.49995H6.93745C7.66132 7.49995 8.25005 8.08868 8.25005 8.81255V16.6875C8.25005 17.4113 7.66132 18 6.93745 18ZM1.31245 8.62495C1.26273 8.625 1.21505 8.64478 1.17991 8.67996C1.14476 8.71513 1.12501 8.76282 1.125 8.81255V16.6875C1.12504 16.7373 1.1448 16.7849 1.17994 16.8201C1.21509 16.8552 1.26275 16.875 1.31245 16.875H6.93745C6.98718 16.875 7.03487 16.8552 7.07004 16.8201C7.10522 16.7849 7.125 16.7373 7.12505 16.6875V8.81255C7.12503 8.7628 7.10526 8.7151 7.07008 8.67992C7.0349 8.64474 6.9872 8.62497 6.93745 8.62495H1.31245ZM16.6875 18H11.0625C10.3387 18 9.74995 17.4113 9.74995 16.6875V13.3125C9.74995 12.5887 10.3387 12 11.0625 12H16.6875C17.4113 12 18 12.5887 18 13.3125V16.6875C18 17.4113 17.4113 18 16.6875 18ZM11.0625 13.125C11.0128 13.125 10.9651 13.1447 10.9299 13.1799C10.8947 13.2151 10.875 13.2628 10.875 13.3125V16.6875C10.875 16.7373 10.8948 16.7849 10.93 16.8201C10.9651 16.8552 11.0128 16.875 11.0625 16.875H16.6875C16.7373 16.875 16.7849 16.8552 16.8201 16.8201C16.8552 16.7849 16.875 16.7373 16.875 16.6875V13.3125C16.875 13.2628 16.8552 13.2151 16.8201 13.18C16.7849 13.1448 16.7373 13.125 16.6875 13.125H11.0625ZM16.6875 10.5H11.0625C10.3387 10.5 9.74995 9.91132 9.74995 9.18745V1.31245C9.74995 0.588727 10.3387 0 11.0625 0H16.6875C17.4113 0 18 0.588727 18 1.31245V9.18745C18 9.91132 17.4113 10.5 16.6875 10.5ZM11.0625 1.125C11.0128 1.12501 10.9651 1.14476 10.93 1.17991C10.8948 1.21505 10.875 1.26273 10.875 1.31245V9.18745C10.875 9.2372 10.8947 9.2849 10.9299 9.32008C10.9651 9.35526 11.0128 9.37503 11.0625 9.37505H16.6875C16.7373 9.375 16.7849 9.35522 16.8201 9.32004C16.8552 9.28487 16.875 9.23718 16.875 9.18745V1.31245C16.875 1.26275 16.8552 1.21509 16.8201 1.17994C16.7849 1.1448 16.7373 1.12504 16.6875 1.125H11.0625Z"
+                fill="white" />
+            </svg>
 
+            <span class="side-menu__label">Dashboard</span>
+          </a>
+        </li>
 
-
-
-                        <span class="side-menu__label">Dashboard</span>
-                    </a>
-                </li>
-
-
-
-                <!-- Start::slide -->
-                {{-- <li class="slide has-sub">
+        <!-- Start::slide -->
+        {{-- <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <i class="ri-arrow-down-s-line side-menu__angle"></i>
                         <svg class="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24" stroke-width=".5"
@@ -98,96 +91,91 @@
                         </li>
                     </ul>
                 </li> --}}
-                <!-- End::slide -->
+        <!-- End::slide -->
 
-                <!-- Start::slide -->
-                <li class="slide has-sub">
-                    <a href="javascript:void(0);" class="side-menu__item">
-                        <i class="ri-arrow-down-s-line side-menu__angle"></i>
-                        <svg class="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24" stroke-width=".5"
-                            stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M15.7234 2.38552H14.2053V0.867479C14.2053 0.390339 13.8149 0 13.338 0H2.2776C1.8005 0 1.41016 0.390339 1.41016 0.867479V14.747C1.41016 15.2241 1.8005 15.6144 2.27764 15.6144H3.79571V17.1325C3.79571 17.6096 4.18588 18 4.66319 18H12.0365C12.5134 18 13.1883 17.7324 13.5355 17.4056L15.9587 15.1246C16.3064 14.7978 16.5905 14.1398 16.5905 13.6627L16.5909 3.25307C16.5908 2.7759 16.2005 2.38552 15.7234 2.38552ZM3.79564 3.25304V14.9638H2.2776C2.16007 14.9638 2.06076 14.8645 2.06076 14.747V0.867479C2.06076 0.749952 2.16007 0.650635 2.2776 0.650635H13.3381C13.4554 0.650635 13.5549 0.749952 13.5549 0.867479V2.38556H4.66312C4.18581 2.38556 3.79564 2.7759 3.79564 3.25304ZM15.5128 14.6509L13.0895 16.9317C13.0399 16.9784 12.9752 17.0241 12.9039 17.0677V15.0723C12.9039 14.9233 12.964 14.7892 13.0631 14.6895C13.163 14.5904 13.2971 14.5301 13.446 14.5301H15.6158C15.5822 14.5758 15.5477 14.6179 15.5128 14.6509ZM15.9398 13.6626C15.9398 13.727 15.928 13.8016 15.9103 13.8794H13.446C12.7879 13.8807 12.2546 14.414 12.2532 15.0722V17.3231C12.1758 17.3387 12.1012 17.3493 12.0364 17.3493H4.66312V17.3493C4.54535 17.3493 4.44628 17.25 4.44628 17.1325V3.253C4.44628 3.13547 4.54538 3.03616 4.66312 3.03616H15.7233C15.8409 3.03616 15.9402 3.13547 15.9402 3.253L15.9398 13.6626Z"
-                                fill="white" />
-                            <path
-                                d="M13.3371 5.42163H7.04796C7.00523 5.42161 6.96292 5.43001 6.92344 5.44635C6.88396 5.46269 6.84809 5.48665 6.81788 5.51686C6.78767 5.54707 6.76371 5.58294 6.74737 5.62242C6.73103 5.66189 6.72263 5.70421 6.72266 5.74693C6.72264 5.78966 6.73104 5.83196 6.74738 5.87144C6.76372 5.91092 6.78768 5.94678 6.81789 5.977C6.8481 6.00721 6.88397 6.03117 6.92345 6.04751C6.96292 6.06385 7.00523 6.07225 7.04796 6.07223H13.3371C13.5167 6.07223 13.6624 5.92672 13.6624 5.74693C13.6624 5.56714 13.5167 5.42163 13.3371 5.42163ZM13.3371 9.759H7.04796C7.00523 9.75897 6.96292 9.76737 6.92344 9.78371C6.88396 9.80005 6.84809 9.82401 6.81788 9.85422C6.78767 9.88444 6.76371 9.92031 6.74737 9.95978C6.73103 9.99926 6.72263 10.0416 6.72266 10.0843C6.72264 10.127 6.73104 10.1693 6.74738 10.2088C6.76372 10.2483 6.78768 10.2842 6.81789 10.3144C6.8481 10.3446 6.88397 10.3685 6.92345 10.3849C6.96292 10.4012 7.00523 10.4096 7.04796 10.4096H13.3371C13.3798 10.4096 13.4221 10.4012 13.4616 10.3848C13.5011 10.3685 13.5369 10.3445 13.5671 10.3143C13.5973 10.2841 13.6213 10.2483 13.6376 10.2088C13.654 10.1693 13.6624 10.127 13.6624 10.0843C13.6624 10.0416 13.654 9.99927 13.6377 9.9598C13.6213 9.92033 13.5973 9.88446 13.5671 9.85426C13.5369 9.82405 13.5011 9.80009 13.4616 9.78374C13.4221 9.7674 13.3798 9.75899 13.3371 9.759ZM10.5178 11.9277H7.04799C6.8682 11.9277 6.72269 12.0732 6.72269 12.253C6.72269 12.4328 6.8682 12.5783 7.04799 12.5783H10.5178C10.6974 12.5783 10.8429 12.4328 10.8429 12.253C10.8429 12.0732 10.6974 11.9277 10.5178 11.9277ZM13.3371 7.59031H7.04796C6.86817 7.59031 6.72266 7.73583 6.72266 7.91562C6.72266 8.0954 6.8682 8.24092 7.04796 8.24092H13.3371C13.5167 8.24092 13.6624 8.0954 13.6624 7.91562C13.6624 7.73583 13.5167 7.59031 13.3371 7.59031Z"
-                                fill="white" />
-                        </svg>
+        <!-- Start::slide -->
+        <li class="slide has-sub">
+          <a href="javascript:void(0);" class="side-menu__item">
+            <i class="ri-arrow-down-s-line side-menu__angle"></i>
+            <svg class="side-menu__icon h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width=".5"
+              stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15.7234 2.38552H14.2053V0.867479C14.2053 0.390339 13.8149 0 13.338 0H2.2776C1.8005 0 1.41016 0.390339 1.41016 0.867479V14.747C1.41016 15.2241 1.8005 15.6144 2.27764 15.6144H3.79571V17.1325C3.79571 17.6096 4.18588 18 4.66319 18H12.0365C12.5134 18 13.1883 17.7324 13.5355 17.4056L15.9587 15.1246C16.3064 14.7978 16.5905 14.1398 16.5905 13.6627L16.5909 3.25307C16.5908 2.7759 16.2005 2.38552 15.7234 2.38552ZM3.79564 3.25304V14.9638H2.2776C2.16007 14.9638 2.06076 14.8645 2.06076 14.747V0.867479C2.06076 0.749952 2.16007 0.650635 2.2776 0.650635H13.3381C13.4554 0.650635 13.5549 0.749952 13.5549 0.867479V2.38556H4.66312C4.18581 2.38556 3.79564 2.7759 3.79564 3.25304ZM15.5128 14.6509L13.0895 16.9317C13.0399 16.9784 12.9752 17.0241 12.9039 17.0677V15.0723C12.9039 14.9233 12.964 14.7892 13.0631 14.6895C13.163 14.5904 13.2971 14.5301 13.446 14.5301H15.6158C15.5822 14.5758 15.5477 14.6179 15.5128 14.6509ZM15.9398 13.6626C15.9398 13.727 15.928 13.8016 15.9103 13.8794H13.446C12.7879 13.8807 12.2546 14.414 12.2532 15.0722V17.3231C12.1758 17.3387 12.1012 17.3493 12.0364 17.3493H4.66312V17.3493C4.54535 17.3493 4.44628 17.25 4.44628 17.1325V3.253C4.44628 3.13547 4.54538 3.03616 4.66312 3.03616H15.7233C15.8409 3.03616 15.9402 3.13547 15.9402 3.253L15.9398 13.6626Z"
+                fill="white" />
+              <path
+                d="M13.3371 5.42163H7.04796C7.00523 5.42161 6.96292 5.43001 6.92344 5.44635C6.88396 5.46269 6.84809 5.48665 6.81788 5.51686C6.78767 5.54707 6.76371 5.58294 6.74737 5.62242C6.73103 5.66189 6.72263 5.70421 6.72266 5.74693C6.72264 5.78966 6.73104 5.83196 6.74738 5.87144C6.76372 5.91092 6.78768 5.94678 6.81789 5.977C6.8481 6.00721 6.88397 6.03117 6.92345 6.04751C6.96292 6.06385 7.00523 6.07225 7.04796 6.07223H13.3371C13.5167 6.07223 13.6624 5.92672 13.6624 5.74693C13.6624 5.56714 13.5167 5.42163 13.3371 5.42163ZM13.3371 9.759H7.04796C7.00523 9.75897 6.96292 9.76737 6.92344 9.78371C6.88396 9.80005 6.84809 9.82401 6.81788 9.85422C6.78767 9.88444 6.76371 9.92031 6.74737 9.95978C6.73103 9.99926 6.72263 10.0416 6.72266 10.0843C6.72264 10.127 6.73104 10.1693 6.74738 10.2088C6.76372 10.2483 6.78768 10.2842 6.81789 10.3144C6.8481 10.3446 6.88397 10.3685 6.92345 10.3849C6.96292 10.4012 7.00523 10.4096 7.04796 10.4096H13.3371C13.3798 10.4096 13.4221 10.4012 13.4616 10.3848C13.5011 10.3685 13.5369 10.3445 13.5671 10.3143C13.5973 10.2841 13.6213 10.2483 13.6376 10.2088C13.654 10.1693 13.6624 10.127 13.6624 10.0843C13.6624 10.0416 13.654 9.99927 13.6377 9.9598C13.6213 9.92033 13.5973 9.88446 13.5671 9.85426C13.5369 9.82405 13.5011 9.80009 13.4616 9.78374C13.4221 9.7674 13.3798 9.75899 13.3371 9.759ZM10.5178 11.9277H7.04799C6.8682 11.9277 6.72269 12.0732 6.72269 12.253C6.72269 12.4328 6.8682 12.5783 7.04799 12.5783H10.5178C10.6974 12.5783 10.8429 12.4328 10.8429 12.253C10.8429 12.0732 10.6974 11.9277 10.5178 11.9277ZM13.3371 7.59031H7.04796C6.86817 7.59031 6.72266 7.73583 6.72266 7.91562C6.72266 8.0954 6.8682 8.24092 7.04796 8.24092H13.3371C13.5167 8.24092 13.6624 8.0954 13.6624 7.91562C13.6624 7.73583 13.5167 7.59031 13.3371 7.59031Z"
+                fill="white" />
+            </svg>
 
+            <span class="side-menu__label"> Rekod Institusi</span>
+          </a>
+          <ul class="slide-menu child1">
+            <li class="slide side-menu__label1">
+              <a href="javascript:void(0)">Rekod Institusi</a>
+            </li>
+            <li class="slide">
+              <a href="{{ route('instituteList') }}" class="side-menu__item">Senarai
+                Institusi</a>
+            </li>
+            <li class="slide">
+              <a href="{{ route('registrationRequests') }}" class="side-menu__item">Permohonan
+                Baru
+              </a>
+            </li>
 
-                        <span class="side-menu__label"> Rekod Institusi</span>
-                    </a>
-                    <ul class="slide-menu child1">
-                        <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">Rekod Institusi</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('instituteList') }}" class="side-menu__item">Senarai
-                                Institusi</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('registrationRequests') }}" class="side-menu__item">Permohonan
-                                Baru
-                            </a>
-                        </li>
-
-                        {{-- <li class="slide">
+            {{-- <li class="slide">
                             <a href="" class="side-menu__item">Permohonan
                                 Baharu</a>
                         </li> --}}
-                    </ul>
-                </li>
-                <!-- End::slide -->
+          </ul>
+        </li>
+        <!-- End::slide -->
 
+        <!-- Start::slide -->
+        <li class="slide has-sub">
+          <a href="javascript:void(0);" class="side-menu__item">
+            <i class="ri-arrow-down-s-line side-menu__angle"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke-width="0.5" stroke="currentColor">
+              <g clip-path="url(#clip0_3476_12823)">
+                <path
+                  d="M12 4.5C12.1989 4.5 12.3897 4.57902 12.5303 4.71967C12.671 4.86032 12.75 5.05109 12.75 5.25C12.75 5.44891 12.671 5.63968 12.5303 5.78033C12.3897 5.92098 12.1989 6 12 6H6C5.80109 6 5.61032 5.92098 5.46967 5.78033C5.32902 5.63968 5.25 5.44891 5.25 5.25C5.25 5.05109 5.32902 4.86032 5.46967 4.71967C5.61032 4.57902 5.80109 4.5 6 4.5H12ZM17.7803 17.7803C17.6396 17.9209 17.4489 17.9998 17.25 17.9998C17.0511 17.9998 16.8604 17.9209 16.7197 17.7803L14.9145 15.975C14.3799 16.3162 13.7592 16.4983 13.125 16.5C12.4575 16.5 11.805 16.3021 11.25 15.9312C10.6949 15.5604 10.2624 15.0333 10.0069 14.4166C9.75146 13.7999 9.68462 13.1213 9.81485 12.4666C9.94507 11.8119 10.2665 11.2105 10.7385 10.7385C11.2105 10.2665 11.8119 9.94507 12.4666 9.81485C13.1213 9.68462 13.7999 9.75146 14.4166 10.0069C15.0333 10.2624 15.5604 10.6949 15.9312 11.25C16.3021 11.805 16.5 12.4575 16.5 13.125C16.4983 13.7592 16.3162 14.3799 15.975 14.9145L17.7803 16.7197C17.9209 16.8604 17.9998 17.0511 17.9998 17.25C17.9998 17.4489 17.9209 17.6396 17.7803 17.7803ZM13.125 15C13.4958 15 13.8584 14.89 14.1667 14.684C14.475 14.478 14.7154 14.1851 14.8573 13.8425C14.9992 13.4999 15.0363 13.1229 14.964 12.7592C14.8916 12.3955 14.713 12.0614 14.4508 11.7992C14.1886 11.537 13.8545 11.3584 13.4908 11.286C13.1271 11.2137 12.7501 11.2508 12.4075 11.3927C12.0649 11.5346 11.772 11.775 11.566 12.0833C11.36 12.3916 11.25 12.7542 11.25 13.125C11.25 13.6223 11.4475 14.0992 11.7992 14.4508C12.1508 14.8025 12.6277 15 13.125 15ZM9.75 16.5H5.25C4.65326 16.5 4.08097 16.2629 3.65901 15.841C3.23705 15.419 3 14.8467 3 14.25V3.75C3 3.15326 3.23705 2.58097 3.65901 2.15901C4.08097 1.73705 4.65326 1.5 5.25 1.5H14.25C14.4489 1.5 14.6397 1.57902 14.7803 1.71967C14.921 1.86032 15 2.05109 15 2.25V8.25C15 8.44891 15.079 8.63968 15.2197 8.78033C15.3603 8.92098 15.5511 9 15.75 9C15.9489 9 16.1397 8.92098 16.2803 8.78033C16.421 8.63968 16.5 8.44891 16.5 8.25V2.25C16.5 1.65326 16.2629 1.08097 15.841 0.65901C15.419 0.237053 14.8467 0 14.25 0L5.25 0C4.2558 0.00119089 3.30267 0.396661 2.59966 1.09966C1.89666 1.80267 1.50119 2.7558 1.5 3.75V14.25C1.50119 15.2442 1.89666 16.1973 2.59966 16.9003C3.30267 17.6033 4.2558 17.9988 5.25 18H9.75C9.94891 18 10.1397 17.921 10.2803 17.7803C10.421 17.6397 10.5 17.4489 10.5 17.25C10.5 17.0511 10.421 16.8603 10.2803 16.7197C10.1397 16.579 9.94891 16.5 9.75 16.5Z"
+                  fill="white" />
+              </g>
+              <defs>
+                <clipPath id="clip0_3476_12823">
+                  <rect width="18" height="18" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
 
+            <span class="side-menu__label">Laporan Kewangan</span>
+          </a>
+          <ul class="slide-menu child1">
+            <li class="slide side-menu__label1">
+              <a href="javascript:void(0)">Laporan Kewangan</a>
+            </li>
 
+            @if (Auth::user()->syslevel != 'ACL03')
+              <li class="slide">
+                <a href="{{ route('statementList') }}" class="side-menu__item">Penghantaran
+                  Baru</a>
+              </li>
+            @endif
 
-
-                <!-- Start::slide -->
-                <li class="slide has-sub">
-                    <a href="javascript:void(0);" class="side-menu__item">
-                        <i class="ri-arrow-down-s-line side-menu__angle"></i>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 side-menu__icon" fill="none"
-                            viewBox="0 0 24 24" stroke-width="0.5" stroke="currentColor">
-                            <g clip-path="url(#clip0_3476_12823)">
-                                <path
-                                    d="M12 4.5C12.1989 4.5 12.3897 4.57902 12.5303 4.71967C12.671 4.86032 12.75 5.05109 12.75 5.25C12.75 5.44891 12.671 5.63968 12.5303 5.78033C12.3897 5.92098 12.1989 6 12 6H6C5.80109 6 5.61032 5.92098 5.46967 5.78033C5.32902 5.63968 5.25 5.44891 5.25 5.25C5.25 5.05109 5.32902 4.86032 5.46967 4.71967C5.61032 4.57902 5.80109 4.5 6 4.5H12ZM17.7803 17.7803C17.6396 17.9209 17.4489 17.9998 17.25 17.9998C17.0511 17.9998 16.8604 17.9209 16.7197 17.7803L14.9145 15.975C14.3799 16.3162 13.7592 16.4983 13.125 16.5C12.4575 16.5 11.805 16.3021 11.25 15.9312C10.6949 15.5604 10.2624 15.0333 10.0069 14.4166C9.75146 13.7999 9.68462 13.1213 9.81485 12.4666C9.94507 11.8119 10.2665 11.2105 10.7385 10.7385C11.2105 10.2665 11.8119 9.94507 12.4666 9.81485C13.1213 9.68462 13.7999 9.75146 14.4166 10.0069C15.0333 10.2624 15.5604 10.6949 15.9312 11.25C16.3021 11.805 16.5 12.4575 16.5 13.125C16.4983 13.7592 16.3162 14.3799 15.975 14.9145L17.7803 16.7197C17.9209 16.8604 17.9998 17.0511 17.9998 17.25C17.9998 17.4489 17.9209 17.6396 17.7803 17.7803ZM13.125 15C13.4958 15 13.8584 14.89 14.1667 14.684C14.475 14.478 14.7154 14.1851 14.8573 13.8425C14.9992 13.4999 15.0363 13.1229 14.964 12.7592C14.8916 12.3955 14.713 12.0614 14.4508 11.7992C14.1886 11.537 13.8545 11.3584 13.4908 11.286C13.1271 11.2137 12.7501 11.2508 12.4075 11.3927C12.0649 11.5346 11.772 11.775 11.566 12.0833C11.36 12.3916 11.25 12.7542 11.25 13.125C11.25 13.6223 11.4475 14.0992 11.7992 14.4508C12.1508 14.8025 12.6277 15 13.125 15ZM9.75 16.5H5.25C4.65326 16.5 4.08097 16.2629 3.65901 15.841C3.23705 15.419 3 14.8467 3 14.25V3.75C3 3.15326 3.23705 2.58097 3.65901 2.15901C4.08097 1.73705 4.65326 1.5 5.25 1.5H14.25C14.4489 1.5 14.6397 1.57902 14.7803 1.71967C14.921 1.86032 15 2.05109 15 2.25V8.25C15 8.44891 15.079 8.63968 15.2197 8.78033C15.3603 8.92098 15.5511 9 15.75 9C15.9489 9 16.1397 8.92098 16.2803 8.78033C16.421 8.63968 16.5 8.44891 16.5 8.25V2.25C16.5 1.65326 16.2629 1.08097 15.841 0.65901C15.419 0.237053 14.8467 0 14.25 0L5.25 0C4.2558 0.00119089 3.30267 0.396661 2.59966 1.09966C1.89666 1.80267 1.50119 2.7558 1.5 3.75V14.25C1.50119 15.2442 1.89666 16.1973 2.59966 16.9003C3.30267 17.6033 4.2558 17.9988 5.25 18H9.75C9.94891 18 10.1397 17.921 10.2803 17.7803C10.421 17.6397 10.5 17.4489 10.5 17.25C10.5 17.0511 10.421 16.8603 10.2803 16.7197C10.1397 16.579 9.94891 16.5 9.75 16.5Z"
-                                    fill="white" />
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_3476_12823">
-                                    <rect width="18" height="18" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-
-                        <span class="side-menu__label">Laporan Kewangan</span>
-                    </a>
-                    <ul class="slide-menu child1">
-                        <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">Laporan Kewangan</a>
-                        </li>
-
-                        @if (Auth::user()->syslevel != 'ACL03')
-                            <li class="slide">
-                                <a href="{{ route('statementList') }}" class="side-menu__item">Penghantaran
-                                    Baru</a>
-                            </li>
-                        @endif
-
-                        <li class="slide">
-                            <a href="{{ route('reviwedStatementList') }}" class="side-menu__item">
-                                Rekod Penghantaran</a>
-                        </li>
-                        {{-- <li class="slide">
+            <li class="slide">
+              <a href="{{ route('reviwedStatementList') }}" class="side-menu__item">
+                Rekod Penghantaran</a>
+            </li>
+            {{-- <li class="slide">
                             <a href="" class="side-menu__item">Rekod Pembatalan</a>
                         </li> --}}
 
-                    </ul>
-                </li>
-                <!-- End::slide -->
+          </ul>
+        </li>
+        <!-- End::slide -->
 
-                {{-- <li class="slide">
+        {{-- <li class="slide">
                     <a href="{{ route('showList', ['type' => 'branches']) }}" class="side-menu__item">
 
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 side-menu__icon" fill="none"
@@ -208,9 +196,8 @@
                     </a>
                 </li> --}}
 
-
-                <!-- Start::slide -->
-                {{-- <li class="slide has-sub">
+        <!-- Start::slide -->
+        {{-- <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">
                         <i class="ri-arrow-down-s-line side-menu__angle"></i>
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 side-menu__icon" fill="none"
@@ -234,148 +221,172 @@
                         </li>
                     </ul>
                 </li> --}}
-                <!-- End::slide -->
+        <!-- End::slide -->
 
-                <!-- Start::slide -->
-                <li class="slide has-sub">
-                    <a href="javascript:void(0);" class="side-menu__item">
-                        <i class="ri-arrow-down-s-line side-menu__angle"></i>
+        <!-- Start::slide -->
+        <li class="slide has-sub">
+          <a href="javascript:void(0);" class="side-menu__item">
+            <i class="ri-arrow-down-s-line side-menu__angle"></i>
 
-                        <svg class="w-6 h-6 side-menu__icon" fill="none" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg" stroke-width=".5" stroke="currentColor">
-                            <path
-                                d="M16.125 0H5.625C5.1279 0.000595447 4.65133 0.198331 4.29983 0.549832C3.94833 0.901334 3.7506 1.3779 3.75 1.875V5.25H0V15.75C0 16.9905 1.0095 18 2.25 18H15.75C16.9905 18 18 16.9905 18 15.75V1.875C18 0.8415 17.1585 0 16.125 0ZM3.75 15.75C3.75 16.5772 3.07725 17.25 2.25 17.25C1.42275 17.25 0.75 16.5772 0.75 15.75V6H3.75V15.75ZM17.25 15.75C17.25 16.5772 16.5772 17.25 15.75 17.25H3.9255C4.29583 16.8382 4.50049 16.3038 4.5 15.75V1.875C4.5 1.25475 5.00475 0.75 5.625 0.75H16.125C16.7453 0.75 17.25 1.25475 17.25 1.875V15.75ZM11.25 5.25H15.75V6H11.25V5.25ZM6 8.25H15.75V9H6V8.25ZM6 11.25H15.75V12H6V11.25ZM6 14.25H15.75V15H6V14.25ZM9.75 2.25H6V6H9.75V2.25ZM9 5.25H6.75V3H9V5.25Z"
-                                fill="white" />
-                        </svg>
+            <svg class="side-menu__icon h-6 w-6" fill="none" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg" stroke-width=".5" stroke="currentColor">
+              <path
+                d="M16.125 0H5.625C5.1279 0.000595447 4.65133 0.198331 4.29983 0.549832C3.94833 0.901334 3.7506 1.3779 3.75 1.875V5.25H0V15.75C0 16.9905 1.0095 18 2.25 18H15.75C16.9905 18 18 16.9905 18 15.75V1.875C18 0.8415 17.1585 0 16.125 0ZM3.75 15.75C3.75 16.5772 3.07725 17.25 2.25 17.25C1.42275 17.25 0.75 16.5772 0.75 15.75V6H3.75V15.75ZM17.25 15.75C17.25 16.5772 16.5772 17.25 15.75 17.25H3.9255C4.29583 16.8382 4.50049 16.3038 4.5 15.75V1.875C4.5 1.25475 5.00475 0.75 5.625 0.75H16.125C16.7453 0.75 17.25 1.25475 17.25 1.875V15.75ZM11.25 5.25H15.75V6H11.25V5.25ZM6 8.25H15.75V9H6V8.25ZM6 11.25H15.75V12H6V11.25ZM6 14.25H15.75V15H6V14.25ZM9.75 2.25H6V6H9.75V2.25ZM9 5.25H6.75V3H9V5.25Z"
+                fill="white" />
+            </svg>
 
+            <span class="side-menu__label">Pelaporan</span>
+          </a>
+          <ul class="slide-menu child1">
+            <li class="slide side-menu__label1">
+              <a href="javascript:void(0)">Pelaporan</a>
+            </li>
+            <li class="slide">
+              <a href="{{ route('submissionCountReport') }}" class="side-menu__item">Jumlah
+                Penghantaran
+              </a>
+            </li>
+            <li class="slide">
+              <a href="{{ route('submissionStatusReport') }}" class="side-menu__item">Status
+                Penghantaran</a>
+            </li>
 
-                        <span class="side-menu__label">Pelaporan</span>
-                    </a>
-                    <ul class="slide-menu child1">
-                        <li class="slide side-menu__label1">
-                            <a href="javascript:void(0)">Pelaporan</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('submissionCountReport') }}" class="side-menu__item">Jumlah
-                                Penghantaran
-                            </a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('submissionStatusReport') }}" class="side-menu__item">Status
-                                Penghantaran</a>
-                        </li>
+            <li class="slide">
+              <a href="{{ route('collectionAndExpenseReport') }}" class="side-menu__item">Kutipan &
+                Perbelanjaan</a>
+            </li>
+            <li class="slide">
+              <a href="{{ route('submissionDetailedReport') }}" class="side-menu__item">Perincian
+                Penghantaran</a>
+            </li>
+            <li class="slide">
+              <a href="{{ route('searchStatementReport') }}" class="side-menu__item">Carian Laporan</a>
+            </li>
+          </ul>
+        </li>
+        <!-- End::slide -->
 
-                        <li class="slide">
-                            <a href="{{ route('collectionAndExpenseReport') }}" class="side-menu__item">Kutipan &
-                                Perbelanjaan</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('submissionDetailedReport') }}" class="side-menu__item">Perincian
-                                Penghantaran</a>
-                        </li>
-                        <li class="slide">
-                            <a href="{{ route('searchStatementReport') }}" class="side-menu__item">Carian Laporan</a>
-                        </li>
-                    </ul>
-                </li>
-                <!-- End::slide -->
+        @if (!in_array(Auth::user()->syslevel, ['ACL02', 'ACL03']))
+          <!-- Start::slide -->
+          <li class="slide has-sub">
+            <a href="javascript:void(0);" class="side-menu__item">
+              <i class="ri-arrow-down-s-line side-menu__angle"></i>
 
+              <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon h-6 w-6" fill="none"
+                viewBox="0 0 24 24" stroke-width=".5" stroke="currentColor">
+                <path
+                  d="M12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3ZM1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12Z"
+                  fill="white" />
+                <path
+                  d="M12 6C12.5523 6 13 6.44772 13 7V11.5858L15.7071 14.2929C16.0976 14.6834 16.0976 15.3166 15.7071 15.7071C15.3166 16.0976 14.6834 16.0976 14.2929 15.7071L11.2929 12.7071C11.1054 12.5196 11 12.2652 11 12V7C11 6.44772 11.4477 6 12 6Z"
+                  fill="white" />
+              </svg>
 
-                @if (!in_array(Auth::user()->syslevel, ['ACL02', 'ACL03']))
-                    <!-- Start::slide -->
-                    <li class="slide has-sub">
-                        <a href="javascript:void(0);" class="side-menu__item">
-                            <i class="ri-arrow-down-s-line side-menu__angle"></i>
+              <span class="side-menu__label">Langganan </span>
+            </a>
+            <ul class="slide-menu child1">
+              <li class="slide side-menu__label1">
+                <a href="javascript:void(0)">Langganan</a>
+              </li>
+              <li class="slide">
+                <a href="{{ route('requestSubscriptions') }}" class="side-menu__item">Permohonan
+                  Baru</a>
+              </li>
+              <li class="slide">
+                <a href="{{ route('outstandingSubscriptions') }}" class="side-menu__item">Rekod
+                  Tunggakan</a>
+              </li>
+              <li class="slide">
+                <a href="{{ route('activeSubscriptions') }}" class="side-menu__item">Rekod Aktif</a>
+              </li>
 
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 side-menu__icon" fill="none"
-                                viewBox="0 0 24 24" stroke-width=".5" stroke="currentColor">
-                                <path
-                                    d="M12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3ZM1 12C1 5.92487 5.92487 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12Z"
-                                    fill="white" />
-                                <path
-                                    d="M12 6C12.5523 6 13 6.44772 13 7V11.5858L15.7071 14.2929C16.0976 14.6834 16.0976 15.3166 15.7071 15.7071C15.3166 16.0976 14.6834 16.0976 14.2929 15.7071L11.2929 12.7071C11.1054 12.5196 11 12.2652 11 12V7C11 6.44772 11.4477 6 12 6Z"
-                                    fill="white" />
-                            </svg>
-
-
-                            <span class="side-menu__label">Langganan </span>
-                        </a>
-                        <ul class="slide-menu child1">
-                            <li class="slide side-menu__label1">
-                                <a href="javascript:void(0)">Langganan</a>
-                            </li>
-                            <li class="slide">
-                                <a href="{{ route('requestSubscriptions') }}" class="side-menu__item">Permohonan
-                                    Baru</a>
-                            </li>
-                            <li class="slide">
-                                <a href="{{ route('outstandingSubscriptions') }}" class="side-menu__item">Rekod
-                                    Tunggakan</a>
-                            </li>
-                            <li class="slide">
-                                <a href="{{ route('activeSubscriptions') }}" class="side-menu__item">Rekod Aktif</a>
-                            </li>
-
-                            {{-- 
+              {{-- 
                         <li class="slide">
                             <a href="{{ route('registerUser') }}" class="side-menu__item">Pentabir Institusi</a>
                         </li> --}}
-                        </ul>
-                    </li>
-                    <!-- End::slide -->
-                @endif
+            </ul>
+          </li>
+          <!-- End::slide -->
+        @endif
 
-                @if (!in_array(Auth::user()->syslevel, ['ACL02', 'ACL03', 'ACL04']))
-                    <!-- Start::slide -->
-                    <li class="slide has-sub">
-                        <a href="javascript:void(0);" class="side-menu__item">
-                            <i class="ri-arrow-down-s-line side-menu__angle"></i>
+        @if (!in_array(Auth::user()->syslevel, ['ACL02', 'ACL03', 'ACL04']))
+          <!-- Start::slide -->
+          <li class="slide has-sub">
+            <a href="javascript:void(0);" class="side-menu__item">
+              <i class="ri-arrow-down-s-line side-menu__angle"></i>
 
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 side-menu__icon" fill="none"
-                                viewBox="0 0 24 24" stroke-width=".5" stroke="currentColor">
-                                <path
-                                    d="M11.2498 4.5C11.2498 2.01825 9.23152 0 6.74977 0C4.26802 0 2.24977 2.01825 2.24977 4.5C2.24977 6.98175 4.26802 9 6.74977 9C9.23152 9 11.2498 6.98175 11.2498 4.5ZM6.74977 7.5C5.09527 7.5 3.74977 6.1545 3.74977 4.5C3.74977 2.8455 5.09527 1.5 6.74977 1.5C8.40427 1.5 9.74977 2.8455 9.74977 4.5C9.74977 6.1545 8.40427 7.5 6.74977 7.5ZM6.74377 11.2035C6.75595 11.3013 6.74875 11.4005 6.72259 11.4954C6.69643 11.5904 6.65181 11.6793 6.59129 11.757C6.53076 11.8347 6.45552 11.8998 6.36985 11.9484C6.28419 11.9971 6.18978 12.0284 6.09202 12.0405C4.82373 12.2014 3.65763 12.8193 2.81214 13.7782C1.96666 14.7372 1.4998 15.9715 1.49902 17.25C1.49902 17.4489 1.42001 17.6397 1.27935 17.7803C1.1387 17.921 0.947936 18 0.749023 18C0.550111 18 0.359346 17.921 0.218693 17.7803C0.0780411 17.6397 -0.000976562 17.4489 -0.000976562 17.25C-0.000976562 13.8517 2.53852 10.9725 5.90602 10.5525C6.10334 10.5285 6.30213 10.5836 6.45897 10.7057C6.6158 10.8278 6.71792 11.0071 6.74302 11.2043L6.74377 11.2035ZM17.0218 14.3497L16.2913 13.9282C16.4158 13.5555 16.4998 13.164 16.4998 12.7493C16.4998 12.3345 16.4165 11.943 16.2913 11.5702L17.0218 11.1488C17.1926 11.0486 17.3169 10.8849 17.3676 10.6934C17.4182 10.502 17.391 10.2982 17.292 10.1267C17.193 9.95521 17.0301 9.82983 16.839 9.77794C16.6478 9.72605 16.4439 9.75186 16.2718 9.84975L15.542 10.2712C15.0091 9.66159 14.2923 9.24195 13.4998 9.07575V8.25C13.4998 8.05109 13.4208 7.86032 13.2801 7.71967C13.1395 7.57902 12.9487 7.5 12.7498 7.5C12.5509 7.5 12.3601 7.57902 12.2194 7.71967C12.0788 7.86032 11.9998 8.05109 11.9998 8.25V9.07575C11.2075 9.24251 10.4908 9.66205 9.95752 10.2712L9.22777 9.84975C9.0556 9.75186 8.85171 9.72605 8.66057 9.77794C8.46944 9.82983 8.3066 9.95521 8.20757 10.1267C8.10854 10.2982 8.08137 10.502 8.132 10.6934C8.18262 10.8849 8.30692 11.0486 8.47777 11.1488L9.20827 11.5702C9.08377 11.943 8.99977 12.3345 8.99977 12.7493C8.99977 13.164 9.08302 13.5555 9.20827 13.9282L8.47777 14.3497C8.30692 14.4499 8.18262 14.6136 8.132 14.8051C8.08137 14.9965 8.10854 15.2003 8.20757 15.3718C8.3066 15.5433 8.46944 15.6687 8.66057 15.7206C8.85171 15.7725 9.0556 15.7466 9.22777 15.6488L9.95752 15.2272C10.4904 15.8369 11.2073 16.2565 11.9998 16.4227V17.2485C11.9998 17.4474 12.0788 17.6382 12.2194 17.7788C12.3601 17.9195 12.5509 17.9985 12.7498 17.9985C12.9487 17.9985 13.1395 17.9195 13.2801 17.7788C13.4208 17.6382 13.4998 17.4474 13.4998 17.2485V16.4227C14.292 16.256 15.0087 15.8364 15.542 15.2272L16.2718 15.6488C16.357 15.6983 16.4512 15.7305 16.5489 15.7435C16.6466 15.7565 16.7459 15.7501 16.8411 15.7246C16.9363 15.6991 17.0256 15.655 17.1037 15.5949C17.1818 15.5347 17.2472 15.4598 17.2963 15.3743C17.3957 15.202 17.4227 14.9973 17.3712 14.8052C17.3197 14.613 17.194 14.4492 17.0218 14.3497ZM12.7498 14.9993C11.5093 14.9993 10.4998 13.9898 10.4998 12.7493C10.4998 11.5087 11.5093 10.4992 12.7498 10.4992C13.9903 10.4992 14.9998 11.5087 14.9998 12.7493C14.9998 13.9898 13.9903 14.9993 12.7498 14.9993Z"
-                                    fill="white" />
-                            </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon h-6 w-6" fill="none"
+                viewBox="0 0 24 24" stroke-width=".5" stroke="currentColor">
+                <path
+                  d="M11.2498 4.5C11.2498 2.01825 9.23152 0 6.74977 0C4.26802 0 2.24977 2.01825 2.24977 4.5C2.24977 6.98175 4.26802 9 6.74977 9C9.23152 9 11.2498 6.98175 11.2498 4.5ZM6.74977 7.5C5.09527 7.5 3.74977 6.1545 3.74977 4.5C3.74977 2.8455 5.09527 1.5 6.74977 1.5C8.40427 1.5 9.74977 2.8455 9.74977 4.5C9.74977 6.1545 8.40427 7.5 6.74977 7.5ZM6.74377 11.2035C6.75595 11.3013 6.74875 11.4005 6.72259 11.4954C6.69643 11.5904 6.65181 11.6793 6.59129 11.757C6.53076 11.8347 6.45552 11.8998 6.36985 11.9484C6.28419 11.9971 6.18978 12.0284 6.09202 12.0405C4.82373 12.2014 3.65763 12.8193 2.81214 13.7782C1.96666 14.7372 1.4998 15.9715 1.49902 17.25C1.49902 17.4489 1.42001 17.6397 1.27935 17.7803C1.1387 17.921 0.947936 18 0.749023 18C0.550111 18 0.359346 17.921 0.218693 17.7803C0.0780411 17.6397 -0.000976562 17.4489 -0.000976562 17.25C-0.000976562 13.8517 2.53852 10.9725 5.90602 10.5525C6.10334 10.5285 6.30213 10.5836 6.45897 10.7057C6.6158 10.8278 6.71792 11.0071 6.74302 11.2043L6.74377 11.2035ZM17.0218 14.3497L16.2913 13.9282C16.4158 13.5555 16.4998 13.164 16.4998 12.7493C16.4998 12.3345 16.4165 11.943 16.2913 11.5702L17.0218 11.1488C17.1926 11.0486 17.3169 10.8849 17.3676 10.6934C17.4182 10.502 17.391 10.2982 17.292 10.1267C17.193 9.95521 17.0301 9.82983 16.839 9.77794C16.6478 9.72605 16.4439 9.75186 16.2718 9.84975L15.542 10.2712C15.0091 9.66159 14.2923 9.24195 13.4998 9.07575V8.25C13.4998 8.05109 13.4208 7.86032 13.2801 7.71967C13.1395 7.57902 12.9487 7.5 12.7498 7.5C12.5509 7.5 12.3601 7.57902 12.2194 7.71967C12.0788 7.86032 11.9998 8.05109 11.9998 8.25V9.07575C11.2075 9.24251 10.4908 9.66205 9.95752 10.2712L9.22777 9.84975C9.0556 9.75186 8.85171 9.72605 8.66057 9.77794C8.46944 9.82983 8.3066 9.95521 8.20757 10.1267C8.10854 10.2982 8.08137 10.502 8.132 10.6934C8.18262 10.8849 8.30692 11.0486 8.47777 11.1488L9.20827 11.5702C9.08377 11.943 8.99977 12.3345 8.99977 12.7493C8.99977 13.164 9.08302 13.5555 9.20827 13.9282L8.47777 14.3497C8.30692 14.4499 8.18262 14.6136 8.132 14.8051C8.08137 14.9965 8.10854 15.2003 8.20757 15.3718C8.3066 15.5433 8.46944 15.6687 8.66057 15.7206C8.85171 15.7725 9.0556 15.7466 9.22777 15.6488L9.95752 15.2272C10.4904 15.8369 11.2073 16.2565 11.9998 16.4227V17.2485C11.9998 17.4474 12.0788 17.6382 12.2194 17.7788C12.3601 17.9195 12.5509 17.9985 12.7498 17.9985C12.9487 17.9985 13.1395 17.9195 13.2801 17.7788C13.4208 17.6382 13.4998 17.4474 13.4998 17.2485V16.4227C14.292 16.256 15.0087 15.8364 15.542 15.2272L16.2718 15.6488C16.357 15.6983 16.4512 15.7305 16.5489 15.7435C16.6466 15.7565 16.7459 15.7501 16.8411 15.7246C16.9363 15.6991 17.0256 15.655 17.1037 15.5949C17.1818 15.5347 17.2472 15.4598 17.2963 15.3743C17.3957 15.202 17.4227 14.9973 17.3712 14.8052C17.3197 14.613 17.194 14.4492 17.0218 14.3497ZM12.7498 14.9993C11.5093 14.9993 10.4998 13.9898 10.4998 12.7493C10.4998 11.5087 11.5093 10.4992 12.7498 10.4992C13.9903 10.4992 14.9998 11.5087 14.9998 12.7493C14.9998 13.9898 13.9903 14.9993 12.7498 14.9993Z"
+                  fill="white" />
+              </svg>
 
-                            <span class="side-menu__label">Pengurusan Pengguna</span>
-                        </a>
-                        <ul class="slide-menu child1">
-                            <li class="slide side-menu__label1">
-                                <a href="javascript:void(0)">Pengurusan Pengguna</a>
-                            </li>
-                            <li class="slide">
-                                <a href="{{ route('userList') }}" class="side-menu__item">Senarai
-                                    Pengguna</a>
-                            </li>
-                            <li class="slide">
-                                <a href="{{ route('activityLogs') }}" class="side-menu__item">Audit Trail</a>
-                            </li>
+              <span class="side-menu__label">Pengurusan Pengguna</span>
+            </a>
+            <ul class="slide-menu child1">
+              <li class="slide side-menu__label1">
+                <a href="javascript:void(0)">Pengurusan Pengguna</a>
+              </li>
+              <li class="slide">
+                <a href="{{ route('userList') }}" class="side-menu__item">Senarai
+                  Pengguna</a>
+              </li>
+              <li class="slide">
+                <a href="{{ route('activityLogs') }}" class="side-menu__item">Audit Trail</a>
+              </li>
 
-                            {{-- 
+              {{-- 
                         <li class="slide">
                             <a href="{{ route('registerUser') }}" class="side-menu__item">Pentabir Institusi</a>
                         </li> --}}
-                        </ul>
-                    </li>
-                    <!-- End::slide -->
-                @endif
+            </ul>
+          </li>
+          <!-- End::slide -->
+        @endif
 
+        @if (!in_array(Auth::user()->syslevel, ['ACL02', 'ACL03', 'ACL04']))
+          <!-- Start::slide -->
+          <li class="slide has-sub">
+            <a href="javascript:void(0);" class="side-menu__item">
+              <i class="ri-arrow-down-s-line side-menu__angle"></i>
 
+              <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon h-6 w-6" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.43.992a6.759 6.759 0 010 .255c-.008.378.137.75.43.99l1.004.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
 
-
-
-
+              <span class="side-menu__label">Settings</span>
+            </a>
+            <ul class="slide-menu child1">
+              <li class="slide side-menu__label1">
+                <a href="javascript:void(0)">Settings</a>
+              </li>
+              <li class="slide">
+                <a href="{{ route('settingsCountry') }}" class="side-menu__item">
+                  Country</a>
+              </li>
+              <li class="slide">
+                <a href="{{ route('settingsList') }}" class="side-menu__item">
+                  Settings</a>
+              </li>
 
             </ul>
-            <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
-                    width="24" height="24" viewBox="0 0 24 24">
-                    <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
-                </svg></div>
-        </nav>
-        <!-- End::nav -->
+          </li>
+          <!-- End::slide -->
+        @endif
 
-    </div>
-    <!-- End::main-sidebar -->
+      </ul>
+      <div class="slide-right" id="slide-right"><svg xmlns="http://www.w3.org/2000/svg" fill="#7b8191"
+          width="24" height="24" viewBox="0 0 24 24">
+          <path d="M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z"></path>
+        </svg></div>
+    </nav>
+    <!-- End::nav -->
+
+  </div>
+  <!-- End::main-sidebar -->
 
 </aside>

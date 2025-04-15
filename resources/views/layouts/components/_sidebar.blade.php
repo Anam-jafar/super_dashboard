@@ -347,9 +347,8 @@
 
         @if (!in_array(Auth::user()->syslevel, ['ACL02', 'ACL03', 'ACL04']))
           <!-- Start::slide -->
-          <li class="slide has-sub">
-            <a href="javascript:void(0);" class="side-menu__item">
-              <i class="ri-arrow-down-s-line side-menu__angle"></i>
+          <li class="slide">
+            <a href="{{ route('settingsList') }}" class="side-menu__item">
 
               <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon h-6 w-6" fill="none"
                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -360,20 +359,6 @@
 
               <span class="side-menu__label">Settings</span>
             </a>
-            <ul class="slide-menu child1">
-              <li class="slide side-menu__label1">
-                <a href="javascript:void(0)">Settings</a>
-              </li>
-              <li class="slide">
-                <a href="{{ route('settingsCountry') }}" class="side-menu__item">
-                  Country</a>
-              </li>
-              <li class="slide">
-                <a href="{{ route('settingsList') }}" class="side-menu__item">
-                  Settings</a>
-              </li>
-
-            </ul>
           </li>
           <!-- End::slide -->
         @endif

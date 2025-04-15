@@ -243,6 +243,19 @@ class ReportController extends Controller
 
         // Fetch parameters
         $parameters = $this->getCommon();
+
+
+        if ($districtAccess != null) {
+            $parameters['districts'] = Parameter::where('grp', 'district')
+                ->where('code', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
+
         if ($request->filled('cate1')) {
             $parameters['categories'] = Parameter::where('grp', 'type_CLIENT')
                 ->where('etc', $request->cate1)
@@ -332,6 +345,17 @@ class ReportController extends Controller
         // Fetch parameters
         $parameters = $this->getCommon();
 
+
+        if ($districtAccess != null) {
+            $parameters['districts'] = Parameter::where('grp', 'district')
+                ->where('code', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
         // Return view with data
         return view('report.collection_expense', [
             'years' => $years,
@@ -403,6 +427,18 @@ class ReportController extends Controller
 
         // Fetch parameters
         $parameters = $this->getCommon();
+
+        if ($districtAccess != null) {
+            $parameters['districts'] = Parameter::where('grp', 'district')
+                ->where('code', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
+
 
         // Return view with data
         return view('report.submission_detailed', [
@@ -563,6 +599,23 @@ class ReportController extends Controller
 
         // Fetch parameters
         $parameters = $this->getCommon();
+
+
+        $districtAccess = DB::table('usr')
+                ->where('mel', Auth::user()->mel)
+                ->value('joblvl');
+
+
+        if ($districtAccess != null) {
+            $parameters['districts'] = Parameter::where('grp', 'district')
+                ->where('code', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
+                ->where('etc', $districtAccess)
+                ->pluck('prm', 'code')
+                ->toArray();
+        }
 
         // Return view with data
         return view('report.report_search', [

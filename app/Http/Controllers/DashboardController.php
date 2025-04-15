@@ -156,6 +156,28 @@ class DashboardController extends Controller
         ];
     }
 
+    private function _getDistrictRow($district)
+    {
+        $categories = Parameter::where('grp', 'type_CLIENT')->pluck('code');
+
+        return DB::table('client AS c')
+            ->select([
+                'c.rem8',
+                ...array_map(function ($category) {
+                    return DB::raw("SUM(CASE WHEN cate = '" . str_replace("'", "''", $category) . "' THEN 1 ELSE 0 END) AS " . str_replace(' ', '_', $category));
+                }, $categories->toArray()),
+                DB::raw("SUM(CASE WHEN sta = 0 THEN 1 ELSE 0 END) AS Total_Active"),
+                DB::raw("SUM(CASE WHEN sta = 1 THEN 1 ELSE 0 END) AS Total_Inactive"),
+                DB::raw("COUNT(*) AS Total")
+            ])
+            ->where(self::CLIENT_BASE_QUERY)
+            ->where('app', 'CLIENT')
+            ->where('isdel', 0)
+            ->where('c.rem8', $district) // <-- Filter by the given district
+            ->groupBy('c.rem8')
+            ->first(); // only one district row expected
+    }
+
     private function _getDistrictTable()
     {
         $categories = Parameter::where('grp', 'type_CLIENT')->pluck('code');
@@ -210,6 +232,7 @@ class DashboardController extends Controller
             'kariahNationality' => $this->_getKariahNationality(),
             'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn ($item) => [$item->prm => $item->total]),
             'mosqueActiveInactive' => $this->_getMosqueActiveInactive($city),
+            'districtTable' => $this->_getDistrictRow($city),
             'city' => $city,
             'kariahPerMosqueType' => $this->_getKariahPerMosquesType($city),
             'categories' => Parameter::where('grp', 'type_CLIENT')->pluck('prm', 'code')->toArray(),
@@ -271,6 +294,16 @@ class DashboardController extends Controller
     // Controller methods for web routes
     public function dashboard()
     {
+
+
+        $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
+
+        if ($districtAccess !== null) {
+            return redirect()->route('mosquesInCityDetails', ['city' => $districtAccess]);
+        }
+
+
+
         $data = [
             'totalMosques' => $this->_getTotalMosques(),
             'totalKariah' => $this->_getTotalKariah(),

@@ -243,8 +243,6 @@ class ReportController extends Controller
 
         // Fetch parameters
         $parameters = $this->getCommon();
-
-
         if ($districtAccess != null) {
             $parameters['districts'] = Parameter::where('grp', 'district')
                 ->where('code', $districtAccess)
@@ -255,7 +253,6 @@ class ReportController extends Controller
                 ->pluck('prm', 'code')
                 ->toArray();
         }
-
         if ($request->filled('cate1')) {
             $parameters['categories'] = Parameter::where('grp', 'type_CLIENT')
                 ->where('etc', $request->cate1)

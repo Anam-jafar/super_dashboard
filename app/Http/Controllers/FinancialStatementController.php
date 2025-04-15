@@ -49,8 +49,11 @@ class FinancialStatementController extends Controller
             return redirect()->route('statementList')->with('success', 'Financial Statement updated successfully');
         }
         $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
-        $financialStatement->FIN_STATUS = $this->financialStatementService->getFinStatus($financialStatement->status);
-
+        $financialStatement->FIN_STATUS = Parameter::where('grp', 'splkstatus')
+                ->where('val', $financialStatement->status)
+                ->pluck('prm', 'val')
+                ->map(fn ($prm, $val) => ['val' => $val, 'prm' => $prm])
+                ->first();
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
         $instituteType = isset($institute->Category->lvl) ? intval($institute->Category->lvl) : null;
         $currentYear = date('Y');

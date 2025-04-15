@@ -8,6 +8,7 @@ use App\Http\Controllers\InstituteController;
 use App\Http\Controllers\FinancialStatementController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Response;
 
 /*
@@ -86,6 +87,16 @@ Route::prefix('mais')->group(function () {
         Route::get('/report/collection-expense', [ReportController::class, 'collectionAndExpense'])->name('collectionAndExpenseReport');
         Route::get('/report/statement-submission', [ReportController::class, 'submissionDetailed'])->name('submissionDetailedReport');
         Route::match(['get', 'post'], '/report/search-statement', [ReportController::class, 'searchStatement'])->name('searchStatementReport');
+
+        Route::get('/setting/list', [SettingController::class, 'list'])->name('settingsList');
+        Route::match(['get', 'post'], '/setting/create', [SettingController::class, 'create'])->name('settingsCreate');
+        Route::match(['get', 'post'], '/setting/edit/{id}', [SettingController::class, 'edit'])->name('settingsEdit');
+        Route::get('/setting/country', [SettingController::class, 'country'])->name('settingsCountry');
+        Route::match(['get', 'post'], '/setting/country/create', [SettingController::class, 'countryCreate'])->name('settingsCountryCreate');
+        Route::match(['get', 'post'], '/setting/country/edit/{id}', [SettingController::class, 'countryEdit'])->name('settingsCountryEdit');
+        Route::get('/setting/institute', [SettingController::class, 'institute'])->name('settingsInstitute');
+        Route::match(['get', 'post'], '/setting/institute/create', [SettingController::class, 'instituteCreate'])->name('settingsInstituteCreate');
+        Route::match(['get', 'post'], '/setting/institute/edit/{id}', [SettingController::class, 'instituteEdit'])->name('settingsInstituteEdit');
 
 
 

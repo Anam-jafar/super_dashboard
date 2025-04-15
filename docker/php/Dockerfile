@@ -17,7 +17,9 @@ RUN docker-php-ext-install gettext intl pdo_mysql zip \
     && docker-php-ext-install -j$(nproc) gd
 
 # Install MongoDB extension
-RUN pecl install mongodb && docker-php-ext-enable mongodb
+# RUN pecl install mongodb && docker-php-ext-enable mongodb
+RUN pecl install mongodb-1.20.0 \
+    && docker-php-ext-enable mongodb
 
 # Set working directory
 WORKDIR /var/www/html
@@ -27,7 +29,6 @@ COPY . .
 
 # Install Composer dependencies
 RUN composer install \
-    --no-dev \
     --no-interaction \
     --no-plugins \
     --no-scripts \

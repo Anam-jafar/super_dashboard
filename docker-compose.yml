@@ -7,6 +7,9 @@ services:
             dockerfile: ./docker/php/Dockerfile
         container_name: mais_dashboard_app
         volumes:
+            - ./resources/views:/var/www/html/resources/views # For Dev
+            - ./app:/var/www/html/app # For Dev
+            - ./routes:/var/www/html/routes # For Dev
             - /home/static_files:/var/www/static_files
             - build-assets:/var/www/html/public/build
         environment:

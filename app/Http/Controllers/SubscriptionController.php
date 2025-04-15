@@ -10,62 +10,28 @@ use App\Models\Parameter;
 use Illuminate\Support\Facades\Http;
 use App\Mail\SubscriptionApprove;
 use Illuminate\Support\Facades\Mail;
+use App\Services\DistrictAccessService;
+use App\Services\SubscriptionService;
 
 class SubscriptionController extends Controller
 {
-    private function applyFilters($query, Request $request)
+    protected $districtAccessService;
+
+    public function __construct(DistrictAccessService $districtAccessService, SubscriptionService $subscriptionService)
     {
-        foreach ($request->all() as $field => $value) {
-            // Use isset() instead of !empty() to allow filtering when value is 0
-            if (isset($value) && \Schema::hasColumn('client', $field)) {
-                $query->where($field, $value);
-            }
-        }
-
-        if ($request->filled('search')) {
-            $searchTerm = $request->input('search');
-            $query->where('name', 'like', "%{$searchTerm}%");
-        }
-
-        return $query;
+        $this->subscriptionService = $subscriptionService;
+        $this->districtAccessService = $districtAccessService;
     }
-
 
     public function activeSubscriptions(Request $request)
     {
-
-        $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
-
         $per_page = $request->per_page ?? 10;
-
         $query = Institute::query()
             ->where('subscription_status', 3)
             ->orderBy('id', 'desc');
-
-        if ($districtAccess != null) {
-            $query->where('rem8', $districtAccess);
-        }
-
-        $query = $this->applyFilters($query, $request);
-
+        $query = $this->subscriptionService->applyFilters($query, $request);
         $subscriptions = $query->paginate($per_page)->withQueryString();
-
-        $subscriptions->getCollection()->transform(function ($subscription) {
-            $subscription->NAME = isset($subscription->name) ? strtoupper($subscription->name) : null;
-            $subscription->TYPE = isset($subscription->Type->prm) ? strtoupper($subscription->Type->prm) : null;
-            $subscription->DISTRICT = isset($subscription->District->prm) ? strtoupper($subscription->District->prm) : null;
-            $subscription->SUBDISTRICT = isset($subscription->Subdistrict->prm) ? strtoupper($subscription->Subdistrict->prm) : null;
-            $subscription->CATEGORY = isset($subscription->Category->prm) ? strtoupper($subscription->Category->prm) : null;
-            $subscription->SUBSCRIPTION_DATE = date('d-m-Y', $subscription->subscription_request_date);
-            $subscription->SUBSCRIPTION_STATUS = Parameter::where('grp', 'subscriptionstatus')
-                ->where('val', $subscription->subscription_status)
-                ->pluck('prm', 'val')
-                ->map(fn ($prm, $val) => ['val' => $val, 'prm' => $prm])
-                ->first();
-
-            return $subscription;
-        });
-
+        $subscriptions->getCollection()->transform(fn ($subscription) => $this->subscriptionService->transformRelations($subscription, true));
         $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
 
         $packages = DB::table('fin_coa_item')
@@ -74,145 +40,39 @@ class SubscriptionController extends Controller
             ->toArray();
 
         $parameters = $this->getCommon();
-
-        if ($districtAccess != null) {
-            $parameters['districts'] = Parameter::where('grp', 'district')
-                ->where('code', $districtAccess)
-                ->pluck('prm', 'code')
-                ->toArray();
-            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
-                ->where('etc', $districtAccess)
-                ->pluck('prm', 'code')
-                ->toArray();
-        }
-
-        if ($request->filled('cate1')) {
-            $parameters['categories'] = Parameter::where('grp', 'type_CLIENT')
-                ->where('etc', $request->cate1)
-                ->pluck('prm', 'code')
-                ->toArray();
-        }
-
-        if ($request->filled('rem8')) {
-            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
-                ->where('etc', $request->rem8)
-                ->pluck('prm', 'code')
-                ->toArray();
-        }
-
+        $parameters = array_merge($parameters, $this->districtAccessService->fetchDistrictParameters());
+        $filteredParameters = $this->fetchParameterOptions($request, [
+            'cate1' => ['type_CLIENT', 'categories'],
+            'rem8'  => ['subdistrict', 'subdistricts'],
+        ]);
+        $parameters = array_merge($parameters, $filteredParameters);
         return view('subscription.active_subscription', compact(['subscriptions', 'parameters', 'statuses', 'packages']));
-    }
-
-    public function requestSubscriptions_(Request $request)
-    {
-        $per_page = $request->per_page ?? 10;
-
-        // Query builder for subscriptions with joinSub
-        $query = DB::table('client')
-            ->where('subscription_status', 1);
-
-        // Apply search filter (searching by name)
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
-
-        $subscriptions = $query->paginate($per_page)->withQueryString();
-
-        $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
-
-
-
-
-        $packages = DB::table('fin_coa_item')
-            ->where('type', 'sales')
-            ->pluck('val', 'id') // Swap id and val correctly
-            ->toArray();
-
-        return view('subscription.new_subscription_application', compact(['subscriptions', 'statuses', 'daerah', 'instituteType', 'packages']));
     }
 
     public function requestSubscriptions(Request $request)
     {
-
-        $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
-
         $per_page = $request->per_page ?? 10;
-
         $query = Institute::query()
             ->where('subscription_status', 1)
             ->orderBy('id', 'desc');
-
-        if ($districtAccess != null) {
-            $query->where('rem8', $districtAccess);
-        }
-
-        $query = $this->applyFilters($query, $request);
+        $query = $this->subscriptionService->applyFilters($query, $request);
 
         $subscriptions = $query->paginate($per_page)->withQueryString();
-
-        $subscriptions->getCollection()->transform(function ($subscription) {
-            $subscription->NAME = isset($subscription->name) ? strtoupper($subscription->name) : null;
-            $subscription->TYPE = isset($subscription->Type->prm) ? strtoupper($subscription->Type->prm) : null;
-            $subscription->DISTRICT = isset($subscription->District->prm) ? strtoupper($subscription->District->prm) : null;
-            $subscription->SUBDISTRICT = isset($subscription->Subdistrict->prm) ? strtoupper($subscription->Subdistrict->prm) : null;
-            $subscription->CATEGORY = isset($subscription->Category->prm) ? strtoupper($subscription->Category->prm) : null;
-            $subscription->SUBSCRIPTION_DATE = date('d-m-Y', $subscription->subscription_request_date);
-            $subscription->SUBSCRIPTION_STATUS = Parameter::where('grp', 'subscriptionstatus')
-                ->where('val', $subscription->subscription_status)
-                ->pluck('prm', 'val')
-                ->map(fn ($prm, $val) => ['val' => $val, 'prm' => $prm])
-                ->first();
-
-            $latestSubmission = DB::table('splk_submission')
-                ->where('inst_refno', $subscription->uid)
-                ->where('fin_category', 'STM02')
-                ->orderByDesc('fin_year')
-                ->limit(1)
-                ->first(['total_income', 'fin_year']);
-
-            $subscription->COLLECTION = [
-                'TOTAL_COLLECTION' => $latestSubmission->total_income ?? null,
-                'FIN_YEAR' => $latestSubmission->fin_year ?? null,
-            ];
-
-            return $subscription;
-        });
-
-        $statuses = DB::table('type')->where('grp', 'clientstatus')->get();
-
+        $subscriptions->getCollection()->transform(fn ($subscription) => $this->subscriptionService->transformRelations($subscription));
         $packages = DB::table('fin_coa_item')
             ->where('type', 'sales')
             ->pluck('val', 'id') // Swap id and val correctly
             ->toArray();
 
         $parameters = $this->getCommon();
+        $parameters = array_merge($parameters, $this->districtAccessService->fetchDistrictParameters());
+        $filteredParameters = $this->fetchParameterOptions($request, [
+            'cate1' => ['type_CLIENT', 'categories'],
+            'rem8'  => ['subdistrict', 'subdistricts'],
+        ]);
+        $parameters = array_merge($parameters, $filteredParameters);
 
-        if ($districtAccess != null) {
-            $parameters['districts'] = Parameter::where('grp', 'district')
-                ->where('code', $districtAccess)
-                ->pluck('prm', 'code')
-                ->toArray();
-            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
-                ->where('etc', $districtAccess)
-                ->pluck('prm', 'code')
-                ->toArray();
-        }
-
-        if ($request->filled('cate1')) {
-            $parameters['categories'] = Parameter::where('grp', 'type_CLIENT')
-                ->where('etc', $request->cate1)
-                ->pluck('prm', 'code')
-                ->toArray();
-        }
-
-        if ($request->filled('rem8')) {
-            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
-                ->where('etc', $request->rem8)
-                ->pluck('prm', 'code')
-                ->toArray();
-        }
-
-        return view('subscription.new_subscription_application', compact(['subscriptions', 'parameters', 'statuses', 'packages']));
+        return view('subscription.new_subscription_application', compact(['subscriptions', 'parameters', 'packages']));
     }
 
 
@@ -225,7 +85,6 @@ class SubscriptionController extends Controller
 
         $query = DB::table('client as c');
 
-        // Apply district access restriction
         if ($districtAccess != null) {
             $query->where('c.rem8', $districtAccess);
         }
@@ -314,33 +173,13 @@ class SubscriptionController extends Controller
         });
 
         $parameters = $this->getCommon();
+        $parameters = array_merge($parameters, $this->districtAccessService->fetchDistrictParameters());
+        $filteredParameters = $this->fetchParameterOptions($request, [
+            'cate1' => ['type_CLIENT', 'categories'],
+            'rem8'  => ['subdistrict', 'subdistricts'],
+        ]);
+        $parameters = array_merge($parameters, $filteredParameters);
 
-        // Adjust parameters based on district access
-        if ($districtAccess != null) {
-            $parameters['districts'] = Parameter::where('grp', 'district')
-                ->where('code', $districtAccess)
-                ->pluck('prm', 'code')
-                ->toArray();
-            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
-                ->where('etc', $districtAccess)
-                ->pluck('prm', 'code')
-                ->toArray();
-        }
-
-        // Apply additional parameter filters
-        if ($request->filled('cate1')) {
-            $parameters['categories'] = Parameter::where('grp', 'type_CLIENT')
-                ->where('etc', $request->cate1)
-                ->pluck('prm', 'code')
-                ->toArray();
-        }
-
-        if ($request->filled('rem8')) {
-            $parameters['subdistricts'] = Parameter::where('grp', 'subdistrict')
-                ->where('etc', $request->rem8)
-                ->pluck('prm', 'code')
-                ->toArray();
-        }
 
         return view('subscription.outstanding_list', compact(['subscriptions', 'parameters']));
     }
@@ -351,38 +190,26 @@ class SubscriptionController extends Controller
             $subscriptionId = $request->input('subscriptionId');
             $packageId = $request->input('packageId');
 
-            // Get user_id from the client table
             $user_id = DB::table('client')->where('id', $subscriptionId)->value('uid');
-
             if (!$user_id) {
                 return response()->json(['success' => false, 'message' => 'User not found'], 404);
             }
 
-            // Call the external API
             $url = "https://maisdev.awfatech.com/main/app/finance/invoice_gen.php?sysapp=maisadmineboss&cli={$user_id}&item={$packageId}";
             $response = Http::get($url);
-
-            // Decode JSON response
             $responseData = $response->json();
-
-            // Check if response is successful and 'status' is 'Success'
             if ($response->successful() && isset($responseData['status']) && $responseData['status'] === 'Success') {
-                // Update subscription status in the database
                 DB::table('client')
                     ->where('id', $subscriptionId)
                     ->update(['subscription_status' => 2]);
                 $institute = DB::table('client')->where('id', $subscriptionId)->first();
-                ;
-
                 Mail::to($institute->mel)->send(new SubscriptionApprove($institute->name));
-
-
                 return response()->json(['success' => true, 'message' => 'Subscription fee added successfully']);
             } else {
                 return response()->json([
                     'success' => false,
                     'message' => 'Failed to process subscription fee',
-                    'api_response' => $responseData // To debug any API response issues
+                    'api_response' => $responseData
                 ]);
             }
         } catch (\Exception $e) {

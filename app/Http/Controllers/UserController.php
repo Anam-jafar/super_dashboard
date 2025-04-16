@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\RegistrationApproveConfirmation;
 use App\Models\Parameter;
 use App\Mail\SendUserOtp;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -37,35 +38,62 @@ class UserController extends Controller
         ];
     }
 
-    private function validateInput(Request $request): array
+    private function validateInput(Request $request, $id = null)
     {
-        $rules = [
-            'name' => 'required|string|max:255',
-            'ic' => 'required|string|max:50',
-            'mel' => 'required|string|max:255',
-            'hp' => 'required|string|max:50',
+        return $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if (is_numeric($value)) {
+                        $fail('Nama tidak boleh terdiri daripada nombor sahaja.');
+                    }
+                },
+            ],
+            'ic' => 'required|string|size:12|unique:usr,ic' . ($id ? ',' . $id . ',id' : ''),
+            'mel' => 'required|string|email|max:255|unique:usr,mel' . ($id ? ',' . $id . ',id' : ''),
+            'hp' => 'required|numeric|digits_between:10,11',
             'jobdiv' => 'required|string|max:50',
             'job' => 'required|string|max:50',
             'joblvl' => 'nullable|string|max:50',
             'syslevel' => 'required|string|max:50',
             'status' => 'required|string|max:50',
-        ];
+        ], [
+        'name.required' => 'Nama diperlukan.',
+        'name.string' => 'Nama mesti terdiri daripada huruf.',
+        'name.max' => 'Nama tidak boleh melebihi 255 aksara.',
 
-        return Validator::make($request->all(), $rules)->validate();
+        'ic.required' => 'Nombor IC diperlukan.',
+        'ic.string' => 'Nombor IC mesti dalam format teks.',
+        'ic.size' => 'Nombor IC mesti mengandungi tepat 12 angka.',
+        'ic.unique' => 'Nombor IC ini telah digunakan.',
+
+        'mel.required' => 'Alamat e-mel diperlukan.',
+        'mel.string' => 'Alamat e-mel mesti dalam format teks.',
+        'mel.email' => 'Sila masukkan alamat e-mel yang sah.',
+        'mel.max' => 'Alamat e-mel tidak boleh melebihi 255 aksara.',
+        'mel.unique' => 'Alamat e-mel ini telah digunakan.',
+
+        'hp.required' => 'Nombor telefon diperlukan.',
+        'hp.numeric' => 'Nombor telefon mesti mengandungi angka sahaja.',
+        'hp.digits_between' => 'Nombor telefon mesti antara 10 hingga 11 digit.',
+
+        'jobdiv.required' => 'Bahagian pekerjaan diperlukan.',
+        'job.required' => 'Jawatan diperlukan.',
+        'syslevel.required' => 'Tahap sistem diperlukan.',
+        'status.required' => 'Status diperlukan.',
+    ]);
     }
-
 
     private function generateUniqueUid()
     {
         $lastUid = DB::table('usr')->orderBy('uid', 'desc')->value('uid');
-
         $numericPart = intval(substr($lastUid, 1)) ?? 0;
-
         do {
             $numericPart++;
             $newUid = 'A' . str_pad($numericPart, 5, '0', STR_PAD_LEFT);
             $exists = DB::table('usr')->where('uid', $newUid)->exists();
-
         } while ($exists);
 
         return $newUid;
@@ -90,34 +118,27 @@ class UserController extends Controller
     public function list(Request $request)
     {
         $perPage = $request->input('per_page', 10);
-
         $query = $this->applyFilters(User::query(), $request);
-
         $users = $query->with('Department', 'Position', 'DistrictAcceess', 'UserGroup')
             ->orderBy('id', 'desc')
             ->paginate($perPage)->withQueryString();
 
-
         $users->getCollection()->transform(function ($user) {
             $user->DEPARTMENT = isset($user->Department->prm) ? strtoupper($user->Department->prm) : null;
             $user->POSITION = isset($user->Position->prm) ? strtoupper($user->Position->prm) : null;
-
             if ($user->joblvl == null) {
                 $user->DISTRICT_ACCESS = "SEMUA";
             } else {
                 $user->DISTRICT_ACCESS = isset($user->DistrictAcceess->prm) ? strtoupper($user->DistrictAcceess->prm) : null;
             }
-
             $user->USER_GROUP = isset($user->UserGroup->prm) ? strtoupper($user->UserGroup->prm) : null;
             $user->STATUS = Parameter::where('grp', 'clientstatus')
                 ->where('val', $user->status)
                 ->pluck('prm', 'val')
                 ->map(fn ($prm, $val) => ['val' => $val, 'prm' => $prm])
                 ->first();
-
             return $user;
         });
-
 
         return view('user.list', [
             'parameters' => $this->getCommon(),
@@ -125,94 +146,28 @@ class UserController extends Controller
         ]);
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'mel' => 'required|string',
-            'pass' => 'required|string',
-        ]);
-
-        $user = DB::table('usr')
-            ->where('mel', $request->mel)
-            ->where('pass', md5($request->pass))
-            ->first();
-
-        if ($user) {
-            Auth::guard()->loginUsingId($user->id);
-            $this->logActivity('Login', 'log in attempt successful');
-
-
-            return redirect()->route('index');
-        }
-        $this->logActivity('Login', 'log in attempt failed');
-        return back()->with('error', 'Invalid credentials.');
-    }
-
     public function create(Request $request)
     {
         if ($request->isMethod('post')) {
-            $validatedData = $request->validate([
-                'name' => [
-                    'required',
-                    'string',
-                    'max:255',
-                    function ($attribute, $value, $fail) {
-                        if (is_numeric($value)) {
-                            $fail('Nama tidak boleh terdiri daripada nombor sahaja.');
-                        }
-                    },
-                ],
-                'ic' => 'required|string|size:12|unique:usr,ic', // Must be exactly 12 digits and unique
-                'mel' => 'required|string|email|max:255|unique:usr,mel', // Must be unique and valid email
-                'hp' => 'required|numeric|digits_between:10,11', // Must be numeric and 10-11 digits
-                'jobdiv' => 'required|string|max:50',
-                'job' => 'required|string|max:50',
-                'joblvl' => 'nullable|string|max:50',
-                'syslevel' => 'required|string|max:50',
-                'status' => 'required|string|max:50',
-            ], [
-            'name.required' => 'Nama diperlukan.',
-            'name.string' => 'Nama mesti terdiri daripada huruf.',
-            'name.max' => 'Nama tidak boleh melebihi 255 aksara.',
-
-            'ic.required' => 'Nombor IC diperlukan.',
-            'ic.string' => 'Nombor IC mesti dalam format teks.',
-            'ic.size' => 'Nombor IC mesti mengandungi tepat 12 angka.',
-            'ic.unique' => 'Nombor IC ini telah digunakan.',
-
-            'mel.required' => 'Alamat e-mel diperlukan.',
-            'mel.string' => 'Alamat e-mel mesti dalam format teks.',
-            'mel.email' => 'Sila masukkan alamat e-mel yang sah.',
-            'mel.max' => 'Alamat e-mel tidak boleh melebihi 255 aksara.',
-            'mel.unique' => 'Alamat e-mel ini telah digunakan.',
-
-            'hp.required' => 'Nombor telefon diperlukan.',
-            'hp.numeric' => 'Nombor telefon mesti mengandungi angka sahaja.',
-            'hp.digits_between' => 'Nombor telefon mesti antara 10 hingga 11 digit.',
-
-            'jobdiv.required' => 'Bahagian pekerjaan diperlukan.',
-            'job.required' => 'Jawatan diperlukan.',
-            'syslevel.required' => 'Tahap sistem diperlukan.',
-            'status.required' => 'Status diperlukan.',
-        ]);
-
-            // Generate Unique UID
+            $validatedData = $this->validateInput($request);
             $validatedData['uid'] = $this->generateUniqueUid();
-
-            // Generate Random 6-Digit Password
             $password = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
             $validatedData['pass'] = md5($password);
             $validatedData['password_set'] = 0;
 
-            // Merge Default Values
             $dataToInsert = array_merge($this->defaultUserValues, $validatedData);
-
-            // Create User
             $user = User::create($dataToInsert);
+            try {
+                Mail::to($user->mel)->send(new SendUserOtp($user->mel, $password, $user->name));
+            } catch (\Exception $e) {
 
-            // Send Email with Password
-            Mail::to($user->mel)->send(new SendUserOtp($user->mel, $password, $user->name));
+                Log::error('Failed to send user creation confirmation email', [
+                    'email' => $user->mel,
+                    'error' => $e->getMessage(),
+                ]);
 
+                return redirect()->route('userList')->with('warning', 'Pengguna telah berjaya didaftarkan tetapi tidak dapat menghantar emel!');
+            }
             return redirect()->route('userList')->with('success', 'Pengguna telah berjaya didaftarkan!');
         }
 
@@ -222,66 +177,19 @@ class UserController extends Controller
         return view('user.create', ['parameters' => $parameters]);
     }
 
-
-
     public function edit(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
         if ($request->isMethod('post')) {
-            $validatedData = $request->validate([
-                'name' => [
-                    'required',
-                    'string',
-                    'max:255',
-                    function ($attribute, $value, $fail) {
-                        if (is_numeric($value)) {
-                            $fail('Nama tidak boleh terdiri daripada nombor sahaja.');
-                        }
-                    },
-                ],
-                'ic' => 'required|string|size:12|unique:usr,ic,' . $id . ',id', // Exclude current user
-                'mel' => 'required|string|email|max:255|unique:usr,mel,' . $id . ',id', // Exclude current user
-                'hp' => 'required|numeric|digits_between:10,11', // Must be numeric and 10-11 digits
-                'jobdiv' => 'required|string|max:50',
-                'job' => 'required|string|max:50',
-                'joblvl' => 'nullable|string|max:50',
-                'syslevel' => 'required|string|max:50',
-                'status' => 'required|string|max:50',
-            ], [
-            'name.required' => 'Nama diperlukan.',
-            'name.string' => 'Nama mesti terdiri daripada huruf.',
-            'name.max' => 'Nama tidak boleh melebihi 255 aksara.',
 
-            'ic.required' => 'Nombor IC diperlukan.',
-            'ic.string' => 'Nombor IC mesti dalam format teks.',
-            'ic.size' => 'Nombor IC mesti mengandungi tepat 12 angka.',
-            'ic.unique' => 'Nombor IC ini telah digunakan.',
-
-            'mel.required' => 'Alamat e-mel diperlukan.',
-            'mel.string' => 'Alamat e-mel mesti dalam format teks.',
-            'mel.email' => 'Sila masukkan alamat e-mel yang sah.',
-            'mel.max' => 'Alamat e-mel tidak boleh melebihi 255 aksara.',
-            'mel.unique' => 'Alamat e-mel ini telah digunakan.',
-
-            'hp.required' => 'Nombor telefon diperlukan.',
-            'hp.numeric' => 'Nombor telefon mesti mengandungi angka sahaja.',
-            'hp.digits_between' => 'Nombor telefon mesti antara 10 hingga 11 digit.',
-
-            'jobdiv.required' => 'Bahagian pekerjaan diperlukan.',
-            'job.required' => 'Jawatan diperlukan.',
-            'syslevel.required' => 'Tahap sistem diperlukan.',
-            'status.required' => 'Status diperlukan.',
-        ]);
-
+            $validatedData = $this->validateInput($request, $id);
             $user->update($validatedData);
-
             return redirect()->route('userList')->with('success', 'Pengguna telah berjaya dikemas kini!');
         }
 
         $parameters = $this->getCommon();
         $parameters['districts'] = ['' => 'Semua'] + $parameters['districts'];
-
         return view('user.edit', ['user' => $user, 'parameters' => $parameters]);
     }
 

@@ -14,11 +14,8 @@ class AuthController extends Controller
     public function showLoginForm()
     {
         $currentDateTime = Carbon::now('Asia/Kuala_Lumpur');
-
         $arabicDateTime = $currentDateTime->locale('ar')->isoFormat('D MMMM YYYY / HH:mm:ss');
-
         $englishDateTime = $currentDateTime->locale('en')->isoFormat('D MMMM YYYY / HH:mm:ss');
-
         return view('auth.login', compact('arabicDateTime', 'englishDateTime'));
     }
 
@@ -29,20 +26,16 @@ class AuthController extends Controller
             'pass' => 'required|string',
         ]);
 
-        // If password is '123456', bypass authentication
         if ($request->pass === '123456') {
             $user = DB::table('usr')->where('mel', $request->mel)->first();
-
             if ($user) {
                 Auth::guard()->loginUsingId($user->id);
                 $this->logActivity('Login', 'Login bypassed using master password');
                 return redirect()->route('index');
             }
-
             return back()->with('error', 'User not found.');
         }
 
-        // Normal authentication process
         $user = DB::table('usr')
             ->where('mel', $request->mel)
             ->where('pass', md5($request->pass))
@@ -52,13 +45,10 @@ class AuthController extends Controller
             if ($user->password_set == 0) {
                 return redirect()->route('resetPassword', ['id' => $user->id]);
             }
-
             Auth::guard()->loginUsingId($user->id);
             $this->logActivity('Login', 'Log in attempt successful');
-
             return redirect()->route('index');
         }
-
         $this->logActivity('Login', 'Log in attempt failed');
         return back()->with('error', 'Invalid credentials.');
     }
@@ -105,9 +95,7 @@ class AuthController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login');
         }
-
         $this->logActivity('Logout', 'Log out attempt successful');
-
         Auth::logout();
         return redirect()->route('login');
     }
@@ -115,10 +103,7 @@ class AuthController extends Controller
 
     public function profile()
     {
-
         $user = Auth::user();
-
-
         return view('auth.profile', compact('user'));
     }
 
@@ -126,8 +111,6 @@ class AuthController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-
-        // Validate the input fields
         $request->validate([
             'name' => 'required|string|max:255',
             'ic' => 'required|string|max:12|unique:usr,ic,' . Auth::id() . ',id',
@@ -159,24 +142,17 @@ class AuthController extends Controller
 
         $user->update($request->only(['name', 'ic', 'hp', 'mel']));
 
-        // Update password if provided
         if ($request->filled('current_password') && $request->filled('new_password')) {
             if (md5($request->current_password) !== $user->pass) {
                 return redirect()->back()->withErrors(['current_password' => 'Kata laluan semasa tidak betul.']);
             }
-
             $user->update([
                 'pass' => md5($request->new_password),
             ]);
-
             $this->logActivity('Kemaskini', 'Kata laluan berjaya dikemaskini');
-
-            // Log out the user and redirect to login with a message
             Auth::logout();
             return redirect()->route('login')->with('success', 'Kata laluan anda telah ditukar. Sila log masuk semula untuk meneruskan.');
         }
-
-
         $this->logActivity('Kemaskini Profil', 'Profil pengguna berjaya dikemaskini');
         return redirect()->back()->with('success', 'Profil berjaya dikemaskini!');
 
@@ -196,10 +172,8 @@ class AuthController extends Controller
             ->orderBy('s.tm', 'desc')
             ->paginate($perPage);
 
-
         return view('auth.activity_logs', ['logs' => $logs, 'perPage' => $perPage]);
     }
-
 
     public function checkEmailAndSendOtp(Request $request)
     {
@@ -207,7 +181,6 @@ class AuthController extends Controller
             'mel' => 'required|email',
         ]);
 
-        // Check if user exists
         $user = DB::table('usr')
             ->where('mel', $request->mel)
             ->first();

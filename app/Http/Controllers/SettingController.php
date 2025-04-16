@@ -9,130 +9,14 @@ use Illuminate\Validation\Rule;
 class SettingController extends Controller
 {
     public $groups = [
-        'country'      => 'Country',
-        'state'        => 'State',
-        'city'         => 'City',
-        'district'     => 'District',
-        'subdistrict'  => 'Sub District',
-        'clientcate1'  => 'Institute',
+        'country'      => 'Negara',
+        'state'        => 'Negeri',
+        'city'         => 'Bandar',
+        'district'     => 'Daerah',
+        'subdistrict'  => 'Mukim',
+        'clientcate1'  => 'Institusi',
         'type_CLIENT'  => 'Jenis Institusi',
     ];
-
-    public function country()
-    {
-        $countries = Parameter::where('grp', 'country')
-                    // ->orderBy('idx')
-                    ->paginate(10);
-
-        return view('setting.country', compact(['countries']));
-    }
-
-    public function countryCreate()
-    {
-        if (request()->isMethod('post')) {
-            $data = request()->validate([
-                'prm' => 'required',
-                'val' => 'nullable',
-                'code' => 'required',
-                'des' => 'nullable',
-                'sid' => 'nullable',
-                'lvl' => 'nullable',
-                'etc' => 'nullable',
-                'idx' => 'nullable',
-            ]);
-
-            $data['grp'] = 'country';
-            $data['sta'] = 1;
-            $data['isdel'] = 0;
-            $data['sid'] = 1;
-
-            Parameter::create($data);
-
-            return redirect()->route('settingsCountry')->with('success', 'Country created successfully.');
-        }
-        return view('setting.country-create');
-    }
-
-    public function countryEdit($id)
-    {
-        $country = Parameter::findOrFail($id);
-
-        if (request()->isMethod('post')) {
-            $data = request()->validate([
-                'prm' => 'required',
-                'val' => 'nullable',
-                'code' => 'required',
-                'des' => 'nullable',
-                'sid' => 'nullable',
-                'lvl' => 'nullable',
-                'etc' => 'nullable',
-                'idx' => 'nullable',
-            ]);
-
-            $country->update($data);
-
-            return redirect()->route('settingsCountry')->with('success', 'Country updated successfully.');
-        }
-
-        return view('setting.country-edit', compact(['country']));
-    }
-
-    public function institute()
-    {
-        $institutes = Parameter::where('grp', 'clientcate1')
-                    // ->orderBy('idx')
-                    ->paginate(10);
-
-        return view('setting.institute', compact(['institutes']));
-    }
-    public function instituteCreate()
-    {
-        if (request()->isMethod('post')) {
-            $data = request()->validate([
-                'prm' => 'required',
-                'val' => 'nullable',
-                'code' => 'required',
-                'des' => 'nullable',
-                'sid' => 'nullable',
-                'lvl' => 'nullable',
-                'etc' => 'nullable',
-                'idx' => 'nullable',
-            ]);
-
-            $data['grp'] = 'clientcate1';
-            $data['sta'] = 1;
-            $data['isdel'] = 0;
-            $data['sid'] = 1;
-
-            Parameter::create($data);
-
-            return redirect()->route('settingsInstitute')->with('success', 'Institute created successfully.');
-        }
-        return view('setting.institute-create');
-    }
-    public function instituteEdit($id)
-    {
-        $institute = Parameter::findOrFail($id);
-
-        if (request()->isMethod('post')) {
-            $data = request()->validate([
-                'prm' => 'required',
-                'val' => 'nullable',
-                'code' => 'required',
-                'des' => 'nullable',
-                'sid' => 'nullable',
-                'lvl' => 'nullable',
-                'etc' => 'nullable',
-                'idx' => 'nullable',
-            ]);
-
-            $institute->update($data);
-
-            return redirect()->route('settingsInstitute')->with('success', 'Institute updated successfully.');
-        }
-
-        return view('setting.institute-edit', compact(['institute']));
-    }
 
     public function list(Request $request)
     {
@@ -175,25 +59,16 @@ class SettingController extends Controller
             return $item;
         });
 
-        $groups = [
-            'country'      => 'Country',
-            'state'        => 'State',
-            'city'         => 'City',
-            'district'     => 'District',
-            'subdistrict'  => 'Sub District',
-            'clientcate1'  => 'Institute',
-            'type_CLIENT'  => 'Jenis Institusi',
-        ];
 
-        $levelParameter = $groups[$selectedGroup] ?? 'Parameter';
+        $levelParameter = $this->groups[$selectedGroup] ?? 'Parameter';
 
         if (!empty($parents) && isset($parents[0])) {
             $selectedParentGroup = Parameter::where('code', $parents[0])->value('grp');
-            $levelParentParameter = $groups[$selectedParentGroup] ?? 'DII';
+            $levelParentParameter = $this->groups[$selectedParentGroup] ?? 'DII';
         } else {
             $levelParentParameter = 'DII';
         }
-
+        $groups = $this->groups;
 
 
 
@@ -236,7 +111,6 @@ class SettingController extends Controller
 
         $levelParameter = $this->groups[$selectedGroup] ?? 'Parameter';
 
-
         if (!empty($parentGroup) && array_key_first($parentGroup)) {
             $firstCode = array_key_first($parentGroup);
             $selectedParentGroup = Parameter::where('code', $firstCode)->value('grp');
@@ -244,10 +118,6 @@ class SettingController extends Controller
         } else {
             $levelParentParameter = 'DII';
         }
-
-
-
-
 
         if (request()->isMethod('post')) {
             $data = request()->validate([
@@ -285,11 +155,8 @@ class SettingController extends Controller
     {
         $item = Parameter::findOrFail($id);
 
-
         $levelParameter = $this->groups[$item->grp] ?? 'Parameter';
         $selectedParent = $item->etc;
-
-
         $parents = Parameter::where('grp', $item->grp)
                     ->whereNotNull('etc')
                     ->where('etc', '!=', '')
@@ -307,7 +174,6 @@ class SettingController extends Controller
         } else {
             $levelParentParameter = 'DII';
         }
-
 
         if (request()->isMethod('post')) {
             $data = request()->validate([

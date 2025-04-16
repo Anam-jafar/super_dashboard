@@ -16,7 +16,6 @@ class DashboardController extends Controller
         'isdel' => 0
     ];
 
-    // Generic database query method to reduce redundancy
     private function executeQuery($table, $constraints = [], $aggregation = null, $groupBy = null)
     {
         $query = DB::table($table);
@@ -24,11 +23,9 @@ class DashboardController extends Controller
         foreach ($constraints as $field => $value) {
             $query->where($field, $value);
         }
-
         if ($aggregation) {
             $query->select(DB::raw($aggregation));
         }
-
         if ($groupBy) {
             $query->groupBy($groupBy);
         }
@@ -173,9 +170,9 @@ class DashboardController extends Controller
             ->where(self::CLIENT_BASE_QUERY)
             ->where('app', 'CLIENT')
             ->where('isdel', 0)
-            ->where('c.rem8', $district) // <-- Filter by the given district
+            ->where('c.rem8', $district)
             ->groupBy('c.rem8')
-            ->first(); // only one district row expected
+            ->first();
     }
 
     private function _getDistrictTable()
@@ -199,7 +196,6 @@ class DashboardController extends Controller
             ->get();
     }
 
-    // Generic listing method to handle mosque, branch, and admin listings
     private function getListingData($table, Request $request, $additionalFilters = [])
     {
         $query = DB::table($table);
@@ -291,18 +287,13 @@ class DashboardController extends Controller
         ];
     }
 
-    // Controller methods for web routes
     public function dashboard()
     {
-
-
         $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
 
         if ($districtAccess !== null) {
             return redirect()->route('mosquesInCityDetails', ['city' => $districtAccess]);
         }
-
-
 
         $data = [
             'totalMosques' => $this->_getTotalMosques(),
@@ -320,18 +311,13 @@ class DashboardController extends Controller
 
 
         ];
-        // $categories = Parameter::where('grp', 'type_CLIENT')->pluck('prm', 'code');
-        // dd($categories);
-
         return view('base.index', $data);
     }
 
     public function getFinancialReport(Request $request)
     {
         $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
-
         $year = $request->input('year', date('Y'));
-
         $totalClientsQuery = DB::table('client')->where('sta', 0);
 
         if ($districtAccess !== null) {
@@ -358,23 +344,8 @@ class DashboardController extends Controller
         ]);
     }
 
-
-    // Controller methods for web routes
     public function index()
     {
-        // $data = [
-        //     'totalMosques' => $this->_getTotalMosques(),
-        //     'totalKariah' => $this->_getTotalKariah(),
-        //     'totalStaff' => $this->_getTotalStaff(),
-        //     'totalKariah_MaleFemale' => $this->_getKariahMaleFemale(),
-        //     'totalKariahPerDistrict' => $this->_getTotalKariahPerDistrict(),
-        //     'kariahPerType' => $this->_getKariahPerType(),
-        //     'kariahPerAgeRange' => $this->_getKariahPerAgeRange(),
-        //     'kariahNationality' => $this->_getKariahNationality(),
-        //     'districtTable' => $this->_getDistrictTable(),
-        //     'mosqueData' => $this->_getTotalMosquePerCategory()->mapWithKeys(fn($item) => [$item->prm => $item->total])
-        // ];
-
         $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
 
         $total_institute = Institute::where('sta', 0)
@@ -430,8 +401,8 @@ class DashboardController extends Controller
                     $q->where('rem8', $districtAccess);
                 });
             })
-            ->orderBy('id', 'desc')  // Order by latest ID
-            ->limit(5) // Limit to 5 records
+            ->orderBy('id', 'desc')
+            ->limit(5)
             ->get()
             ->transform(function ($financialStatement) {
                 $financialStatement->CATEGORY = isset($financialStatement->Category->prm)
@@ -484,7 +455,7 @@ class DashboardController extends Controller
                 })
                 ->where('inv.src', 'INV')
                 ->groupBy('inv.vid')
-                ->having(DB::raw('SUM(inv.val) - COALESCE(SUM(rec.val), 0)'), '>', 0), // Ensure outstanding > 0
+                ->having(DB::raw('SUM(inv.val) - COALESCE(SUM(rec.val), 0)'), '>', 0),
             'subquery',
             'c.uid',
             '=',
@@ -499,7 +470,7 @@ class DashboardController extends Controller
             'subquery.outstanding'
         )
         ->limit(5)
-        ->get(); // Fix: Fetch the results as a collection
+        ->get();
 
         $subscriptions->transform(function ($subscription) {
             $subscription->NAME = isset($subscription->name) ? strtoupper($subscription->name) : null;

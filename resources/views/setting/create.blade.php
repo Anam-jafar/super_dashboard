@@ -7,7 +7,7 @@
   <div class="main-content app-content">
     <div class="container-fluid">
 
-      <x-page-header :title="'Daftar'" :breadcrumbs="[['label' => 'Settings', 'url' => route('settingsList')], ['label' => 'Settings']]" />
+      <x-page-header :title="'Tambah ' . $levelParameter" :breadcrumbs="[['label' => 'Tetapan', 'url' => route('settingsList')], ['label' => 'Tetapan Baru']]" />
       <x-alert />
 
       <form method="POST" action="{{ route('settingsCreate', ['group' => $selectedGroup]) }}"

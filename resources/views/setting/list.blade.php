@@ -4,7 +4,7 @@
   <div class="main-content app-content">
     <div class="container-fluid">
 
-      <x-page-header :title="'Senarai'" :breadcrumbs="[['label' => 'Settings', 'url' => 'javascript:void(0);'], ['label' => 'Settings']]" />
+      <x-page-header :title="'Senarai Tetapan'" :breadcrumbs="[['label' => 'Tetapan', 'url' => 'javascript:void(0);'], ['label' => 'Senarai Tetapan']]" />
       <x-alert />
       <div class="mb-4 rounded-lg bg-white px-4 py-8 shadow">
         <div class="2xl:justify-start flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -14,7 +14,7 @@
 
             <!-- Group Dropdown -->
             <div class="w-full lg:max-w-[14rem]">
-              <label for="grp" class="mb-1 block text-sm font-medium text-gray-700">Group</label>
+              <label for="grp" class="mb-1 block text-sm font-medium text-gray-700">Kategori</label>
               <select id="grp" name="grp" class="ti-form-select w-full text-ellipsis rounded-sm py-2 pr-1"
                 onchange="this.form.submit()">
                 <option value="" {{ request('grp') ? '' : 'selected' }}>Semua</option>
@@ -29,7 +29,7 @@
             @if (count($parentGroup) > 0)
               <!-- Parent Group Dropdown -->
               <div class="w-full lg:max-w-[14rem]">
-                <label for="etc" class="mb-1 block text-sm font-medium text-gray-700">Parent Group</label>
+                <label for="etc" class="mb-1 block text-sm font-medium text-gray-700">Kategori Utama</label>
                 <select id="etc" name="etc" class="ti-form-select w-full text-ellipsis rounded-sm py-2 pr-1"
                   onchange="this.form.submit()">
                   <option value="" {{ request('etc') ? '' : 'selected' }}>Semua</option>
@@ -47,7 +47,7 @@
             <!-- New Page Link -->
             <a href="{{ route('settingsCreate', ['group' => $selectedGroup, 'parent' => $selectedParent]) }}"
               class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-lg order-1 flex w-full items-center justify-center lg:order-2 lg:w-auto">
-              Daftar Baru
+              Tambah Baru
               <i class="fe fe-plus ml-2"></i>
             </a>
           @endif

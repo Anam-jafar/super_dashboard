@@ -7,7 +7,7 @@
   <div class="main-content app-content">
     <div class="container-fluid">
 
-      <x-page-header :title="'Kemaskini'" :breadcrumbs="[['label' => 'Setting', 'url' => route('settingsList')], ['label' => 'Kemaskini']]" />
+      <x-page-header :title="'Kemaskini ' . $levelParameter" :breadcrumbs="[['label' => 'Tetapan', 'url' => route('settingsList')], ['label' => 'Tetapan Kemaskini']]" />
       <x-alert />
 
       <form method="POST" action="{{ route('settingsEdit', $item->id) }}" class="rounded-lg bg-white text-xs shadow sm:p-6">

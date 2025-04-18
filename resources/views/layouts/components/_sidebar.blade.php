@@ -357,7 +357,7 @@
                 <circle cx="12" cy="12" r="3" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
 
-              <span class="side-menu__label">Settings</span>
+              <span class="side-menu__label">Tetapan</span>
             </a>
           </li>
           <!-- End::slide -->

@@ -10,12 +10,14 @@ class FilterCard extends Component
     public $route;
     public $buttonLabel;
     public $buttonRoute; // New property
+    public $download;
 
     /**
      * Create a new component instance.
      */
-    public function __construct($filters, $route, $buttonLabel = 'Apply Filters', $buttonRoute = null)
+    public function __construct($filters, $route, $buttonLabel = 'Apply Filters', $buttonRoute = null, $download = false)
     {
+        $this->download = $download;
         $this->filters = $filters;
         $this->route = $route;
         $this->buttonLabel = $buttonLabel;

@@ -11,6 +11,8 @@ use App\Models\Institute;
 use App\Models\Parameter;
 use App\Services\DistrictAccessService;
 use App\Services\FinancialStatementService;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GenericExport;
 
 class ReportController extends Controller
 {
@@ -73,6 +75,31 @@ class ReportController extends Controller
             ->where('s.fin_category', $finCategory);
         $query->groupBy('t.prm', 's.fin_year', 's.fin_category')
             ->orderBy('t.prm');
+
+
+        $isExcel = $request->boolean('excel', false);
+
+        // 🔻 If Excel requested, export and return here
+        if ($isExcel) {
+            $entries = $query->get();
+
+            $headings = ['Institusi', 'Tahun', 'Kategori Penyata', 'Telah Hantar Penyata', 'Belum Hantar Penyata'];
+
+            $data = $entries->map(function ($entry) {
+                return [
+                    strtoupper($entry->cate_name),
+                    $entry->fin_year,
+                    strtoupper(Parameter::where('code', $entry->fin_category)->value('prm') ?? ''),
+                    $entry->total_submission,
+                    $entry->unsubmitted,
+                ];
+            })->toArray();
+
+
+            return Excel::download(new GenericExport($headings, $data), 'Jumlah Penghantaran.xlsx');
+        }
+
+
         $entries = $query->paginate($perPage)->withQueryString();
 
         $entries->transform(function ($entry) {
@@ -118,6 +145,34 @@ class ReportController extends Controller
             });
         $query = $this->applyFilters($query, $request);
         $query->orderBy('t.prm', 'ASC');
+
+        $isExcel = $request->boolean('excel', false);
+
+        // 🔻 If Excel requested, export and return here
+        if ($isExcel) {
+            $entries = $query->get();
+
+            $headings = ['Jenis Institusi', 'Nama Institusi', 'Tahun Laporan', 'Tarikh Hantar', 'Kategori Laporan', 'Daerah', 'Jumlah Kutipan', 'Jumlah Belanja', 'Jumlah Baki Bank', 'Status'];
+
+            $data = $entries->map(function ($entry) {
+                return [
+                    strtoupper($entry->Jenis_Institusi),
+                    strtoupper($entry->Nama_institusi),
+                    $entry->Tahun_Laporan,
+                    strtoupper($entry->Tarikh_Hantar),
+                    strtoupper(Parameter::where('code', $entry->Kategori_laporan)->value('prm') ?? ''),
+                    strtoupper($entry->Daerah),
+                    strtoupper($entry->Jumlah_kutipan),
+                    strtoupper($entry->Jumlah_Belanja),
+                    strtoupper($entry->Jumlah_Baki_Bank),
+                    $this->financialStatementService->getFinStatus($entry->status)['prm']
+                ];
+            })->toArray();
+
+
+            return Excel::download(new GenericExport($headings, $data), 'Status Penghantaran.xlsx');
+        }
+
         $entries = $query->paginate($perPage)->withQueryString();
 
         $entries->transform(function ($entry) {
@@ -174,6 +229,34 @@ class ReportController extends Controller
             });
         $query = $this->applyFilters($query, $request);
         $query->orderBy('t.prm', 'ASC');
+
+
+        $isExcel = $request->boolean('excel', false);
+
+        // 🔻 If Excel requested, export and return here
+        if ($isExcel) {
+            $entries = $query->get();
+
+            $headings = ['Jenis Institusi', 'Nama Institusi', 'Tahun Laporan', 'Kategori Laporan', 'Daerah', 'Jumlah Kutipan', 'Jumlah Belanja', 'Jumlah Pendaptan', 'Jumlah Baki Diisytihar'];
+
+            $data = $entries->map(function ($entry) {
+                return [
+                    strtoupper($entry->Jenis_Institusi),
+                    strtoupper($entry->Nama_institusi),
+                    $entry->Tahun_Laporan,
+                    strtoupper(Parameter::where('code', $entry->Kategori_laporan)->value('prm') ?? ''),
+                    strtoupper($entry->Daerah),
+                    strtoupper($entry->Jumlah_kutipan),
+                    strtoupper($entry->Jumlah_Belanja),
+                    strtoupper($entry->Jumlah_Pendapatan),
+                    strtoupper($entry->Jumlah_Baki_Diisytihar),
+                ];
+            })->toArray();
+
+
+            return Excel::download(new GenericExport($headings, $data), 'Kutipan Perbelanjaan.xlsx');
+        }
+
         $entries = $query->paginate($perPage)->withQueryString();
 
         $entries->transform(function ($entry) {
@@ -223,6 +306,33 @@ class ReportController extends Controller
             });
         $query = $this->applyFilters($query, $request);
         $query->orderBy('t.prm', 'ASC');
+
+
+        $isExcel = $request->boolean('excel', false);
+
+
+        // 🔻 If Excel requested, export and return here
+        if ($isExcel) {
+            $entries = $query->get();
+
+            $headings = ['Jenis Institusi', 'Nama Institusi', 'Tahun Laporan', 'Tarikh Hantar', 'Kategori Laporan', 'Daerah', 'Status'];
+
+            $data = $entries->map(function ($entry) {
+                return [
+                    strtoupper($entry->Jenis_Institusi),
+                    strtoupper($entry->Nama_institusi),
+                    $entry->Tahun_Laporan,
+                    strtoupper($entry->Tarikh_Hantar),
+                    strtoupper(Parameter::where('code', $entry->Kategori_laporan)->value('prm') ?? ''),
+                    strtoupper($entry->Daerah),
+                    $this->financialStatementService->getFinStatus($entry->status)['prm']
+                ];
+            })->toArray();
+
+
+            return Excel::download(new GenericExport($headings, $data), 'Perincian Penghantaran.xlsx');
+        }
+
         $entries = $query->paginate($perPage)->withQueryString();
 
         $entries->transform(function ($entry) {

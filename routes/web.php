@@ -9,6 +9,7 @@ use App\Http\Controllers\FinancialStatementController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\MetrixController;
 use Illuminate\Support\Facades\Response;
 
 /*
@@ -97,6 +98,32 @@ Route::prefix('mais')->group(function () {
         Route::get('/setting/institute', [SettingController::class, 'institute'])->name('settingsInstitute');
         Route::match(['get', 'post'], '/setting/institute/create', [SettingController::class, 'instituteCreate'])->name('settingsInstituteCreate');
         Route::match(['get', 'post'], '/setting/institute/edit/{id}', [SettingController::class, 'instituteEdit'])->name('settingsInstituteEdit');
+
+
+        Route::prefix('metrix')->name('metrix.')->group(function () {
+            $registerCategoryRoutes = function ($prefix, $type) {
+                Route::controller(MetrixController::class)->group(function () use ($prefix, $type) {
+                    Route::group([
+                        'prefix' => $prefix,
+                        'as' => $prefix . '.',
+                        'where' => ['type' => $type]
+                    ], function () {
+                        Route::get('/{type}', 'index')->name('list');
+                        Route::get('/{type}/create', 'create')->name('create');
+                        Route::post('/{type}', 'store')->name('store');
+                        Route::get('/{type}/{id}/edit', 'edit')->name('edit');
+                        Route::put('/{type}/{id}', 'update')->name('update');
+                        Route::put('/{type}/{id}/active', 'markAsActive')->name('mark-active');
+                        Route::put('/{type}/{id}/update-and-activate', 'update')
+                            ->name('update-and-activate')
+                            ->defaults('markAsActive', true);
+                    });
+                });
+            };
+
+            $registerCategoryRoutes('compensation', 'kaffarah');
+            $registerCategoryRoutes('settings', 'fidyah');
+        });
 
 
 

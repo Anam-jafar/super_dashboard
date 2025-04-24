@@ -162,9 +162,9 @@ class ReportController extends Controller
                     strtoupper($entry->Tarikh_Hantar),
                     strtoupper(Parameter::where('code', $entry->Kategori_laporan)->value('prm') ?? ''),
                     strtoupper($entry->Daerah),
-                    strtoupper($entry->Jumlah_kutipan),
-                    strtoupper($entry->Jumlah_Belanja),
-                    strtoupper($entry->Jumlah_Baki_Bank),
+                    'RM '.number_format($entry->Jumlah_kutipan, 2, '.', ','),
+                    'RM '.number_format($entry->Jumlah_Belanja, 2, '.', ','),
+                    'RM '.number_format($entry->Jumlah_Baki_Bank, 2, '.', ','),
                     $this->financialStatementService->getFinStatus($entry->status)['prm']
                 ];
             })->toArray();
@@ -182,9 +182,9 @@ class ReportController extends Controller
             $entry->DATE = strtoupper($entry->Tarikh_Hantar);
             $entry->STATEMENT = strtoupper(Parameter::where('code', $entry->Kategori_laporan)->value('prm'));
             $entry->DISTRICT = strtoupper($entry->Daerah);
-            $entry->JUMLAH_KUTIPAN = strtoupper($entry->Jumlah_kutipan);
-            $entry->JUMLAH_BELANJA = strtoupper($entry->Jumlah_Belanja);
-            $entry->JUMLAH_BAKI_BANK = strtoupper($entry->Jumlah_Baki_Bank);
+            $entry->JUMLAH_KUTIPAN = 'RM '.number_format($entry->Jumlah_kutipan, 2, '.', ',');
+            $entry->JUMLAH_BELANJA = 'RM '.number_format($entry->Jumlah_Belanja, 2, '.', ',');
+            $entry->JUMLAH_BAKI_BANK = 'RM '.number_format($entry->Jumlah_Baki_Bank, 2, '.', ',');
             $entry->FIN_STATUS = $this->financialStatementService->getFinStatus($entry->status);
             return $entry;
         });
@@ -246,10 +246,10 @@ class ReportController extends Controller
                     $entry->Tahun_Laporan,
                     strtoupper(Parameter::where('code', $entry->Kategori_laporan)->value('prm') ?? ''),
                     strtoupper($entry->Daerah),
-                    strtoupper($entry->Jumlah_kutipan),
-                    strtoupper($entry->Jumlah_Belanja),
-                    strtoupper($entry->Jumlah_Pendapatan),
-                    strtoupper($entry->Jumlah_Baki_Diisytihar),
+                    'RM '.number_format($entry->Jumlah_kutipan, 2, '.', ','),
+                    'RM '.number_format($entry->Jumlah_Belanja, 2, '.', ','),
+                    'RM '.number_format($entry->Jumlah_Pendapatan, 2, '.', ','),
+                    'RM '.number_format($entry->Jumlah_Baki_Diisytihar, 2, '.', ','),
                 ];
             })->toArray();
 
@@ -267,6 +267,10 @@ class ReportController extends Controller
         });
         $entries->transform(function ($entry) {
             $entry->Kategori_laporan = strtoupper(Parameter::where('code', $entry->Kategori_laporan)->value('prm'));
+            $entry->Jumlah_kutipan = 'RM '.number_format($entry->Jumlah_kutipan, 2, '.', ',');
+            $entry->Jumlah_Belanja = 'RM '.number_format($entry->Jumlah_Belanja, 2, '.', ',');
+            $entry->Jumlah_Pendapatan = 'RM '.number_format($entry->Jumlah_Pendapatan, 2, '.', ',');
+            $entry->Jumlah_Baki_Diisytihar = 'RM '.number_format($entry->Jumlah_Baki_Diisytihar, 2, '.', ',');
             return $entry;
         });
 
@@ -418,10 +422,16 @@ class ReportController extends Controller
 
             $parameters = $this->getCommon();
 
+
+            $filters = $request->all();
+
+
             return view('report.search_result', [
                 'years' => $years,
                 'entries' => $entries,
                 'parameters' => $parameters,
+                'filters' => $filters,
+
             ]);
         }
 
@@ -457,5 +467,69 @@ class ReportController extends Controller
             'months' => $months,
         ]);
     }
+
+    public function exportStatementReport(Request $request)
+    {
+
+        $query = DB::table('splk_submission as s')
+                        ->selectRaw("t.prm AS Jenis_Institusi, c.name AS Nama_institusi, 
+                s.submission_date AS Tarikh_Hantar, s.fin_year AS Tahun_Laporan, 
+                s.fin_category AS Kategori_laporan, s.id AS id, s.status as status,
+                t1.prm AS Daerah, t2.prm AS Status")->whereNotIn('s.status', [0, 4])
+                        ->join('client as c', 'c.uid', '=', 's.inst_refno')
+                        ->join('type as t', function ($join) {
+                            $join->on('c.cate', '=', 't.code')
+                                ->where('t.grp', '=', 'type_client');
+                        })
+                        ->join('type as t1', function ($join) {
+                            $join->on('c.rem8', '=', 't1.code')
+                                ->where('t1.grp', '=', 'district');
+                        })
+                        ->join('type as t2', function ($join) {
+                            $join->on('s.status', '=', 't2.val')
+                                ->where('t2.grp', '=', 'splkstatus');
+                        });
+        $query = $this->applyFilters($query, $request);
+
+
+        if ($request->filled('year')) {
+            $query->whereYear('s.submission_date', $request->year);
+        }
+        if ($request->filled('month')) {
+            $query->whereMonth('s.submission_date', $request->month);
+        }
+        if ($request->filled('start_date')) {
+            $query->whereDate('s.submission_date', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('s.submission_date', '<=', $request->end_date);
+        }
+
+        $query->orderBy('t.prm', 'ASC');
+
+        $entries = $query->get();
+
+        $headings = ['Jenis Institusi', 'Nama Institusi', 'Tahun Laporan', 'Tarikh Hantar', 'Kategori Laporan', 'Daerah', 'Status'];
+
+        $data = $entries->map(function ($entry) {
+            return [
+                strtoupper($entry->Jenis_Institusi),
+                strtoupper($entry->Nama_institusi),
+                $entry->Tahun_Laporan,
+                strtoupper($entry->Tarikh_Hantar),
+                strtoupper(Parameter::where('code', $entry->Kategori_laporan)->value('prm') ?? ''),
+                strtoupper($entry->Daerah),
+                $this->financialStatementService->getFinStatus($entry->status)['prm']
+            ];
+        })->toArray();
+
+
+        return Excel::download(new GenericExport($headings, $data), 'Laporan.xlsx');
+
+
+
+    }
+
+
 
 }

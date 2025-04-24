@@ -32,9 +32,9 @@
             'Kategori Laporan',
             'Daerah',
             'Jumlah Kutipan',
-            'Jumlah Belanja',
+            'Jumlah Perbelanjaan',
             'Jumlah Pendapatan',
-            'Jumlah Baki Diisytihar',
+            'Maklumat Baki Bank Dan Tunai',
         ]" :columns="[
             'Jenis_Institusi',
             'Nama_institusi',

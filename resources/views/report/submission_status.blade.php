@@ -42,8 +42,8 @@
             'Kategori Laporan',
             'Daerah',
             'Jumlah Kutipan',
-            'Jumlah Belanja',
-            'Jumlah Baki Bank',
+            'Jumlah Perbelanjaan',
+            'Maklumat Baki Bank Dan Tunai',
             'Status',
         ]" :columns="[
             'CATEGORY',

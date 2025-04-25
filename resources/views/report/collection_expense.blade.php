@@ -20,30 +20,24 @@
                 'type' => 'select',
                 'options' => $parameters['districts'],
             ],
-        
             ['name' => 'fin_year', 'label' => 'Tahun Penyata', 'type' => 'select', 'options' => $years],
+            [
+                'name' => 'fin_category',
+                'label' => $parameters['statements']['STM02'] ?? '', // Show only STM01 value
+                'type' => 'select',
+                'options' => collect($parameters['statements'])->except('STM02')->toArray(), // Remove STM01 from options
+            ],
             ['name' => 'search', 'label' => '', 'type' => 'text', 'placeholder' => 'Carian nama...'],
         ]" :route="route('collectionAndExpenseReport')" :download='true' />
-        {{--
-2. Jenis Institusi
-3. Nama Institusi
-4. Tahun Laporan
-5. Kategori Laporan
-6. Daerah
-7. Baki bawa kehadapan 1 januari
-8. Jumlah Kutipan
-9. Jumlah Perbelanjaan
-10. Jumlah Pendapatan
-11. Jumlah Lebihan/Kurangan Tahun Semasa
-12. Maklumat Baki Bank dan Tunai
---}}
         <x-table :headers="[
             'Jenis Institusi',
             'Nama Institusi',
             'Tahun Laporan',
             'Kategori Laporan',
             'Daerah',
-            'Baki bawa kehadapan 1 januari',
+            request()->fin_category === 'STM01' 
+                ? 'Baki bawa kehadapan 30 Jun' 
+                : 'Baki bawa kehadapan 31 Dis',
             'Jumlah Kutipan',
             'Jumlah Perbelanjaan',
             'Jumlah Pendapatan',

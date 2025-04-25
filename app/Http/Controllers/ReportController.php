@@ -144,6 +144,10 @@ class ReportController extends Controller
                 $join->on('s.status', '=', 't2.val')
                      ->where('t2.grp', '=', 'splkstatus');
             });
+
+        $finCategory = $request->filled('fin_category') ? $request->fin_category : 'STM02';
+        $query->where('s.fin_category', $finCategory);
+
         $query = $this->applyFilters($query, $request);
         $query->orderBy('t.prm', 'ASC');
 
@@ -249,6 +253,10 @@ class ReportController extends Controller
                 $join->on('c.rem8', '=', 't1.code')
                      ->where('t1.grp', '=', 'district');
             });
+
+        $finCategory = $request->filled('fin_category') ? $request->fin_category : 'STM02';
+        $query->where('s.fin_category', $finCategory);
+
         $query = $this->applyFilters($query, $request);
         $query->orderBy('t.prm', 'ASC');
 

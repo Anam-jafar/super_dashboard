@@ -7,9 +7,6 @@
       <x-page-header :title="'Laporan Status Penghantaran Penyata Kewangan Institusi'" :breadcrumbs="[['label' => 'Pelaporan', 'url' => 'javascript:void(0);'], ['label' => 'Status Penghantaran']]" />
       <x-alert />
       <div class="rounded-lg bg-white px-4 py-8 shadow">
-        <a href="{{ request()->fullUrlWithQuery(['excel' => true]) }}" class="btn btn-success">
-          Download Excel
-        </a>
         <x-filter-card :filters="[
             [
                 'name' => 'cate',
@@ -29,8 +26,13 @@
                 'type' => 'select',
                 'options' => $parameters['financial_statement_statuses_report'],
             ],
-        
             ['name' => 'fin_year', 'label' => 'Tahun Penyata', 'type' => 'select', 'options' => $years],
+            [
+                'name' => 'fin_category',
+                'label' => $parameters['statements']['STM02'] ?? '', // Show only STM01 value
+                'type' => 'select',
+                'options' => collect($parameters['statements'])->except('STM02')->toArray(), // Remove STM01 from options
+            ],
             ['name' => 'search', 'label' => '', 'type' => 'text', 'placeholder' => 'Carian nama...'],
         ]" :route="route('submissionStatusReport')" :download='true' />
 
@@ -41,7 +43,9 @@
             'Tarikh Hantar',
             'Kategori Laporan',
             'Daerah',
-            'Baki bawa kehadapan 1 januari',
+            request()->fin_category === 'STM01' 
+                ? 'Baki bawa kehadapan 30 Jun' 
+                : 'Baki bawa kehadapan 31 Dis',
             'Jumlah Kutipan',
             'Jumlah Perbelanjaan',
             'Jumlah Pendapatan',

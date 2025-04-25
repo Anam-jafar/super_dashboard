@@ -128,6 +128,7 @@ class ReportController extends Controller
             ->selectRaw("t.prm AS Jenis_Institusi, c.name AS Nama_institusi, 
             s.fin_year AS Tahun_Laporan, s.submission_date AS Tarikh_Hantar, 
             s.fin_category AS Kategori_laporan, t1.prm AS Daerah, 
+            s.balance_forward AS Balance_forward, s.total_income AS Total_income, s.total_surplus AS Total_surplus,
             s.total_collection AS Jumlah_kutipan, s.total_expenses AS Jumlah_Belanja, 
             s.bank_cash_balance AS Jumlah_Baki_Bank, s.status, t2.prm AS Status")->whereNotIn('s.status', [0, 4])
             ->join('client as c', 'c.uid', '=', 's.inst_refno')
@@ -152,7 +153,21 @@ class ReportController extends Controller
         if ($isExcel) {
             $entries = $query->get();
 
-            $headings = ['Jenis Institusi', 'Nama Institusi', 'Tahun Laporan', 'Tarikh Hantar', 'Kategori Laporan', 'Daerah', 'Jumlah Kutipan', 'Jumlah Belanja', 'Jumlah Baki Bank', 'Status'];
+            $headings = [
+                'Jenis Institusi',
+                'Nama Institusi',
+                'Tahun Laporan',
+                'Tarikh Hantar',
+                'Kategori Laporan',
+                'Daerah',
+                'Baki bawa kehadapan 1 januari',
+                'Jumlah Kutipan',
+                'Jumlah Perbelanjaan',
+                'Jumlah Pendapatan',
+                'Jumlah Lebihan/Kurangan Tahun Semasa',
+                'Maklumat Baki Bank Dan Tunai',
+                'Status'
+            ];
 
             $data = $entries->map(function ($entry) {
                 return [
@@ -162,8 +177,11 @@ class ReportController extends Controller
                     strtoupper($entry->Tarikh_Hantar),
                     strtoupper(Parameter::where('code', $entry->Kategori_laporan)->value('prm') ?? ''),
                     strtoupper($entry->Daerah),
+                    'RM '.number_format($entry->Balance_forward, 2, '.', ','),
                     'RM '.number_format($entry->Jumlah_kutipan, 2, '.', ','),
                     'RM '.number_format($entry->Jumlah_Belanja, 2, '.', ','),
+                    'RM '.number_format($entry->Total_income, 2, '.', ','),
+                    'RM '.number_format($entry->Total_surplus, 2, '.', ','),
                     'RM '.number_format($entry->Jumlah_Baki_Bank, 2, '.', ','),
                     $this->financialStatementService->getFinStatus($entry->status)['prm']
                 ];
@@ -185,6 +203,9 @@ class ReportController extends Controller
             $entry->JUMLAH_KUTIPAN = 'RM '.number_format($entry->Jumlah_kutipan, 2, '.', ',');
             $entry->JUMLAH_BELANJA = 'RM '.number_format($entry->Jumlah_Belanja, 2, '.', ',');
             $entry->JUMLAH_BAKI_BANK = 'RM '.number_format($entry->Jumlah_Baki_Bank, 2, '.', ',');
+            $entry->BALANCE_FORWARD = 'RM '.number_format($entry->Balance_forward, 2, '.', ',');
+            $entry->TOTAL_INCOME = 'RM '.number_format($entry->Total_income, 2, '.', ',');
+            $entry->TOTAL_SURPLUS = 'RM '.number_format($entry->Total_surplus, 2, '.', ',');
             $entry->FIN_STATUS = $this->financialStatementService->getFinStatus($entry->status);
             return $entry;
         });
@@ -216,6 +237,7 @@ class ReportController extends Controller
             ->selectRaw("t.prm AS Jenis_Institusi, c.name AS Nama_institusi, 
             s.fin_year AS Tahun_Laporan, s.fin_category AS Kategori_laporan, 
             t1.prm AS Daerah, s.total_collection AS Jumlah_kutipan, 
+            s.balance_forward AS Balance_forward, s.total_surplus AS Total_surplus,
             s.total_expenses AS Jumlah_Belanja, s.total_income AS Jumlah_Pendapatan, 
             s.bank_cash_balance AS Jumlah_Baki_Diisytihar")->whereNotIn('s.status', [0, 4])
             ->join('client as c', 'c.uid', '=', 's.inst_refno')
@@ -237,7 +259,19 @@ class ReportController extends Controller
         if ($isExcel) {
             $entries = $query->get();
 
-            $headings = ['Jenis Institusi', 'Nama Institusi', 'Tahun Laporan', 'Kategori Laporan', 'Daerah', 'Jumlah Kutipan', 'Jumlah Belanja', 'Jumlah Pendaptan', 'Jumlah Baki Diisytihar'];
+            $headings = [
+                'Jenis Institusi',
+                'Nama Institusi',
+                'Tahun Laporan',
+                'Kategori Laporan',
+                'Daerah',
+                'Baki bawa kehadapan 1 januari',
+                'Jumlah Kutipan',
+                'Jumlah Perbelanjaan',
+                'Jumlah Pendapatan',
+                'Jumlah Lebihan/Kurangan Tahun Semasa',
+                'Maklumat Baki Bank Dan Tunai',
+            ];
 
             $data = $entries->map(function ($entry) {
                 return [
@@ -246,9 +280,11 @@ class ReportController extends Controller
                     $entry->Tahun_Laporan,
                     strtoupper(Parameter::where('code', $entry->Kategori_laporan)->value('prm') ?? ''),
                     strtoupper($entry->Daerah),
+                    'RM '.number_format($entry->Balance_forward, 2, '.', ','),
                     'RM '.number_format($entry->Jumlah_kutipan, 2, '.', ','),
                     'RM '.number_format($entry->Jumlah_Belanja, 2, '.', ','),
                     'RM '.number_format($entry->Jumlah_Pendapatan, 2, '.', ','),
+                    'RM '.number_format($entry->Total_surplus, 2, '.', ','),
                     'RM '.number_format($entry->Jumlah_Baki_Diisytihar, 2, '.', ','),
                 ];
             })->toArray();
@@ -271,6 +307,9 @@ class ReportController extends Controller
             $entry->Jumlah_Belanja = 'RM '.number_format($entry->Jumlah_Belanja, 2, '.', ',');
             $entry->Jumlah_Pendapatan = 'RM '.number_format($entry->Jumlah_Pendapatan, 2, '.', ',');
             $entry->Jumlah_Baki_Diisytihar = 'RM '.number_format($entry->Jumlah_Baki_Diisytihar, 2, '.', ',');
+            $entry->BALANCE_FORWARD = 'RM '.number_format($entry->Balance_forward, 2, '.', ',');
+            $entry->TOTAL_SURPLUS = 'RM '.number_format($entry->Total_surplus, 2, '.', ',');
+
             return $entry;
         });
 

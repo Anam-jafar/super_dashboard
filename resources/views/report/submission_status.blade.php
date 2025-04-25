@@ -41,8 +41,11 @@
             'Tarikh Hantar',
             'Kategori Laporan',
             'Daerah',
+            'Baki bawa kehadapan 1 januari',
             'Jumlah Kutipan',
             'Jumlah Perbelanjaan',
+            'Jumlah Pendapatan',
+            'Jumlah Lebihan/Kurangan Tahun Semasa',
             'Maklumat Baki Bank Dan Tunai',
             'Status',
         ]" :columns="[
@@ -52,8 +55,11 @@
             'DATE',
             'STATEMENT',
             'DISTRICT',
+            'BALANCE_FORWARD',
             'JUMLAH_KUTIPAN',
             'JUMLAH_BELANJA',
+            'TOTAL_INCOME',
+            'TOTAL_SURPLUS',
             'JUMLAH_BAKI_BANK',
             'FIN_STATUS',
         ]" :rows="$entries" :id="'id'" />

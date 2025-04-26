@@ -41,6 +41,7 @@ Route::prefix('mais')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
         Route::get('/district', [DashboardController::class, 'mosquesInCityDetails'])->name('mosquesInCityDetails');
         Route::get('/get-financial-report', [DashboardController::class, 'getFinancialReport'])->name('getFinancialReport');
+        Route::get('/get-statement-report', [DashboardController::class, 'getStatementsReport'])->name('getStatementsReport');
 
 
         // Profile Management Routes

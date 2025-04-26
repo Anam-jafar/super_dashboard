@@ -320,9 +320,13 @@ class DashboardController extends Controller
         $year = $request->input('year', date('Y'));
         $totalClientsQuery = DB::table('client')->where('sta', 0);
 
-        if ($districtAccess !== null) {
-            $totalClientsQuery->where('rem8', $districtAccess);
+
+        $district = $request->input('district') ?? $districtAccess;
+
+        if (!empty($district)) {
+            $totalClientsQuery->where('rem8', $district);
         }
+
 
         $totalClients = $totalClientsQuery->count();
 
@@ -332,15 +336,120 @@ class DashboardController extends Controller
             ->where('s.fin_category', 'STM02')
             ->whereIn('s.status', [1,2]);
 
-        if ($districtAccess !== null) {
-            $totalEntriesQuery->where('c.rem8', $districtAccess);
+
+        $district = $request->input('district') ?? $districtAccess;
+
+        if (!empty($district)) {
+            $totalEntriesQuery->where('c.rem8', $district);
         }
+
 
         $totalEntries = $totalEntriesQuery->count();
 
         return response()->json([
             'totalClients' => $totalClients,
             'totalEntries' => $totalEntries,
+        ]);
+    }
+    public function getStatementsReport(Request $request)
+    {
+        $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
+        $year = $request->input('year', date('Y'));
+        $district = $request->input('district') ?? $districtAccess;
+
+        // Base query
+        $query = DB::table('splk_submission as s')
+            ->join('client as c', 'c.uid', '=', 's.inst_refno')
+            ->where('s.fin_year', $year)
+            ->where('s.fin_category', 'STM01')
+            ->whereNotIn('s.status', [0, 4]);
+
+        // Apply district filter if specified
+        if (!empty($district)) {
+            $query->where('c.rem8', $district);
+        }
+
+        // Get total submitted
+        $total_telah_hantar = clone $query;
+        $total_telah_hantar = $total_telah_hantar->where('s.status', 1)->count();
+
+        // Get total received/accepted
+        $total_diterima = clone $query;
+        $total_diterima = $total_diterima->where('s.status', 2)->count();
+
+        // Get total rejected and not resubmitted
+        $total_ditolak_belum_hantar = DB::table('splk_submission as s')
+            ->join('client as c', 'c.uid', '=', 's.inst_refno')
+            ->where('s.fin_year', $year)
+            ->where('s.fin_category', 'STM01')
+            ->where('s.status', 3)
+            ->whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('splk_submission as s2')
+                    ->whereRaw('s2.inst_refno = s.inst_refno')
+                    ->whereRaw('s2.fin_year = s.fin_year')
+                    ->whereRaw('s2.fin_category = s.fin_category')
+                    ->whereIn('s2.status', [1, 2])
+                    ->whereRaw('s2.id > s.id');
+            });
+
+        if (!empty($district)) {
+            $total_ditolak_belum_hantar->where('c.rem8', $district);
+        }
+
+        $total_ditolak_belum_hantar = $total_ditolak_belum_hantar->count();
+
+        // Get total rejected and resubmitted
+        $total_ditolak_dan_hantar = DB::table('splk_submission as s')
+            ->join('client as c', 'c.uid', '=', 's.inst_refno')
+            ->where('s.fin_year', $year)
+            ->where('s.fin_category', 'STM01')
+            ->where('s.status', 3)
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('splk_submission as s2')
+                    ->whereRaw('s2.inst_refno = s.inst_refno')
+                    ->whereRaw('s2.fin_year = s.fin_year')
+                    ->whereRaw('s2.fin_category = s.fin_category')
+                    ->whereIn('s2.status', [1, 2])
+                    ->whereRaw('s2.id > s.id');
+            });
+
+        if (!empty($district)) {
+            $total_ditolak_dan_hantar->where('c.rem8', $district);
+        }
+
+        $total_ditolak_dan_hantar = $total_ditolak_dan_hantar->count();
+
+        // Get total registered (from client table)
+        $total_berdaftar = DB::table('client')
+            ->where('sta', 0);
+
+        if (!empty($district)) {
+            $total_berdaftar->where('rem8', $district);
+        }
+
+        $total_berdaftar = $total_berdaftar->count();
+
+        // Calculate total rejected
+        $total_ditolak = $total_ditolak_belum_hantar + $total_ditolak_dan_hantar;
+
+        return response()->json([
+            'categories' => [
+                ['Jumlah Hantar', 'Jumlah Berdaftar'],
+                ['Jumlah Terima', 'Jumlah Ditolak'],
+                ['Ditolak & Telah Hantar Semula', 'Ditolak & Belum Hantar Semula']
+            ],
+            'series' => [
+                [$total_telah_hantar, $total_berdaftar],
+                [$total_diterima, $total_ditolak],
+                [$total_ditolak_dan_hantar, $total_ditolak_belum_hantar]
+            ],
+            'colors' => [
+                ['#E75FB4', '#5B6EF5'],
+                ['#FF9066', '#26C5B2'],
+                ['#FFD84D', '#4CAF50']
+            ]
         ]);
     }
 
@@ -373,7 +482,26 @@ class DashboardController extends Controller
             })
             ->count() ?: null;
 
-        $total_statement_cancelled = FinancialStatement::where('status', 4)
+
+        $total_statement_accepted = FinancialStatement::where('status', 2)
+            ->when($districtAccess !== null, function ($query) use ($districtAccess) {
+                return $query->whereHas('Institute', function ($q) use ($districtAccess) {
+                    $q->where('rem8', $districtAccess);
+                });
+            })
+            ->count() ?: null;
+
+
+        $total_statement_request_edit = FinancialStatement::where('status', 4)
+            ->when($districtAccess !== null, function ($query) use ($districtAccess) {
+                return $query->whereHas('Institute', function ($q) use ($districtAccess) {
+                    $q->where('rem8', $districtAccess);
+                });
+            })
+            ->count() ?: null;
+
+
+        $total_statement_cancelled = FinancialStatement::where('status', 3)
             ->when($districtAccess !== null, function ($query) use ($districtAccess) {
                 return $query->whereHas('Institute', function ($q) use ($districtAccess) {
                     $q->where('rem8', $districtAccess);
@@ -496,11 +624,21 @@ class DashboardController extends Controller
 
         $years = range(date('Y'), date('Y') - 4);
 
+        $districts = Parameter::where('grp', 'district')->pluck('prm', 'code')->toArray();
+        if ($districtAccess !== null) {
+            $districts = array_filter($districts, function ($key) use ($districtAccess) {
+                return $key == $districtAccess;
+            }, ARRAY_FILTER_USE_KEY);
+        }
+
+
         return view('base.dashboard', compact(
             'total_institute',
             'total_institute_registration',
             'total_statement_to_review',
             'total_statement_cancelled',
+            'total_statement_accepted',
+            'total_statement_request_edit',
             'institute_registration_list',
             'financial_statements_list',
             'institute_by_district',
@@ -509,7 +647,8 @@ class DashboardController extends Controller
             'latest_fin_year',
             'totalClients',
             'totalEntries',
-            'years'
+            'years',
+            'districts',
         ));
     }
 

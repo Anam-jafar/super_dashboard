@@ -57,10 +57,42 @@ class ReportController extends Controller
         $districtAccess = $this->districtAccessService->getDistrictAccess();
 
         $query = DB::table('splk_submission as s')
-            ->selectRaw("t.prm AS cate_name, s.fin_year, s.fin_category,
-            COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS total_submission, 
-            SUM(CASE WHEN c.sta = 0 AND c.app = 'CLIENT' AND c.isdel = 0 THEN 1 ELSE 0 END) - 
-            COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS unsubmitted")
+            ->selectRaw("
+                        t.prm AS cate_name, s.fin_year, s.fin_category,
+                        COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS total_submission,
+                        SUM(CASE WHEN c.sta = 0 AND c.app = 'CLIENT' AND c.isdel = 0 THEN 1 ELSE 0 END) - 
+                            COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS unsubmitted,
+                        SUM(CASE WHEN s.status = 1 THEN 1 ELSE 0 END) AS total_telah_hantar,
+                        SUM(CASE WHEN s.status = 2 THEN 1 ELSE 0 END) AS total_diterima,
+                        SUM(
+                            CASE 
+                            WHEN s.status = 3 AND NOT EXISTS (
+                                SELECT 1 
+                                FROM splk_submission s2
+                                WHERE s2.inst_refno = s.inst_refno
+                                AND s2.fin_year = s.fin_year
+                                AND s2.fin_category = s.fin_category
+                                AND s2.status IN (1,2)
+                                AND s2.id > s.id
+                            )
+                            THEN 1 ELSE 0 
+                            END
+                        ) AS total_ditolak_belum_hantar,
+                        SUM(
+                            CASE 
+                            WHEN s.status = 3 AND EXISTS (
+                                SELECT 1 
+                                FROM splk_submission s2
+                                WHERE s2.inst_refno = s.inst_refno
+                                AND s2.fin_year = s.fin_year
+                                AND s2.fin_category = s.fin_category
+                                AND s2.status IN (1,2)
+                                AND s2.id > s.id
+                            )
+                            THEN 1 ELSE 0 
+                            END
+                        ) AS total_ditolak_dan_hantar
+                        ")
             ->join('client as c', 'c.uid', '=', 's.inst_refno')
             ->join('type as t', function ($join) {
                 $join->on('c.cate1', '=', 't.code')
@@ -105,6 +137,9 @@ class ReportController extends Controller
         $entries->transform(function ($entry) {
             $entry->CATEGORY = isset($entry->cate_name) ? strtoupper($entry->cate_name) : null;
             $entry->FIN_CATEGORY = strtoupper(Parameter::where('code', $entry->fin_category)->value('prm') ?? '');
+            $entry->JUMLAH_1 = $entry->total_submission + $entry->unsubmitted;
+            $entry->JUMLAH_2 = $entry->total_telah_hantar + $entry->total_diterima;
+            $entry->JUMLAH_3 = $entry->total_ditolak_belum_hantar + $entry->total_ditolak_dan_hantar;
             return $entry;
         });
 
@@ -117,6 +152,105 @@ class ReportController extends Controller
             'entries' => $entries,
             'parameters' => $parameters,
         ]);
+    }
+
+    public function filteredSubmission(Request $request)
+    {
+        $perPage = $request->input('per_page', 10);
+
+        $query = DB::table('splk_submission as s')->join('client as c', 'c.uid', '=', 's.inst_refno')
+                    ->selectRaw("
+                       s.fin_year AS fin_year, s.id AS id, t.prm AS cate_name, t1.prm AS district, t2.prm AS subdistrict, t3.prm AS fin_category, c.name AS institute_name, c.con1 as officer, s.submission_date AS date, s.status AS status")
+                    ->join('type as t', function ($join) {
+                        $join->on('c.cate', '=', 't.code')
+                             ->where('t.grp', '=', 'type_client');
+                    })
+                    ->join('type as t1', function ($join) {
+                        $join->on('c.rem8', '=', 't1.code')
+                            ->where('t1.grp', '=', 'district');
+                    })
+                    ->join('type as t2', function ($join) {
+                        $join->on('c.rem9', '=', 't2.code')
+                            ->where('t2.grp', '=', 'subdistrict');
+                    })
+                    ->join('type as t3', function ($join) {
+                        $join->on('s.fin_category', '=', 't3.code')
+                            ->where('t3.grp', '=', 'statement');
+                    });
+
+
+        // Apply status filter if provided
+
+        if ($request->filled('status')) {
+            $statuses = explode(',', $request->input('status'));
+            $query->whereIn('s.status', $statuses);
+        }
+
+        // Handle cate1 filter (convert prm to code)
+        if ($request->filled('category')) {
+            $cate1Code = Parameter::where('grp', 'clientcate1')->where('prm', $request->category)->value('code');
+            if ($cate1Code) {
+                $request->merge(['cate1' => $cate1Code]);
+            }
+        }
+
+        if ($request->filled('fin_year')) {
+            $query->where('s.fin_year', $request->fin_year);
+        }
+
+        if ($request->filled('fin_category')) {
+            $query->where('s.fin_category', $request->fin_category);
+        }
+
+        if ($request->filled('category')) {
+            $query->where('c.cate1', $cate1Code);
+        }
+
+
+        $isExcel = $request->boolean('excel', false);
+
+
+        // 🔻 If Excel requested, export and return here
+        if ($isExcel) {
+            $entries = $query->get();
+
+            $headings = ['Tarikh Hantar', 'Tahun Penyata', 'Kategori Penyata', 'Daerah', 'Mukim', 'Nama Institusi', 'Wakil Institusi', 'Status'];
+
+            $data = $entries->map(function ($entry) {
+                return [
+                    date('d-m-Y', strtotime($entry->date)),
+                    $entry->fin_year,
+                    strtoupper($entry->fin_category),
+                    strtoupper($entry->district),
+                    strtoupper($entry->subdistrict),
+                    strtoupper($entry->institute_name),
+                    strtoupper($entry->officer),
+                    $this->financialStatementService->getFinStatus($entry->status)['prm']
+                ];
+            })->toArray();
+
+            return Excel::download(new GenericExport($headings, $data), 'Jumlah Penghantaran.xlsx');
+        }
+
+        $entries = $query
+            ->orderBy('id', 'desc')
+            ->paginate($perPage)->withQueryString();
+
+        $entries->transform(function ($financialStatement) {
+            $financialStatement->CATEGORY = strtoupper($financialStatement->fin_category);
+            $financialStatement->INSTITUTE = strtoupper($financialStatement->institute_name);
+            $financialStatement->OFFICER = strtoupper($financialStatement->officer);
+            $financialStatement->DISTRICT = strtoupper($financialStatement->district);
+            $financialStatement->SUBDISTRICT = strtoupper($financialStatement->subdistrict);
+            $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->date));
+            $financialStatement->FIN_STATUS = $this->financialStatementService->getFinStatus($financialStatement->status);
+            return $financialStatement;
+        });
+
+        return view('report.filtered_submission', [
+            'entries' => $entries,
+        ]);
+
     }
 
 

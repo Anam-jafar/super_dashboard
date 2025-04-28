@@ -36,11 +36,11 @@ class InstituteService
             'rem9' => 'required|string|max:50',
             'addr' => 'nullable|string|max:128',
             'addr1' => 'nullable|string|max:128',
-            'pcode' => 'nullable|numeric|max:8',
+            'pcode' => 'nullable|numeric|digits_between:1,8',
             'city' => 'nullable|string|max:50',
             'state' => 'nullable|string|max:50',
             'hp' => 'nullable|numeric|digits:11',
-            'fax' => 'nullable|numeric|digits:11',
+            'fax' => 'nullable|numeric|digits_between:1,10',
             'mel' => 'nullable|email|max:255',
             'web' => 'nullable|string|max:255',
             'rem10' => 'nullable|string|max:50',
@@ -51,7 +51,7 @@ class InstituteService
             'rem15' => 'nullable|string|max:50',
             'location' => 'nullable|string|max:255',
             'con1' => 'nullable|string|max:50',
-            'ic' => 'nullable|string|max:50',
+            'ic' => 'nullable|numeric|digits:12',
             'pos1' => 'nullable|string|max:50',
             'tel1' => 'nullable|numeric|digits:11',
             'sta' => 'nullable|string|max:50',
@@ -87,7 +87,7 @@ class InstituteService
             $rules['hp'] = 'required|numeric|digits:11|unique:client,hp,' . $id;
             $rules['mel'] = 'required|email|max:255|unique:client,mel,' . $id;
             $rules['con1'] = 'required|string|max:50';
-            $rules['ic'] = 'required|string|max:50';
+            $rules['ic'] = 'required|numeric|digits:12';
             $rules['pos1'] = 'required|string|max:50';
             $rules['tel1'] = 'required|numeric|digits:11';
         }
@@ -107,12 +107,15 @@ class InstituteService
             'addr.max' => 'Alamat tidak boleh melebihi 128 aksara.',
             'addr1.max' => 'Alamat 1 tidak boleh melebihi 128 aksara.',
             'pcode.numeric' => 'Kod pos mesti dalam format nombor.',
-            'pcode.max' => 'Kod pos tidak boleh melebihi 8 aksara.',
+            'pcode.digits_between' => 'Kod pos mesti mempunyai antara 1 hingga 8 digit.',
+            'fax.digits_between' => 'Faksimili mesti mempunyai antara 1 hingga 8 digit.',
             'fax.numeric' => 'Faksimili mesti dalam format nombor.',
-            'fax.digits' => 'Faksimili mesti mempunyai 11 digit.',
             'location.max' => 'Lokasi mesti dalam format koordinat dan tidak boleh melebihi 255 aksara.',
             'tel1.numeric' => 'Telefon 1 mesti dalam format nombor.',
             'tel1.digits' => 'Telefon 1 mesti mempunyai 11 digit.',
+            'ic.required' => 'Kad Pengenalan diperlukan kerana institusi belum disahkan.',
+            'ic.numeric' => 'Kad Pengenalan mesti dalam format nombor.',
+            'ic.digits' => 'Kad Pengenalan mesti mempunyai 12 digit.',
         ])->validate();
     }
 

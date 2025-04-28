@@ -13,11 +13,11 @@
     <select id="{{ $id }}" name="{{ $name }}"
       class="input-field {{ $disabled || $readonly ? 'bg-gray-200' : '' }} h-[3rem] rounded-lg border !border-[#6E829F] p-2 !text-gray-800"
       autocomplete="off" {{ $disabled ? 'disabled' : '' }} {{ $required && $required === true ? 'required' : '' }}>
-      <option value="" disabled {{ $value === null ? 'selected' : '' }}>
+      <option value="" disabled {{ old($name, $value) === null ? 'selected' : '' }}>
         {{ $placeholder }}
       </option>
       @foreach ($valueList as $key => $displayValue)
-        <option value="{{ $key }}" {{ $key == $value ? 'selected' : '' }}>
+        <option value="{{ $key }}" {{ (string) $key === (string) old($name, $value) ? 'selected' : '' }}>
           {{ $displayValue }}
         </option>
       @endforeach
@@ -33,7 +33,7 @@
   @else
     <input type="{{ $type }}" id="{{ $id }}" name="{{ $name }}"
       class="input-field {{ $disabled || $readonly ? 'bg-gray-100 cursor-not-allowed text-gray-500' : 'bg-white' }} {{ $rightAlign && $rightAlign === true ? 'text-right' : 'text-left' }} h-[3rem] rounded-lg border !border-[#6E829F] p-2 text-gray-800"
-      autocomplete="off" placeholder="{{ $placeholder }}" value="{{ $value }}"
+      autocomplete="off" placeholder="{{ $placeholder }}" value="{{ old($name, $value) }}"
       {{ $readonly ? 'readonly' : '' }} {{ $disabled ? 'disabled' : '' }}
       {{ $required && $required === true ? 'required' : '' }}>
   @endif

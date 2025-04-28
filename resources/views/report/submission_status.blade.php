@@ -43,9 +43,7 @@
             'Tarikh Hantar',
             'Kategori Laporan',
             'Daerah',
-            request()->fin_category === 'STM01' 
-                ? 'Baki bawa kehadapan 30 Jun' 
-                : 'Baki bawa kehadapan 31 Dis',
+            'Baki bawa kehadapan 1 Januari',
             'Jumlah Kutipan',
             'Jumlah Perbelanjaan',
             'Jumlah Pendapatan',

@@ -58,65 +58,63 @@ class ReportController extends Controller
         $finYear = $request->filled('fin_year') ? $request->fin_year : date('Y');
         $finCategory = $request->filled('fin_category') ? $request->fin_category : 'STM01';
 
+
         // Create a base query that starts with institution types
         $query = DB::table('type as t')
             ->selectRaw("
-            t.prm AS cate_name,
-            '{$finYear}' AS fin_year,
-            '{$finCategory}' AS fin_category,
-            COALESCE(sub.total_submission, 0) AS total_submission,
-            COALESCE(sub.unsubmitted, 0) AS unsubmitted,
-            COALESCE(sub.total_telah_hantar, 0) AS total_telah_hantar,
-            COALESCE(sub.total_diterima, 0) AS total_diterima,
-            COALESCE(sub.total_ditolak_belum_hantar, 0) AS total_ditolak_belum_hantar,
-            COALESCE(sub.total_ditolak_dan_hantar, 0) AS total_ditolak_dan_hantar
-        ")
-            ->where('t.grp', 'clientcate1')
-            ->leftJoin(DB::raw("(
-            SELECT
-                c.cate1,
-                COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS total_submission,
-                ((SELECT COUNT(*) FROM client c2 WHERE c2.cate1 = c.cate1 AND c2.sta = 0 AND c2.app = 'CLIENT' AND c2.isdel = 0) - 
-                    COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END)) AS unsubmitted,
-                SUM(CASE WHEN s.status = 1 THEN 1 ELSE 0 END) AS total_telah_hantar,
-                SUM(CASE WHEN s.status = 2 THEN 1 ELSE 0 END) AS total_diterima,
-                SUM(
-                    CASE 
-                    WHEN s.status = 3 AND NOT EXISTS (
-                        SELECT 1 
-                        FROM splk_submission s2
-                        WHERE s2.inst_refno = s.inst_refno
-                        AND s2.fin_year = s.fin_year
-                        AND s2.fin_category = s.fin_category
-                        AND s2.status IN (1,2)
-                        AND s2.id > s.id
-                    )
-                    THEN 1 ELSE 0 
-                    END
-                ) AS total_ditolak_belum_hantar,
-                SUM(
-                    CASE 
-                    WHEN s.status = 3 AND EXISTS (
-                        SELECT 1 
-                        FROM splk_submission s2
-                        WHERE s2.inst_refno = s.inst_refno
-                        AND s2.fin_year = s.fin_year
-                        AND s2.fin_category = s.fin_category
-                        AND s2.status IN (1,2)
-                        AND s2.id > s.id
-                    )
-                    THEN 1 ELSE 0 
-                    END
-                ) AS total_ditolak_dan_hantar
-            FROM client c
-            LEFT JOIN splk_submission s ON c.uid = s.inst_refno 
-                AND s.fin_year = '{$finYear}'
-                AND s.fin_category = '{$finCategory}'
-            WHERE c.sta = 0 AND c.app = 'CLIENT' AND c.isdel = 0
-            " . (!is_null($districtAccess) ? " AND c.rem8 = '{$districtAccess}'" : "") . "
-            GROUP BY c.cate1
-        ) as sub"), 't.code', '=', 'sub.cate1')
+                    t.prm AS cate_name,
+                    '{$finYear}' AS fin_year,
+                    '{$finCategory}' AS fin_category,
+                    COALESCE(sub.total_submission, 0) AS total_submission,
+                    COALESCE(sub.unsubmitted, 0) AS unsubmitted,
+                    COALESCE(sub.total_telah_hantar, 0) AS total_telah_hantar,
+                    COALESCE(sub.total_diterima, 0) AS total_diterima,
+                    COALESCE(sub.total_ditolak_belum_hantar, 0) AS total_ditolak_belum_hantar,
+                    COALESCE(sub.total_ditolak_dan_hantar, 0) AS total_ditolak_dan_hantar
+                ")
+                        ->where('t.grp', 'clientcate1')
+                        ->leftJoin(DB::raw("(
+                    SELECT
+                        c.cate1,
+                        COUNT(DISTINCT CASE WHEN s.status IN (1, 2) THEN s.inst_refno END) AS total_submission,
+                        ((SELECT COUNT(*) FROM client c2 WHERE c2.cate1 = c.cate1 AND c2.sta = 0 AND c2.app = 'CLIENT' AND c2.isdel = 0) - 
+                            COUNT(DISTINCT CASE WHEN s.status IN (1, 2) THEN s.inst_refno END)) AS unsubmitted,
+                        COUNT(DISTINCT CASE WHEN s.status = 1 THEN s.inst_refno END) AS total_telah_hantar,
+                        COUNT(DISTINCT CASE WHEN s.status = 2 THEN s.inst_refno END) AS total_diterima,
+                        COUNT(DISTINCT CASE 
+                            WHEN s.status = 3 AND NOT EXISTS (
+                                SELECT 1 
+                                FROM splk_submission s2
+                                WHERE s2.inst_refno = s.inst_refno
+                                AND s2.fin_year = s.fin_year
+                                AND s2.fin_category = s.fin_category
+                                AND s2.status IN (1,2)
+                                AND s2.id > s.id
+                            )
+                            THEN s.inst_refno 
+                        END) AS total_ditolak_belum_hantar,
+                        COUNT(DISTINCT CASE 
+                            WHEN s.status = 3 AND EXISTS (
+                                SELECT 1 
+                                FROM splk_submission s2
+                                WHERE s2.inst_refno = s.inst_refno
+                                AND s2.fin_year = s.fin_year
+                                AND s2.fin_category = s.fin_category
+                                AND s2.status IN (1,2)
+                                AND s2.id > s.id
+                            )
+                            THEN s.inst_refno 
+                        END) AS total_ditolak_dan_hantar
+                    FROM client c
+                    LEFT JOIN splk_submission s ON c.uid = s.inst_refno 
+                        AND s.fin_year = '{$finYear}'
+                        AND s.fin_category = '{$finCategory}'
+                    WHERE c.sta = 0 AND c.app = 'CLIENT' AND c.isdel = 0
+                    " . (!is_null($districtAccess) ? " AND c.rem8 = '{$districtAccess}'" : "") . "
+                    GROUP BY c.cate1
+                ) as sub"), 't.code', '=', 'sub.cate1')
             ->orderBy('t.prm');
+
 
         $isExcel = $request->boolean('excel', false);
 

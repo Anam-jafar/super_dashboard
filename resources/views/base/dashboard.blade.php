@@ -147,8 +147,7 @@
               <div class="box">
                 <div class="box-header justify-between">
                   <div class="box-title">
-                    Permohonan Pendaftaran
-                  </div>
+                    Perbandingan Jumlah Mengikut Status </div>
 
                   <div class="flex items-center gap-2">
                     <!-- Year Dropdown -->

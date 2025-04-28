@@ -44,7 +44,7 @@
             <span class="side-menu__label">Utama</span>
           </a>
         </li>
-
+        {{--
         <li class="slide">
           <a href="{{ route('dashboard') }}" class="side-menu__item">
 
@@ -58,7 +58,7 @@
             <span class="side-menu__label">Dashboard</span>
           </a>
         </li>
-
+        --}}
         <!-- Start::slide -->
         {{-- <li class="slide has-sub">
                     <a href="javascript:void(0);" class="side-menu__item">

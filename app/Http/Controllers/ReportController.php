@@ -60,8 +60,8 @@ class ReportController extends Controller
             ->selectRaw("
                         t.prm AS cate_name, s.fin_year, s.fin_category,
                         COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS total_submission,
-                        SUM(CASE WHEN c.sta = 0 AND c.app = 'CLIENT' AND c.isdel = 0 THEN 1 ELSE 0 END) - 
-                            COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END) AS unsubmitted,
+                        ((SELECT COUNT(*) FROM client c2 WHERE c2.cate1 = c.cate1 AND c2.sta = 0 AND c2.app = 'CLIENT' AND c2.isdel = 0) - 
+                            COUNT(CASE WHEN s.status IN (1, 2) THEN 1 END)) AS unsubmitted,
                         SUM(CASE WHEN s.status = 1 THEN 1 ELSE 0 END) AS total_telah_hantar,
                         SUM(CASE WHEN s.status = 2 THEN 1 ELSE 0 END) AS total_diterima,
                         SUM(
@@ -105,7 +105,7 @@ class ReportController extends Controller
         $finCategory = $request->filled('fin_category') ? $request->fin_category : 'STM01';
         $query->where('s.fin_year', $finYear)
             ->where('s.fin_category', $finCategory);
-        $query->groupBy('t.prm', 's.fin_year', 's.fin_category')
+        $query->groupBy('t.prm', 's.fin_year', 's.fin_category', 'c.cate1')
             ->orderBy('t.prm');
 
 

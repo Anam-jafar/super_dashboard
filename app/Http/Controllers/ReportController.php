@@ -76,10 +76,10 @@ class ReportController extends Controller
                         ->leftJoin(DB::raw("(
                     SELECT
                         c.cate1,
-                        COUNT(DISTINCT CASE WHEN s.status IN (1, 2) THEN s.inst_refno END) AS total_submission,
+                        COUNT(DISTINCT CASE WHEN s.status IN (1, 2, 3) THEN s.inst_refno END) AS total_submission,
                         ((SELECT COUNT(*) FROM client c2 WHERE c2.cate1 = c.cate1 AND c2.sta = 0 AND c2.app = 'CLIENT' AND c2.isdel = 0) - 
-                            COUNT(DISTINCT CASE WHEN s.status IN (1, 2) THEN s.inst_refno END)) AS unsubmitted,
-                        COUNT(DISTINCT CASE WHEN s.status = 1 THEN s.inst_refno END) AS total_telah_hantar,
+                            COUNT(DISTINCT CASE WHEN s.status IN (1, 2, 3) THEN s.inst_refno END)) AS unsubmitted,
+                        COUNT(DISTINCT CASE WHEN s.status = 3 THEN s.inst_refno END) AS total_telah_hantar,
                         COUNT(DISTINCT CASE WHEN s.status = 2 THEN s.inst_refno END) AS total_diterima,
                         COUNT(DISTINCT CASE 
                             WHEN s.status = 3 AND NOT EXISTS (
@@ -163,9 +163,45 @@ class ReportController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
+        // Check if we need to show institutions that haven't submitted
+        if ($request->filled('status') && $request->status == 'not_submitted') {
+            $cate1Code = null;
+            // Handle cate1 filter (convert prm to code)
+            if ($request->filled('category')) {
+                $cate1Code = Parameter::where('grp', 'clientcate1')->where('prm', $request->category)->value('code');
+            }
+            return $this->institutesNotSubmitted($request, $cate1Code);
+        }
+
+        // if ($request->filled('options') && $request->options == 3) {
+        //     /*
+        //     dd($request->all());
+        //     "fin_year" => "2025"
+        //     "fin_category" => "STM01"
+        //     "status" => "2,3"
+        //     "category" => "Masjid"
+        //     "options" => "3"
+        //     ]
+
+        //     if it is option 3 that means I want to see the statements for splk submission that has been cacelled once here get the lates cancelled one. and then for the same fin_year
+        //     and fin_category they have submitted. if the status = cancelled_submitted then show it. if status = cancelled_not_submitted then show statement that was cancelled and for that no other submit for same
+        //     year and fin_category. do this fucntion in a different funcion naming canceledSubmissions. but that will show entries in the same style as it is.
+
+        //     For understanding cancelled submittions check the query of submissioncount funciton how they counted out the cancelled and resubmitted statements.
+        //     */
+        // }
+
+        if ($request->filled('options') && $request->options == 3) {
+            return $this->canceledSubmissions($request);
+        }
+
+
+
+
+
         $query = DB::table('splk_submission as s')->join('client as c', 'c.uid', '=', 's.inst_refno')
                     ->selectRaw("
-                       s.fin_year AS fin_year, s.id AS id, t.prm AS cate_name, t1.prm AS district, t2.prm AS subdistrict, t3.prm AS fin_category, c.name AS institute_name, c.con1 as officer, s.submission_date AS date, s.status AS status")
+                   s.fin_year AS fin_year, s.id AS id, t.prm AS cate_name, t1.prm AS district, t2.prm AS subdistrict, t3.prm AS fin_category, c.name AS institute_name, c.con1 as officer, s.submission_date AS date, s.status AS status")
                     ->join('type as t', function ($join) {
                         $join->on('c.cate', '=', 't.code')
                              ->where('t.grp', '=', 'type_client');
@@ -184,13 +220,6 @@ class ReportController extends Controller
                     });
 
 
-        // Apply status filter if provided
-
-        if ($request->filled('status')) {
-            $statuses = explode(',', $request->input('status'));
-            $query->whereIn('s.status', $statuses);
-        }
-
         // Handle cate1 filter (convert prm to code)
         if ($request->filled('category')) {
             $cate1Code = Parameter::where('grp', 'clientcate1')->where('prm', $request->category)->value('code');
@@ -198,6 +227,7 @@ class ReportController extends Controller
                 $request->merge(['cate1' => $cate1Code]);
             }
         }
+
 
         if ($request->filled('fin_year')) {
             $query->where('s.fin_year', $request->fin_year);
@@ -210,10 +240,19 @@ class ReportController extends Controller
         if ($request->filled('category')) {
             $query->where('c.cate1', $cate1Code);
         }
+        if ($request->filled('cate1')) {
+            $query->where('c.cate1', $request->cate1);
+        }
+
+        // Apply status filter if provided
+        if ($request->filled('status')) {
+            $statuses = explode(',', $request->input('status'));
+            $query->whereIn('s.status', $statuses);
+        }
+
 
 
         $isExcel = $request->boolean('excel', false);
-
 
         // 🔻 If Excel requested, export and return here
         if ($isExcel) {
@@ -252,11 +291,367 @@ class ReportController extends Controller
             return $financialStatement;
         });
 
+
+        $statuses = [];
+        $defaultOption = [];
+
+        if ($request->filled('options')) {
+            if ($request->options == 1) {
+
+                $statuses = [
+                    'not_submitted' => 'Belum Hantar', // Custom label for "not submitted"
+                ];
+
+                $defaultOption = [
+                    'code' => '1,2,3',
+                    'value' => 'Dihantar',
+                ];
+
+            }
+            if ($request->options == 2) {
+                $statuses = Parameter::where('grp', 'splkstatus')
+                ->whereNotIn('val', [0, 1, 2, 4])
+                ->pluck('prm', 'val')
+                ->toArray();
+
+                $defaultOption = [
+                    'code' => 2,
+                    'value' => 'Diterima',
+                ];
+
+            }
+            if ($request->options == 3) {
+                $statuses = [
+                    'canceled_submitted' => 'Canceled & Submitted',
+                    'canceled_not_submitted' => 'Cancelled & Not Submitted',
+                ];
+
+
+                $defaultOption = [
+                    'code' => 'cancelled_submitted',
+                    'value' => 'Canceled & Submitted',
+                ];
+
+            }
+        }
+
+
+
+        // queries
+        $queries = $request->only('fin_year', 'fin_category', 'category', 'status');
+
         return view('report.filtered_submission', [
             'entries' => $entries,
+            'statuses' => $statuses,
+            'queries' => $queries,
+            'defaultOption' => $defaultOption,
         ]);
-
     }
+
+    /**
+ * Handle submissions that have been canceled and possibly resubmitted
+ *
+ * @param Request $request
+ * @return \Illuminate\View\View|\Symfony\Component\HttpFoundation\BinaryFileResponse
+ */
+    public function canceledSubmissions(Request $request)
+    {
+        $perPage = $request->input('per_page', 10);
+        $finYear = $request->input('fin_year');
+        $finCategory = $request->input('fin_category');
+        $status = $request->input('status', 'canceled_submitted');
+
+        // Create base query for canceled submissions
+        $query = DB::table('splk_submission as s')
+            ->join('client as c', 'c.uid', '=', 's.inst_refno')
+            ->selectRaw("
+            s.fin_year AS fin_year, 
+            s.id AS id, 
+            t.prm AS cate_name, 
+            t1.prm AS district, 
+            t2.prm AS subdistrict, 
+            t3.prm AS fin_category, 
+            c.name AS institute_name, 
+            c.con1 as officer, 
+            s.submission_date AS date, 
+            s.status AS status,
+            c.cate1 AS cate1,
+            c.uid AS inst_refno,
+            CASE 
+                WHEN EXISTS (
+                    SELECT 1 
+                    FROM splk_submission s2
+                    WHERE s2.inst_refno = s.inst_refno
+                    AND s2.fin_year = s.fin_year
+                    AND s2.fin_category = s.fin_category
+                    AND s2.status IN (1,2)
+                    AND s2.id > s.id
+                ) THEN 'canceled_submitted'
+                ELSE 'canceled_not_submitted'
+            END AS cancel_status
+        ")
+            ->join('type as t', function ($join) {
+                $join->on('c.cate1', '=', 't.code')
+                     ->where('t.grp', '=', 'clientcate1');
+            })
+            ->join('type as t1', function ($join) {
+                $join->on('c.rem8', '=', 't1.code')
+                    ->where('t1.grp', '=', 'district');
+            })
+            ->join('type as t2', function ($join) {
+                $join->on('c.rem9', '=', 't2.code')
+                    ->where('t2.grp', '=', 'subdistrict');
+            })
+            ->join('type as t3', function ($join) {
+                $join->on('s.fin_category', '=', 't3.code')
+                    ->where('t3.grp', '=', 'statement');
+            })
+            ->where('s.status', 3); // Status 3 means canceled
+
+        // Apply filters
+        if ($finYear) {
+            $query->where('s.fin_year', $finYear);
+        }
+
+        if ($finCategory) {
+            $query->where('s.fin_category', $finCategory);
+        }
+
+        // Handle cate1 filter (convert prm to code)
+        if ($request->filled('category')) {
+            $cate1Code = Parameter::where('grp', 'clientcate1')->where('prm', $request->category)->value('code');
+            if ($cate1Code) {
+                $query->where('c.cate1', $cate1Code);
+            }
+        }
+
+        // Filter by cancel status (if submitted or not after cancellation)
+        if ($status == 'canceled_submitted') {
+            $query->whereRaw("EXISTS (
+            SELECT 1 
+            FROM splk_submission s2
+            WHERE s2.inst_refno = s.inst_refno
+            AND s2.fin_year = s.fin_year
+            AND s2.fin_category = s.fin_category
+            AND s2.status IN (1,2)
+            AND s2.id > s.id
+        )");
+        } elseif ($status == 'canceled_not_submitted') {
+            $query->whereRaw("NOT EXISTS (
+            SELECT 1 
+            FROM splk_submission s2
+            WHERE s2.inst_refno = s.inst_refno
+            AND s2.fin_year = s.fin_year
+            AND s2.fin_category = s.fin_category
+            AND s2.status IN (1,2)
+            AND s2.id > s.id
+        )");
+        }
+
+        // For export to Excel
+        $isExcel = $request->boolean('excel', false);
+        if ($isExcel) {
+            $entries = $query->get();
+
+            $headings = ['Tarikh Hantar', 'Tahun Penyata', 'Kategori Penyata', 'Daerah', 'Mukim', 'Nama Institusi', 'Wakil Institusi', 'Status'];
+
+            $data = $entries->map(function ($entry) {
+                $statusText = 'DIBATALKAN';
+                if ($entry->cancel_status == 'canceled_submitted') {
+                    $statusText = 'DIBATALKAN & DIHANTAR SEMULA';
+                } elseif ($entry->cancel_status == 'canceled_not_submitted') {
+                    $statusText = 'DIBATALKAN & BELUM HANTAR SEMULA';
+                }
+
+                return [
+                    date('d-m-Y', strtotime($entry->date)),
+                    $entry->fin_year,
+                    strtoupper($entry->fin_category),
+                    strtoupper($entry->district),
+                    strtoupper($entry->subdistrict),
+                    strtoupper($entry->institute_name),
+                    strtoupper($entry->officer),
+                    $statusText
+                ];
+            })->toArray();
+
+            return Excel::download(new GenericExport($headings, $data), 'Penyata_Dibatalkan.xlsx');
+        }
+
+        // Get paginated results
+        $entries = $query
+            ->orderBy('s.id', 'desc')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        // Transform entries for view
+        $entries->transform(function ($entry) {
+            $entry->CATEGORY = strtoupper($entry->fin_category);
+            $entry->INSTITUTE = strtoupper($entry->institute_name);
+            $entry->OFFICER = strtoupper($entry->officer);
+            $entry->DISTRICT = strtoupper($entry->district);
+            $entry->SUBDISTRICT = strtoupper($entry->subdistrict);
+            $entry->SUBMISSION_DATE = date('d-m-Y', strtotime($entry->date));
+
+            // Get status information for view
+            $statusInfo = $this->financialStatementService->getFinStatus($entry->status);
+            if ($entry->cancel_status == 'canceled_submitted') {
+                $statusInfo['label'] = 'warning';
+                $statusInfo['prm'] = 'DIBATALKAN & DIHANTAR SEMULA';
+            } elseif ($entry->cancel_status == 'canceled_not_submitted') {
+                $statusInfo['label'] = 'danger';
+                $statusInfo['prm'] = 'DIBATALKAN & BELUM HANTAR SEMULA';
+            }
+
+            $entry->FIN_STATUS = $statusInfo;
+            return $entry;
+        });
+
+        // Set up statuses for filtering
+        $statuses = [
+            'canceled_submitted' => 'Dibatalkan & Dihantar Semula',
+            'canceled_not_submitted' => 'Dibatalkan & Belum Hantar Semula',
+        ];
+
+        $defaultOption = [
+            'code' => $status,
+            'value' => $statuses[$status] ?? 'Dibatalkan & Dihantar Semula',
+        ];
+
+        // Pass queries for maintaining state
+        $queries = $request->only('fin_year', 'fin_category', 'category', 'status');
+
+        return view('report.filtered_submission', [
+            'entries' => $entries,
+            'statuses' => $statuses,
+            'queries' => $queries,
+            'defaultOption' => $defaultOption,
+        ]);
+    }
+
+    /**
+     * Find institutions that have not submitted financial statements
+     * for the given year and category
+     *
+     * @param Request $request
+     * @param string|null $cate1Code
+     * @return \Illuminate\View\View|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function institutesNotSubmitted(Request $request, $cate1Code = null)
+    {
+        $perPage = $request->input('per_page', 10);
+        $finYear = $request->input('fin_year');
+        $finCategory = $request->input('fin_category');
+
+        // Check if we need to show institutions that haven't submitted
+        if ($request->filled('status') && $request->status != 'not_submitted') {
+            return $this->filteredSubmission($request);
+        }
+
+
+        // Query to find institutions that haven't submitted
+        $query = DB::table('client as c')
+            ->selectRaw("
+                c.uid AS id,
+                c.name AS institute_name,
+                c.con1 AS officer,
+                c.hp AS hp,
+                c.mel AS email,
+                t.prm AS cate_name,
+                t1.prm AS district,
+                t2.prm AS subdistrict
+            ")
+            ->join('type as t', function ($join) {
+                $join->on('c.cate1', '=', 't.code')
+                     ->where('t.grp', '=', 'clientcate1');
+            })
+            ->join('type as t1', function ($join) {
+                $join->on('c.rem8', '=', 't1.code')
+                     ->where('t1.grp', '=', 'district');
+            })
+            ->join('type as t2', function ($join) {
+                $join->on('c.rem9', '=', 't2.code')
+                     ->where('t2.grp', '=', 'subdistrict');
+            })
+            // Add filters for active clients in the main query
+            ->where('c.sta', 0)
+            ->where('c.app', 'CLIENT')
+            ->where('c.isdel', 0)
+            ->whereNotExists(function ($subquery) use ($finYear, $finCategory) {
+                $subquery->select(DB::raw(1))
+                    ->from('splk_submission as s')
+                    ->whereRaw('s.inst_refno = c.uid');
+
+                if ($finYear) {
+                    $subquery->where('s.fin_year', $finYear);
+                }
+
+                if ($finCategory) {
+                    $subquery->where('s.fin_category', $finCategory);
+                }
+
+                $subquery->whereNotIn('s.status', [0, 4]);
+
+            });
+
+        // Apply category filter if provided
+        if ($cate1Code) {
+            $query->where('c.cate1', $cate1Code);
+        }
+
+        // Handle Excel export if requested
+        if ($request->boolean('excel')) {
+            $entries = $query->get();
+
+            $headings = ['Daerah', 'Mukim', 'Nama Institusi', 'Wakil Institusi', 'Status'];
+
+            $data = $entries->map(function ($entry) {
+                return [
+                    strtoupper($entry->district),
+                    strtoupper($entry->subdistrict),
+                    strtoupper($entry->institute_name),
+                    strtoupper($entry->officer),
+                    'BELUM HANTAR',
+                ];
+            })->toArray();
+
+            return Excel::download(new GenericExport($headings, $data), 'Institusi_Belum_Hantar.xlsx');
+        }
+
+        // Paginate the results
+        $entries = $query->orderBy('c.name')->paginate($perPage)->withQueryString();
+
+        // Transform for view
+        $entries->transform(function ($institute) use ($request, $finYear, $finCategory) {
+            $institute->INSTITUTE = strtoupper($institute->institute_name);
+            $institute->OFFICER = strtoupper($institute->officer);
+            $institute->DISTRICT = strtoupper($institute->district);
+            $institute->SUBDISTRICT = strtoupper($institute->subdistrict);
+            $institute->HP = $institute->hp;
+            $institute->EMAIL = $institute->email;
+            $institute->CATEGORY = strtoupper($institute->cate_name);
+
+
+            return $institute;
+        });
+
+        // Remove the dd() call that was stopping execution
+        // dd($entries);
+
+        $statuses = [
+            '1,2,3' => 'Dihantar',
+        ];
+
+        $queries = $request->only('fin_year', 'fin_category', 'category', 'status');
+
+
+        return view('report.institute_not_submitted', [
+            'entries' => $entries,
+            'statuses' => $statuses,
+            'queries' => $queries,
+        ]);
+    }
+
 
 
     public function submissionStatus(Request $request)

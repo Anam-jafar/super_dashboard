@@ -27,11 +27,9 @@
               <select id="status" name="status" class="ti-form-select w-full text-ellipsis rounded-sm py-2 pr-1"
                 onchange="this.form.submit()">
 
-                @if (!empty($defaultOption))
-                  <option value="{{ $defaultOption['code'] }}" {{ request()->has('status') ? '' : 'selected' }}>
-                    {{ $defaultOption['value'] }}
-                  </option>
-                @endif
+                <option value="not_submitted" {{ request()->has('status') ? '' : 'selected' }}>
+                  Belum Hantar
+                </option>
 
                 @foreach ($statuses as $key => $value)
                   <option value="{{ $key }}"
@@ -54,25 +52,7 @@
           </div>
         </div>
 
-        <x-table :headers="[
-            'Tarikh Hantar',
-            'Tahun Penyata',
-            'Kategori Penyata',
-            'Daerah',
-            'Mukim',
-            'Nama Institusi',
-            'Wakil Institusi',
-            'Status',
-        ]" :columns="[
-            'SUBMISSION_DATE',
-            'fin_year',
-            'CATEGORY',
-            'DISTRICT',
-            'SUBDISTRICT',
-            'INSTITUTE',
-            'OFFICER',
-            'FIN_STATUS',
-        ]" :rows="$entries" />
+        <x-table :headers="['Institusi', 'Nama Institusi', 'Wakil Institusi', 'Nombor Telefon', 'Emel', 'Daerah', 'Mukim']" :columns="['CATEGORY', 'INSTITUTE', 'OFFICER', 'HP', 'EMAIL', 'DISTRICT', 'SUBDISTRICT']" :rows="$entries" />
         <x-pagination :items="$entries" label="jumlah rekod" />
 
       </div>

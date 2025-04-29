@@ -94,19 +94,19 @@
                     {{ $row->unsubmitted ?? '0' }}
                   </td>
                   <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
-                    <a href="{{ route('filteredSubmission', ['fin_year' => $row->fin_year, 'fin_category' => $row->fin_category, 'status' => '1,2', 'category' => $row->cate_name]) }}"
+                    <a href="{{ route('filteredSubmission', ['fin_year' => $row->fin_year, 'fin_category' => $row->fin_category, 'status' => '1,2,3', 'category' => $row->cate_name, 'options' => 1]) }}"
                       class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-sm inline-flex w-[4rem] items-center justify-center bg-indigo-500 font-medium text-white hover:bg-indigo-600">
                       {{ $row->JUMLAH_1 ?? '0' }}
                     </a>
                   </td>
                   <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
-                    {{ $row->total_telah_hantar ?? '0' }}
-                  </td>
-                  <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
                     {{ $row->total_diterima ?? '0' }}
                   </td>
                   <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
-                    <a href="{{ route('filteredSubmission', ['fin_year' => $row->fin_year, 'fin_category' => $row->fin_category, 'status' => '1,2', 'category' => $row->cate_name]) }}"
+                    {{ $row->total_telah_hantar ?? '0' }}
+                  </td>
+                  <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
+                    <a href="{{ route('filteredSubmission', ['fin_year' => $row->fin_year, 'fin_category' => $row->fin_category, 'status' => '2,3', 'category' => $row->cate_name, 'options' => 2]) }}"
                       class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-sm inline-flex w-[4rem] items-center justify-center bg-indigo-500 font-medium text-white hover:bg-indigo-600">
                       {{ $row->JUMLAH_2 ?? '0' }}
                     </a>
@@ -118,7 +118,7 @@
                     {{ $row->total_ditolak_dan_hantar ?? '0' }}
                   </td>
                   <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
-                    <a href="#"
+                    <a href="{{ route('filteredSubmission', ['fin_year' => $row->fin_year, 'fin_category' => $row->fin_category, 'status' => '2,3', 'category' => $row->cate_name, 'options' => 3]) }}"
                       class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-sm inline-flex w-[4rem] items-center justify-center bg-indigo-500 font-medium text-white hover:bg-indigo-600">
                       {{ $row->JUMLAH_3 ?? '0' }}
                     </a>

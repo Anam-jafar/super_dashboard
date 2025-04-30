@@ -14,7 +14,7 @@
 
         <div class="2xl:justify-start flex w-full flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <!-- Filters Form -->
-          <form method="GET" action="{{ route('filteredSubmission', $queries) }}"
+          <form method="GET" action="{{ route('reviewedSubmissions', $queries) }}"
             class="order-2 flex flex-col gap-4 md:flex-row lg:order-1 lg:flex-1">
 
             {{-- Preserve all other query parameters except 'status' --}}
@@ -46,10 +46,10 @@
 
           <!-- Download Button -->
           <div class="order-1 flex w-full flex-row gap-2 lg:order-2 lg:w-auto">
-            <a href="{{ (app()->environment('production') ? secure_url(request()->path()) : url(request()->path())) . '?' . http_build_query(array_merge(request()->query(), ['excel' => 'true'])) }}"
+            <a href="{{ request()->fullUrlWithQuery(['excel' => true]) }}"
               class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-lg flex w-full items-center justify-center rounded-sm border border-gray-300 bg-white p-2 hover:bg-gray-50 lg:w-auto">
-                <span class="fe fe-download mr-1 text-center text-gray-700"></span>
-                <span class="text-sm font-normal text-gray-700 sm:inline md:inline lg:hidden">Download</span>
+              <span class="fe fe-download mr-1 text-center text-gray-700"></span>
+              <span class="text-sm font-normal text-gray-700 sm:inline md:inline lg:hidden">Download</span>
             </a>
           </div>
         </div>

@@ -351,107 +351,88 @@ class DashboardController extends Controller
             'totalEntries' => $totalEntries,
         ]);
     }
-    public function getStatementsReport(Request $request)
-    {
-        $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
-        $year = $request->input('year', date('Y'));
-        $district = $request->input('district') ?? $districtAccess;
+public function getStatementsReport(Request $request)
+{
+    $finYear = $request->filled('year') ? $request->year : date('Y');
+    $finCategory = $request->filled('fin_category') ? $request->fin_category : 'STM02';
+    $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
+    $district = $request->filled('district') ? $request->district : $districtAccess;
 
-        // Base query
-        $query = DB::table('splk_submission as s')
-            ->join('client as c', 'c.uid', '=', 's.inst_refno')
-            ->where('s.fin_year', $year)
-            ->where('s.fin_category', 'STM01')
-            ->whereNotIn('s.status', [0, 4]);
+    // Start building the subquery filter
+    $subQueryFilter = "WHERE c.sta = 0 AND c.app = 'CLIENT' AND c.isdel = 0";
 
-        // Apply district filter if specified
-        if (!empty($district)) {
-            $query->where('c.rem8', $district);
-        }
-
-        // Get total submitted
-        $total_telah_hantar = clone $query;
-        $total_telah_hantar = $total_telah_hantar->where('s.status', 1)->count();
-
-        // Get total received/accepted
-        $total_diterima = clone $query;
-        $total_diterima = $total_diterima->where('s.status', 2)->count();
-
-        // Get total rejected and not resubmitted
-        $total_ditolak_belum_hantar = DB::table('splk_submission as s')
-            ->join('client as c', 'c.uid', '=', 's.inst_refno')
-            ->where('s.fin_year', $year)
-            ->where('s.fin_category', 'STM01')
-            ->where('s.status', 3)
-            ->whereNotExists(function ($query) {
-                $query->select(DB::raw(1))
-                    ->from('splk_submission as s2')
-                    ->whereRaw('s2.inst_refno = s.inst_refno')
-                    ->whereRaw('s2.fin_year = s.fin_year')
-                    ->whereRaw('s2.fin_category = s.fin_category')
-                    ->whereIn('s2.status', [1, 2])
-                    ->whereRaw('s2.id > s.id');
-            });
-
-        if (!empty($district)) {
-            $total_ditolak_belum_hantar->where('c.rem8', $district);
-        }
-
-        $total_ditolak_belum_hantar = $total_ditolak_belum_hantar->count();
-
-        // Get total rejected and resubmitted
-        $total_ditolak_dan_hantar = DB::table('splk_submission as s')
-            ->join('client as c', 'c.uid', '=', 's.inst_refno')
-            ->where('s.fin_year', $year)
-            ->where('s.fin_category', 'STM01')
-            ->where('s.status', 3)
-            ->whereExists(function ($query) {
-                $query->select(DB::raw(1))
-                    ->from('splk_submission as s2')
-                    ->whereRaw('s2.inst_refno = s.inst_refno')
-                    ->whereRaw('s2.fin_year = s.fin_year')
-                    ->whereRaw('s2.fin_category = s.fin_category')
-                    ->whereIn('s2.status', [1, 2])
-                    ->whereRaw('s2.id > s.id');
-            });
-
-        if (!empty($district)) {
-            $total_ditolak_dan_hantar->where('c.rem8', $district);
-        }
-
-        $total_ditolak_dan_hantar = $total_ditolak_dan_hantar->count();
-
-        // Get total registered (from client table)
-        $total_berdaftar = DB::table('client')
-            ->where('sta', 0);
-
-        if (!empty($district)) {
-            $total_berdaftar->where('rem8', $district);
-        }
-
-        $total_berdaftar = $total_berdaftar->count();
-
-        // Calculate total rejected
-        $total_ditolak = $total_ditolak_belum_hantar + $total_ditolak_dan_hantar;
-
-        return response()->json([
-            'categories' => [
-                ['Jumlah Hantar', 'Jumlah Berdaftar'],
-                ['Jumlah Terima', 'Jumlah Ditolak'],
-                ['Ditolak & Telah Hantar Semula', 'Ditolak & Belum Hantar Semula']
-            ],
-            'series' => [
-                [$total_telah_hantar, $total_berdaftar],
-                [$total_diterima, $total_ditolak],
-                [$total_ditolak_dan_hantar, $total_ditolak_belum_hantar]
-            ],
-            'colors' => [
-                ['#E75FB4', '#5B6EF5'],
-                ['#FF9066', '#26C5B2'],
-                ['#FFD84D', '#4CAF50']
-            ]
-        ]);
+    if (!is_null($district)) {
+        $subQueryFilter .= " AND c.rem8 = '{$district}'";
     }
+
+    // Main query using the subquery approach for more efficient calculation
+    $data = DB::table('client as c')
+        ->selectRaw("
+            COUNT(DISTINCT c.uid) AS total_berdaftar,
+            COUNT(DISTINCT CASE WHEN s.status IN (1, 2, 3) THEN s.inst_refno END) AS total_telah_hantar,
+            COUNT(DISTINCT CASE WHEN s.status = 2 THEN s.inst_refno END) AS total_diterima,
+            COUNT(DISTINCT CASE 
+                WHEN s.status = 3 AND NOT EXISTS (
+                    SELECT 1 
+                    FROM splk_submission s2
+                    WHERE s2.inst_refno = s.inst_refno
+                    AND s2.fin_year = s.fin_year
+                    AND s2.fin_category = s.fin_category
+                    AND s2.status IN (1, 2)
+                    AND s2.id > s.id
+                )
+                THEN s.inst_refno 
+            END) AS total_ditolak_belum_hantar,
+            COUNT(DISTINCT CASE 
+                WHEN s.status = 3 AND EXISTS (
+                    SELECT 1 
+                    FROM splk_submission s2
+                    WHERE s2.inst_refno = s.inst_refno
+                    AND s2.fin_year = s.fin_year
+                    AND s2.fin_category = s.fin_category
+                    AND s2.status IN (1, 2)
+                    AND s2.id > s.id
+                )
+                THEN s.inst_refno 
+            END) AS total_ditolak_dan_hantar
+        ")
+        ->leftJoin('splk_submission as s', function($join) use ($finYear, $finCategory) {
+            $join->on('c.uid', '=', 's.inst_refno')
+                ->where('s.fin_year', $finYear)
+                ->where('s.fin_category', $finCategory)
+                ->whereNotIn('s.status', [0, 4]);
+        })
+        ->where('c.sta', 0)
+        ->where('c.app', 'CLIENT')
+        ->where('c.isdel', 0);
+
+    if (!is_null($district)) {
+        $data->where('c.rem8', $district);
+    }
+
+    $result = $data->first();
+
+    // Calculate total rejected
+    $total_ditolak = $result->total_ditolak_belum_hantar + $result->total_ditolak_dan_hantar;
+
+    return response()->json([
+        'categories' => [
+            ['Jumlah Hantar', 'Jumlah Berdaftar'],
+            ['Jumlah Terima', 'Jumlah Ditolak'],
+            ['Ditolak & Telah Hantar Semula', 'Ditolak & Belum Hantar Semula']
+        ],
+        'series' => [
+            [$result->total_telah_hantar, $result->total_berdaftar],
+            [$result->total_diterima, $total_ditolak],
+            [$result->total_ditolak_dan_hantar, $result->total_ditolak_belum_hantar]
+        ],
+        'colors' => [
+            ['#E75FB4', '#5B6EF5'],
+            ['#FF9066', '#26C5B2'],
+            ['#FFD84D', '#4CAF50']
+        ]
+    ]);
+}
 
     public function index()
     {

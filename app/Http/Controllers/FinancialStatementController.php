@@ -46,7 +46,7 @@ class FinancialStatementController extends Controller
 
             $financialStatement->update($validatedData);
 
-            return redirect()->route('statementList')->with('success', 'Financial Statement updated successfully');
+            return redirect()->route('statementList')->with('success', 'Laporan Kewangan Telah Berjaya Dihantar');
         }
         $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
         $financialStatement->FIN_STATUS = $this->financialStatementService->getFinStatus($financialStatement->status);

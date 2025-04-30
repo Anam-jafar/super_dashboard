@@ -110,7 +110,6 @@
                   <div class="mb-2 flex items-start justify-between">
                     <div>
                       <span class="mb-1 block text-textmuted dark:text-textmuted/50">Jumlah Ditolak
-                        Kemaskini
                       </span>
                       <h4 class="mb-0 font-medium">{{ $total_statement_cancelled ?? 0 }}</h4>
                     </div>

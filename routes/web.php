@@ -91,6 +91,7 @@ Route::prefix('mais')->group(function () {
         Route::match(['get', 'post'], '/report/search-statement', [ReportController::class, 'searchStatement'])->name('searchStatementReport');
         Route::get('/report/export-statement', [ReportController::class, 'exportStatementReport'])->name('exportStatementReport');
         Route::get('/report/filtered-submission', [ReportController::class, 'filteredSubmission'])->name('filteredSubmission');
+        Route::get('/report/filtered-reviewed-submission', [ReportController::class, 'reviewedSubmissions'])->name('reviewedSubmissions');
 
 
         Route::get('/setting/list', [SettingController::class, 'list'])->name('settingsList');

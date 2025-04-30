@@ -20,7 +20,13 @@
                 'type' => 'select',
                 'options' => collect($parameters['statements'])->except('STM01')->toArray(), // Remove STM01 from options
             ],
-        ]" :route="route('submissionCountReport')" :download='true' />
+            [
+                'name' => 'rem8',
+                'label' => 'Semua Daerah',
+                'type' => 'select',
+                'options' => $parameters['districts'],
+            ],
+        ]" :route="route('submissionCountReport')" />
         @php
           $headers = [
               'Institusi',
@@ -94,8 +100,8 @@
                     {{ $row->unsubmitted ?? '0' }}
                   </td>
                   <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
-                    <a href="{{ route('filteredSubmission', ['fin_year' => $row->fin_year, 'fin_category' => $row->fin_category, 'status' => '1,2,3', 'category' => $row->cate_name, 'options' => 1]) }}"
-                      class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-sm inline-flex w-[4rem] items-center justify-center bg-indigo-500 font-medium text-white hover:bg-indigo-600">
+                    <a href="{{ route('filteredSubmission', ['fin_year' => $row->fin_year, 'fin_category' => $row->fin_category, 'status' => '1,2,3', 'category' => $row->cate_name, 'options' => 1, 'rem8' => $district_query]) }}"
+                      target=_blank class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-sm inline-flex w-[4rem] items-center justify-center bg-indigo-500 font-medium text-white hover:bg-indigo-600">
                       {{ $row->JUMLAH_1 ?? '0' }}
                     </a>
                   </td>
@@ -106,20 +112,20 @@
                     {{ $row->total_telah_hantar ?? '0' }}
                   </td>
                   <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
-                    <a href="{{ route('filteredSubmission', ['fin_year' => $row->fin_year, 'fin_category' => $row->fin_category, 'status' => '2,3', 'category' => $row->cate_name, 'options' => 2]) }}"
-                      class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-sm inline-flex w-[4rem] items-center justify-center bg-indigo-500 font-medium text-white hover:bg-indigo-600">
+                    <a href="{{ route('filteredSubmission', ['fin_year' => $row->fin_year, 'fin_category' => $row->fin_category, 'status' => '2,3', 'category' => $row->cate_name, 'options' => 2, 'rem8' => $district_query]) }}"
+                      target=_blank class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-sm inline-flex w-[4rem] items-center justify-center bg-indigo-500 font-medium text-white hover:bg-indigo-600">
                       {{ $row->JUMLAH_2 ?? '0' }}
                     </a>
-                  </td>
-                  <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
-                    {{ $row->total_ditolak_belum_hantar ?? '0' }}
                   </td>
                   <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
                     {{ $row->total_ditolak_dan_hantar ?? '0' }}
                   </td>
                   <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
-                    <a href="{{ route('filteredSubmission', ['fin_year' => $row->fin_year, 'fin_category' => $row->fin_category, 'status' => '2,3', 'category' => $row->cate_name, 'options' => 3]) }}"
-                      class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-sm inline-flex w-[4rem] items-center justify-center bg-indigo-500 font-medium text-white hover:bg-indigo-600">
+                    {{ $row->total_ditolak_belum_hantar ?? '0' }}
+                  </td>
+                  <td class="whitespace-nowrap px-2 py-2 text-center text-xs text-black">
+                    <a href="{{ route('filteredSubmission', ['fin_year' => $row->fin_year, 'fin_category' => $row->fin_category, 'status' => 'canceled_submitted', 'category' => $row->cate_name, 'options' => 3, 'rem8' => $district_query]) }}"
+                      target=_blank class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-sm inline-flex w-[4rem] items-center justify-center bg-indigo-500 font-medium text-white hover:bg-indigo-600">
                       {{ $row->JUMLAH_3 ?? '0' }}
                     </a>
                   </td>

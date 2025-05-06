@@ -542,7 +542,7 @@
                           <td>{{ $subscription->OFFICER }}</td>
                           <td class="text-center">{{ $subscription->PHONE }}</td>
                           <td class="text-center">
-                            ${{ number_format($subscription->TOTAL_OUTSTANDING, 2) }}
+                            RM {{ number_format($subscription->TOTAL_OUTSTANDING, 2) }}
                           </td>
                           <td class="text-center">
                             <span class="badge bg-primarytint1color">{{ $subscription->STATUS ?? '-' }}</span>

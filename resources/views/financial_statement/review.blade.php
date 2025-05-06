@@ -102,6 +102,11 @@
                     name="contruction_expenses" type="money" placeholder="00.00" :rightAlign="true"
                     value="{{ $financialStatement->contruction_expenses }}" disabled="true" />
                 </div>
+                <div class="grid grid-cols-1 items-end gap-6 md:grid-cols-2">
+                  <x-input-field level="(iii) Belanja Pembinaan PWS (RM)" id="i6" name="pws_expenses"
+                    type="money" placeholder="00.00" :rightAlign="true"
+                    value="{{ $financialStatement->pws_expenses }}" disabled="true" />
+                </div>
 
               </div>
               <div class="mt-4 grid grid-cols-2 gap-6">
@@ -117,11 +122,6 @@
                   <x-input-field level="(ii) Lebihan PWS (RM)" id="i5" name="pws_surplus" type="money"
                     placeholder="00.00" :rightAlign="true" value="{{ $financialStatement->pws_surplus }}"
                     disabled="true" />
-                </div>
-                <div class="grid grid-cols-1 items-end gap-6 md:grid-cols-2">
-                  <x-input-field level="(iii) Belanja Pembinaan PWS (RM)" id="i6" name="pws_expenses"
-                    type="money" placeholder="00.00" :rightAlign="true"
-                    value="{{ $financialStatement->pws_expenses }}" disabled="true" />
                 </div>
               </div>
 

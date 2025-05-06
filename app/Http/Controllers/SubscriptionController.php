@@ -137,6 +137,7 @@ class SubscriptionController extends Controller
             '=',
             'subquery.vid'
         )
+        ->where('c.subscription_status', 2)
         ->select(
             'c.name as name',
             'c.cate1 as cate1',

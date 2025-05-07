@@ -98,7 +98,18 @@ class ReportController extends Controller
                             WHERE $whereClause) 
                             - COUNT(DISTINCT CASE WHEN s.status IN (1, 2, 3) THEN s.inst_refno END)
                         ) AS unsubmitted,
-                        COUNT(DISTINCT CASE WHEN s.status = 3 THEN s.inst_refno END) AS total_telah_hantar,
+                        COUNT(DISTINCT CASE 
+                            WHEN s.status = 3 AND NOT EXISTS (
+                                SELECT 1 
+                                FROM splk_submission s2
+                                WHERE s2.inst_refno = s.inst_refno
+                                AND s2.fin_year = s.fin_year
+                                AND s2.fin_category = s.fin_category
+                                AND s2.status IN (1,2)
+                                AND s2.id > s.id
+                            )
+                            THEN s.inst_refno 
+                        END) AS total_telah_hantar,
                         COUNT(DISTINCT CASE WHEN s.status = 2 THEN s.inst_refno END) AS total_diterima,
                         COUNT(DISTINCT CASE 
                             WHEN s.status = 3 AND NOT EXISTS (
@@ -119,7 +130,7 @@ class ReportController extends Controller
                                 WHERE s2.inst_refno = s.inst_refno
                                 AND s2.fin_year = s.fin_year
                                 AND s2.fin_category = s.fin_category
-                                AND s2.status IN (1,2)
+                                AND s2.status = 1
                                 AND s2.id > s.id
                             )
                             THEN s.inst_refno 
@@ -424,6 +435,15 @@ class ReportController extends Controller
                 $join->on('s.id', '=', 'latest_status3.max_id');
             })
             ->where('s.status', 3)
+            ->whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('splk_submission as s2')
+                    ->whereColumn('s2.inst_refno', 's.inst_refno')
+                    ->whereColumn('s2.fin_year', 's.fin_year')
+                    ->whereColumn('s2.fin_category', 's.fin_category')
+                    ->whereIn('s2.status', [1, 2])
+                    ->whereColumn('s2.id', '>', 's.id');
+            })
             ->selectRaw("
                 s.fin_year AS fin_year, s.id AS id, t.prm AS cate_name, t1.prm AS district, 
                 t2.prm AS subdistrict, t3.prm AS fin_category, c.name AS institute_name, 
@@ -644,7 +664,7 @@ class ReportController extends Controller
                 ->selectRaw($baseSelect . ", 'canceled_submitted' AS cancel_status");
                 
             $query = $baseJoins($query);
-            $query->whereIn('s.status', [1, 2])
+            $query->where('s.status', 1)
                 ->whereRaw("EXISTS (
                     SELECT 1 
                     FROM splk_submission s2

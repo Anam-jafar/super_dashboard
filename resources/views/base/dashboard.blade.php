@@ -29,154 +29,372 @@
       <div class="grid grid-cols-12 gap-x-6">
 
         {{-- Left Side --}}
-        <div class="col-span-12 xl:col-span-8">
-          <div class="grid grid-cols-12 gap-x-6">
+        <div class="col-span-12 xl:col-span-9">
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
 
-            {{-- Dashboard Cards --}}
-            <div class="col-span-12 xl:col-span-6 xxl:col-span-4">
-              <div class="box main-content-card overflow-hidden">
+            {{-- First Row of Dashboard Cards --}}
+            <div class="col-span-1">
+              <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
-                  <div class="mb-2 flex items-start justify-between">
+                  <div class="flex items-start justify-between">
                     <div>
-                      <span class="mb-1 block text-textmuted dark:text-textmuted/50">Jumlah Institusi
-                        Berdaftar</span>
-                      <h4 class="mb-0 font-medium">{{ $total_institute ?? 0 }}</h4>
+                      <span class="card-title">Jumlah Institusi Berdaftar</span>
+                      <h4 class="card-value">{{ $total_institute ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
-
                       <img src="{{ asset('assets/icons/dashboard_icons_1.svg') }}" alt="logo"
-                        class="toggle-dark h-10 w-10">
-
+                        class="toggle-dark card-icon">
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
-            <div class="col-span-12 xl:col-span-6 xxl:col-span-4">
-              <div class="box main-content-card overflow-hidden">
+            <div class="col-span-1">
+              <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
-                  <div class="mb-2 flex items-start justify-between">
+                  <div class="flex items-start justify-between">
                     <div>
-                      <span class="mb-1 block text-textmuted dark:text-textmuted/50">Permohonan Daftar Masjid
-                      </span>
-                      <h4 class="mb-0 font-medium">{{ $total_institute_registration ?? 0 }}</h4>
+                      <span class="card-title">Permohonan Daftar Masjid</span>
+                      <h4 class="card-value">{{ $total_institute_registration ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
                       <img src="{{ asset('assets/icons/dashboard_icons_2.svg') }}" alt="logo"
-                        class="toggle-dark h-10 w-10">
+                        class="toggle-dark card-icon">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-span-12 xl:col-span-6 xxl:col-span-4">
-              <div class="box main-content-card overflow-hidden">
+            <div class="col-span-1">
+              <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
-                  <div class="mb-2 flex items-start justify-between">
+                  <div class="flex items-start justify-between">
                     <div>
-                      <span class="mb-1 block text-textmuted dark:text-textmuted/50">Status Menunggu Semakan
-                      </span>
-                      <h4 class="mb-0 font-medium">{{ $total_statement_to_review ?? 0 }}</h4>
+                      <span class="card-title">Status Menunggu Semakan</span>
+                      <h4 class="card-value">{{ $total_statement_to_review ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
                       <img src="{{ asset('assets/icons/dashboard_icons_3.svg') }}" alt="logo"
-                        class="toggle-dark h-10 w-10">
+                        class="toggle-dark card-icon">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-span-12 xl:col-span-6 xxl:col-span-4">
-              <div class="box main-content-card overflow-hidden">
+            <div class="col-span-1">
+              <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
-                  <div class="mb-2 flex items-start justify-between">
+                  <div class="flex items-start justify-between">
                     <div>
-                      <span class="mb-1 block text-textmuted dark:text-textmuted/50">Jumlah Diterima
-                      </span>
-                      <h4 class="mb-0 font-medium">{{ $total_statement_accepted ?? 0 }}</h4>
+                      <span class="card-title">Jumlah Diterima</span>
+                      <h4 class="card-value">{{ $total_statement_accepted ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
                       <img src="{{ asset('assets/icons/dashboard_icons_5.svg') }}" alt="logo"
-                        class="toggle-dark h-10 w-10">
+                        class="toggle-dark card-icon">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-span-12 xl:col-span-6 xxl:col-span-4">
-              <div class="box main-content-card overflow-hidden">
+            <div class="col-span-1">
+              <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
-                  <div class="mb-2 flex items-start justify-between">
+                  <div class="flex items-start justify-between">
                     <div>
-                      <span class="mb-1 block text-textmuted dark:text-textmuted/50">Jumlah Ditolak
-                      </span>
-                      <h4 class="mb-0 font-medium">{{ $total_statement_cancelled ?? 0 }}</h4>
+                      <span class="card-title">Jumlah Ditolak</span>
+                      <h4 class="card-value">{{ $total_statement_cancelled ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
                       <img src="{{ asset('assets/icons/dashboard_icons_4.svg') }}" alt="logo"
-                        class="toggle-dark h-10 w-10">
+                        class="toggle-dark card-icon">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-span-12 xl:col-span-6 xxl:col-span-4">
-              <div class="box main-content-card overflow-hidden">
+            {{-- End of First Row --}}
+
+            {{-- Second Row of Dashboard Cards --}}
+            <div class="col-span-1">
+              <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
-                  <div class="mb-2 flex items-start justify-between">
+                  <div class="flex items-start justify-between">
                     <div>
-                      <span class="mb-1 block text-textmuted dark:text-textmuted/50">Jumlah Mohon
-                        Kemaskini
-                      </span>
-                      <h4 class="mb-0 font-medium">{{ $total_statement_request_edit ?? 0 }}</h4>
+                      <span class="card-title">Jumlah Mohon Kemaskini</span>
+                      <h4 class="card-value">{{ $total_statement_request_edit ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
                       <img src="{{ asset('assets/icons/dashboard_icons_6.svg') }}" alt="logo"
-                        class="toggle-dark h-10 w-10">
+                        class="toggle-dark card-icon">
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            {{-- End::Dashboard Cards --}}
-
-            {{-- Bar Graph --}}
-            <div class="col-span-12">
-              <div class="box">
-                <div class="box-header justify-between">
-                  <div class="box-title">
-                    Perbandingan Jumlah Mengikut Status </div>
-
-                  <div class="flex items-center gap-2">
-                    <!-- Year Dropdown -->
-                    <select id="bar_yearSelect" class="w-20 rounded-md border px-3 py-2">
-                      @foreach ($years as $year)
-                        <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>
-                          {{ $year }}
-                        </option>
-                      @endforeach
-                    </select>
-
-                    <!-- District Dropdown -->
-                    <select id="bar_districtSelect" class="w-40 rounded-md border px-3 py-2">
-                      <option value="">Semua Daerah</option> <!-- Default option -->
-                      @foreach ($districts as $code => $prm)
-                        <option value="{{ $code }}">
-                          {{ $prm }}
-                        </option>
-                      @endforeach
-                    </select>
-
+            <div class="col-span-1">
+              <div class="box dashboard-card overflow-hidden">
+                <div class="box-body">
+                  <div class="flex items-start justify-between">
+                    <div>
+                      <span class="card-title">Status Menunggu Semakan</span>
+                      <h4 class="card-value">{{ $total_statement_to_review ?? 0 }}</h4>
+                    </div>
+                    <div class="leading-none">
+                      <img src="{{ asset('assets/icons/dashboard_icons_3.svg') }}" alt="logo"
+                        class="toggle-dark card-icon">
+                    </div>
                   </div>
-                </div>
-                <div class="box-body mb-6 mt-6 flex flex-col justify-start" style="min-height: 350px;">
-                  <div id="chart"></div>
-
                 </div>
               </div>
             </div>
-            {{-- End::Bar Graph --}}
+            <div class="col-span-1">
+              <div class="box dashboard-card overflow-hidden">
+                <div class="box-body">
+                  <div class="flex items-start justify-between">
+                    <div>
+                      <span class="card-title">Jumlah Diterima</span>
+                      <h4 class="card-value">{{ $total_statement_accepted ?? 0 }}</h4>
+                    </div>
+                    <div class="leading-none">
+                      <img src="{{ asset('assets/icons/dashboard_icons_5.svg') }}" alt="logo"
+                        class="toggle-dark card-icon">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="box dashboard-card overflow-hidden">
+                <div class="box-body">
+                  <div class="flex items-start justify-between">
+                    <div>
+                      <span class="card-title">Jumlah Ditolak</span>
+                      <h4 class="card-value">{{ $total_statement_cancelled ?? 0 }}</h4>
+                    </div>
+                    <div class="leading-none">
+                      <img src="{{ asset('assets/icons/dashboard_icons_4.svg') }}" alt="logo"
+                        class="toggle-dark card-icon">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-span-1">
+              <div class="box dashboard-card overflow-hidden">
+                <div class="box-body">
+                  <div class="flex items-start justify-between">
+                    <div>
+                      <span class="card-title">Jumlah Mohon Kemaskini</span>
+                      <h4 class="card-value">{{ $total_statement_request_edit ?? 0 }}</h4>
+                    </div>
+                    <div class="leading-none">
+                      <img src="{{ asset('assets/icons/dashboard_icons_6.svg') }}" alt="logo"
+                        class="toggle-dark card-icon">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{-- End::Second Row --}}
+
+          </div>
+        </div>
+        {{-- End::Left Side --}}
+
+        {{-- Right Side --}}
+        <div class="col-span-12 xl:col-span-3">
+          <div class="box h-full overflow-hidden"
+            style="background-image: url('{{ asset('assets/icons/banner.png') }}'); background-size: cover; background-position: center; min-height:225px">
+            <div class="box-body relative p-3">
+              <div class="grid grid-cols-12 justify-between">
+              </div>
+
+              <!-- Dark Transparent Footer for Date & Time -->
+              <div class="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 p-3 text-center text-white">
+                <span class="text-lg font-semibold">
+                  {{ now('Asia/Kuala_Lumpur')->format('l, d F Y') }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{-- End::Right Side --}}
+
+      </div>
+      <!-- End::Row-1 -->
+
+      <!-- Start::Row-2 -->
+      {{-- Financial Reports Grid Container --}}
+      <div class="grid grid-cols-12 gap-6">
+        {{-- Filters Row --}}
+        <div class="col-span-12">
+          <div class="mb-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <!-- Header -->
+            <h2 class="text-lg font-semibold text-gray-800 sm:mb-0">Statistic</h2>
+
+            <!-- Filters -->
+            <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+              <!-- Year Dropdown -->
+              <select id="yearSelect" class="w-full rounded-md border px-3 py-2 sm:w-20">
+                @foreach ($years as $year)
+                  <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>
+                    {{ $year }}
+                  </option>
+                @endforeach
+              </select>
+
+              <!-- District Dropdown -->
+              <select id="districtSelect" class="w-full rounded-md border px-3 py-2 sm:w-40">
+                <option value="">Semua Daerah</option>
+                @foreach ($districts as $code => $prm)
+                  <option value="{{ $code }}">
+                    {{ $prm }}
+                  </option>
+                @endforeach
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {{-- Financial Report Pie Chart 1 --}}
+        <div class="col-span-12 xl:col-span-6 xxl:col-span-3">
+          <div class="box overflow-hidden">
+            <div class="box-header justify-between pb-0">
+              <div class="box-title">
+                Penghantaran Laporan Kewangan
+              </div>
+            </div>
+
+            <div class="box-body px-3 py-4">
+              <div id="orders1" class="my-2"></div>
+            </div>
+
+            <div class="box-footer border-t border-dashed px-4 py-3">
+              <div class="flex items-center justify-between">
+                <!-- Left Section -->
+                <div class="text-gray-700 dark:text-gray-300">
+                  <h5 class="mb-2 text-sm font-semibold">Jumlah Penghantaran</h5>
+                  <h5 class="text-sm font-semibold">Jumlah Institusi Berdaftar</h5>
+                </div>
+
+                <!-- Right Section -->
+                <div class="text-right text-gray-700 dark:text-gray-300">
+                  <h5 id="totalEntries1" class="mb-2 text-lg font-bold">{{ $totalEntries }}</h5>
+                  <h5 id="totalClients1" class="text-lg font-bold">{{ $totalClients }}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{-- End::Financial Report Pie Chart 1 --}}
+
+        {{-- Financial Report Pie Chart 2 --}}
+        <div class="col-span-12 xl:col-span-6 xxl:col-span-3">
+          <div class="box overflow-hidden">
+            <div class="box-header justify-between pb-0">
+              <div class="box-title">
+                Status Pematuhan Kewangan
+              </div>
+            </div>
+
+            <div class="box-body px-3 py-4">
+              <div id="orders2" class="my-2"></div>
+            </div>
+
+            <div class="box-footer border-t border-dashed px-4 py-3">
+              <div class="flex items-center justify-between">
+                <!-- Left Section -->
+                <div class="text-gray-700 dark:text-gray-300">
+                  <h5 class="mb-2 text-sm font-semibold">Jumlah Penghantaran</h5>
+                  <h5 class="text-sm font-semibold">Jumlah Institusi Berdaftar</h5>
+                </div>
+
+                <!-- Right Section -->
+                <div class="text-right text-gray-700 dark:text-gray-300">
+                  <h5 id="totalEntries2" class="mb-2 text-lg font-bold">{{ $totalEntries }}</h5>
+                  <h5 id="totalClients2" class="text-lg font-bold">{{ $totalClients }}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{-- End::Financial Report Pie Chart 2 --}}
+
+        {{-- Financial Report Pie Chart 3 --}}
+        <div class="col-span-12 xl:col-span-6 xxl:col-span-3">
+          <div class="box overflow-hidden">
+            <div class="box-header justify-between pb-0">
+              <div class="box-title">
+                Pengesahan Audit Tahunan
+              </div>
+            </div>
+
+            <div class="box-body px-3 py-4">
+              <div id="orders3" class="my-2"></div>
+            </div>
+
+            <div class="box-footer border-t border-dashed px-4 py-3">
+              <div class="flex items-center justify-between">
+                <!-- Left Section -->
+                <div class="text-gray-700 dark:text-gray-300">
+                  <h5 class="mb-2 text-sm font-semibold">Jumlah Penghantaran</h5>
+                  <h5 class="text-sm font-semibold">Jumlah Institusi Berdaftar</h5>
+                </div>
+
+                <!-- Right Section -->
+                <div class="text-right text-gray-700 dark:text-gray-300">
+                  <h5 id="totalEntries3" class="mb-2 text-lg font-bold">{{ $totalEntries }}</h5>
+                  <h5 id="totalClients3" class="text-lg font-bold">{{ $totalClients }}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{-- End::Financial Report Pie Chart 3 --}}
+
+        {{-- Financial Report Pie Chart 4 --}}
+        <div class="col-span-12 xl:col-span-6 xxl:col-span-3">
+          <div class="box overflow-hidden">
+            <div class="box-header justify-between pb-0">
+              <div class="box-title">
+                Status Dokumen Kewangan
+              </div>
+            </div>
+
+            <div class="box-body px-3 py-4">
+              <div id="orders4" class="my-2"></div>
+            </div>
+
+            <div class="box-footer border-t border-dashed px-4 py-3">
+              <div class="flex items-center justify-between">
+                <!-- Left Section -->
+                <div class="text-gray-700 dark:text-gray-300">
+                  <h5 class="mb-2 text-sm font-semibold">Jumlah Penghantaran</h5>
+                  <h5 class="text-sm font-semibold">Jumlah Institusi Berdaftar</h5>
+                </div>
+
+                <!-- Right Section -->
+                <div class="text-right text-gray-700 dark:text-gray-300">
+                  <h5 id="totalEntries4" class="mb-2 text-lg font-bold">{{ $totalEntries }}</h5>
+                  <h5 id="totalClients4" class="text-lg font-bold">{{ $totalClients }}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{-- End::Financial Report Pie Chart 4 --}}
+      </div>
+      {{-- End::Financial Reports Grid Container --}}
+
+      <!-- End::Row-2 -->
+
+      <!-- Start::Row-3 -->
+      <div class="grid grid-cols-12 gap-x-6">
+
+        {{-- Left Side --}}
+        <div class="col-span-12 xl:col-span-8">
+          <div class="grid grid-cols-12 gap-x-6">
 
             {{-- New Registration Requests --}}
             <div class="col-span-12 xl:col-span-4 xxl:col-span-4">
@@ -366,81 +584,6 @@
         {{-- Right Side --}}
         <div class="col-span-12 xl:col-span-4">
           <div class="grid grid-cols-12 gap-x-6">
-            {{-- Banner with Time --}}
-            <div class="xl:col-span12 col-span-12">
-              <div class="box overflow-hidden"
-                style="background-image: url('{{ asset('assets/icons/banner.png') }}'); background-size: cover; background-position: center; min-height:225px">
-                <div class="box-body relative p-6">
-                  <div class="grid grid-cols-12 justify-between">
-                  </div>
-
-                  <!-- Dark Transparent Footer for Date & Time -->
-                  <div class="absolute bottom-0 left-0 w-full bg-black bg-opacity-50 p-4 text-center text-white">
-                    <span class="text-lg font-semibold">
-                      {{ now('Asia/Kuala_Lumpur')->format('l, d F Y') }}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {{-- End::Banner with Time --}}
-
-            {{-- Financial Report Pie Chart --}}
-            <div class="xl:col-span12 col-span-12">
-              <div class="col-span-12 xl:col-span-6 xxl:col-span-4">
-                <div class="box overflow-hidden">
-                  <div class="box-header justify-between pb-0">
-                    <div class="box-title">
-                      Jumlah Penghantaran Tahunan Laporan Kewangan
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <!-- Year Dropdown -->
-                      <select id="yearSelect" class="w-20 rounded-md border px-3 py-2">
-                        @foreach ($years as $year)
-                          <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>
-                            {{ $year }}
-                          </option>
-                        @endforeach
-                      </select>
-
-                      <!-- District Dropdown -->
-                      <select id="districtSelect" class="w-40 rounded-md border px-3 py-2">
-                        <option value="">Semua Daerah</option> <!-- Default option -->
-                        @foreach ($districts as $code => $prm)
-                          <option value="{{ $code }}">
-                            {{ $prm }}
-                          </option>
-                        @endforeach
-                      </select>
-
-                    </div>
-
-                  </div>
-
-                  <div class="box-body px-3 py-4">
-                    <div id="orders" class="my-2"></div>
-                  </div>
-
-                  <div class="box-footer border-t border-dashed px-4 py-3">
-                    <div class="flex items-center justify-between">
-                      <!-- Left Section -->
-                      <div class="text-gray-700 dark:text-gray-300">
-                        <h5 class="mb-2 text-sm font-semibold">Jumlah Penghantaran</h5>
-                        <h5 class="text-sm font-semibold">Jumlah Institusi Berdaftar</h5>
-                      </div>
-
-                      <!-- Right Section -->
-                      <div class="text-right text-gray-700 dark:text-gray-300">
-                        <h5 id="totalEntries" class="mb-2 text-lg font-bold">{{ $totalEntries }}
-                        </h5>
-                        <h5 id="totalClients" class="text-lg font-bold">{{ $totalClients }}</h5>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            {{-- End::Financial Report Pie Chart --}}
 
             {{-- Institute Count by District --}}
             @php
@@ -498,9 +641,9 @@
         {{-- End::Right Side --}}
 
       </div>
-      <!-- End::Row-1 -->
+      <!-- End::Row-3 -->
 
-      <!-- Start::Row-3 -->
+      <!-- Start::Row-4 -->
       @if (!in_array(Auth::user()->syslevel, ['ACL02', 'ACL03']))
         <div class="grid grid-cols-12 gap-x-6">
           <div class="col-span-12">
@@ -557,7 +700,7 @@
           </div>
         </div>
       @endif
-      <!-- End::Row-3 -->
+      <!-- End::Row-4 -->
 
     </div>
   </div>
@@ -572,28 +715,73 @@
     document.addEventListener("DOMContentLoaded", function() {
       const yearSelect = document.getElementById("yearSelect");
       const districtSelect = document.getElementById("districtSelect");
-      const totalEntriesEl = document.getElementById("totalEntries");
-      const totalClientsEl = document.getElementById("totalClients");
 
-      let chart;
+      // Elements for Chart 1
+      const totalEntriesEl1 = document.getElementById("totalEntries1");
+      const totalClientsEl1 = document.getElementById("totalClients1");
+
+      // Elements for Chart 2
+      const totalEntriesEl2 = document.getElementById("totalEntries2");
+      const totalClientsEl2 = document.getElementById("totalClients2");
+
+      // Elements for Chart 3
+      const totalEntriesEl3 = document.getElementById("totalEntries3");
+      const totalClientsEl3 = document.getElementById("totalClients3");
+
+      // Elements for Chart 4
+      const totalEntriesEl4 = document.getElementById("totalEntries4");
+      const totalClientsEl4 = document.getElementById("totalClients4");
+
+      // Chart instances
+      let chart1, chart2, chart3, chart4;
 
       function fetchFinancialReport(year, district) {
         fetch(`{{ route('getFinancialReport') }}?year=${year}&district=${district}`)
           .then(response => response.json())
           .then(data => {
-            totalEntriesEl.textContent = data.totalEntries;
-            totalClientsEl.textContent = data.totalClients;
+            // Update all 4 charts with the same data initially
+            // In the future, the backend could return different data sets for each chart
 
-            updateChart(data.totalEntries, data.totalClients);
+            // Update Chart 1
+            totalEntriesEl1.textContent = data.totalEntries;
+            totalClientsEl1.textContent = data.totalClients;
+            updateChart(1, "orders1", data.totalEntries, data.totalClients, chart1);
+            chart1 = chart1 || window.chart1;
+
+            // Update Chart 2
+            totalEntriesEl2.textContent = data.totalEntries;
+            totalClientsEl2.textContent = data.totalClients;
+            updateChart(2, "orders2", data.totalEntries, data.totalClients, chart2);
+            chart2 = chart2 || window.chart2;
+
+            // Update Chart 3
+            totalEntriesEl3.textContent = data.totalEntries;
+            totalClientsEl3.textContent = data.totalClients;
+            updateChart(3, "orders3", data.totalEntries, data.totalClients, chart3);
+            chart3 = chart3 || window.chart3;
+
+            // Update Chart 4
+            totalEntriesEl4.textContent = data.totalEntries;
+            totalClientsEl4.textContent = data.totalClients;
+            updateChart(4, "orders4", data.totalEntries, data.totalClients, chart4);
+            chart4 = chart4 || window.chart4;
           })
           .catch(error => console.error("Error fetching data:", error));
       }
 
-      function updateChart(totalEntries, totalClients) {
+      function updateChart(chartNumber, chartElementId, totalEntries, totalClients) {
         const remainingClients = totalClients - totalEntries;
 
         // Avoid division by zero and round to the nearest whole number
         const percentageSent = totalClients > 0 ? Math.round((totalEntries / totalClients) * 100) : 0;
+
+        // Define different colors for each chart
+        const colorSets = {
+          1: ["rgba(var(--primary-rgb))", "rgba(227, 84, 212, 1)"],
+          2: ["rgba(255, 93, 159, 1)", "rgba(255, 142, 111, 1)"],
+          3: ["rgba(0, 158, 247, 1)", "rgba(41, 204, 151, 1)"],
+          4: ["rgba(255, 199, 0, 1)", "rgba(247, 103, 7, 1)"]
+        };
 
         const options = {
           series: [totalEntries, remainingClients],
@@ -649,11 +837,9 @@
                     show: true,
                     fontSize: '16px',
                     fontWeight: 600,
-
                     offsetY: -20,
                     formatter: function() {
-                      return percentageSent +
-                        "%"; // Show percentage without decimal points
+                      return percentageSent + "%"; // Show percentage without decimal points
                     }
                   },
                   total: {
@@ -676,19 +862,17 @@
               bottom: -100
             }
           },
-          colors: [
-            "rgba(var(--primary-rgb))",
-            "rgba(227, 84, 212, 1)",
-            "rgba(255, 93, 159, 1)",
-            "rgba(255, 142, 111, 1)"
-          ],
+          colors: colorSets[chartNumber]
         };
 
-        if (chart) {
-          chart.updateOptions(options);
+        // Check if chart instance exists
+        const chartInstance = window[`chart${chartNumber}`];
+
+        if (chartInstance) {
+          chartInstance.updateOptions(options);
         } else {
-          chart = new ApexCharts(document.querySelector("#orders"), options);
-          chart.render();
+          window[`chart${chartNumber}`] = new ApexCharts(document.querySelector(`#${chartElementId}`), options);
+          window[`chart${chartNumber}`].render();
         }
       }
 
@@ -699,176 +883,10 @@
       yearSelect.addEventListener("change", function() {
         fetchFinancialReport(this.value, districtSelect.value);
       });
+
       // Event Listener for District Change
       districtSelect.addEventListener("change", function() {
         fetchFinancialReport(yearSelect.value, this.value);
-      });
-
-
-      // Get the year and district select elements
-      const barYearSelect = document.getElementById("bar_yearSelect");
-      const barDistrictSelect = document.getElementById("bar_districtSelect");
-
-      let barChart; // Global variable to store the chart instance
-
-      // Function to fetch statements report data
-      function fetchStatementsReport(year, district) {
-        fetch(`{{ route('getStatementsReport') }}?year=${year}&district=${district}`)
-          .then(response => response.json())
-          .then(data => {
-            updateBarChart(data);
-          })
-          .catch(error => console.error("Error fetching bar chart data:", error));
-      }
-
-      // Function to update or create the bar chart
-      function updateBarChart(chartData) {
-        const options = {
-          series: [{
-              name: chartData.categories[0][0],
-              data: [chartData.series[0][0], null, null]
-            },
-            {
-              name: chartData.categories[0][1],
-              data: [chartData.series[0][1], null, null]
-            },
-            {
-              name: chartData.categories[1][0],
-              data: [null, chartData.series[1][0], null]
-            },
-            {
-              name: chartData.categories[1][1],
-              data: [null, chartData.series[1][1], null]
-            },
-            {
-              name: chartData.categories[2][0],
-              data: [null, null, chartData.series[2][0]]
-            },
-            {
-              name: chartData.categories[2][1],
-              data: [null, null, chartData.series[2][1]]
-            }
-          ],
-          chart: {
-            type: 'bar',
-            height: 350,
-            stacked: false,
-            toolbar: {
-              show: false
-            },
-            fontFamily: 'Inter, sans-serif',
-          },
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              columnWidth: '100%',
-              borderRadius: 4,
-              dataLabels: {
-                position: 'top',
-              },
-            },
-          },
-          dataLabels: {
-            enabled: true,
-            formatter: function(val) {
-              return val !== null ? val : '';
-            },
-            offsetY: -20,
-            style: {
-              fontSize: '12px',
-              colors: ["#000"]
-            }
-          },
-          colors: [
-            chartData.colors[0][0], chartData.colors[0][1],
-            chartData.colors[1][0], chartData.colors[1][1],
-            chartData.colors[2][0], chartData.colors[2][1]
-          ],
-          xaxis: {
-            categories: ['Group 1', 'Group 2', 'Group 3'],
-            labels: {
-              show: false
-            },
-            axisBorder: {
-              show: false
-            },
-            axisTicks: {
-              show: false
-            }
-          },
-          yaxis: {
-            max: Math.max(...chartData.series.flat().filter(val => val !== null)) * 1.2,
-            title: {
-              text: ''
-            },
-            labels: {
-              formatter: function(val) {
-                return Math.floor(val);
-              }
-            }
-          },
-          legend: {
-            position: 'right',
-            offsetY: 40,
-            markers: {
-              width: 12,
-              height: 12,
-              radius: 0
-            }
-          },
-          grid: {
-            borderColor: '#f1f1f1',
-            strokeDashArray: 4
-          },
-          tooltip: {
-            enabled: true,
-            custom: function({
-              series,
-              seriesIndex,
-              dataPointIndex
-            }) {
-              const value = series[seriesIndex][dataPointIndex];
-              if (value === null) return '';
-
-              const seriesName = options.series[seriesIndex].name;
-              return `<div class="p-2">
-          <span class="font-semibold">${seriesName}: </span>
-          <span>${value}</span>
-        </div>`;
-            }
-          },
-          // ✨ Responsive part added here
-          responsive: [{
-            breakpoint: 992, // screens smaller than 992px
-            options: {
-              legend: {
-                position: 'bottom',
-                offsetY: 0
-              }
-            }
-          }]
-        };
-
-        if (barChart) {
-          barChart.updateOptions(options);
-        } else {
-          barChart = new ApexCharts(document.querySelector("#chart"), options);
-          barChart.render();
-        }
-      }
-
-
-      // Initial load
-      fetchStatementsReport(barYearSelect.value, barDistrictSelect.value);
-
-      // Event listener for year change
-      barYearSelect.addEventListener("change", function() {
-        fetchStatementsReport(this.value, barDistrictSelect.value);
-      });
-
-      // Event listener for district change
-      barDistrictSelect.addEventListener("change", function() {
-        fetchStatementsReport(barYearSelect.value, this.value);
       });
     });
   </script>

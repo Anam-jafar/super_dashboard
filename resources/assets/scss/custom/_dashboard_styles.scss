@@ -158,7 +158,7 @@ ul.analytics-activity li {
         @apply content-[""] absolute w-full h-full bg-[url(http://127.0.0.1:8000/build/assets/images/media/media-89.png)] bg-center bg-repeat z-[-1] opacity-60 bg-cover inset-0;
     }
 }
-/* Alternatively, you could create a new class specifically for the dashboard cards */
+/* Dashboard card specific styling */
 .dashboard-card {
     @apply relative z-[1] overflow-hidden border border-defaultborder dark:border-defaultborder/10 border-solid h-full;
 
@@ -171,17 +171,26 @@ ul.analytics-activity li {
         @apply p-3;
     }
 
+    .card-title-container {
+        @apply h-10 flex items-center;
+    }
+
     .card-title {
-        @apply text-sm mb-1 block text-textmuted dark:text-textmuted/50;
+        @apply text-sm block text-textmuted dark:text-textmuted/50 leading-tight;
     }
 
     .card-value {
-        @apply mb-0 font-medium;
+        @apply mb-0 mt-1 font-medium;
     }
 
     .card-icon {
         @apply h-10 w-10;
     }
+}
+
+/* Compact the overall card to reduce empty space */
+.box.dashboard-card .box-body {
+    @apply py-2;
 }
 [class="dark"] {
     .main-content-card:before {

@@ -37,8 +37,10 @@
               <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
                   <div class="flex items-start justify-between">
-                    <div>
-                      <span class="card-title">Jumlah Institusi Berdaftar</span>
+                    <div class="flex flex-col">
+                      <div class="card-title-container">
+                        <span class="card-title">Jumlah Institusi Berdaftar</span>
+                      </div>
                       <h4 class="card-value">{{ $total_institute ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
@@ -53,8 +55,10 @@
               <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
                   <div class="flex items-start justify-between">
-                    <div>
-                      <span class="card-title">Permohonan Daftar Masjid</span>
+                    <div class="flex flex-col">
+                      <div class="card-title-container">
+                        <span class="card-title">Permohonan Daftar Masjid</span>
+                      </div>
                       <h4 class="card-value">{{ $total_institute_registration ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
@@ -69,8 +73,10 @@
               <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
                   <div class="flex items-start justify-between">
-                    <div>
-                      <span class="card-title">Status Menunggu Semakan</span>
+                    <div class="flex flex-col">
+                      <div class="card-title-container">
+                        <span class="card-title">Status Menunggu Semakan</span>
+                      </div>
                       <h4 class="card-value">{{ $total_statement_to_review ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
@@ -85,8 +91,10 @@
               <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
                   <div class="flex items-start justify-between">
-                    <div>
-                      <span class="card-title">Jumlah Diterima</span>
+                    <div class="flex flex-col">
+                      <div class="card-title-container">
+                        <span class="card-title">Jumlah Diterima</span>
+                      </div>
                       <h4 class="card-value">{{ $total_statement_accepted ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
@@ -101,8 +109,10 @@
               <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
                   <div class="flex items-start justify-between">
-                    <div>
-                      <span class="card-title">Jumlah Ditolak</span>
+                    <div class="flex flex-col">
+                      <div class="card-title-container">
+                        <span class="card-title">Jumlah Ditolak</span>
+                      </div>
                       <h4 class="card-value">{{ $total_statement_cancelled ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
@@ -120,8 +130,10 @@
               <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
                   <div class="flex items-start justify-between">
-                    <div>
-                      <span class="card-title">Jumlah Mohon Kemaskini</span>
+                    <div class="flex flex-col">
+                      <div class="card-title-container">
+                        <span class="card-title">Jumlah Mohon Kemaskini</span>
+                      </div>
                       <h4 class="card-value">{{ $total_statement_request_edit ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
@@ -136,8 +148,10 @@
               <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
                   <div class="flex items-start justify-between">
-                    <div>
-                      <span class="card-title">Status Menunggu Semakan</span>
+                    <div class="flex flex-col">
+                      <div class="card-title-container">
+                        <span class="card-title">Status Menunggu Semakan</span>
+                      </div>
                       <h4 class="card-value">{{ $total_statement_to_review ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
@@ -152,8 +166,10 @@
               <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
                   <div class="flex items-start justify-between">
-                    <div>
-                      <span class="card-title">Jumlah Diterima</span>
+                    <div class="flex flex-col">
+                      <div class="card-title-container">
+                        <span class="card-title">Jumlah Diterima</span>
+                      </div>
                       <h4 class="card-value">{{ $total_statement_accepted ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
@@ -168,8 +184,10 @@
               <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
                   <div class="flex items-start justify-between">
-                    <div>
-                      <span class="card-title">Jumlah Ditolak</span>
+                    <div class="flex flex-col">
+                      <div class="card-title-container">
+                        <span class="card-title">Jumlah Ditolak</span>
+                      </div>
                       <h4 class="card-value">{{ $total_statement_cancelled ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
@@ -184,8 +202,10 @@
               <div class="box dashboard-card overflow-hidden">
                 <div class="box-body">
                   <div class="flex items-start justify-between">
-                    <div>
-                      <span class="card-title">Jumlah Mohon Kemaskini</span>
+                    <div class="flex flex-col">
+                      <div class="card-title-container">
+                        <span class="card-title">Jumlah Mohon Kemaskini</span>
+                      </div>
                       <h4 class="card-value">{{ $total_statement_request_edit ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">

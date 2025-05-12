@@ -351,23 +351,24 @@ class DashboardController extends Controller
             'totalEntries' => $totalEntries,
         ]);
     }
-public function getStatementsReport(Request $request)
-{
-    $finYear = $request->filled('year') ? $request->year : date('Y');
-    $finCategory = $request->filled('fin_category') ? $request->fin_category : 'STM02';
-    $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
-    $district = $request->filled('district') ? $request->district : $districtAccess;
 
-    // Start building the subquery filter
-    $subQueryFilter = "WHERE c.sta = 0 AND c.app = 'CLIENT' AND c.isdel = 0";
+    public function getStatementsReport(Request $request)
+    {
+        $finYear = $request->filled('year') ? $request->year : date('Y');
+        $finCategory = $request->filled('fin_category') ? $request->fin_category : 'STM02';
+        $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
+        $district = $request->filled('district') ? $request->district : $districtAccess;
 
-    if (!is_null($district)) {
-        $subQueryFilter .= " AND c.rem8 = '{$district}'";
-    }
+        // Start building the subquery filter
+        $subQueryFilter = "WHERE c.sta = 0 AND c.app = 'CLIENT' AND c.isdel = 0";
 
-    // Main query using the subquery approach for more efficient calculation
-    $data = DB::table('client as c')
-        ->selectRaw("
+        if (!is_null($district)) {
+            $subQueryFilter .= " AND c.rem8 = '{$district}'";
+        }
+
+        // Main query using the subquery approach for more efficient calculation
+        $data = DB::table('client as c')
+            ->selectRaw("
             COUNT(DISTINCT c.uid) AS total_berdaftar,
             COUNT(DISTINCT CASE WHEN s.status IN (1, 2, 3) THEN s.inst_refno END) AS total_telah_hantar,
             COUNT(DISTINCT CASE WHEN s.status = 2 THEN s.inst_refno END) AS total_diterima,
@@ -396,43 +397,47 @@ public function getStatementsReport(Request $request)
                 THEN s.inst_refno 
             END) AS total_ditolak_dan_hantar
         ")
-        ->leftJoin('splk_submission as s', function($join) use ($finYear, $finCategory) {
-            $join->on('c.uid', '=', 's.inst_refno')
-                ->where('s.fin_year', $finYear)
-                ->where('s.fin_category', $finCategory)
-                ->whereNotIn('s.status', [0, 4]);
-        })
-        ->where('c.sta', 0)
-        ->where('c.app', 'CLIENT')
-        ->where('c.isdel', 0);
+            ->leftJoin('splk_submission as s', function ($join) use ($finYear, $finCategory) {
+                $join->on('c.uid', '=', 's.inst_refno')
+                    ->where('s.fin_year', $finYear)
+                    ->where('s.fin_category', $finCategory)
+                    ->whereNotIn('s.status', [0, 4]);
+            })
+            ->where('c.sta', 0)
+            ->where('c.app', 'CLIENT')
+            ->where('c.isdel', 0);
 
-    if (!is_null($district)) {
-        $data->where('c.rem8', $district);
+        if (!is_null($district)) {
+            $data->where('c.rem8', $district);
+        }
+
+        $result = $data->first();
+
+        // Calculate total rejected
+        $total_ditolak = $result->total_ditolak_belum_hantar + $result->total_ditolak_dan_hantar;
+
+        return response()->json([
+            'categories' => [
+                ['Jumlah Hantar', 'Jumlah Berdaftar'],
+                ['Jumlah Terima', 'Jumlah Ditolak'],
+                ['Ditolak & Telah Hantar Semula', 'Ditolak & Belum Hantar Semula'],
+                ['Jumlah Berdaftar', 'Jumlah Hantar']
+            ],
+            'series' => [
+                [$result->total_telah_hantar, $result->total_berdaftar],
+                [$result->total_diterima, $total_ditolak],
+                [$result->total_ditolak_dan_hantar, $result->total_ditolak_belum_hantar],
+                [$result->total_ditolak_dan_hantar, $result->total_ditolak_belum_hantar]
+
+            ],
+            'colors' => [
+                ['#E75FB4', '#5B6EF5'],
+                ['#FF9066', '#26C5B2'],
+                ['#FFD84D', '#4CAF50'],
+                ['#FF9066', '#26C5B2']
+            ]
+        ]);
     }
-
-    $result = $data->first();
-
-    // Calculate total rejected
-    $total_ditolak = $result->total_ditolak_belum_hantar + $result->total_ditolak_dan_hantar;
-
-    return response()->json([
-        'categories' => [
-            ['Jumlah Hantar', 'Jumlah Berdaftar'],
-            ['Jumlah Terima', 'Jumlah Ditolak'],
-            ['Ditolak & Telah Hantar Semula', 'Ditolak & Belum Hantar Semula']
-        ],
-        'series' => [
-            [$result->total_telah_hantar, $result->total_berdaftar],
-            [$result->total_diterima, $total_ditolak],
-            [$result->total_ditolak_dan_hantar, $result->total_ditolak_belum_hantar]
-        ],
-        'colors' => [
-            ['#E75FB4', '#5B6EF5'],
-            ['#FF9066', '#26C5B2'],
-            ['#FFD84D', '#4CAF50']
-        ]
-    ]);
-}
 
     public function index()
     {
@@ -549,37 +554,37 @@ public function getStatementsReport(Request $request)
             $query->where('c.rem8', $districtAccess);
         }
 
-$subscriptions = $query->joinSub(
-    DB::table('fin_ledger as inv')
-        ->select(
-            'inv.vid',
-            DB::raw('SUM(inv.val) AS total_invoice'),
-            DB::raw('COALESCE(SUM(csl.val), 0) AS total_received'),
-            DB::raw('SUM(inv.val) - COALESCE(SUM(csl.val), 0) AS outstanding')
+        $subscriptions = $query->joinSub(
+            DB::table('fin_ledger as inv')
+                ->select(
+                    'inv.vid',
+                    DB::raw('SUM(inv.val) AS total_invoice'),
+                    DB::raw('COALESCE(SUM(csl.val), 0) AS total_received'),
+                    DB::raw('SUM(inv.val) - COALESCE(SUM(csl.val), 0) AS outstanding')
+                )
+                ->leftJoin('fin_ledger as csl', function ($join) {
+                    $join->on('inv.vid', '=', 'csl.vid')
+                        ->where('csl.src', 'CSL');
+                })
+                ->where('inv.src', 'INV')
+                ->groupBy('inv.vid')
+                ->having(DB::raw('SUM(inv.val) - COALESCE(SUM(csl.val), 0)'), '>', 0),
+            'subquery',
+            'c.uid',
+            '=',
+            'subquery.vid'
         )
-        ->leftJoin('fin_ledger as csl', function ($join) {
-            $join->on('inv.vid', '=', 'csl.vid')
-                ->where('csl.src', 'CSL');
-        })
-        ->where('inv.src', 'INV')
-        ->groupBy('inv.vid')
-        ->having(DB::raw('SUM(inv.val) - COALESCE(SUM(csl.val), 0)'), '>', 0),
-    'subquery',
-    'c.uid',
-    '=',
-    'subquery.vid'
-)
-->where('c.subscription_status', 2)
-->select(
-    'c.name as name',
-    'c.con1 as con1',
-    'c.mel as mel',
-    'c.hp as hp',
-    'c.subscription_status as subscription_status',
-    'subquery.outstanding'
-)
-->limit(5)
-->get();
+        ->where('c.subscription_status', 2)
+        ->select(
+            'c.name as name',
+            'c.con1 as con1',
+            'c.mel as mel',
+            'c.hp as hp',
+            'c.subscription_status as subscription_status',
+            'subquery.outstanding'
+        )
+        ->limit(5)
+        ->get();
         $subscriptions->transform(function ($subscription) {
             $subscription->NAME = isset($subscription->name) ? strtoupper($subscription->name) : null;
             $subscription->OFFICER = isset($subscription->con1) ? strtoupper($subscription->con1) : null;
@@ -610,6 +615,10 @@ $subscriptions = $query->joinSub(
                 return $key == $districtAccess;
             }, ARRAY_FILTER_USE_KEY);
         }
+        $institute = Parameter::where('grp', 'clientcate1')->pluck('prm', 'code')->toArray();
+        $statement = Parameter::where('grp', 'statement')->pluck('prm', 'code')->toArray();
+
+
 
 
         return view('base.dashboard', compact(
@@ -629,6 +638,8 @@ $subscriptions = $query->joinSub(
             'totalEntries',
             'years',
             'districts',
+            'institute',
+            'statement'
         ));
     }
 

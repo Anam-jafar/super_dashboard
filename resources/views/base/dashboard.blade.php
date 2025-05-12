@@ -246,17 +246,19 @@
 
       <!-- Start::Row-2 -->
       {{-- Financial Reports Grid Container --}}
-      <div class="grid grid-cols-12 gap-6">
+
+      <div class="mt-4 grid grid-cols-12 gap-6">
         {{-- Filters Row --}}
         <div class="col-span-12">
-          <div class="mb-2 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <!-- Header -->
-            <h2 class="text-lg font-semibold text-gray-800 sm:mb-0">Statistic</h2>
-
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800">Statistic</h2>
+            </div>
             <!-- Filters -->
-            <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+            <div class="grid w-full grid-cols-1 gap-2 sm:w-auto sm:grid-cols-2 md:grid-cols-4">
               <!-- Year Dropdown -->
-              <select id="yearSelect" class="w-full rounded-md border px-3 py-2 sm:w-20">
+              <select id="yearSelect" class="w-full rounded-md border px-3 py-2">
                 @foreach ($years as $year)
                   <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>
                     {{ $year }}
@@ -264,8 +266,25 @@
                 @endforeach
               </select>
 
+              <!-- Statement Dropdown -->
+              <select id="statementSelect" class="w-full rounded-md border px-3 py-2">
+                <option value="STM02">01 Tahun</option>
+                @foreach (collect($statement)->except('STM02') as $code => $label)
+                  <option value="{{ $code }}">{{ $label }}</option>
+                @endforeach
+              </select>
+
+              <!-- Institute Dropdown -->
+              <select id="instituteSelect" class="w-full rounded-md border px-3 py-2">
+                <option value="">Semua Institusi</option>
+                @foreach ($institute as $code => $prm)
+                  <option value="{{ $code }}">{{ $prm }}
+                  </option>
+                @endforeach
+              </select>
+
               <!-- District Dropdown -->
-              <select id="districtSelect" class="w-full rounded-md border px-3 py-2 sm:w-40">
+              <select id="districtSelect" class="w-full rounded-md border px-3 py-2">
                 <option value="">Semua Daerah</option>
                 @foreach ($districts as $code => $prm)
                   <option value="{{ $code }}">
@@ -735,77 +754,82 @@
     document.addEventListener("DOMContentLoaded", function() {
       const yearSelect = document.getElementById("yearSelect");
       const districtSelect = document.getElementById("districtSelect");
+      const finCategorySelect = document.getElementById("finCategorySelect");
 
       // Elements for Chart 1
-      const totalEntriesEl1 = document.getElementById("totalEntries1");
-      const totalClientsEl1 = document.getElementById("totalClients1");
+      const totalSentEl1 = document.getElementById("totalSent1");
+      const totalRegisteredEl1 = document.getElementById("totalRegistered1");
 
       // Elements for Chart 2
-      const totalEntriesEl2 = document.getElementById("totalEntries2");
-      const totalClientsEl2 = document.getElementById("totalClients2");
+      const totalReceivedEl2 = document.getElementById("totalReceived2");
+      const totalRejectedEl2 = document.getElementById("totalRejected2");
 
       // Elements for Chart 3
-      const totalEntriesEl3 = document.getElementById("totalEntries3");
-      const totalClientsEl3 = document.getElementById("totalClients3");
+      const totalRejectedResentEl3 = document.getElementById("totalRejectedResent3");
+      const totalRejectedNotResentEl3 = document.getElementById("totalRejectedNotResent3");
 
       // Elements for Chart 4
-      const totalEntriesEl4 = document.getElementById("totalEntries4");
-      const totalClientsEl4 = document.getElementById("totalClients4");
+      const totalRegisteredEl4 = document.getElementById("totalRegistered4");
+      const totalSentEl4 = document.getElementById("totalSent4");
 
       // Chart instances
       let chart1, chart2, chart3, chart4;
 
-      function fetchFinancialReport(year, district) {
-        fetch(`{{ route('getFinancialReport') }}?year=${year}&district=${district}`)
+      function fetchStatementsReport() {
+        const year = yearSelect.value;
+        const district = districtSelect.value;
+        const finCategory = finCategorySelect ? finCategorySelect.value : 'STM02';
+
+        fetch(`{{ route('getStatementsReport') }}?year=${year}&district=${district}&fin_category=${finCategory}`)
           .then(response => response.json())
           .then(data => {
-            // Update all 4 charts with the same data initially
-            // In the future, the backend could return different data sets for each chart
+            // Update Chart 1: Jumlah Hantar vs Jumlah Berdaftar
+            updateChartData(1, "orders1",
+              data.series[0][0], data.series[0][1],
+              data.categories[0][0], data.categories[0][1],
+              data.colors[0]);
 
-            // Update Chart 1
-            totalEntriesEl1.textContent = data.totalEntries;
-            totalClientsEl1.textContent = data.totalClients;
-            updateChart(1, "orders1", data.totalEntries, data.totalClients, chart1);
-            chart1 = chart1 || window.chart1;
+            if (totalSentEl1) totalSentEl1.textContent = data.series[0][0];
+            if (totalRegisteredEl1) totalRegisteredEl1.textContent = data.series[0][1];
 
-            // Update Chart 2
-            totalEntriesEl2.textContent = data.totalEntries;
-            totalClientsEl2.textContent = data.totalClients;
-            updateChart(2, "orders2", data.totalEntries, data.totalClients, chart2);
-            chart2 = chart2 || window.chart2;
+            // Update Chart 2: Jumlah Terima vs Jumlah Ditolak
+            updateChartData(2, "orders2",
+              data.series[1][0], data.series[1][1],
+              data.categories[1][0], data.categories[1][1],
+              data.colors[1]);
 
-            // Update Chart 3
-            totalEntriesEl3.textContent = data.totalEntries;
-            totalClientsEl3.textContent = data.totalClients;
-            updateChart(3, "orders3", data.totalEntries, data.totalClients, chart3);
-            chart3 = chart3 || window.chart3;
+            if (totalReceivedEl2) totalReceivedEl2.textContent = data.series[1][0];
+            if (totalRejectedEl2) totalRejectedEl2.textContent = data.series[1][1];
 
-            // Update Chart 4
-            totalEntriesEl4.textContent = data.totalEntries;
-            totalClientsEl4.textContent = data.totalClients;
-            updateChart(4, "orders4", data.totalEntries, data.totalClients, chart4);
-            chart4 = chart4 || window.chart4;
+            // Update Chart 3: Ditolak & Telah Hantar Semula vs Ditolak & Belum Hantar Semula
+            updateChartData(3, "orders3",
+              data.series[2][0], data.series[2][1],
+              data.categories[2][0], data.categories[2][1],
+              data.colors[2]);
+
+            if (totalRejectedResentEl3) totalRejectedResentEl3.textContent = data.series[2][0];
+            if (totalRejectedNotResentEl3) totalRejectedNotResentEl3.textContent = data.series[2][1];
+
+            // Update Chart 4: Custom chart (if needed)
+            updateChartData(4, "orders4",
+              data.series[3][0], data.series[3][1],
+              data.categories[3][0], data.categories[3][1],
+              data.colors[3]);
+
+            if (totalRegisteredEl4) totalRegisteredEl4.textContent = data.series[3][0];
+            if (totalSentEl4) totalSentEl4.textContent = data.series[3][1];
           })
           .catch(error => console.error("Error fetching data:", error));
       }
 
-      function updateChart(chartNumber, chartElementId, totalEntries, totalClients) {
-        const remainingClients = totalClients - totalEntries;
-
-        // Avoid division by zero and round to the nearest whole number
-        const percentageSent = totalClients > 0 ? Math.round((totalEntries / totalClients) * 100) : 0;
-
-        // Define different colors for each chart
-        const colorSets = {
-          1: ["rgba(var(--primary-rgb))", "rgba(227, 84, 212, 1)"],
-          2: ["rgba(255, 93, 159, 1)", "rgba(255, 142, 111, 1)"],
-          3: ["rgba(0, 158, 247, 1)", "rgba(41, 204, 151, 1)"],
-          4: ["rgba(255, 199, 0, 1)", "rgba(247, 103, 7, 1)"]
-        };
+      function updateChartData(chartNumber, chartElementId, value1, value2, label1, label2, colors) {
+        // Calculate percentage
+        const total = value1 + value2;
+        const percentage = total > 0 ? Math.round((value1 / total) * 100) : 0;
 
         const options = {
-          series: [totalEntries, remainingClients],
-          labels: ["Dihantar", "Belum Dihantar"],
+          series: [value1, value2],
+          labels: [label1, label2],
           chart: {
             height: 175,
             type: 'donut',
@@ -859,7 +883,7 @@
                     fontWeight: 600,
                     offsetY: -20,
                     formatter: function() {
-                      return percentageSent + "%"; // Show percentage without decimal points
+                      return percentage + "%";
                     }
                   },
                   total: {
@@ -870,7 +894,7 @@
                     fontWeight: 600,
                     color: '#495057',
                     formatter: function() {
-                      return percentageSent + "%"; // Show total percentage at center
+                      return percentage + "%";
                     }
                   }
                 }
@@ -882,14 +906,12 @@
               bottom: -100
             }
           },
-          colors: colorSets[chartNumber]
+          colors: colors
         };
 
         // Check if chart instance exists
-        const chartInstance = window[`chart${chartNumber}`];
-
-        if (chartInstance) {
-          chartInstance.updateOptions(options);
+        if (window[`chart${chartNumber}`]) {
+          window[`chart${chartNumber}`].updateOptions(options);
         } else {
           window[`chart${chartNumber}`] = new ApexCharts(document.querySelector(`#${chartElementId}`), options);
           window[`chart${chartNumber}`].render();
@@ -897,17 +919,22 @@
       }
 
       // Initial Load
-      fetchFinancialReport(yearSelect.value, districtSelect.value);
+      fetchStatementsReport();
 
       // Event Listener for Year Change
-      yearSelect.addEventListener("change", function() {
-        fetchFinancialReport(this.value, districtSelect.value);
-      });
+      if (yearSelect) {
+        yearSelect.addEventListener("change", fetchStatementsReport);
+      }
 
       // Event Listener for District Change
-      districtSelect.addEventListener("change", function() {
-        fetchFinancialReport(yearSelect.value, this.value);
-      });
+      if (districtSelect) {
+        districtSelect.addEventListener("change", fetchStatementsReport);
+      }
+
+      // Event Listener for Financial Category Change
+      if (finCategorySelect) {
+        finCategorySelect.addEventListener("change", fetchStatementsReport);
+      }
     });
   </script>
 @endsection

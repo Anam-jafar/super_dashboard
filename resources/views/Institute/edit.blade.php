@@ -53,8 +53,8 @@
             <div class="grid-col-1 grid gap-6 md:grid-cols-2">
               <x-input-field level="Status" id="inst_type" name="sta" type="select" placeholder="Pilih"
                 value="{{ $institute->sta }}" :valueList="$parameters['user_statuses']" />
-              <x-input-field level="Tarikh Naik Taraf" id="upgrade_date" name="upgrade_date" type="date"
-                placeholder="" />
+              <x-input-field level="Tarikh Naik Taraf" id="upgrade_date" name="upgrade_date" type="date" placeholder=""
+                value="{{ $institute->upgrade_date }}" />
             </div>
             <div class="grid-col-1 grid gap-6 md:grid-cols-2">
               <div class="mb-4 flex items-end space-x-2">
@@ -392,6 +392,18 @@
       document.addEventListener("click", function(event) {
         if (!citySearchInput.contains(event.target) && !cityResults.contains(event.target)) {
           cityResults.classList.add("hidden");
+        }
+      });
+
+      const checkbox = document.getElementById('upgrade_institute');
+      const upgradeDate = document.getElementById('upgrade_date');
+
+      checkbox.addEventListener('change', function() {
+        if (this.checked) {
+          const today = new Date().toISOString().split('T')[0]; // format: yyyy-mm-dd
+          upgradeDate.value = today;
+        } else {
+          upgradeDate.value = ''; // clear the date if unchecked
         }
       });
     });

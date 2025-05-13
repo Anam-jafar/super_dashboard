@@ -10,9 +10,9 @@ class Institute extends Model
     use HasFactory;
 
     protected $table = 'client';
-    
+
     public $timestamps = false;
-        
+
     protected $fillable = [
         'uid',
         'name',
@@ -49,6 +49,7 @@ class Institute extends Model
         'sid',
         'regdt',
         'app',
+        'upgrade_date',
     ];
 
     public function Type()

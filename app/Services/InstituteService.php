@@ -56,6 +56,7 @@ class InstituteService
             'tel1' => 'nullable|numeric|digits:11',
             'sta' => 'nullable|string|max:50',
             'country' => 'nullable|string|max:50',
+            'upgrade_date' => 'nullable|date',
         ];
 
         // Unique check for name in rem8 during creation and edit

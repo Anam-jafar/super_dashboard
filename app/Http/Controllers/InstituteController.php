@@ -13,6 +13,7 @@ use App\Models\Institute;
 use Illuminate\Support\Facades\Log;
 use App\Services\InstituteService;
 use App\Services\DistrictAccessService;
+use App\Models\InstituteHistory;
 
 class InstituteController extends Controller
 {
@@ -69,16 +70,47 @@ class InstituteController extends Controller
     public function edit(Request $request, $id)
     {
         $institute = Institute::with('type', 'category', 'City', 'subdistrict', 'district')->findOrFail($id);
+        $history = InstituteHistory::with('Type', 'Category')
+            ->where('inst_refno', $institute->uid)
+            ->orderBy('id', 'desc')
+            ->get();
 
         if ($request->isMethod('post')) {
             $validatedData = $this->instituteService->validateInstitute($request, $id);
+
+            if ($request->filled('upgrade_institute')) {
+                $request->validate([
+                    'upgrade_date' => 'required|date',
+                ], [
+                    'upgrade_date.required' => 'Untuk menaik taraf, tarikh naik taraf mesti diisi.',
+                    'upgrade_date.date' => 'Tarikh naik taraf mesti dalam format yang sah.',
+                ]);
+
+                InstituteHistory::create([
+                    'inst_refno' => $institute->uid,
+                    'institute' => $institute->cate1,
+                    'institute_type' => $institute->cate,
+                    'registration_date' => $institute->regdt,
+                    'upgrade_date' => $request->upgrade_date,
+                ]);
+
+                $validatedData['regdt'] = now()->toDateString();
+            }
+
             $institute->update($validatedData);
 
-            return redirect()->route('instituteList')->with('success', 'Institusi berjaya dikemaskini!');
+            return redirect()
+                ->route('instituteList')
+                ->with('success', 'Institusi berjaya dikemaskini!');
         }
 
-        return view('Institute.edit', ['institute' => $institute, 'parameters' => $this->getCommon()]);
+        return view('Institute.edit', [
+            'institute' => $institute,
+            'parameters' => $this->getCommon(),
+            'history' => $history,
+        ]);
     }
+
 
     public function registrationRequests(Request $request)
     {

@@ -398,12 +398,17 @@
       const checkbox = document.getElementById('upgrade_institute');
       const upgradeDate = document.getElementById('upgrade_date');
 
+      // Store original date (from backend or manually entered)
+      let originalUpgradeDate = upgradeDate.value;
+
       checkbox.addEventListener('change', function() {
         if (this.checked) {
-          const today = new Date().toISOString().split('T')[0]; // format: yyyy-mm-dd
-          upgradeDate.value = today;
+          // Save current value then clear it
+          originalUpgradeDate = upgradeDate.value;
+          upgradeDate.value = '';
         } else {
-          upgradeDate.value = ''; // clear the date if unchecked
+          // Restore previous value
+          upgradeDate.value = originalUpgradeDate;
         }
       });
     });

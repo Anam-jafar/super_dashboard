@@ -372,9 +372,35 @@ class DashboardController extends Controller
             ->selectRaw("
             COUNT(DISTINCT c.uid) AS total_berdaftar,
             COUNT(DISTINCT CASE WHEN s.status IN (1, 2, 3) THEN s.inst_refno END) AS total_telah_hantar,
-            COUNT(DISTINCT CASE WHEN s.status = 2 THEN s.inst_refno END) AS total_diterima,
-            COUNT(DISTINCT CASE WHEN s.status IN (2, 3) THEN s.inst_refno END) AS total_checked,
-            COUNT(DISTINCT CASE WHEN s.status = 1 THEN s.inst_refno END) AS total_unchecked,
+            COUNT(DISTINCT CASE 
+                WHEN s.status = 2 OR (
+                    s.status = 3 AND NOT EXISTS (
+                        SELECT 1 
+                        FROM splk_submission s2
+                        WHERE s2.inst_refno = s.inst_refno
+                        AND s2.fin_year = s.fin_year
+                        AND s2.fin_category = s.fin_category
+                        AND s2.status IN (1, 2)
+                        AND s2.id > s.id
+                    )
+                ) 
+                THEN s.inst_refno 
+            END) AS total_checked,
+            COUNT(DISTINCT CASE 
+                WHEN s.status = 1 OR (
+                    s.status = 3 AND EXISTS (
+                        SELECT 1
+                        FROM splk_submission s2
+                        WHERE s2.inst_refno = s.inst_refno
+                        AND s2.fin_year = s.fin_year
+                        AND s2.fin_category = s.fin_category
+                        AND s2.status = 1
+                        AND s2.id > s.id
+                    )
+                )
+                THEN s.inst_refno
+            END) AS total_unchecked,
+
 
             COUNT(DISTINCT CASE 
                 WHEN s.status = 3 AND NOT EXISTS (
@@ -645,6 +671,7 @@ class DashboardController extends Controller
         }
         $institute = Parameter::where('grp', 'clientcate1')->pluck('prm', 'code')->toArray();
         $statement = Parameter::where('grp', 'statement')->pluck('prm', 'code')->toArray();
+
 
 
 

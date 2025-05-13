@@ -372,6 +372,8 @@ class DashboardController extends Controller
             ->selectRaw("
             COUNT(DISTINCT c.uid) AS total_berdaftar,
             COUNT(DISTINCT CASE WHEN s.status IN (1, 2, 3) THEN s.inst_refno END) AS total_telah_hantar,
+            COUNT(DISTINCT CASE WHEN s.status = 2 THEN s.inst_refno END) AS total_diterima,
+
             COUNT(DISTINCT CASE 
                 WHEN s.status = 2 OR (
                     s.status = 3 AND NOT EXISTS (

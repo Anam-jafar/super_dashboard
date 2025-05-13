@@ -12,7 +12,7 @@
           ['label' => 'Kemaskini Maklumat Institusi'],
       ]" />
 
-      <form method="POST" action="{{ route('instituteEdit', ['id' => $institute->id]) }}" class="">
+      <form method="POST" action="{{ route('instituteEdit', ['id' => $institute->id]) }}" id="instituteForm">
         @csrf
 
         <div class="space-y-2 rounded-lg bg-white px-4 py-8 text-xs shadow lg:px-8">
@@ -186,15 +186,45 @@
               Kembali
             </a>
 
-            <button
-              class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg bg-indigo-500 font-semibold text-white hover:bg-indigo-600"
-              type="submit">
+            <button type="button" id="submitBtn"
+              class="ti-btn ti-btn-primary btn-wave waves-effect waves-light ti-btn-w-lg ti-btn-lg bg-indigo-500 font-semibold text-white hover:bg-indigo-600">
               Kemaskini
             </button>
           </div>
         </div>
 
       </form>
+
+      <!-- Upgrade Confirmation Modal -->
+      <div id="upgradeConfirmModal" class="fixed inset-0 z-[9999] flex hidden items-center justify-center">
+        <!-- Overlay that covers the ENTIRE viewport -->
+        <div class="absolute inset-0 bg-gray-900 bg-opacity-50"></div>
+
+        <!-- Modal Content -->
+        <div class="relative z-[10000] w-full max-w-3xl rounded-xl bg-white p-6 text-center shadow-lg">
+          <!-- Close Button -->
+          <button onclick="closeUpgradeModal()"
+            class="absolute right-4 top-2 p-3 text-3xl text-gray-500 hover:text-gray-700">
+            &times;
+          </button>
+
+          <!-- Modal Title -->
+          <h2 class="mb-2 text-start text-lg font-semibold text-green-600">
+            Naik Taraf Institusi
+          </h2>
+          <hr>
+          <p class="mt-4 text-sm text-gray-700">
+            Adakah anda pasti untuk naik taraf institusi ini? </p>
+          <hr class="mt-4">
+
+          <!-- Action Buttons -->
+          <div class="mt-4 flex justify-end">
+            <button onclick="submitMainForm()" class="rounded-lg bg-blue-600 px-6 py-2 text-white hover:bg-blue-700">
+              Hantar
+            </button>
+          </div>
+        </div>
+      </div>
 
       <div class="mt-4 space-y-2 rounded-lg bg-white px-4 py-8 text-xs shadow lg:px-8">
         <button id="toggleBtn"
@@ -376,5 +406,27 @@
       content.classList.toggle("hidden", !isOpen);
       arrow.style.transform = isOpen ? "rotate(-180deg)" : "rotate(0deg)";
     });
+
+    document.getElementById('submitBtn').addEventListener('click', function() {
+      const isUpgradeChecked = document.getElementById('upgrade_institute').checked;
+      if (isUpgradeChecked) {
+        // Show confirmation modal
+        document.getElementById('upgradeConfirmModal').classList.remove('hidden');
+        document.getElementById('upgradeConfirmModal').classList.add('flex');
+      } else {
+        // Submit form directly
+        document.getElementById('instituteForm').submit();
+      }
+    });
+
+    function closeUpgradeModal() {
+      const modal = document.getElementById('upgradeConfirmModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function submitMainForm() {
+      document.getElementById('instituteForm').submit();
+    }
   </script>
 @endsection

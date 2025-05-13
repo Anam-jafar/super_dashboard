@@ -39,7 +39,7 @@ class InstituteService
             'pcode' => 'nullable|numeric|digits_between:1,8',
             'city' => 'nullable|string|max:50',
             'state' => 'nullable|string|max:50',
-            'hp' => 'nullable|numeric|digits:11',
+            'hp' => 'nullable|regex:/^\d+$/',
             'fax' => 'nullable|numeric|digits_between:1,10',
             'mel' => 'nullable|email|max:255',
             'web' => 'nullable|string|max:255',
@@ -53,7 +53,7 @@ class InstituteService
             'con1' => 'nullable|string|max:50',
             'ic' => 'nullable|numeric|digits:12',
             'pos1' => 'nullable|string|max:50',
-            'tel1' => 'nullable|numeric|digits:11',
+            'tel1' => 'nullable|regex:/^\d+$/',
             'sta' => 'nullable|string|max:50',
             'country' => 'nullable|string|max:50',
             'upgrade_date' => 'nullable|date',
@@ -85,19 +85,18 @@ class InstituteService
 
         // If the institution status is 0, make certain fields required
         if ($request->sta == '0') {
-            $rules['hp'] = 'required|numeric|digits:11|unique:client,hp,' . $id;
+            $rules['hp'] = 'required|regex:/^\d+$/|unique:client,hp,' . $id;
             $rules['mel'] = 'required|email|max:255|unique:client,mel,' . $id;
             $rules['con1'] = 'required|string|max:50';
             $rules['ic'] = 'required|numeric|digits:12';
             $rules['pos1'] = 'required|string|max:50';
-            $rules['tel1'] = 'required|numeric|digits:11';
+            $rules['tel1'] = 'required|regex:/^\d+$/';
         }
 
         // Return the validation rules along with custom error messages in Malay
         return Validator::make($request->all(), $rules, [
             'hp.required' => 'Nombor telefon diperlukan kerana institusi belum disahkan.',
-            'hp.numeric' => 'Nombor telefon mesti dalam format nombor.',
-            'hp.digits' => 'Nombor telefon mesti mempunyai 11 digit.',
+            'hp.regex' => 'Nombor telefon hanya boleh mengandungi angka sahaja.',
             'hp.unique' => 'Nombor telefon ini telah digunakan.',
             'mel.required' => 'E-mel diperlukan kerana institusi belum disahkan.',
             'mel.email' => 'Sila masukkan alamat e-mel yang sah.',
@@ -113,7 +112,7 @@ class InstituteService
             'fax.numeric' => 'Faksimili mesti dalam format nombor.',
             'location.max' => 'Lokasi mesti dalam format koordinat dan tidak boleh melebihi 255 aksara.',
             'tel1.numeric' => 'Telefon 1 mesti dalam format nombor.',
-            'tel1.digits' => 'Telefon 1 mesti mempunyai 11 digit.',
+            'tel1.regex' => 'Nombor telefon hanya boleh mengandungi angka sahaja.',
             'ic.required' => 'Kad Pengenalan diperlukan kerana institusi belum disahkan.',
             'ic.numeric' => 'Kad Pengenalan mesti dalam format nombor.',
             'ic.digits' => 'Kad Pengenalan mesti mempunyai 12 digit.',

@@ -39,7 +39,7 @@
                   <div class="flex items-start justify-between">
                     <div class="flex flex-col">
                       <div class="card-title-container">
-                        <span class="card-title">Jumlah Institusi Berdaftar</span>
+                        <span class="card-title">Bil Berdaftar (Aktif)</span>
                       </div>
                       <h4 class="card-value">{{ $total_institute ?? 0 }}</h4>
                     </div>
@@ -57,13 +57,12 @@
                   <div class="flex items-start justify-between">
                     <div class="flex flex-col">
                       <div class="card-title-container">
-                        <span class="card-title">Permohonan Daftar Masjid</span>
+                        <span class="card-title">Bil Masjid Pengurusan</span>
                       </div>
-                      <h4 class="card-value">{{ $total_institute_registration ?? 0 }}</h4>
+                      <h4 class="card-value">{{ $categoryCounts['MAP'] ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
-                      <img src="{{ asset('assets/icons/dashboard_icons_2.svg') }}" alt="logo"
-                        class="toggle-dark card-icon">
+                      <img src="{{ asset('assets/icons/card_icon_1.svg') }}" alt="logo" class="toggle-dark card-icon">
                     </div>
                   </div>
                 </div>
@@ -75,13 +74,12 @@
                   <div class="flex items-start justify-between">
                     <div class="flex flex-col">
                       <div class="card-title-container">
-                        <span class="card-title">Status Menunggu Semakan</span>
+                        <span class="card-title">Bil Masjid Institusi</span>
                       </div>
-                      <h4 class="card-value">{{ $total_statement_to_review ?? 0 }}</h4>
+                      <h4 class="card-value">{{ $categoryCounts['MAI'] ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
-                      <img src="{{ asset('assets/icons/dashboard_icons_3.svg') }}" alt="logo"
-                        class="toggle-dark card-icon">
+                      <img src="{{ asset('assets/icons/card_icon_1.svg') }}" alt="logo" class="toggle-dark card-icon">
                     </div>
                   </div>
                 </div>
@@ -93,13 +91,12 @@
                   <div class="flex items-start justify-between">
                     <div class="flex flex-col">
                       <div class="card-title-container">
-                        <span class="card-title">Jumlah Diterima</span>
+                        <span class="card-title">Bil Masjid Kariah</span>
                       </div>
-                      <h4 class="card-value">{{ $total_statement_accepted ?? 0 }}</h4>
+                      <h4 class="card-value">{{ $categoryCounts['MAK'] ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
-                      <img src="{{ asset('assets/icons/dashboard_icons_5.svg') }}" alt="logo"
-                        class="toggle-dark card-icon">
+                      <img src="{{ asset('assets/icons/card_icon_1.svg') }}" alt="logo" class="toggle-dark card-icon">
                     </div>
                   </div>
                 </div>
@@ -111,13 +108,12 @@
                   <div class="flex items-start justify-between">
                     <div class="flex flex-col">
                       <div class="card-title-container">
-                        <span class="card-title">Jumlah Ditolak</span>
+                        <span class="card-title">Bil Masjid Pembinaan</span>
                       </div>
-                      <h4 class="card-value">{{ $total_statement_cancelled ?? 0 }}</h4>
+                      <h4 class="card-value">{{ $categoryCounts['MPD'] ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
-                      <img src="{{ asset('assets/icons/dashboard_icons_4.svg') }}" alt="logo"
-                        class="toggle-dark card-icon">
+                      <img src="{{ asset('assets/icons/card_icon_1.svg') }}" alt="logo" class="toggle-dark card-icon">
                     </div>
                   </div>
                 </div>
@@ -132,12 +128,12 @@
                   <div class="flex items-start justify-between">
                     <div class="flex flex-col">
                       <div class="card-title-container">
-                        <span class="card-title">Jumlah Mohon Kemaskini</span>
+                        <span class="card-title">Bil Surau Biasa</span>
                       </div>
-                      <h4 class="card-value">{{ $total_statement_request_edit ?? 0 }}</h4>
+                      <h4 class="card-value">{{ $categoryCounts['SUB'] ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
-                      <img src="{{ asset('assets/icons/dashboard_icons_6.svg') }}" alt="logo"
+                      <img src="{{ asset('assets/icons/card_icon_2.svg') }}" alt="logo"
                         class="toggle-dark card-icon">
                     </div>
                   </div>
@@ -150,12 +146,12 @@
                   <div class="flex items-start justify-between">
                     <div class="flex flex-col">
                       <div class="card-title-container">
-                        <span class="card-title">Status Menunggu Semakan</span>
+                        <span class="card-title">Bil Kebenaran Jumaat</span>
                       </div>
-                      <h4 class="card-value">{{ $total_statement_to_review ?? 0 }}</h4>
+                      <h4 class="card-value">{{ $categoryCounts['SKJ'] ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
-                      <img src="{{ asset('assets/icons/dashboard_icons_3.svg') }}" alt="logo"
+                      <img src="{{ asset('assets/icons/card_icon_2.svg') }}" alt="logo"
                         class="toggle-dark card-icon">
                     </div>
                   </div>
@@ -168,12 +164,12 @@
                   <div class="flex items-start justify-between">
                     <div class="flex flex-col">
                       <div class="card-title-container">
-                        <span class="card-title">Jumlah Diterima</span>
+                        <span class="card-title">Bil Surau Pembinaan</span>
                       </div>
-                      <h4 class="card-value">{{ $total_statement_accepted ?? 0 }}</h4>
+                      <h4 class="card-value">{{ $categoryCounts['SUD'] ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
-                      <img src="{{ asset('assets/icons/dashboard_icons_5.svg') }}" alt="logo"
+                      <img src="{{ asset('assets/icons/card_icon_2.svg') }}" alt="logo"
                         class="toggle-dark card-icon">
                     </div>
                   </div>
@@ -186,12 +182,12 @@
                   <div class="flex items-start justify-between">
                     <div class="flex flex-col">
                       <div class="card-title-container">
-                        <span class="card-title">Jumlah Ditolak</span>
+                        <span class="card-title">Bil Musolla</span>
                       </div>
-                      <h4 class="card-value">{{ $total_statement_cancelled ?? 0 }}</h4>
+                      <h4 class="card-value">{{ $categoryCounts['MSL'] ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
-                      <img src="{{ asset('assets/icons/dashboard_icons_4.svg') }}" alt="logo"
+                      <img src="{{ asset('assets/icons/card_icon_3.svg') }}" alt="logo"
                         class="toggle-dark card-icon">
                     </div>
                   </div>
@@ -204,12 +200,12 @@
                   <div class="flex items-start justify-between">
                     <div class="flex flex-col">
                       <div class="card-title-container">
-                        <span class="card-title">Jumlah Mohon Kemaskini</span>
+                        <span class="card-title">Bil Musolla Kebenaran Jumaat</span>
                       </div>
-                      <h4 class="card-value">{{ $total_statement_request_edit ?? 0 }}</h4>
+                      <h4 class="card-value">{{ $categoryCounts['MKJ'] ?? 0 }}</h4>
                     </div>
                     <div class="leading-none">
-                      <img src="{{ asset('assets/icons/dashboard_icons_6.svg') }}" alt="logo"
+                      <img src="{{ asset('assets/icons/card_icon_3.svg') }}" alt="logo"
                         class="toggle-dark card-icon">
                     </div>
                   </div>
@@ -253,7 +249,7 @@
           <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <!-- Header -->
             <div>
-              <h2 class="text-lg font-semibold text-gray-800">Statistic</h2>
+              <h2 class="text-lg font-semibold text-gray-800">Statistik</h2>
             </div>
             <!-- Filters -->
             <div class="grid w-full grid-cols-1 gap-2 sm:w-auto sm:grid-cols-2 md:grid-cols-4">
@@ -267,7 +263,7 @@
               </select>
 
               <!-- Statement Dropdown -->
-              <select id="statementSelect" class="w-full rounded-md border px-3 py-2">
+              <select id="finCategorySelect" class="w-full rounded-md border px-3 py-2">
                 <option value="STM02">01 Tahun</option>
                 @foreach (collect($statement)->except('STM02') as $code => $label)
                   <option value="{{ $code }}">{{ $label }}</option>
@@ -301,7 +297,6 @@
           <div class="box overflow-hidden">
             <div class="box-header justify-between pb-0">
               <div class="box-title">
-                Penghantaran Laporan Kewangan
               </div>
             </div>
 
@@ -313,14 +308,14 @@
               <div class="flex items-center justify-between">
                 <!-- Left Section -->
                 <div class="text-gray-700 dark:text-gray-300">
-                  <h5 class="mb-2 text-sm font-semibold">Jumlah Penghantaran</h5>
-                  <h5 class="text-sm font-semibold">Jumlah Institusi Berdaftar</h5>
+                  <h5 class="mb-2 text-sm font-semibold">Bil Hantar</h5>
+                  <h5 class="text-sm font-semibold">Bil Daftar (Aktif)</h5>
                 </div>
 
                 <!-- Right Section -->
                 <div class="text-right text-gray-700 dark:text-gray-300">
-                  <h5 id="totalEntries1" class="mb-2 text-lg font-bold">{{ $totalEntries }}</h5>
-                  <h5 id="totalClients1" class="text-lg font-bold">{{ $totalClients }}</h5>
+                  <h5 id="totalSubmitted" class="mb-2 text-lg font-bold"></h5>
+                  <h5 id="totalNotSubmitted" class="text-lg font-bold"></h5>
                 </div>
               </div>
             </div>
@@ -333,7 +328,6 @@
           <div class="box overflow-hidden">
             <div class="box-header justify-between pb-0">
               <div class="box-title">
-                Status Pematuhan Kewangan
               </div>
             </div>
 
@@ -345,14 +339,18 @@
               <div class="flex items-center justify-between">
                 <!-- Left Section -->
                 <div class="text-gray-700 dark:text-gray-300">
-                  <h5 class="mb-2 text-sm font-semibold">Jumlah Penghantaran</h5>
-                  <h5 class="text-sm font-semibold">Jumlah Institusi Berdaftar</h5>
+                  <h5 class="mb-2 text-sm font-semibold">
+                    Bil Dah Semak
+                    <br>
+                    <span class="block text-xs font-normal text-gray-600">(Status diterima + Ditolak)</span>
+                  </h5>
+                  <h5 class="text-sm font-semibold">Bil Belum Semak</h5>
                 </div>
 
                 <!-- Right Section -->
                 <div class="text-right text-gray-700 dark:text-gray-300">
-                  <h5 id="totalEntries2" class="mb-2 text-lg font-bold">{{ $totalEntries }}</h5>
-                  <h5 id="totalClients2" class="text-lg font-bold">{{ $totalClients }}</h5>
+                  <h5 id="totalChecked" class="mb-2 text-lg font-bold"></h5>
+                  <h5 id="totalUnchecked" class="text-lg font-bold"></h5>
                 </div>
               </div>
             </div>
@@ -365,7 +363,6 @@
           <div class="box overflow-hidden">
             <div class="box-header justify-between pb-0">
               <div class="box-title">
-                Pengesahan Audit Tahunan
               </div>
             </div>
 
@@ -377,14 +374,14 @@
               <div class="flex items-center justify-between">
                 <!-- Left Section -->
                 <div class="text-gray-700 dark:text-gray-300">
-                  <h5 class="mb-2 text-sm font-semibold">Jumlah Penghantaran</h5>
-                  <h5 class="text-sm font-semibold">Jumlah Institusi Berdaftar</h5>
+                  <h5 class="mb-2 text-sm font-semibold">Bil Terima</h5>
+                  <h5 class="text-sm font-semibold">Bil Ditolak</h5>
                 </div>
 
                 <!-- Right Section -->
                 <div class="text-right text-gray-700 dark:text-gray-300">
-                  <h5 id="totalEntries3" class="mb-2 text-lg font-bold">{{ $totalEntries }}</h5>
-                  <h5 id="totalClients3" class="text-lg font-bold">{{ $totalClients }}</h5>
+                  <h5 id="totalAccepted" class="mb-2 text-lg font-bold"></h5>
+                  <h5 id="totalRejected" class="text-lg font-bold"></h5>
                 </div>
               </div>
             </div>
@@ -397,7 +394,6 @@
           <div class="box overflow-hidden">
             <div class="box-header justify-between pb-0">
               <div class="box-title">
-                Status Dokumen Kewangan
               </div>
             </div>
 
@@ -409,14 +405,14 @@
               <div class="flex items-center justify-between">
                 <!-- Left Section -->
                 <div class="text-gray-700 dark:text-gray-300">
-                  <h5 class="mb-2 text-sm font-semibold">Jumlah Penghantaran</h5>
-                  <h5 class="text-sm font-semibold">Jumlah Institusi Berdaftar</h5>
+                  <h5 class="mb-2 text-sm font-semibold">Bil Tolak & Telah Hantar Semula</h5>
+                  <h5 class="text-sm font-semibold">Bil Ditolak Belum Hantar Semula</h5>
                 </div>
 
                 <!-- Right Section -->
                 <div class="text-right text-gray-700 dark:text-gray-300">
-                  <h5 id="totalEntries4" class="mb-2 text-lg font-bold">{{ $totalEntries }}</h5>
-                  <h5 id="totalClients4" class="text-lg font-bold">{{ $totalClients }}</h5>
+                  <h5 id="totalResubmitted" class="mb-2 text-lg font-bold"></h5>
+                  <h5 id="totalNotResubmitted" class="text-lg font-bold"></h5>
                 </div>
               </div>
             </div>
@@ -755,22 +751,24 @@
       const yearSelect = document.getElementById("yearSelect");
       const districtSelect = document.getElementById("districtSelect");
       const finCategorySelect = document.getElementById("finCategorySelect");
+      const instituteSelect = document.getElementById("instituteSelect");
+
 
       // Elements for Chart 1
-      const totalSentEl1 = document.getElementById("totalSent1");
-      const totalRegisteredEl1 = document.getElementById("totalRegistered1");
+      const totalSubmitted = document.getElementById("totalSubmitted");
+      const totalNotSubmitted = document.getElementById("totalNotSubmitted");
 
       // Elements for Chart 2
-      const totalReceivedEl2 = document.getElementById("totalReceived2");
-      const totalRejectedEl2 = document.getElementById("totalRejected2");
+      const totalChecked = document.getElementById("totalChecked");
+      const totalUnchecked = document.getElementById("totalUnchecked");
 
       // Elements for Chart 3
-      const totalRejectedResentEl3 = document.getElementById("totalRejectedResent3");
-      const totalRejectedNotResentEl3 = document.getElementById("totalRejectedNotResent3");
+      const totalAccepted = document.getElementById("totalAccepted");
+      const totalRejected = document.getElementById("totalRejected");
 
       // Elements for Chart 4
-      const totalRegisteredEl4 = document.getElementById("totalRegistered4");
-      const totalSentEl4 = document.getElementById("totalSent4");
+      const totalResubmitted = document.getElementById("totalResubmitted");
+      const totalNotResubmitted = document.getElementById("totalNotResubmitted");
 
       // Chart instances
       let chart1, chart2, chart3, chart4;
@@ -779,8 +777,11 @@
         const year = yearSelect.value;
         const district = districtSelect.value;
         const finCategory = finCategorySelect ? finCategorySelect.value : 'STM02';
+        const institute = instituteSelect ? instituteSelect.value : '';
 
-        fetch(`{{ route('getStatementsReport') }}?year=${year}&district=${district}&fin_category=${finCategory}`)
+        fetch(
+            `{{ route('getStatementsReport') }}?year=${year}&district=${district}&fin_category=${finCategory}&institute=${institute}`
+          )
           .then(response => response.json())
           .then(data => {
             // Update Chart 1: Jumlah Hantar vs Jumlah Berdaftar
@@ -789,8 +790,8 @@
               data.categories[0][0], data.categories[0][1],
               data.colors[0]);
 
-            if (totalSentEl1) totalSentEl1.textContent = data.series[0][0];
-            if (totalRegisteredEl1) totalRegisteredEl1.textContent = data.series[0][1];
+            if (totalSubmitted) totalSubmitted.textContent = data.series[0][0];
+            if (totalNotSubmitted) totalNotSubmitted.textContent = data.series[0][0] + data.series[0][1];
 
             // Update Chart 2: Jumlah Terima vs Jumlah Ditolak
             updateChartData(2, "orders2",
@@ -798,8 +799,20 @@
               data.categories[1][0], data.categories[1][1],
               data.colors[1]);
 
-            if (totalReceivedEl2) totalReceivedEl2.textContent = data.series[1][0];
-            if (totalRejectedEl2) totalRejectedEl2.textContent = data.series[1][1];
+            if (totalChecked && totalUnchecked) {
+              const checked = data.series[1][0];
+              const unchecked = data.series[1][1];
+              const total = checked + unchecked;
+
+              const checkedPercent = total ? Math.round((checked / total) * 100) : 0;
+              const uncheckedPercent = total ? Math.round((unchecked / total) * 100) : 0;
+
+              totalChecked.innerHTML = `${checked} <span class="text-xs text-gray-700">(${checkedPercent}%)</span>`;
+              totalUnchecked.innerHTML =
+                `${unchecked} <span class="text-xs text-gray-700">(${uncheckedPercent}%)</span>`;
+            }
+
+
 
             // Update Chart 3: Ditolak & Telah Hantar Semula vs Ditolak & Belum Hantar Semula
             updateChartData(3, "orders3",
@@ -807,8 +820,20 @@
               data.categories[2][0], data.categories[2][1],
               data.colors[2]);
 
-            if (totalRejectedResentEl3) totalRejectedResentEl3.textContent = data.series[2][0];
-            if (totalRejectedNotResentEl3) totalRejectedNotResentEl3.textContent = data.series[2][1];
+            if (totalAccepted && totalRejected) {
+              const accepted = data.series[2][0];
+              const rejected = data.series[2][1];
+              const total = accepted + rejected;
+
+              const acceptedPercent = total ? Math.round((accepted / total) * 100) : 0;
+              const rejectedPercent = total ? Math.round((rejected / total) * 100) : 0;
+
+              totalAccepted.innerHTML =
+                `${accepted} <span class="text-xs text-gray-700">(${acceptedPercent}%)</span>`;
+              totalRejected.innerHTML =
+                `${rejected} <span class="text-xs text-gray-700">(${rejectedPercent}%)</span>`;
+            }
+
 
             // Update Chart 4: Custom chart (if needed)
             updateChartData(4, "orders4",
@@ -816,8 +841,20 @@
               data.categories[3][0], data.categories[3][1],
               data.colors[3]);
 
-            if (totalRegisteredEl4) totalRegisteredEl4.textContent = data.series[3][0];
-            if (totalSentEl4) totalSentEl4.textContent = data.series[3][1];
+            if (totalResubmitted && totalNotResubmitted) {
+              const resubmitted = data.series[3][0];
+              const notResubmitted = data.series[3][1];
+              const total = resubmitted + notResubmitted;
+
+              const resubmittedPercent = total ? Math.round((resubmitted / total) * 100) : 0;
+              const notResubmittedPercent = total ? Math.round((notResubmitted / total) * 100) : 0;
+
+              totalResubmitted.innerHTML =
+                `${resubmitted} <span class="text-xs text-gray-700">(${resubmittedPercent}%)</span>`;
+              totalNotResubmitted.innerHTML =
+                `${notResubmitted} <span class="text-xs text-gray-700">(${notResubmittedPercent}%)</span>`;
+            }
+
           })
           .catch(error => console.error("Error fetching data:", error));
       }
@@ -934,6 +971,10 @@
       // Event Listener for Financial Category Change
       if (finCategorySelect) {
         finCategorySelect.addEventListener("change", fetchStatementsReport);
+      }
+
+      if (instituteSelect) {
+        instituteSelect.addEventListener("change", fetchStatementsReport);
       }
     });
   </script>

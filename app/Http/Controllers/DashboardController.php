@@ -358,6 +358,7 @@ class DashboardController extends Controller
         $finCategory = $request->filled('fin_category') ? $request->fin_category : 'STM02';
         $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
         $district = $request->filled('district') ? $request->district : $districtAccess;
+        $institute = $request->filled('institute') ? $request->institute : null;
 
         // Start building the subquery filter
         $subQueryFilter = "WHERE c.sta = 0 AND c.app = 'CLIENT' AND c.isdel = 0";
@@ -372,6 +373,9 @@ class DashboardController extends Controller
             COUNT(DISTINCT c.uid) AS total_berdaftar,
             COUNT(DISTINCT CASE WHEN s.status IN (1, 2, 3) THEN s.inst_refno END) AS total_telah_hantar,
             COUNT(DISTINCT CASE WHEN s.status = 2 THEN s.inst_refno END) AS total_diterima,
+            COUNT(DISTINCT CASE WHEN s.status IN (2, 3) THEN s.inst_refno END) AS total_checked,
+            COUNT(DISTINCT CASE WHEN s.status = 1 THEN s.inst_refno END) AS total_unchecked,
+
             COUNT(DISTINCT CASE 
                 WHEN s.status = 3 AND NOT EXISTS (
                     SELECT 1 
@@ -397,11 +401,14 @@ class DashboardController extends Controller
                 THEN s.inst_refno 
             END) AS total_ditolak_dan_hantar
         ")
-            ->leftJoin('splk_submission as s', function ($join) use ($finYear, $finCategory) {
+            ->leftJoin('splk_submission as s', function ($join) use ($finYear, $finCategory, $request) {
                 $join->on('c.uid', '=', 's.inst_refno')
                     ->where('s.fin_year', $finYear)
                     ->where('s.fin_category', $finCategory)
                     ->whereNotIn('s.status', [0, 4]);
+                if ($request->filled('institute')) {
+                    $join->where('s.institute', $request->institute);
+                }
             })
             ->where('c.sta', 0)
             ->where('c.app', 'CLIENT')
@@ -409,6 +416,9 @@ class DashboardController extends Controller
 
         if (!is_null($district)) {
             $data->where('c.rem8', $district);
+        }
+        if (!is_null($institute)) {
+            $data->where('c.cate1', $institute);
         }
 
         $result = $data->first();
@@ -418,15 +428,15 @@ class DashboardController extends Controller
 
         return response()->json([
             'categories' => [
-                ['Jumlah Hantar', 'Jumlah Berdaftar'],
-                ['Jumlah Terima', 'Jumlah Ditolak'],
-                ['Ditolak & Telah Hantar Semula', 'Ditolak & Belum Hantar Semula'],
-                ['Jumlah Berdaftar', 'Jumlah Hantar']
+                ['Bil Hantar', 'Bil Daftar (Aktif)'],
+                ['Bil Dah Semak', 'Bil Belum Semak'],
+                ['Bil Terima', 'Bil Di Tolak'],
+                ['Bil Tolak & Telah Hantar Semula', 'Bil Ditolak Belum Hantar Semula']
             ],
             'series' => [
-                [$result->total_telah_hantar, $result->total_berdaftar],
+                [$result->total_telah_hantar, $result->total_berdaftar - $result->total_telah_hantar],
+                [$result->total_checked, $result->total_unchecked],
                 [$result->total_diterima, $total_ditolak],
-                [$result->total_ditolak_dan_hantar, $result->total_ditolak_belum_hantar],
                 [$result->total_ditolak_dan_hantar, $result->total_ditolak_belum_hantar]
 
             ],
@@ -441,13 +451,31 @@ class DashboardController extends Controller
 
     public function index()
     {
+
         $districtAccess = DB::table('usr')->where('mel', Auth::user()->mel)->value('joblvl');
 
-        $total_institute = Institute::where('sta', 0)
+        $categories = Parameter::where('grp', 'type_CLIENT')->pluck('code')->toArray();
+
+        // Base query
+        $baseQuery = Institute::selectRaw('cate, COUNT(*) as total')
+            ->where('sta', 0)
             ->when($districtAccess !== null, function ($query) use ($districtAccess) {
-                return $query->where('rem8', $districtAccess);
+                $query->where('rem8', $districtAccess);
             })
-            ->count() ?: null;
+            ->whereIn('cate', $categories)
+            ->groupBy('cate')
+            ->pluck('total', 'cate');
+
+        // Ensure all categories are present in result (even if 0)
+        $categoryCounts = [];
+        foreach ($categories as $code) {
+            $categoryCounts[$code] = $baseQuery[$code] ?? 0;
+        }
+
+        // Optional: Total count of all
+        $total_institute = array_sum($categoryCounts);
+
+
 
         $total_institute_registration = Institute::where('sta', 1)
             ->when($districtAccess !== null, function ($query) use ($districtAccess) {
@@ -639,7 +667,8 @@ class DashboardController extends Controller
             'years',
             'districts',
             'institute',
-            'statement'
+            'statement',
+            'categoryCounts',
         ));
     }
 

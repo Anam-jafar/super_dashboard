@@ -372,8 +372,6 @@ class DashboardController extends Controller
             ->selectRaw("
             COUNT(DISTINCT c.uid) AS total_berdaftar,
             COUNT(DISTINCT CASE WHEN s.status IN (1, 2, 3) THEN s.inst_refno END) AS total_telah_hantar,
-            COUNT(DISTINCT CASE WHEN s.status = 2 THEN s.inst_refno END) AS total_diterima,
-
             COUNT(DISTINCT CASE 
                 WHEN s.status = 2 OR (
                     s.status = 3 AND NOT EXISTS (
@@ -402,6 +400,21 @@ class DashboardController extends Controller
                 )
                 THEN s.inst_refno
             END) AS total_unchecked,
+
+            COUNT(DISTINCT CASE WHEN s.status = 2 THEN s.inst_refno END) AS total_diterima,
+            COUNT(DISTINCT CASE 
+                WHEN s.status = 3 AND NOT EXISTS (
+                        SELECT 1 
+                        FROM splk_submission s2
+                        WHERE s2.inst_refno = s.inst_refno
+                        AND s2.fin_year = s.fin_year
+                        AND s2.fin_category = s.fin_category
+                        AND s2.status IN (1, 2)
+                        AND s2.id > s.id
+                    )
+                THEN s.inst_refno
+            END) AS total_ditolak,
+
 
 
             COUNT(DISTINCT CASE 
@@ -464,7 +477,7 @@ class DashboardController extends Controller
             'series' => [
                 [$result->total_telah_hantar, $result->total_berdaftar - $result->total_telah_hantar],
                 [$result->total_checked, $result->total_unchecked],
-                [$result->total_diterima, $total_ditolak],
+                [$result->total_diterima, $result->total_ditolak],
                 [$result->total_ditolak_dan_hantar, $result->total_ditolak_belum_hantar]
 
             ],

@@ -341,8 +341,6 @@
                 <div class="text-gray-700 dark:text-gray-300">
                   <h5 class="mb-2 text-sm font-semibold">
                     Bil Dah Semak
-                    <br>
-                    <span class="block text-xs font-normal text-gray-600">(Status diterima + Ditolak)</span>
                   </h5>
                   <h5 class="text-sm font-semibold">Bil Belum Semak</h5>
                 </div>
@@ -823,7 +821,9 @@
             if (totalAccepted && totalRejected) {
               const accepted = data.series[2][0];
               const rejected = data.series[2][1];
-              const total = accepted + rejected;
+
+              const checked = data.series[1][0];
+              const total = checked;
 
               const acceptedPercent = total ? Math.round((accepted / total) * 100) : 0;
               const rejectedPercent = total ? Math.round((rejected / total) * 100) : 0;

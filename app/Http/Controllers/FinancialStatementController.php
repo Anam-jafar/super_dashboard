@@ -50,8 +50,14 @@ class FinancialStatementController extends Controller
         }
         $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
         $financialStatement->FIN_STATUS = $this->financialStatementService->getFinStatus($financialStatement->status);
+        $financialStatement->INSTITUTE = Parameter::where('code', $financialStatement->institute)->value('prm');
+        $financialStatement->INSTITUTE_TYPE = Parameter::where('code', $financialStatement->institute_type)->value('prm');
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
-        $instituteType = isset($institute->Category->lvl) ? intval($institute->Category->lvl) : null;
+        $instituteType = (int) DB::table('type')
+            ->where('grp', 'type_CLIENT')
+            ->where('code', $financialStatement->institute_type)
+            ->value('lvl');
+
         $currentYear = date('Y');
         $years = array_combine(range($currentYear - 3, $currentYear + 1), range($currentYear - 3, $currentYear + 1));
 
@@ -94,9 +100,16 @@ class FinancialStatementController extends Controller
         $financialStatement = FinancialStatement::with('VerifiedBy')->find($id);
         $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
         $financialStatement->FIN_STATUS = $this->financialStatementService->getFinStatus($financialStatement->status);
+        $financialStatement->INSTITUTE = Parameter::where('code', $financialStatement->institute)->value('prm');
+        $financialStatement->INSTITUTE_TYPE = Parameter::where('code', $financialStatement->institute_type)->value('prm');
 
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
-        $instituteType = isset($institute->Category->lvl) ? intval($institute->Category->lvl) : null;
+
+        $instituteType = (int) DB::table('type')
+            ->where('grp', 'type_CLIENT')
+            ->where('code', $financialStatement->institute_type)
+            ->value('lvl');
+
         $currentYear = date('Y');
         $years = array_combine(range($currentYear - 3, $currentYear + 1), range($currentYear - 3, $currentYear + 1));
 

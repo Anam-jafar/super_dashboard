@@ -19,8 +19,8 @@
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 
           <div class="mt-8 grid max-w-3xl grid-cols-1 gap-x-16 gap-y-2">
-            <x-show-key-value :key="'Institusi'" :value="$financialStatement->Institute->Type->prm" />
-            <x-show-key-value :key="'Jenis Institusi'" :value="$financialStatement->Institute->Category->prm" />
+            <x-show-key-value :key="'Institusi'" :value="$financialStatement->INSTITUTE" />
+            <x-show-key-value :key="'Jenis Institusi'" :value="$financialStatement->INSTITUTE_TYPE" />
             <x-show-key-value :key="'Nama Institusi'" :value="$financialStatement->Institute->name" />
             <x-show-key-value :key="'Daerah'" :value="$financialStatement->Institute->District->prm" />
             <x-show-key-value :key="'Mukim'" :value="$financialStatement->Institute->Subdistrict->prm" />
@@ -111,8 +111,8 @@
                 <div class="grid grid-cols-1 items-end gap-6 md:grid-cols-2">
 
                   <x-input-field level="(iii) Belanja Pembinaan PWS (RM)" id="i6" name="pws_expenses"
-                    type="money" placeholder="00.00" :rightAlign="true"
-                    value="{{ $financialStatement->pws_expenses }}" disabled="true" />
+                    type="money" placeholder="00.00" :rightAlign="true" value="{{ $financialStatement->pws_expenses }}"
+                    disabled="true" />
                 </div>
               </div>
               <div class="mt-4 grid grid-cols-2 gap-6">
@@ -121,9 +121,9 @@
               <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                 <div class="grid grid-cols-1 items-end gap-6 md:grid-cols-2">
 
-                  <x-input-field level="(i) Lebihan Masjid/Surau (RM)" id="i4" name="inst_surplus" type="money"
-                    placeholder="00.00" :rightAlign="true" value="{{ $financialStatement->inst_surplus }}"
-                    disabled="true" />
+                  <x-input-field level="(i) Lebihan Masjid/Surau (RM)" id="i4" name="inst_surplus"
+                    type="money" placeholder="00.00" :rightAlign="true"
+                    value="{{ $financialStatement->inst_surplus }}" disabled="true" />
                   <x-input-field level="(ii) Lebihan PWS (RM)" id="i5" name="pws_surplus" type="money"
                     placeholder="00.00" :rightAlign="true" value="{{ $financialStatement->pws_surplus }}"
                     disabled="true" />

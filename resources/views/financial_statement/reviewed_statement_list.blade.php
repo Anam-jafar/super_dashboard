@@ -17,6 +17,12 @@
                 'options' => $parameters['statements'],
             ],
             [
+                'name' => 'institute_type',
+                'label' => 'Jenis Institusi',
+                'type' => 'select',
+                'options' => $parameters['categories'],
+            ],
+            [
                 'name' => 'rem8',
                 'label' => 'Semua Daerah',
                 'type' => 'select',
@@ -42,6 +48,7 @@
             'Tarikh Hantar',
             'Tahun Penyata',
             'Kategori Penyata',
+            'Jenis Institusi',
             'Daerah',
             'Mukim',
             'Nama Institusi',
@@ -51,6 +58,7 @@
             'SUBMISSION_DATE',
             'fin_year',
             'CATEGORY',
+            'INSTITUTE_TYPE',
             'DISTRICT',
             'SUBDISTRICT',
             'INSTITUTE',

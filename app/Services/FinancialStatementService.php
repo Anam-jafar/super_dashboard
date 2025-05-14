@@ -61,6 +61,7 @@ class FinancialStatementService
         $financialStatement->SUBDISTRICT = $this->getParameter($financialStatement->Institute->Subdistrict);
         $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
         $financialStatement->FIN_STATUS = $this->getFinStatus($financialStatement->status);
+        $financialStatement->INSTITUTE_TYPE = Parameter::where('code', $financialStatement->institute_type)->value('prm');
 
         return $financialStatement;
     }

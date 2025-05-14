@@ -436,7 +436,7 @@ class DashboardController extends Controller
                     WHERE s2.inst_refno = s.inst_refno
                     AND s2.fin_year = s.fin_year
                     AND s2.fin_category = s.fin_category
-                    AND s2.status IN (1, 2)
+                    AND s2.status = 1
                     AND s2.id > s.id
                 )
                 THEN s.inst_refno 

@@ -220,7 +220,7 @@
 
         {{-- Right Side --}}
         <div class="col-span-12 xl:col-span-3">
-          <div class="box h-full overflow-hidden"
+          <div class="box mb-4 mt-4 h-full overflow-hidden lg:mb-0 lg:mt-0"
             style="background-image: url('{{ asset('assets/icons/banner.png') }}'); background-size: cover; background-position: center; min-height:225px">
             <div class="box-body relative p-3">
               <div class="grid grid-cols-12 justify-between">
@@ -242,56 +242,49 @@
 
       <!-- Start::Row-2 -->
       {{-- Financial Reports Grid Container --}}
+      {{-- Filters Row --}}
+      <div class="box-header mt-4 justify-between px-0">
+        <div class="box-title">
+          Statistik </div>
+        <div class="grid w-full grid-cols-1 gap-2 sm:w-auto sm:grid-cols-2 md:grid-cols-4">
+          <!-- Year Dropdown -->
+          <select id="yearSelect" class="w-full rounded-md border px-3 py-2">
+            @foreach ($years as $year)
+              <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>
+                {{ $year }}
+              </option>
+            @endforeach
+          </select>
 
-      <div class="mt-4 grid grid-cols-12 gap-6">
-        {{-- Filters Row --}}
-        <div class="col-span-12">
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <!-- Header -->
-            <div>
-              <h2 class="text-lg font-semibold text-gray-800">Statistik</h2>
-            </div>
-            <!-- Filters -->
-            <div class="grid w-full grid-cols-1 gap-2 sm:w-auto sm:grid-cols-2 md:grid-cols-4">
-              <!-- Year Dropdown -->
-              <select id="yearSelect" class="w-full rounded-md border px-3 py-2">
-                @foreach ($years as $year)
-                  <option value="{{ $year }}" {{ $year == date('Y') ? 'selected' : '' }}>
-                    {{ $year }}
-                  </option>
-                @endforeach
-              </select>
+          <!-- Statement Dropdown -->
+          <select id="finCategorySelect" class="w-full rounded-md border px-3 py-2">
+            <option value="STM02">01 Tahun</option>
+            @foreach (collect($statement)->except('STM02') as $code => $label)
+              <option value="{{ $code }}">{{ $label }}</option>
+            @endforeach
+          </select>
 
-              <!-- Statement Dropdown -->
-              <select id="finCategorySelect" class="w-full rounded-md border px-3 py-2">
-                <option value="STM02">01 Tahun</option>
-                @foreach (collect($statement)->except('STM02') as $code => $label)
-                  <option value="{{ $code }}">{{ $label }}</option>
-                @endforeach
-              </select>
+          <!-- Institute Dropdown -->
+          <select id="instituteSelect" class="w-full rounded-md border px-3 py-2">
+            <option value="">Semua Institusi</option>
+            @foreach ($institute as $code => $prm)
+              <option value="{{ $code }}">{{ $prm }}
+              </option>
+            @endforeach
+          </select>
 
-              <!-- Institute Dropdown -->
-              <select id="instituteSelect" class="w-full rounded-md border px-3 py-2">
-                <option value="">Semua Institusi</option>
-                @foreach ($institute as $code => $prm)
-                  <option value="{{ $code }}">{{ $prm }}
-                  </option>
-                @endforeach
-              </select>
-
-              <!-- District Dropdown -->
-              <select id="districtSelect" class="w-full rounded-md border px-3 py-2">
-                <option value="">Semua Daerah</option>
-                @foreach ($districts as $code => $prm)
-                  <option value="{{ $code }}">
-                    {{ $prm }}
-                  </option>
-                @endforeach
-              </select>
-            </div>
-          </div>
+          <!-- District Dropdown -->
+          <select id="districtSelect" class="w-full rounded-md border px-3 py-2">
+            <option value="">Semua Daerah</option>
+            @foreach ($districts as $code => $prm)
+              <option value="{{ $code }}">
+                {{ $prm }}
+              </option>
+            @endforeach
+          </select>
         </div>
-
+      </div>
+      <div class="mt-4 grid grid-cols-12 gap-6">
         {{-- Financial Report Pie Chart 1 --}}
         <div class="col-span-12 xl:col-span-6 xxl:col-span-3">
           <div class="box overflow-hidden">
@@ -426,7 +419,7 @@
       <div class="grid grid-cols-12 gap-x-6">
 
         {{-- Left Side --}}
-        <div class="col-span-12 xl:col-span-8">
+        <div class="col-span-12 xl:col-span-9">
           <div class="grid grid-cols-12 gap-x-6">
 
             {{-- New Registration Requests --}}
@@ -437,10 +430,11 @@
                     Permohonan Pendaftaran
                   </div>
                   <a href="{{ route('registrationRequests') }}"
-                    class="ti-ti-btn ti-btn-light btn-wave waves-effect waves-light px-2 py-[0.26rem] text-textmuted dark:text-textmuted/50">Lihat
-                    Semua</a>
+                    class="ti-btn ti-btn-light btn-wave ti-btn-sm text-textmuted dark:text-textmuted/50">Lihat
+                    Semua
+                    <i class="ti ti-arrow-narrow-right"></i></a>
                 </div>
-                <div class="box-body mb-6 mt-6 flex flex-col justify-start" style="min-height: 350px;">
+                <div class="box-body mb-6 mt-6 flex flex-col justify-start" style="min-height: 450px;">
                   @if (!isset($institute_registration_list[0]))
                     <div class="text-center text-gray-500">Tiada rekod ditemui</div>
                   @endif
@@ -553,7 +547,7 @@
                     Semua
                     <i class="ti ti-arrow-narrow-right"></i></a>
                 </div>
-                <div class="box-body mb-6 mt-6 flex flex-col justify-start" style="min-height: 350px;">
+                <div class="box-body mb-6 mt-6 flex flex-col justify-start" style="min-height: 450px;">
                   <div class="table-responsive">
                     <table class="ti-custom-table text-nowrap">
                       <thead>
@@ -615,7 +609,7 @@
         {{-- End::Left Side --}}
 
         {{-- Right Side --}}
-        <div class="col-span-12 xl:col-span-4">
+        <div class="col-span-12 xl:col-span-3">
           <div class="grid grid-cols-12 gap-x-6">
 
             {{-- Institute Count by District --}}
@@ -686,9 +680,9 @@
                   Senarai Pembayaran Langganan Tertunggak
                 </div>
                 <a href="{{ route('outstandingSubscriptions') }}"
-                  class="ti-btn ti-btn-light btn-wave waves-effect waves-light px-2 py-[0.26rem] text-textmuted dark:text-textmuted/50">
-                  Lihat Semua
-                </a>
+                  class="ti-btn ti-btn-light btn-wave ti-btn-sm text-textmuted dark:text-textmuted/50">Lihat
+                  Semua
+                  <i class="ti ti-arrow-narrow-right"></i></a>
               </div>
               <div class="box-body mb-6 mt-6 flex flex-col justify-start" style="min-height: 460px;">
                 <div class="table-responsive">

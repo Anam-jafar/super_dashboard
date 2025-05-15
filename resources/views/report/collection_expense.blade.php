@@ -9,7 +9,7 @@
       <div class="rounded-lg bg-white px-4 py-8 shadow">
         <x-filter-card :filters="[
             [
-                'name' => 'cate',
+                'name' => 'institute_type',
                 'label' => 'Semua Institusi',
                 'type' => 'select',
                 'options' => $parameters['categories'],

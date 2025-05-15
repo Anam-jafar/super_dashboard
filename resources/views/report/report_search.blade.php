@@ -25,7 +25,7 @@
             <div class="grid grid-cols-2 gap-6">
               <x-input-field level="Daerah" id="pos" name="rem8" type="select" placeholder="Pilih"
                 :valueList="$parameters['districts']" />
-              <x-input-field level="Institusi" id="hp" name="cate1" type="select" placeholder="Pilih"
+              <x-input-field level="Institusi" id="hp" name="institute" type="select" placeholder="Pilih"
                 :valueList="$parameters['types']" />
             </div>
           </div>
@@ -34,8 +34,8 @@
             <div class="grid grid-cols-2 gap-6">
               <x-input-field level="Kategori Penyata" id="incharge" name="fin_category" type="select"
                 placeholder="Pilih" :valueList="$parameters['statements']" />
-              <x-input-field level="Jenis Institusi" id="nric" name="cate" type="select" placeholder="Pilih"
-                :valueList="$parameters['categories']" />
+              <x-input-field level="Jenis Institusi" id="nric" name="institute_type" type="select"
+                placeholder="Pilih" :valueList="$parameters['categories']" />
             </div>
 
             <div class="grid grid-cols-2 gap-6">

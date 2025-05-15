@@ -213,7 +213,7 @@ class ReportController extends Controller
         if ($request->filled('options') && $request->options == 2) {
             return $this->reviewedSubmissions($request);
             // route reviewedSubmissions with request
-            // Implement this funciton, it will be similar to the funcitionality of this funciton with a catch. For option two we will show the splk with status 2 and 3. But for status 3 we will show the 
+            // Implement this funciton, it will be similar to the funcitionality of this funciton with a catch. For option two we will show the splk with status 2 and 3. But for status 3 we will show the
             // latest one with status 3. Like this funciton it wiill not get one splk_statement for each client. There can be multiple. Just for status 3 if there is then we get the lates one. Implement the fucntion.
         }
 
@@ -221,16 +221,16 @@ class ReportController extends Controller
         $latestSubmissionIds = DB::table('splk_submission as s')
             ->select(DB::raw('MAX(s.id) as max_id'))
             ->groupBy('s.inst_refno');
-        
+
         // Apply filters to the subquery
         if ($request->filled('fin_year')) {
             $latestSubmissionIds->where('s.fin_year', $request->fin_year);
         }
-        
+
         if ($request->filled('fin_category')) {
             $latestSubmissionIds->where('s.fin_category', $request->fin_category);
         }
-        
+
         // Build the main query with the subquery to get latest submissions only
         $query = DB::table('splk_submission as s')
             ->join('client as c', 'c.uid', '=', 's.inst_refno')
@@ -276,7 +276,7 @@ class ReportController extends Controller
         if ($request->filled('category')) {
             $query->where('c.cate1', $cate1Code);
         }
-        
+
         if ($request->filled('cate1')) {
             $query->where('c.cate1', $request->cate1);
         }
@@ -387,7 +387,7 @@ class ReportController extends Controller
     public function reviewedSubmissions(Request $request)
     {
         $perPage = $request->input('per_page', 10);
-        
+
         // First get all submissions with status 2 (Diterima)
         $status2Query = DB::table('splk_submission as s')
             ->join('client as c', 'c.uid', '=', 's.inst_refno')
@@ -412,22 +412,22 @@ class ReportController extends Controller
                 $join->on('s.fin_category', '=', 't3.code')
                     ->where('t3.grp', '=', 'statement');
             });
-        
+
         // Then get the latest submissions with status 3 for each client
         $latestStatus3Ids = DB::table('splk_submission as s')
             ->select(DB::raw('MAX(s.id) as max_id'))
             ->where('s.status', 3)
             ->groupBy('s.inst_refno');
-        
+
         // Apply common filters to the latest status 3 subquery
         if ($request->filled('fin_year')) {
             $latestStatus3Ids->where('s.fin_year', $request->fin_year);
         }
-        
+
         if ($request->filled('fin_category')) {
             $latestStatus3Ids->where('s.fin_category', $request->fin_category);
         }
-        
+
         // Query for status 3 submissions (only latest)
         $status3Query = DB::table('splk_submission as s')
             ->join('client as c', 'c.uid', '=', 's.inst_refno')
@@ -464,22 +464,22 @@ class ReportController extends Controller
                 $join->on('s.fin_category', '=', 't3.code')
                     ->where('t3.grp', '=', 'statement');
             });
-        
+
         // Handle cate1 filter (convert prm to code) - for both queries
         $cate1Code = null;
         if ($request->filled('category')) {
             $cate1Code = Parameter::where('grp', 'clientcate1')->where('prm', $request->category)->value('code');
         }
-        
+
         // Apply common filters to both queries
         if ($request->filled('fin_year')) {
             $status2Query->where('s.fin_year', $request->fin_year);
         }
-        
+
         if ($request->filled('fin_category')) {
             $status2Query->where('s.fin_category', $request->fin_category);
         }
-        
+
         // Handle cate1 filter
         if ($cate1Code) {
             $status2Query->where('c.cate1', $cate1Code);
@@ -510,15 +510,15 @@ class ReportController extends Controller
             // Default to status 2 if no status or status is not 3
             $query = $status2Query;
         }
-        
+
         $isExcel = $request->boolean('excel', false);
-        
+
         // Handle Excel export if requested
         if ($isExcel) {
             $entries = $query->get();
-            
+
             $headings = ['Tarikh Hantar', 'Tahun Penyata', 'Kategori Penyata', 'Daerah', 'Mukim', 'Nama Institusi', 'Wakil Institusi', 'Status'];
-            
+
             $data = $entries->map(function ($entry) {
                 return [
                     date('d-m-Y', strtotime($entry->date)),
@@ -531,15 +531,15 @@ class ReportController extends Controller
                     $this->financialStatementService->getFinStatus($entry->status)['prm']
                 ];
             })->toArray();
-            
+
             return Excel::download(new GenericExport($headings, $data), 'Penghantaran Disemak.xlsx');
         }
-        
+
         // For normal page view, paginate the results
         $entries = $query
             ->orderBy('id', 'desc')
             ->paginate($perPage)->withQueryString();
-        
+
         // Transform each entry to format for display
         $entries->transform(function ($financialStatement) {
             $financialStatement->CATEGORY = strtoupper($financialStatement->fin_category);
@@ -551,21 +551,21 @@ class ReportController extends Controller
             $financialStatement->FIN_STATUS = $this->financialStatementService->getFinStatus($financialStatement->status);
             return $financialStatement;
         });
-        
+
         // Get status options for the filter dropdown
         $statuses = Parameter::where('grp', 'splkstatus')
             ->whereNotIn('val', [0, 1, 4])
             ->pluck('prm', 'val')
             ->toArray();
-        
+
         // $defaultOption = [
         //     'code' => 2,
         //     'value' => 'Diterima',
         // ];
-        
+
         // Prepare queries for the view
         $queries = $request->only('fin_year', 'fin_category', 'category', 'status');
-        
+
         return view('report.filtered_submission', [
             'entries' => $entries,
             'statuses' => $statuses,
@@ -580,12 +580,12 @@ class ReportController extends Controller
         $finYear = $request->input('fin_year');
         $finCategory = $request->input('fin_category');
         $status = $request->input('status', 'canceled_submitted');
-        
+
         // Validate that status is a valid option
         if (!in_array($status, ['canceled_submitted', 'canceled_not_submitted'])) {
             $status = 'canceled_submitted'; // Default to canceled_submitted if invalid status
         }
-        
+
         // Base query structure
         $baseSelect = "
             s.fin_year AS fin_year, 
@@ -602,7 +602,7 @@ class ReportController extends Controller
             c.uid AS inst_refno,
             s.fin_category AS submission_fin_category
         ";
-        
+
         $baseJoins = function ($query) {
             return $query->join('client as c', 'c.uid', '=', 's.inst_refno')
                 ->join('type as t', function ($join) {
@@ -622,7 +622,7 @@ class ReportController extends Controller
                         ->where('t3.grp', '=', 'statement');
                 });
         };
-        
+
         $applyFilters = function ($query) use ($finYear, $finCategory, $request) {
             // Apply filters
             if ($finYear) {
@@ -653,7 +653,7 @@ class ReportController extends Controller
                 $query->where('c.rem8', $districtAccess);
             }
 
-            
+
             return $query;
         };
 
@@ -662,7 +662,7 @@ class ReportController extends Controller
             // For 'canceled_submitted', get submissions with status 1 or 2 where a canceled submission exists
             $query = DB::table('splk_submission as s')
                 ->selectRaw($baseSelect . ", 'canceled_submitted' AS cancel_status");
-                
+
             $query = $baseJoins($query);
             $query->where('s.status', 1)
                 ->whereRaw("EXISTS (
@@ -674,13 +674,13 @@ class ReportController extends Controller
                     AND s2.status = 3
                     AND s2.id < s.id
                 )");
-                
+
             $query = $applyFilters($query);
         } else {
             // For 'canceled_not_submitted', get canceled submissions that don't have a later submission
             $query = DB::table('splk_submission as s')
                 ->selectRaw($baseSelect . ", 'canceled_not_submitted' AS cancel_status");
-                
+
             $query = $baseJoins($query);
             $query->where('s.status', 3)
                 ->whereRaw("NOT EXISTS (
@@ -692,7 +692,7 @@ class ReportController extends Controller
                     AND s2.status IN (1, 2)
                     AND s2.id > s.id
                 )");
-                
+
             $query = $applyFilters($query);
         }
 
@@ -704,8 +704,8 @@ class ReportController extends Controller
             $headings = ['Tarikh Hantar', 'Tahun Penyata', 'Kategori Penyata', 'Daerah', 'Mukim', 'Nama Institusi', 'Wakil Institusi', 'Status'];
 
             $data = $entries->map(function ($entry) use ($status) {
-                $statusText = ($status === 'canceled_submitted') 
-                    ? 'DIBATALKAN & DIHANTAR SEMULA' 
+                $statusText = ($status === 'canceled_submitted')
+                    ? 'DIBATALKAN & DIHANTAR SEMULA'
                     : 'DIBATALKAN & BELUM HANTAR SEMULA';
 
                 return [
@@ -766,7 +766,7 @@ class ReportController extends Controller
         $finCategory = $request->input('fin_category');
 
         // Get accessible district from service (single value)
-        $districtAccess = $this->districtAccessService->getDistrictAccess();    
+        $districtAccess = $this->districtAccessService->getDistrictAccess();
         // Check if we need to show institutions that haven't submitted
         if ($request->filled('status') && $request->status != 'not_submitted') {
             return $this->filteredSubmission($request);
@@ -832,9 +832,9 @@ class ReportController extends Controller
         // Apply category filter if provided
         if ($cate1Code) {
             $query->where('c.cate1', $cate1Code);
-        
+
         }
-        
+
         $isExcel = $request->boolean('excel', false);
 
         // 🔻 If Excel requested, export and return here
@@ -852,7 +852,7 @@ class ReportController extends Controller
                     'BELUM HANTAR',
                 ];
             })->toArray();
-            
+
             return Excel::download(new GenericExport($headings, $data), 'Institusi_Belum_Hantar.xlsx');
         }
 
@@ -898,7 +898,7 @@ class ReportController extends Controller
             s.bank_cash_balance AS Jumlah_Baki_Bank, s.status, t2.prm AS Status")->whereNotIn('s.status', [0, 4])
             ->join('client as c', 'c.uid', '=', 's.inst_refno')
             ->join('type as t', function ($join) {
-                $join->on('c.cate', '=', 't.code')
+                $join->on('s.institute_type', '=', 't.code')
                      ->where('t.grp', '=', 'type_client');
             })
             ->join('type as t1', function ($join) {
@@ -1011,7 +1011,7 @@ class ReportController extends Controller
             s.bank_cash_balance AS Jumlah_Baki_Diisytihar")->whereNotIn('s.status', [0, 4])
             ->join('client as c', 'c.uid', '=', 's.inst_refno')
             ->join('type as t', function ($join) {
-                $join->on('c.cate', '=', 't.code')
+                $join->on('s.institute_type', '=', 't.code')
                      ->where('t.grp', '=', 'type_client');
             })
             ->join('type as t1', function ($join) {
@@ -1109,7 +1109,7 @@ class ReportController extends Controller
             t1.prm AS Daerah, t2.prm AS Status")->whereNotIn('s.status', [0, 4])
             ->join('client as c', 'c.uid', '=', 's.inst_refno')
             ->join('type as t', function ($join) {
-                $join->on('c.cate', '=', 't.code')
+                $join->on('s.institute_type', '=', 't.code')
                      ->where('t.grp', '=', 'type_client');
             })
             ->join('type as t1', function ($join) {

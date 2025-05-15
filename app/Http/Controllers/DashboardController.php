@@ -459,7 +459,7 @@ class DashboardController extends Controller
             $data->where('c.rem8', $district);
         }
         if (!is_null($institute)) {
-            $data->where('c.cate1', $institute);
+            $data->where('s.institute', $institute);
         }
 
         $result = $data->first();

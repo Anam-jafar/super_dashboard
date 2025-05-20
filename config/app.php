@@ -172,7 +172,7 @@ return [
 
 
 
-        
+
     ])->toArray(),
 
     /*
@@ -189,5 +189,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
+
+    'pdf_download_base_url' => env('PDF_DOWNLOAD_BASE_URL'),
+
 
 ];

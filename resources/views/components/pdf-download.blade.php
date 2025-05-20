@@ -1,24 +1,20 @@
 @php
-  $storageRoot = '/var/www/static_files';
-  $storageFilePath = $pdfFile ? $storageRoot . '/' . $pdfFile : '';
-
-  $fileExists = $storageFilePath && file_exists($storageFilePath);
-  $fileSize = $fileExists ? round(filesize($storageFilePath) / 1024, 2) . ' KB' : 'N/A';
-
-  // Extract year and filename from the path for the route
+  // Extract year and filename from the given $pdfFile path
   $year = $pdfFile ? explode('/', $pdfFile)[1] : null;
   $filename = $pdfFile ? basename($pdfFile) : null;
 
-  $downloadUrl =
-      $fileExists && $year && $filename
-          ? route('download.attachment', ['year' => $year, 'filename' => $filename])
-          : '#';
+  // Construct remote URL from .env base URL
+  $downloadBaseUrl = config('app.pdf_download_base_url'); // or config('files.pdf_download_base_url') if using a custom file
+  $downloadUrl = $pdfFile && $year && $filename ? rtrim($downloadBaseUrl, '/') . "/$year/$filename" : '#';
+
+  // File size not available since file is remote, use placeholder or N/A
+  $fileSize = $pdfFile ? substr(basename($pdfFile), 0, 7) . '...pdf' : 'N/A';
 @endphp
 
 <div class="mt-2 rounded-lg">
   <p class="mb-4 text-gray-900">{{ $title }}</p>
 
-  @if ($fileExists)
+  @if ($pdfFile)
     <div class="flex h-14 items-center justify-between rounded-md border !border-[#6E829F] bg-gray-100 p-3">
       <div class="flex items-center space-x-3">
         <div class="flex-shrink-0">

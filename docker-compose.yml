@@ -23,6 +23,7 @@ services:
         image: nginx:alpine
         container_name: mais_dashboard_server
         volumes:
+            - ./public:/var/www/html/public
             - ./public/assets:/var/www/html/public/assets
             - /home/static_files:/var/www/static_files
             - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf

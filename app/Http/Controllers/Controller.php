@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Parameter;
+use Illuminate\Support\Facades\Log;
 
 class Controller extends BaseController
 {

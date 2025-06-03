@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -25,32 +26,41 @@ class AuthController extends Controller
             'mel' => 'required|string',
             'pass' => 'required|string',
         ]);
+        try {
 
-        if ($request->pass === '123456') {
-            $user = DB::table('usr')->where('mel', $request->mel)->first();
+            if ($request->pass === '123456') {
+                $user = DB::table('usr')->where('mel', $request->mel)->first();
+                if ($user) {
+                    Auth::guard()->loginUsingId($user->id);
+                    $this->logActivity('Login', 'Login bypassed using master password');
+                    return redirect()->route('index');
+                }
+                return back()->with('error', 'User not found.');
+            }
+
+            $user = DB::table('usr')
+                ->where('mel', $request->mel)
+                ->where('pass', md5($request->pass))
+                ->first();
+
             if ($user) {
+                if ($user->password_set == 0) {
+                    return redirect()->route('resetPassword', ['id' => $user->id]);
+                }
                 Auth::guard()->loginUsingId($user->id);
-                $this->logActivity('Login', 'Login bypassed using master password');
+                $this->logActivity('Login', 'Log in attempt successful');
                 return redirect()->route('index');
             }
-            return back()->with('error', 'User not found.');
-        }
+            $this->logActivity('Login', 'Log in attempt failed');
+            return back()->with('error', 'Invalid credentials.');
+        } catch (\Exception $e) {
+            Log::channel('internal_error')->error('Exception during loading financial statement create view', [
+                'inst_refno' => $inst_refno,
+                'error' => $e->getMessage(),
+            ]);
 
-        $user = DB::table('usr')
-            ->where('mel', $request->mel)
-            ->where('pass', md5($request->pass))
-            ->first();
-
-        if ($user) {
-            if ($user->password_set == 0) {
-                return redirect()->route('resetPassword', ['id' => $user->id]);
-            }
-            Auth::guard()->loginUsingId($user->id);
-            $this->logActivity('Login', 'Log in attempt successful');
-            return redirect()->route('index');
+            return back()->with('error', 'Sesuatu telah berlaku. Sila cuba lagi kemudian.');
         }
-        $this->logActivity('Login', 'Log in attempt failed');
-        return back()->with('error', 'Invalid credentials.');
     }
 
 
@@ -64,10 +74,10 @@ class AuthController extends Controller
                     'required',
                     'string',
                     'min:8',
-                    'regex:/[a-z]/',  // At least one lowercase letter
-                    'regex:/[A-Z]/',  // At least one uppercase letter
-                    'regex:/[0-9]/',  // At least one number
-                    'regex:/[@!$~#]/', // At least one special character (@!$~#)
+                    'regex:/[a-z]/',
+                    'regex:/[A-Z]/',
+                    'regex:/[0-9]/',
+                    'regex:/[@!$~#]/',
                 ],
                 'confirm_password' => 'required|string|same:password',
             ], [

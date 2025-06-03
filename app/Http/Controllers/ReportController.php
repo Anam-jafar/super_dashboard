@@ -13,6 +13,7 @@ use App\Services\DistrictAccessService;
 use App\Services\FinancialStatementService;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\GenericExport;
+use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {

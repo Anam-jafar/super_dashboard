@@ -8,6 +8,7 @@ use App\Models\Institute;
 use App\Models\FinancialStatement;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Parameter;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {

@@ -131,6 +131,10 @@ Route::prefix('mais')->group(function () {
         });
 
 
+        Route::get('/download/s3/attachment/{filepath}', [App\Http\Controllers\S3FileController::class, 'downloadAttachment'])
+                ->name('download.s3.attachment');
+
+
 
 
 

@@ -5,35 +5,18 @@ services:
         build:
             context: .
             dockerfile: ./docker/php/Dockerfile
-        container_name: mais_dashboard_app
+        image: 054037133502.dkr.ecr.ap-southeast-5.amazonaws.com/mais-splkadmin:latest
+        container_name: mais_admin
         volumes:
             - ./resources/views:/var/www/html/resources/views # For Dev
             - ./app:/var/www/html/app # For Dev
+            - ./database:/var/www/html/database # For Dev
             - ./routes:/var/www/html/routes # For Dev
-            - /home/static_files:/var/www/static_files
-            - build-assets:/var/www/html/public/build
-            - ./composer.json:/var/www/html/composer.json # For Dev
-            - ./composer.lock:/var/www/html/composer.lock # For Dev
-            - ./package.json:/var/www/html/package.json # For Dev
-            - ./package-lock.json:/var/www/html/package-lock.json # For Dev
+            - ./composer.json:/var/www/html/composer.json:rw
+            - ./composer.lock:/var/www/html/composer.lock:rw
+        ports:
+            - "8060:80"
+
         environment:
             - PHP_OPCACHE_VALIDATE_TIMESTAMPS=1
-
-    webserver:
-        image: nginx:alpine
-        container_name: mais_dashboard_server
-        volumes:
-            - ./public:/var/www/html/public
-            - ./public/assets:/var/www/html/public/assets
-            - /home/static_files:/var/www/static_files
-            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-            - build-assets:/var/www/html/public/build
-
-        ports:
-            - "7080:80"
-
-        depends_on:
-            - app
-
-volumes:
-    build-assets:
+        restart: always

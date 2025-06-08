@@ -54,6 +54,10 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
+            'options' => array_filter([
+                'ServerSideEncryption' => env('AWS_SERVER_SIDE_ENCRYPTION', 'aws:kms'),
+                'SSEKMSKeyId' => env('AWS_KMS_KEY_ID'), // Will be null if not set
+            ]),
         ],
 
     ],

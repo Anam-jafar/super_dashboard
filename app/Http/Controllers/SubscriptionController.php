@@ -12,6 +12,7 @@ use App\Mail\SubscriptionApprove;
 use Illuminate\Support\Facades\Mail;
 use App\Services\DistrictAccessService;
 use App\Services\SubscriptionService;
+use Illuminate\Support\Facades\Log;
 
 class SubscriptionController extends Controller
 {
@@ -196,23 +197,30 @@ class SubscriptionController extends Controller
                 return response()->json(['success' => false, 'message' => 'User not found'], 404);
             }
 
-            $url = "https://maisdev.awfatech.com/main/app/finance/invoice_gen.php?sysapp=maisadmineboss&cli={$user_id}&item={$packageId}";
-            $response = Http::get($url);
-            $responseData = $response->json();
-            if ($response->successful() && isset($responseData['status']) && $responseData['status'] === 'Success') {
+            // Call the function to create invoice
+            $invoiceResponse = $this->createInvoice($user_id, $packageId);
+
+            if ($invoiceResponse['success']) {
                 DB::table('client')
                     ->where('id', $subscriptionId)
                     ->update(['subscription_status' => 2]);
+
                 $institute = DB::table('client')->where('id', $subscriptionId)->first();
                 Mail::to($institute->mel)->send(new SubscriptionApprove($institute->name));
-                return response()->json(['success' => true, 'message' => 'Subscription fee added successfully']);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Subscription fee added successfully',
+                    'invoice_id' => $invoiceResponse['invoice_id']
+                ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Failed to process subscription fee',
-                    'api_response' => $responseData
+                    'message' => 'Failed to create invoice',
+                    'error' => $invoiceResponse['message']
                 ]);
             }
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -221,6 +229,109 @@ class SubscriptionController extends Controller
             ], 500);
         }
     }
+
+
+    private function createInvoice($userId, $packageId)
+    {
+        try {
+            $institute = Institute::where('uid', $userId)->first();
+            if (!$institute) {
+                return ['success' => false, 'message' => 'Institute not found'];
+            }
+
+            $invno_count = DB::table('sch')->where('id', 1)->value('invno');
+            $invno = str_pad($invno_count + 1, 6, '0', STR_PAD_LEFT);
+            $tid = 'IN-TM-' . $invno;
+
+            $invoiceData = [
+                'sid' => 1,
+                'sta' => 0,
+                'isdelete' => 0,
+                'ispaid' => 0,
+                'isconfirm' => 0,
+                'src' => 'IN',
+                'app' => 'EBOSS',
+                'ic' => $institute->ic,
+                'name' => $institute->name,
+                'vid' => $institute->uid,
+                'addr' => $institute->addr,
+                'addr1' => $institute->addr1,
+                'city' => $institute->city,
+                'state' => $institute->state,
+                'pcode' => $institute->pcode,
+                'hp' => $institute->hp,
+                'fax' => $institute->fax,
+                'mel' => $institute->mel,
+                'country' => $institute->country,
+                'dt' => now(),
+                'year' => now()->year,
+                'adm' => Auth::user()->uid,
+                'ts' => now(),
+                'tid' => $tid,
+            ];
+
+            $invoiceCreated = DB::table('fin_invoice')->insert($invoiceData);
+
+            if (!$invoiceCreated) {
+                return ['success' => false, 'message' => 'Failed to create invoice'];
+            }
+
+            DB::table('sch')->where('id', 1)->update(['invno' => $invno_count + 1]);
+
+            $package = DB::table('fin_coa_item')->where('id', $packageId)->first();
+            if (!$package) {
+                return ['success' => false, 'message' => 'Package not found'];
+            }
+
+            $ledgerData = [
+                'code' => $package->code,
+                'ccode' => $package->ccode,
+                'cate' => $package->cate,
+                'type' => $package->type,
+                'item' => $package->item,
+                'val' => $package->val,
+                'total' => $package->val,
+                'qtt' => 1,
+                'tid' => $tid,
+                'vid' => $institute->uid,
+                'vname' => $institute->name,
+                'src' => 'INV',
+                'sta' => 0,
+                'app' => 'EBOSS',
+                'sid' => 1,
+                'year' => now()->year,
+                'ts' => now(),
+                'adm' => Auth::user()->uid,
+                'dt' => now(),
+            ];
+
+            $ledgerCreated = DB::table('fin_ledger')->insert($ledgerData);
+
+            if (!$ledgerCreated) {
+                return ['success' => false, 'message' => 'Failed to create ledger entry'];
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Invoice created successfully',
+                'invoice_id' => $tid
+            ];
+
+        } catch (\Exception $e) {
+            Log::channel('internal_error')->error('Exception while creating invoice', [
+                'user_id' => $userId,
+                'package_id' => $packageId,
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            return ['success' => false, 'message' => 'Internal server error'];
+        }
+    }
+
+
+
 
 
 

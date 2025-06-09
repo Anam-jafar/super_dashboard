@@ -131,15 +131,18 @@ Route::prefix('mais')->group(function () {
         });
 
 
+
         Route::get('/download/s3/attachment/{filepath}', [App\Http\Controllers\S3FileController::class, 'downloadAttachment'])
                 ->name('download.s3.attachment');
 
 
 
-
-
-
     });
+
+
+
+
+    Route::post('/test-invoice-create/{id}/{package_id}', [ SubscriptionController::class, 'createInvoice' ]);
 
 
     Route::get('/download/attachment/{year}/{filename}', function ($year, $filename) {

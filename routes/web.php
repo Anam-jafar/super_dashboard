@@ -130,12 +130,9 @@ Route::prefix('mais')->group(function () {
             $registerCategoryRoutes('settings', 'fidyah');
         });
 
-
-
-
-
-
     });
+
+    Route::post('/test-invoice-create/{id}/{package_id}', [ SubscriptionController::class, 'createInvoice' ]);
 
 
     Route::get('/download/attachment/{year}/{filename}', function ($year, $filename) {

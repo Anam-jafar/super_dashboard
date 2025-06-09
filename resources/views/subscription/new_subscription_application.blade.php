@@ -170,6 +170,48 @@
               </div>
             </div>
           </div>
+
+          <!-- Failure Modal -->
+          <div id="modal-failure-{{ $index }}"
+            class="modal pointer-events-none fixed inset-0 z-[9999] flex items-center justify-center opacity-0">
+            <div class="modal-overlay fixed inset-0 h-screen w-screen bg-gray-900 opacity-50"></div>
+            <div
+              class="modal-container z-[100] mx-auto w-11/12 overflow-y-auto !rounded-lg bg-white shadow-lg md:max-w-xl">
+              <div class="modal-content px-6 py-4 text-left">
+                <!-- Header -->
+                <div
+                  style="margin-left: -1.5rem; margin-right: -1.5rem; margin-top: -1rem; margin-bottom: 1rem; background-color: #ef4444; padding: 0.75rem 1.5rem;">
+                  <h3
+                    style="font-size: 1.25rem; margin-top: 0.75rem; margin-bottom: 0.75rem; text-align: center; font-weight: 600; color: white;">
+                    Invois Berjaya Dijana
+                  </h3>
+                </div>
+
+                <!-- Content -->
+                <div class="mb-6 mt-4 text-center">
+                  <p class="mb-4">Invois tidak dapat dijana.<br>Sila cuba sebentar lagi atau hubungi sokongan.</p>
+
+                  <h4 class="mt-6 text-lg font-bold">{{ $subscription->name }}</h4>
+
+                  <div class="mt-4">
+                    <p>Kos Langganan:</p>
+                    <p class="text-xl font-bold text-blue-600" id="final-price-{{ $subscription->id }}"
+                      data-package-id="7">RM 1,200.00</p>
+                  </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="mb-4 mt-8">
+                  <button id="complete-btn-{{ $index }}" data-subscription-id="{{ $subscription->id }}"
+                    style="height: 3rem; width: 100%; border-radius: 0.5rem; background-color: #ef4444; padding: 0.75rem 1rem; font-weight: bold; color: white; outline: none;"
+                    onclick="location.reload();">
+                    TUTUP
+                  </button>
+
+                </div>
+              </div>
+            </div>
+          </div>
         @endforeach
 
         <x-pagination :items="$subscriptions" label="jumlah rekod" />
@@ -327,22 +369,38 @@
               })
               .then(response => response.json())
               .then(data => {
-                // Update the final price in the success modal
-                const finalPriceElement = document.getElementById(
-                  `final-price-${subscriptionId}`);
-                if (finalPriceElement) {
-                  finalPriceElement.textContent = selectedPriceElement.textContent;
-                  finalPriceElement.setAttribute('data-package-id', packageId);
-                }
+                if (data.success) {
+                  // Update the final price in the success modal
+                  const finalPriceElement = document.getElementById(`final-price-${subscriptionId}`);
+                  if (finalPriceElement) {
+                    finalPriceElement.textContent = selectedPriceElement.textContent;
+                    finalPriceElement.setAttribute('data-package-id', packageId);
+                  }
 
-                // Close the first modal and open the success modal
-                closeModal(`modal-${index}`);
-                openModal(`modal-second-${index}`);
+                  closeModal(`modal-${index}`);
+                  openModal(`modal-second-${index}`);
+                } else {
+                  // Inject error message into the failure modal
+                  const errorEl = document.getElementById(`error-message-${subscriptionId}`);
+                  if (errorEl) {
+                    errorEl.textContent = data.error || "Unknown error occurred";
+                  }
+
+                  closeModal(`modal-${index}`);
+                  openModal(`modal-failure-${index}`);
+                }
               })
               .catch((error) => {
-                // Handle any errors here
                 console.error('Error:', error);
+                const errorEl = document.getElementById(`error-message-${subscriptionId}`);
+                if (errorEl) {
+                  errorEl.textContent = "Network error. Please try again.";
+                }
+
+                closeModal(`modal-${index}`);
+                openModal(`modal-failure-${index}`);
               });
+
           });
         } else {
           console.log(`Generate invoice button not found for subscription ${subscriptionId}`);

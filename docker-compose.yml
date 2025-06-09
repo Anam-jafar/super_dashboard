@@ -15,7 +15,7 @@ services:
             - ./composer.json:/var/www/html/composer.json:rw
             - ./composer.lock:/var/www/html/composer.lock:rw
         ports:
-            - "8060:80"
+            - "8050:80"
 
         environment:
             - PHP_OPCACHE_VALIDATE_TIMESTAMPS=1

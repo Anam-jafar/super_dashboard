@@ -38,7 +38,7 @@ return [
         'mongodb' => [
             'driver' => 'mongodb',
             'dsn' => env('MONGO_URI'),
-            'database' => 'mais', 
+            'database' => 'mais',
         ],
 
         'sqlite' => [
@@ -66,7 +66,12 @@ return [
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::ATTR_TIMEOUT => env('DB_TIMEOUT', 60),
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             ]) : [],
+            'connect_timeout' => env('DB_CONNECT_TIMEOUT', 60),
+            'read_timeout' => env('DB_READ_TIMEOUT', 60),
+            'write_timeout' => env('DB_WRITE_TIMEOUT', 60),
         ],
 
         'pgsql' => [

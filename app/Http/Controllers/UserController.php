@@ -157,17 +157,25 @@ class UserController extends Controller
 
             $dataToInsert = array_merge($this->defaultUserValues, $validatedData);
             $user = User::create($dataToInsert);
-            try {
-                Mail::to($user->mel)->send(new SendUserOtp($user->mel, $password, $user->name));
-            } catch (\Exception $e) {
-
-                Log::error('Failed to send user creation confirmation email', [
+            $to = [
+                [
                     'email' => $user->mel,
-                    'error' => $e->getMessage(),
-                ]);
+                    'name' => $user->name
+                ]
+            ];
 
-                return redirect()->route('userList')->with('warning', 'Pengguna telah berjaya didaftarkan tetapi tidak dapat menghantar emel!');
-            }
+            $dynamicTemplateData = [
+                'institute_name' => $user->name,
+                'email' => $user->mel,
+                'link' => env('APP_URL'),
+                'otp' => $password,
+            ];
+
+            $templateType = 'mais-send-otp';
+
+            // Just call the function - it handles success/failure internally
+            $this->sendEmail($to, $dynamicTemplateData, $templateType);
+
             return redirect()->route('userList')->with('success', 'Pengguna telah berjaya didaftarkan!');
         }
 

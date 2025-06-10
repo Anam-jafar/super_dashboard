@@ -32,14 +32,14 @@
     <div class="flex h-12 items-center justify-between rounded-md border border-[#6E829F] bg-[#EBEBEB] p-3">
       <div class="flex items-center space-x-3">
         <div class="flex-shrink-0">
-          <img src="{{ asset('subscription/assets/icons/fin_pdf.svg') }}" alt="PDF" class="h-8 w-8" />
+          <img src="{{ asset('assets/icons/fin_pdf.svg') }}" alt="PDF" class="h-8 w-8" />
         </div>
         <div class="flex flex-col">
           <span class="text-sm text-gray-600">{{ $fileSize }}</span>
         </div>
       </div>
       <a href="{{ $downloadUrl }}" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-gray-700">
-        <img src="{{ asset('subscription/assets/icons/fin_pdf_download.svg') }}" alt="download" class="h-10 w-10" />
+        <img src="{{ asset('assets/icons/fin_pdf_download.svg') }}" alt="download" class="h-10 w-10" />
       </a>
     </div>
   @else

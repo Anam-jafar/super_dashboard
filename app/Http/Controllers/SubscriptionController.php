@@ -206,7 +206,21 @@ class SubscriptionController extends Controller
                     ->update(['subscription_status' => 2]);
 
                 $institute = DB::table('client')->where('id', $subscriptionId)->first();
-                Mail::to($institute->mel)->send(new SubscriptionApprove($institute->name));
+
+                $to = [
+                    [
+                        'email' => $institute->mel,
+                        'name' => $institute->name
+                    ]
+                ];
+
+                $dynamicTemplateData = [
+                    'institute_name' => $institute->name,
+                ];
+
+                $templateType = 'mais-subscription-approve';
+
+                $this->sendEmail($to, $dynamicTemplateData, $templateType);
 
                 return response()->json([
                     'success' => true,

@@ -163,14 +163,24 @@ class FinancialStatementController extends Controller
 
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
         $fin_category = Parameter::where('code', $financialStatement->fin_category)->value('prm');
-        try {
-            Mail::to($institute->mel)->send(new EditRequestApprove($institute->name, $fin_category, $financialStatement->fin_year));
-        } catch (\Exception $e) {
-            Log::error('Failed to send financial statement edit approval confirmation email', [
-                'email' => $request->mel,
-                'error' => $e->getMessage(),
-            ]);
-        }
+        $to = [
+                    [
+                        'email' => $institute->mel,
+                        'name' => $institute->name,
+                    ]
+                ];
+
+        $dynamicTemplateData = [
+            'institute_name' => $institute->name,
+            'fin_category' => $fin_category,
+            'fin_year' => $financialStatement->fin_year,
+        ];
+
+        $templateType = 'mais-edit-request-approve';
+
+        // Just call the function - it handles success/failure internally
+        $this->sendEmail($to, $dynamicTemplateData, $templateType);
+
 
         return redirect()->route('statementList')->with('success', 'Permintaan suntingan Penyata Kewangan diluluskan.');
     }

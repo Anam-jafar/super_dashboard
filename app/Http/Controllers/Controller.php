@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Parameter;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class Controller extends BaseController
 {
@@ -114,6 +115,72 @@ class Controller extends BaseController
             }
             return $results;
         }, []);
+    }
+
+    protected function sendEmail(array $to, array $dynamicTemplateData, string $templateType): void
+    {
+        try {
+            $apiUrl = env('AWFATECH_EMAIL_API_URL', 'https://api01.awfatech.com/api/v2/email/general/send');
+            $apiKey = env('AWFATECH_EMAIL_API_KEY');
+
+            if (!$apiKey) {
+                Log::channel('external_error')->error('Awfatech API key not configured in .env file');
+                return;
+            }
+
+            $payload = [
+                'username' => 'infomail2umy',
+                'from' => [
+                    'email' => 'do_not_reply@mail2u.my',
+                    'name' => 'Awfatech eboos'
+                ],
+                'reply_to' => [
+                    [
+                        'email' => 'awfatech@mail2u.my',
+                        'name' => 'awfatech'
+                    ]
+                ],
+                'personalizations' => [
+                    [
+                        'to' => $to,
+                        'dynamic_template_data' => $dynamicTemplateData
+                    ]
+                ],
+                'template_type' => $templateType
+            ];
+
+            $response = Http::withHeaders([
+                'x-api-key' => $apiKey,
+                'Content-Type' => 'application/json'
+            ])->post($apiUrl, $payload);
+
+            if ($response->successful()) {
+                $responseData = $response->json();
+
+                if (isset($responseData['success']) && $responseData['success'] === true) {
+                    // Email sent successfully - no action needed
+                    return;
+                } else {
+                    Log::channel('external_error')->error('Awfatech API returned unsuccessful response', [
+                        'response' => $responseData,
+                        'payload' => $payload
+                    ]);
+                }
+            } else {
+                Log::channel('external_error')->error('Awfatech API request failed', [
+                    'status' => $response->status(),
+                    'response' => $response->body(),
+                    'payload' => $payload
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            Log::channel('external_error')->error('Exception occurred while sending email', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'payload' => $payload ?? null
+            ]);
+        }
     }
 
 

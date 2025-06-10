@@ -176,14 +176,23 @@ class InstituteController extends Controller
         ]);
 
         if ($updated) {
-            try {
-                Mail::to($request->mel)->send(new RegistrationApproveConfirmation($request->mel, $institute->name));
-            } catch (\Exception $e) {
-                Log::error('Failed to send registration approval confirmation email', [
+            $to = [
+                [
                     'email' => $request->mel,
-                    'error' => $e->getMessage(),
-                ]);
-            }
+                    'name' => $institute->name,
+                ]
+            ];
+
+            $dynamicTemplateData = [
+                'institute_name' => $institute->name,
+                'email' => $request->mel,
+            ];
+
+            $templateType = 'mais-registration-approve-confirmation';
+
+            // Just call the function - it handles success/failure internally
+            $this->sendEmail($to, $dynamicTemplateData, $templateType);
+
             return redirect()->route('registrationRequests')->with('success', 'Pendaftaran Institusi diluluskan dan e-mel pengesahan telah berjaya dihantar!');
         } else {
             return redirect()->back()->with('error', 'Pengesahan pendaftaran institusi tidak berjaya, sila cuba sebentar lagi!');

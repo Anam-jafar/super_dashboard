@@ -6,6 +6,7 @@ services:
             context: .
             dockerfile: ./docker/php/Dockerfile
         image: 054037133502.dkr.ecr.ap-southeast-5.amazonaws.com/mais-splkadmin:latest
+        # image: mais-admin:development
         container_name: mais_admin
         volumes:
             - ./resources/views:/var/www/html/resources/views # For Dev

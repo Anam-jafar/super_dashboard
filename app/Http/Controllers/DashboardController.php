@@ -624,21 +624,18 @@ class DashboardController extends Controller
             $query->where('c.rem8', $districtAccess);
         }
 
+
         $subscriptions = $query->joinSub(
             DB::table('fin_ledger as inv')
-                ->select(
-                    'inv.vid',
-                    DB::raw('SUM(inv.val) AS total_invoice'),
-                    DB::raw('COALESCE(SUM(csl.val), 0) AS total_received'),
-                    DB::raw('SUM(inv.val) - COALESCE(SUM(csl.val), 0) AS outstanding')
-                )
-                ->leftJoin('fin_ledger as csl', function ($join) {
-                    $join->on('inv.vid', '=', 'csl.vid')
-                        ->where('csl.src', 'CSL');
-                })
-                ->where('inv.src', 'INV')
-                ->groupBy('inv.vid')
-                ->having(DB::raw('SUM(inv.val) - COALESCE(SUM(csl.val), 0)'), '>', 0),
+                        ->select(
+                            'inv.vid',
+                            DB::raw('SUM(inv.val) AS total_invoice'),
+                            DB::raw('SUM(CASE WHEN inv.sta = 2 THEN inv.val ELSE 0 END) AS total_received'),
+                            DB::raw('SUM(inv.val) - SUM(CASE WHEN inv.sta = 2 THEN inv.val ELSE 0 END) AS outstanding')
+                        )
+                        ->where('inv.src', 'INV')
+                        ->groupBy('inv.vid')
+                        ->havingRaw('SUM(inv.val) - SUM(CASE WHEN inv.sta = 2 THEN inv.val ELSE 0 END) > 0'),
             'subquery',
             'c.uid',
             '=',
@@ -655,6 +652,7 @@ class DashboardController extends Controller
         )
         ->limit(5)
         ->get();
+
         $subscriptions->transform(function ($subscription) {
             $subscription->NAME = isset($subscription->name) ? strtoupper($subscription->name) : null;
             $subscription->OFFICER = isset($subscription->con1) ? strtoupper($subscription->con1) : null;

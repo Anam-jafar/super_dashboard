@@ -112,27 +112,19 @@ class SubscriptionController extends Controller
         }
 
 
+
         $subscriptions = $query->joinSub(
             DB::table('fin_ledger as inv')
-                ->leftJoinSub(
-                    DB::table('fin_ledger')
-                        ->select('vid', DB::raw('SUM(val) AS total_received'))
-                        ->where('src', 'CSL')
-                        ->groupBy('vid'),
-                    'payments', // Alias for the subquery
-                    'inv.vid',
-                    '=',
-                    'payments.vid'
-                )
-                ->select(
-                    'inv.vid',
-                    DB::raw('SUM(inv.val) AS total_invoice'),
-                    DB::raw('COALESCE(payments.total_received, 0) AS total_received'),
-                    DB::raw('SUM(inv.val) - COALESCE(payments.total_received, 0) AS outstanding')
-                )
-                ->where('inv.src', 'INV')
-                ->groupBy('inv.vid', 'payments.total_received')
-                ->havingRaw('SUM(inv.val) - COALESCE(payments.total_received, 0) > 0'), // Ensure outstanding > 0
+                        ->select(
+                            'inv.vid',
+                            DB::raw('SUM(inv.val) AS total_invoice'),
+                            DB::raw('SUM(CASE WHEN inv.sta = 2 THEN inv.val ELSE 0 END) AS total_received'),
+                            DB::raw('SUM(inv.val) - SUM(CASE WHEN inv.sta = 2 THEN inv.val ELSE 0 END) AS outstanding')
+                        )
+                        ->where('inv.src', 'INV')
+                        ->groupBy('inv.vid')
+                        ->havingRaw('SUM(inv.val) - SUM(CASE WHEN inv.sta = 2 THEN inv.val ELSE 0 END) > 0') // outstanding > 0
+            ,
             'subquery',
             'c.uid',
             '=',
@@ -150,6 +142,7 @@ class SubscriptionController extends Controller
             'subquery.outstanding'
         )
         ->paginate($per_page);
+
 
 
         // Optimize transformations by pre-fetching necessary parameters

@@ -50,6 +50,9 @@ class Institute extends Model
         'regdt',
         'app',
         'upgrade_date',
+        'subscription_date',
+        'subscription_start',
+        'subscription_end',
     ];
 
     public function Type()

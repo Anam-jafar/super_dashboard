@@ -57,6 +57,9 @@ class InstituteService
             'sta' => 'nullable|string|max:50',
             'country' => 'nullable|string|max:50',
             'upgrade_date' => 'nullable|date',
+            'subscription_date' => 'nullable|date',
+            'subscription_start' => 'nullable|date',
+            'subscription_end' => 'nullable|date',
         ];
 
         // Unique check for name in rem8 during creation and edit

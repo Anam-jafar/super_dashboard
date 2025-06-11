@@ -72,6 +72,24 @@
 
           </div>
         </div>
+        <div class="mt-4 space-y-2 rounded-lg bg-white px-4 py-8 text-xs shadow lg:px-8">
+          <h3 class="mb-2 text-lg font-semibold">Langganan</h3>
+          <hr class="mb-4">
+          <div class="grid-col-1 grid gap-6 md:grid-cols-2">
+            <div class="grid-col-1 grid gap-6 md:grid-cols-2">
+              <x-input-field level="Tarikh Langganan" id="subscription_date" name="subscription_date" type="date"
+                placeholder="" value="{{ $institute->subscription_date }}" />
+              <x-input-field level="Tarikh Mula" id="subscription_start" name="subscription_start" type="date"
+                placeholder="" value="{{ $institute->subscription_start }}" />
+            </div>
+            <div class="grid-col-1 grid gap-6 md:grid-cols-2">
+
+              <x-input-field level="Tarikh Tamat" id="subscription_end" name="subscription_end" type="date"
+                placeholder="" value="{{ $institute->subscription_end }}" />
+            </div>
+
+          </div>
+        </div>
 
         <div class="mt-4 space-y-2 rounded-lg bg-white px-4 py-8 text-xs shadow lg:px-8">
           <h3 class="mb-2 text-lg font-semibold">Maklumat Tambahan</h3>

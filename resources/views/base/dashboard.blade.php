@@ -434,7 +434,7 @@
                     Semua
                     <i class="ti ti-arrow-narrow-right"></i></a>
                 </div>
-                <div class="box-body mb-6 mt-6 flex flex-col justify-start" style="min-height: 450px;">
+                <div class="box-body mb-6 mt-6 flex flex-col justify-start" style="min-height: 430px;">
                   @if (!isset($institute_registration_list[0]))
                     <div class="text-center text-gray-500">Tiada rekod ditemui</div>
                   @endif
@@ -511,7 +511,7 @@
                       </li>
                     @endif
 
-                    @if (isset($institute_registration_list[4]))
+                    {{-- @if (isset($institute_registration_list[4]))
                       <li>
                         <div>
                           <div>
@@ -527,7 +527,7 @@
                           </span>
                         </div>
                       </li>
-                    @endif
+                    @endif --}}
                   </ul>
                 </div>
 

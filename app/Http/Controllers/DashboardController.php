@@ -586,7 +586,7 @@ class DashboardController extends Controller
                 });
             })
             ->orderBy('id', 'desc')
-            ->limit(5)
+            ->limit(8)
             ->get()
             ->transform(function ($financialStatement) {
                 $financialStatement->CATEGORY = isset($financialStatement->Category->prm)
@@ -650,7 +650,7 @@ class DashboardController extends Controller
             'c.subscription_status as subscription_status',
             'subquery.outstanding'
         )
-        ->limit(5)
+        ->limit(8)
         ->get();
 
         $subscriptions->transform(function ($subscription) {

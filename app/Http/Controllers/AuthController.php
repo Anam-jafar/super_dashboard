@@ -52,7 +52,7 @@ class AuthController extends Controller
                 return redirect()->route('index');
             }
             $this->logActivity('Login', 'Log in attempt failed');
-            return back()->with('error', 'Invalid credentials.');
+            return back()->with('error', 'Kelayakan Tidak Sah.');
         } catch (\Exception $e) {
             Log::channel('internal_error')->error('Exception during loading financial statement create view', [
                 'inst_refno' => $inst_refno,
@@ -123,7 +123,7 @@ class AuthController extends Controller
         $user = Auth::user();
         $request->validate([
             'name' => 'required|string|max:255',
-            'ic' => 'required|string|max:12|unique:usr,ic,' . Auth::id() . ',id',
+            'ic' => 'required|string|unique:usr,ic,' . Auth::id() . ',id',
             'hp' => 'required|string|max:15',
             'mel' => 'required|email|max:255|unique:usr,mel,' . Auth::id() . ',id',
             'current_password' => 'nullable|string',
@@ -203,9 +203,15 @@ class AuthController extends Controller
         }
 
         try {
+
+
+            $appcodeUrl = env('AWFATECH_APPCODE_URL');
+            $sendOtpUrl = env('AWFATECH_SEND_OTP_URL');
+            $appcode = env('AWFATECH_APPCODE');
+
             // Step 1: Get the Encrypted Key
-            $keyResponse = Http::post('https://devapi01.awfatech.com/api/v2/auth/appcode', [
-                'appcode' => 'MAISADMINEBOSS'
+            $keyResponse = Http::post($appcodeUrl, [
+                'appcode' => $appcode
             ]);
 
             if (!$keyResponse->successful()) {
@@ -226,7 +232,7 @@ class AuthController extends Controller
             // Step 2: Send OTP Request
             $otpResponse = Http::withHeaders([
                 'x-encrypted-key' => $encryptedKey
-            ])->post('https://devapi01.awfatech.com/api/v2/auth/eboss/staff/otp/send?via=email', [
+            ])->post($sendOtpUrl, [
                 'input' => $request->mel,
                 'role' => 'general'
             ]);

@@ -46,6 +46,11 @@ class FinancialStatementController extends Controller
 
             $financialStatement->update($validatedData);
 
+            $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
+            $fin_category = Parameter::where('code', $financialStatement->fin_category)->value('prm');
+
+            $this->logActivity('Statement', 'Reviewed. Institute: ' . $institute->name . ', Year: ' . $financialStatement->fin_year . ', Category: ' . $fin_category);
+
             return redirect()->route('statementList')->with('success', 'Laporan Kewangan Telah Berjaya Dihantar');
         }
         $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
@@ -163,6 +168,8 @@ class FinancialStatementController extends Controller
 
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
         $fin_category = Parameter::where('code', $financialStatement->fin_category)->value('prm');
+
+        $this->logActivity('Statement', 'Edit Request Approved. Institute: ' . $institute->name . ', Year: ' . $financialStatement->fin_year. ', Category: ' . $fin_category);
         $to = [
                     [
                         'email' => $institute->mel,

@@ -51,7 +51,7 @@ class UserController extends Controller
                     }
                 },
             ],
-            'ic' => 'required|string|size:12|unique:usr,ic' . ($id ? ',' . $id . ',id' : ''),
+            'ic' => 'required|string|unique:usr,ic' . ($id ? ',' . $id . ',id' : ''),
             'mel' => 'required|string|email|max:255|unique:usr,mel' . ($id ? ',' . $id . ',id' : ''),
             'hp' => 'required|numeric|digits_between:10,11',
             'jobdiv' => 'required|string|max:50',
@@ -155,7 +155,10 @@ class UserController extends Controller
             $validatedData['pass'] = md5($password);
             $validatedData['password_set'] = 0;
 
-            $dataToInsert = array_merge($this->defaultUserValues, $validatedData);
+            $dataToInsert = array_merge($this->defaultUserValues, $validatedData, [
+                'ts' => now(),
+                'adm' => Auth::user()->uid,
+            ]);
             $user = User::create($dataToInsert);
             $to = [
                 [
@@ -176,6 +179,7 @@ class UserController extends Controller
             // Just call the function - it handles success/failure internally
             $this->sendEmail($to, $dynamicTemplateData, $templateType);
 
+            $this->logActivity('Staff', 'Created. Staff : ' . $user->name);
             return redirect()->route('userList')->with('success', 'Pengguna telah berjaya didaftarkan!');
         }
 
@@ -192,7 +196,13 @@ class UserController extends Controller
         if ($request->isMethod('post')) {
 
             $validatedData = $this->validateInput($request, $id);
-            $user->update($validatedData);
+            $user->update($validatedData, [
+                'ts' => now(),
+                'adm' => Auth::user()->uid,
+            ]);
+
+            $this->logActivity('Staff', 'Updated. Staff : ' . $user->name);
+
             return redirect()->route('userList')->with('success', 'Pengguna telah berjaya dikemas kini!');
         }
 

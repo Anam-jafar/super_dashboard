@@ -8,12 +8,12 @@ use Illuminate\Auth\Authenticatable;
 
 class User extends Model implements AuthenticatableContract
 {
-    use Authenticatable; 
+    use Authenticatable;
     protected $table = 'usr';
-    public $timestamps = false; 
+    public $timestamps = false;
 
 
-    protected $fillable = ['ic', 'pass', 'name', 'mel', 'uid', 'hp', 'jobdiv', 'job', 'joblvl', 'syslevel', 'status', 'imgProfile', 'sch_id', 'login_sta', 'login_ts', 'login_period', 'resettokenexpiration', 'mailaddr', 'mailaddr2', 'mailaddr3', 'password_set', 'cdate', 'll'];
+    protected $fillable = ['ic', 'pass', 'name', 'mel', 'uid', 'hp', 'jobdiv', 'job', 'joblvl', 'syslevel', 'status', 'imgProfile', 'sch_id', 'login_sta', 'login_ts', 'login_period', 'resettokenexpiration', 'mailaddr', 'mailaddr2', 'mailaddr3', 'password_set', 'cdate', 'll', 'adm', 'ts'];
     protected $hidden = ['pass'];
 
     public function Department()
@@ -32,5 +32,5 @@ class User extends Model implements AuthenticatableContract
     {
         return $this->belongsTo(Parameter::class, 'syslevel', 'code');
     }
-    
+
 }

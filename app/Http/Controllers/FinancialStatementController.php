@@ -29,6 +29,14 @@ class FinancialStatementController extends Controller
     public function review(Request $request, $id)
     {
         $financialStatement = FinancialStatement::find($id);
+        $instituteType = (int) DB::table('type')
+                ->where('grp', 'type_CLIENT')
+                ->where('code', $financialStatement->institute_type)
+                ->value('lvl');
+
+        if (!in_array($instituteType, [1, 2])) {
+            return redirect()->back()->with('error', 'Jenis institusi tidak dipilih. Sila hubungi pihak penyelenggaraan.');
+        }
 
         if ($request->isMethod('post')) {
 
@@ -58,10 +66,18 @@ class FinancialStatementController extends Controller
         $financialStatement->INSTITUTE = Parameter::where('code', $financialStatement->institute)->value('prm');
         $financialStatement->INSTITUTE_TYPE = Parameter::where('code', $financialStatement->institute_type)->value('prm');
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
-        $instituteType = (int) DB::table('type')
-            ->where('grp', 'type_CLIENT')
-            ->where('code', $financialStatement->institute_type)
-            ->value('lvl');
+
+        $createBy = $financialStatement->created_by ? explode(', ', $financialStatement->created_by) : null;
+        $financialStatement->created_by = [
+            'name' => $createBy[0] ?? $institute->con1,
+            'position' => Parameter::where('grp', 'user_position')
+                    ->where('code', $createBy[1] ?? '')
+                    ->value('prm')
+                ?? Parameter::where('grp', 'user_position')
+                ->where('code', $institute->pos1 ?? '')
+                ->value('prm'),
+            'phone' => $createBy[2] ?? $institute->tel1,
+        ];
 
         $currentYear = date('Y');
         $years = array_combine(range($currentYear - 3, $currentYear + 1), range($currentYear - 3, $currentYear + 1));
@@ -103,17 +119,30 @@ class FinancialStatementController extends Controller
     public function view(Request $request, $id)
     {
         $financialStatement = FinancialStatement::with('VerifiedBy')->find($id);
+        $instituteType = (int) DB::table('type')
+                ->where('grp', 'type_CLIENT')
+                ->where('code', $financialStatement->institute_type)
+                ->value('lvl');
+
+        if (!in_array($instituteType, [1, 2])) {
+            return redirect()->back()->with('error', 'Jenis institusi tidak dipilih. Sila hubungi pihak penyelenggaraan.');
+        }
         $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));
         $financialStatement->FIN_STATUS = $this->financialStatementService->getFinStatus($financialStatement->status);
         $financialStatement->INSTITUTE = Parameter::where('code', $financialStatement->institute)->value('prm');
         $financialStatement->INSTITUTE_TYPE = Parameter::where('code', $financialStatement->institute_type)->value('prm');
-
         $institute = Institute::where('uid', $financialStatement->inst_refno)->first();
-
-        $instituteType = (int) DB::table('type')
-            ->where('grp', 'type_CLIENT')
-            ->where('code', $financialStatement->institute_type)
-            ->value('lvl');
+        $createBy = $financialStatement->created_by ? explode(', ', $financialStatement->created_by) : null;
+        $financialStatement->created_by = [
+            'name' => $createBy[0] ?? $institute->con1,
+            'position' => Parameter::where('grp', 'user_position')
+                    ->where('code', $createBy[1] ?? '')
+                    ->value('prm')
+                ?? Parameter::where('grp', 'user_position')
+                ->where('code', $institute->pos1 ?? '')
+                ->value('prm'),
+            'phone' => $createBy[2] ?? $institute->tel1,
+        ];
 
         $currentYear = date('Y');
         $years = array_combine(range($currentYear - 3, $currentYear + 1), range($currentYear - 3, $currentYear + 1));

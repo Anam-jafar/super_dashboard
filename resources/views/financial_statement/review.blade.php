@@ -11,7 +11,7 @@
           ['label' => 'Laporan Kewangan', 'url' => 'javascript:void(0);'],
           [
               'label' => 'Penghantaran Baru
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ',
           ],
       ]" />
       <x-alert />
@@ -33,9 +33,9 @@
             <x-show-key-value :key="'Emel (Rasmi)'" :value="$financialStatement->Institute->mel" />
           </div>
           <div class="mt-8 max-w-3xl space-y-2">
-            <x-show-key-value :key="'Nama Pengawai / Waki Institusi'" :value="$financialStatement->Institute->con1" />
-            <x-show-key-value :key="'Jawatan'" :value="$financialStatement->Institute->UserPosition->prm" />
-            <x-show-key-value :key="'Nombor Telefon'" :value="$financialStatement->Institute->tel1" />
+            <x-show-key-value :key="'Nama Pengawal / Wakil Institusi'" :value="$financialStatement->created_by['name']" />
+            <x-show-key-value :key="'Jawatan'" :value="$financialStatement->created_by['position']" />
+            <x-show-key-value :key="'No. H/P'" :value="$financialStatement->created_by['phone']" />
           </div>
         </div>
         <div class="rounded-lg bg-white px-4 py-8 shadow lg:px-6">

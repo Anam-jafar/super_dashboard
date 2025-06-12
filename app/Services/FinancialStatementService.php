@@ -56,7 +56,10 @@ class FinancialStatementService
     {
         $financialStatement->CATEGORY = $this->getParameter($financialStatement->Category);
         $financialStatement->INSTITUTE = isset($financialStatement->Institute->name) ? strtoupper($financialStatement->Institute->name) : null;
-        $financialStatement->OFFICER = isset($financialStatement->Institute->con1) ? strtoupper($financialStatement->Institute->con1) : null;
+        $createBy = $financialStatement->created_by ? explode(', ', $financialStatement->created_by) : null;
+        $financialStatement->OFFICER = isset($createBy[0])
+            ? strtoupper($createBy[0])
+            : (isset($financialStatement->Institute->con1) ? strtoupper($financialStatement->Institute->con1) : null);
         $financialStatement->DISTRICT = $this->getParameter($financialStatement->Institute->District);
         $financialStatement->SUBDISTRICT = $this->getParameter($financialStatement->Institute->Subdistrict);
         $financialStatement->SUBMISSION_DATE = date('d-m-Y', strtotime($financialStatement->submission_date));

@@ -57,9 +57,17 @@ class InstituteController extends Controller
         if ($request->isMethod('post')) {
             $validatedData = $this->instituteService->validateInstitute($request);
             $validatedData['uid'] = $this->instituteService->generateUniqueUid();
-            $dataToInsert = array_merge($this->instituteService->defaultInstituteValues, $validatedData);
+            $timestapmps = [
+                'ts' => now(),
+                'updated_at' => now(),
+                'updated_by' => Auth::user()->uid,
+                'adm' => Auth::user()->uid,
+            ];
+            $dataToInsert = array_merge($this->instituteService->defaultInstituteValues, $validatedData, $timestapmps);
 
             Institute::create($dataToInsert);
+
+            $this->logActivity('Institute', 'Created. Institute : ' . $validatedData['name']);
 
             return redirect()->route('instituteList')->with('success', 'Institusi telah berjaya didaftarkan!');
         }
@@ -96,8 +104,12 @@ class InstituteController extends Controller
 
                 $validatedData['regdt'] = now()->toDateString();
             }
+            $validatedData['updated_at'] = now();
+            $validatedData['updated_by'] = Auth::user()->uid;
 
             $institute->update($validatedData);
+
+            $this->logActivity('Institute', 'Updated. Institute : ' . $validatedData['name']);
 
             return redirect()
                 ->route('instituteList')
@@ -173,6 +185,8 @@ class InstituteController extends Controller
             'sta' => 0,
             'mel' => $request->mel,
             'regdt' => now()->toDateString(),
+            'approvedreg_by' => Auth::user()->uid,
+
         ]);
 
         if ($updated) {
@@ -192,6 +206,8 @@ class InstituteController extends Controller
 
             // Just call the function - it handles success/failure internally
             $this->sendEmail($to, $dynamicTemplateData, $templateType);
+
+            $this->logActivity('Registration', 'Registration Approved. Institute : ' . $institute->name);
 
             return redirect()->route('registrationRequests')->with('success', 'Pendaftaran Institusi diluluskan dan e-mel pengesahan telah berjaya dihantar!');
         } else {

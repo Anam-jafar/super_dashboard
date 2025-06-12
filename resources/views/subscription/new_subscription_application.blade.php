@@ -156,7 +156,7 @@
                   <div class="mt-4">
                     <p>Kos Langganan:</p>
                     <p class="text-xl font-bold text-blue-600" id="final-price-{{ $subscription->id }}"
-                      data-package-id="7">RM 1,200.00</p>
+                      data-package-id="7">RM </p>
                   </div>
                 </div>
 
@@ -183,7 +183,7 @@
                   style="margin-left: -1.5rem; margin-right: -1.5rem; margin-top: -1rem; margin-bottom: 1rem; background-color: #ef4444; padding: 0.75rem 1.5rem;">
                   <h3
                     style="font-size: 1.25rem; margin-top: 0.75rem; margin-bottom: 0.75rem; text-align: center; font-weight: 600; color: white;">
-                    Invois Berjaya Dijana
+                    Penjanaan Invois gagal
                   </h3>
                 </div>
 
@@ -196,7 +196,7 @@
                   <div class="mt-4">
                     <p>Kos Langganan:</p>
                     <p class="text-xl font-bold text-blue-600" id="final-price-{{ $subscription->id }}"
-                      data-package-id="7">RM 1,200.00</p>
+                      data-package-id="7">RM </p>
                   </div>
                 </div>
 

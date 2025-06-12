@@ -28,7 +28,7 @@ class Controller extends BaseController
                 'uid' => $user->uid ?? null,
                 'lvl' => $user->syslevel ?? null,
                 'ip' => \Illuminate\Support\Facades\Request::ip(),
-                'app' => 'emasjid_dashboard',
+                'app' => 'mais',
                 'act' => $action,
                 'des' => $description,
                 'dt' => $currentTime->toDateString(),

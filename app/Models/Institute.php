@@ -53,6 +53,12 @@ class Institute extends Model
         'subscription_date',
         'subscription_start',
         'subscription_end',
+        'adm',
+        'ts',
+        'updated_at',
+        'updated_by',
+        'approvedreg_by',
+
     ];
 
     public function Type()

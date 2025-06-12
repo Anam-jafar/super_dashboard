@@ -141,6 +141,7 @@ class SubscriptionController extends Controller
             'subquery.total_received',
             'subquery.outstanding'
         )
+        ->orderBy('c.approvespm_at', 'desc')
         ->paginate($per_page);
 
 
@@ -196,7 +197,11 @@ class SubscriptionController extends Controller
             if ($invoiceResponse['success']) {
                 DB::table('client')
                     ->where('id', $subscriptionId)
-                    ->update(['subscription_status' => 2]);
+                    ->update([
+                        'subscription_status' => 2,
+                        'approvedspm_by' => Auth::user()->uid,
+                        'approvespm_at' => now(),
+                    ]);
 
                 $institute = DB::table('client')->where('id', $subscriptionId)->first();
 
@@ -214,6 +219,7 @@ class SubscriptionController extends Controller
                 $templateType = 'mais-subscription-approve';
 
                 $this->sendEmail($to, $dynamicTemplateData, $templateType);
+                $this->logActivity('Subscription', 'Subscription Approved. Institute: ' . $institute->name);
 
                 return response()->json([
                     'success' => true,
